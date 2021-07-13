@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="somfytahoma"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="cozytouchelectricheater">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge"/>
+		</supported-bridge-type-refs>
+		<label>Cozytouch Electric Heater</label>
+		<channels>
+			<channel id="operating_mode" typeId="cozytouch_operating_mode"/>
+			<channel id="heating_mode" typeId="cozytouch_heating_mode"/>
+			<channel id="target_temperature" typeId="target_temperature"></channel>
+			<channel id="confort_temperature_setpoint" typeId="confort_temperature_setpoint"/>
+			<channel id="lowering_temperature" typeId="lowering_temperature"/>
+			<channel id="heating" typeId="heating"/>
+			<channel id="open_window_detection" typeId="open_window_detection"/>
+		</channels>
+		<representation-property>url</representation-property>
+		<config-description-ref uri="thing-type:somfytahoma:deviceinplace"/>
+	</thing-type>
+
+	<channel-type id="cozytouch_operating_mode">
+		<item-type>String</item-type>
+		<label>Operating Mode</label>
+		<description>The operating mode of the electric heater.</description>
+		<command>
+			<options>
+				<option value="auto">Program 0</option>
+				<option value="away">Away</option>
+				<option value="frostprotection">Frost protection</option>
+				<option value="manual">Manual</option>
+				<option value="off">Off</option>
+				<option value="eco">Night</option>
+				<option value="prog">Program 1</option>
+				<option value="program">Program 2</option>
+				<option value="standby">Off 2</option>
+				<option value="basic">Basic</option>
+				<option value="internal">Program 3</option>
+			</options>
+		</command>
+	</channel-type>
+
+	<channel-type id="cozytouch_heating_mode">
+		<item-type>String</item-type>
+		<label>Heating Mode</label>
+		<description>The heating mode of the electric heater.</description>
+		<state readOnly="true"/>
+	</channel-type>
+
+	<channel-type id="confort_temperature_setpoint">
+		<item-type>Number:Temperature</item-type>
+		<label>Confort Temperature Setpoint</label>
+		<description>The temperature setpoint in comfort mode.</description>
+		<category>Temperature</category>
+		<state readOnly="false" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="lowering_temperature">
+		<item-type>Number:Temperature</item-type>
+		<label>Lowering Temperature</label>
+		<description>The lowering temperature in eco mode.</description>
+		<category>Temperature</category>
+		<state readOnly="false" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="heating">
+		<item-type>Switch</item-type>
+		<label>Heating</label>
+		<description>ON when the radiator is heating.</description>
+		<state readOnly="true"/>
+	</channel-type>
+
+	<channel-type id="open_window_detection">
+		<item-type>Switch</item-type>
+		<label>Open Window Detection</label>
+		<description>This enables or disables the open window detection.</description>
+	</channel-type>
+</thing:thing-descriptions>

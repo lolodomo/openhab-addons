@@ -8,7 +8,7 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge"/>
 		</supported-bridge-type-refs>
-		<label>Somfy Contact Sensor</label>
+		<label>Contact Sensor</label>
 		<channels>
 			<channel id="contact" typeId="contact"></channel>
 			<channel id="sensor_defect" typeId="sensor_defect"></channel>

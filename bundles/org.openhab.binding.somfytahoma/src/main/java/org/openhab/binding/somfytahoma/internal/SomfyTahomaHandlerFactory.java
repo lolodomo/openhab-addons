@@ -16,6 +16,7 @@ import static org.openhab.binding.somfytahoma.internal.SomfyTahomaBindingConstan
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.somfytahoma.internal.handler.CozytouchElectricHeaterHandler;
 import org.openhab.binding.somfytahoma.internal.handler.SomfyTahomaActionGroupHandler;
 import org.openhab.binding.somfytahoma.internal.handler.SomfyTahomaAdjustableSlatsRollerShutterHandler;
 import org.openhab.binding.somfytahoma.internal.handler.SomfyTahomaAwningHandler;
@@ -72,6 +73,7 @@ import org.slf4j.LoggerFactory;
  * handlers.
  *
  * @author Ondrej Pecta - Initial contribution
+ * @author Laurent Garnier - New Atlantic electric heater device (Cozytouch)
  */
 @NonNullByDefault
 @Component(service = ThingHandlerFactory.class, configurationPid = "binding.somfytahoma")
@@ -184,6 +186,8 @@ public class SomfyTahomaHandlerFactory extends BaseThingHandlerFactory {
             return new SomfyTahomaMyfoxAlarmHandler(thing);
         } else if (thingTypeUID.equals(THING_TYPE_THERMOSTAT)) {
             return new SomfyTahomaThermostatHandler(thing);
+        } else if (thingTypeUID.equals(THING_TYPE_COZYTOUCH_ELECTRIC_HEATER)) {
+            return new CozytouchElectricHeaterHandler(thing);
         } else {
             return null;
         }

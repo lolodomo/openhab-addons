@@ -27,6 +27,7 @@ import org.openhab.core.thing.ThingTypeUID;
  *
  * @author Ondrej Pecta - Initial contribution
  * @author Laurent Garnier - Other portals integration
+ * @author Laurent Garnier - New Atlantic electric heater device (Cozytouch)
  */
 @NonNullByDefault
 public class SomfyTahomaBindingConstants {
@@ -160,6 +161,10 @@ public class SomfyTahomaBindingConstants {
     // Thermostat
     public static final ThingTypeUID THING_TYPE_THERMOSTAT = new ThingTypeUID(BINDING_ID, "thermostat");
 
+    // Cozytouch Electric Heater
+    public static final ThingTypeUID THING_TYPE_COZYTOUCH_ELECTRIC_HEATER = new ThingTypeUID(BINDING_ID,
+            "cozytouchelectricheater");
+
     // List of all Channel ids
     public static final String RSSI = "rssi";
 
@@ -280,8 +285,15 @@ public class SomfyTahomaBindingConstants {
     // Myfox Camera
     public static final String SHUTTER = "shutter";
 
+    // Cozytouch Electric Heater
+    public static final String CONFORT_TEMPERATURE_SETPOINT = "confort_temperature_setpoint";
+    public static final String LOWERING_TEMPERATURE = "lowering_temperature";
+    public static final String HEATING = "heating";
+    public static final String OPEN_WINDOW_DETECTION = "open_window_detection";
+
     // Constants
     public static final String TAHOMA_PORTAL = "www.tahomalink.com";
+    public static final String COZYTOUCH_PORTAL = "ha110-1.overkiz.com";
     public static final String API_BASE_URL = "/enduser-mobile-web/enduserAPI/";
     public static final String EVENTS_URL = "events/";
     public static final String SETUP_URL = "setup/";
@@ -400,7 +412,7 @@ public class SomfyTahomaBindingConstants {
             THING_TYPE_ADJUSTABLE_SLATS_ROLLERSHUTTER, THING_TYPE_MYFOX_CAMERA, THING_TYPE_ROLLERSHUTTER_UNO,
             THING_TYPE_WATERSENSOR, THING_TYPE_HUMIDITYSENSOR, THING_TYPE_MYFOX_ALARM, THING_TYPE_THERMOSTAT,
             THING_TYPE_DIMMER_LIGHT, THING_TYPE_EXTERIOR_HEATING_SYSTEM, THING_TYPE_VALVE_HEATING_SYSTEM,
-            THING_TYPE_BIOCLIMATIC_PERGOLA));
+            THING_TYPE_BIOCLIMATIC_PERGOLA, THING_TYPE_COZYTOUCH_ELECTRIC_HEATER));
 
     // somfy gateways
     public static Map<Integer, String> gatewayTypes = new HashMap<Integer, String>() {

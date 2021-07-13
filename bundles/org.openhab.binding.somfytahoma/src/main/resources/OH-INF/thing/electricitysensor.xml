@@ -8,7 +8,7 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge"/>
 		</supported-bridge-type-refs>
-		<label>Somfy Electricity Sensor</label>
+		<label>Electricity Sensor</label>
 		<channels>
 			<channel id="energy_consumption" typeId="energy_consumption"></channel>
 		</channels>

@@ -8,7 +8,7 @@
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="bridge"/>
 		</supported-bridge-type-refs>
-		<label>Somfy Occupancy Sensor</label>
+		<label>Occupancy Sensor</label>
 		<channels>
 			<channel id="contact" typeId="contact"></channel>
 			<channel id="sensor_defect" typeId="sensor_defect"></channel>

@@ -655,6 +655,10 @@ public class SomfyTahomaBridgeHandler extends BaseBridgeHandler {
         return "https://" + thingConfig.getCloudPortal() + API_BASE_URL + subUrl;
     }
 
+    public boolean isCozytouchBridge() {
+        return COZYTOUCH_PORTAL.equals(thingConfig.getCloudPortal());
+    }
+
     public void sendCommand(String io, String command, String params, String url) {
         if (ThingStatus.OFFLINE == thing.getStatus() && !reLogin()) {
             return;
@@ -816,6 +820,14 @@ public class SomfyTahomaBridgeHandler extends BaseBridgeHandler {
                 HttpMethod.GET, SomfyTahomaState.class);
         if (state != null && !state.getName().isEmpty()) {
             updateDevice(url, List.of(state));
+        }
+    }
+
+    public synchronized void refresh(String url) {
+        SomfyTahomaDevice device = invokeCallToURL(DEVICES_URL + urlEncode(url), "", HttpMethod.GET,
+                SomfyTahomaDevice.class);
+        if (device != null) {
+            updateDevice(url, device.getStates());
         }
     }
 

@@ -18,6 +18,21 @@
 		</parameter>
 	</config-description>
 
+	<config-description uri="thing-type:somfytahoma:deviceinplace">
+		<parameter name="url" type="text" required="true">
+			<label>Device URL</label>
+			<description>The identifier of this device</description>
+		</parameter>
+
+		<parameter name="applyCmdsToPlace" type="boolean">
+			<label>Apply Commands to Place</label>
+			<description>Set it to true to apply the commands not only to this device but to all other similar devices in the
+				same place</description>
+			<default>false</default>
+			<advanced>true</advanced>
+		</parameter>
+	</config-description>
+
 	<config-description uri="bridge-type:somfytahoma:bridge">
 		<parameter name="cloudPortal" type="text" required="false">
 			<label>Cloud Portal</label>

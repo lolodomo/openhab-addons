@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.somfytahoma.internal.handler.SomfyTahomaBaseThingHandler;
 import org.openhab.binding.somfytahoma.internal.handler.SomfyTahomaBridgeHandler;
 import org.openhab.binding.somfytahoma.internal.model.SomfyTahomaActionGroup;
 import org.openhab.binding.somfytahoma.internal.model.SomfyTahomaDevice;
@@ -48,6 +49,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Ondrej Pecta - Initial contribution
  * @author Laurent Garnier - Include the place into the inbox label (when defined for the device)
+ * @author Laurent Garnier - Discovery of Atlantic electric heater device (Cozytouch)
  */
 @NonNullByDefault
 public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
@@ -154,6 +156,8 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
     private void discoverDevice(SomfyTahomaDevice device, SomfyTahomaSetup setup) {
         logger.debug("url: {}", device.getDeviceURL());
         String place = getPlaceLabel(setup, device.getPlaceOID());
+        SomfyTahomaBridgeHandler localBridgeHandler = bridgeHandler;
+        boolean useGenericLabel = localBridgeHandler != null ? localBridgeHandler.isCozytouchBridge() : false;
         switch (device.getUiClass()) {
             case CLASS_AWNING:
                 // widget: PositionableHorizontalAwning
@@ -161,7 +165,8 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
                 break;
             case CLASS_CONTACT_SENSOR:
                 // widget: ContactSensor
-                deviceDiscovered(device, THING_TYPE_CONTACTSENSOR, place);
+                deviceDiscovered(useGenericLabel ? "Contact Sensor" : device.getLabel(), device,
+                        THING_TYPE_CONTACTSENSOR, place);
                 break;
             case CLASS_CURTAIN:
                 deviceDiscovered(device, THING_TYPE_CURTAIN, place);
@@ -192,7 +197,8 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
                 break;
             case CLASS_OCCUPANCY_SENSOR:
                 // widget: OccupancySensor
-                deviceDiscovered(device, THING_TYPE_OCCUPANCYSENSOR, place);
+                deviceDiscovered(useGenericLabel ? "Occupancy Sensor" : device.getLabel(), device,
+                        THING_TYPE_OCCUPANCYSENSOR, place);
                 break;
             case CLASS_ON_OFF:
                 // widget: StatefulOnOff
@@ -247,6 +253,9 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
                     deviceDiscovered(device, THING_TYPE_THERMOSTAT, place);
                 } else if ("ValveHeatingTemperatureInterface".equals(device.getWidget())) {
                     deviceDiscovered(device, THING_TYPE_VALVE_HEATING_SYSTEM, place);
+                } else if ("AtlanticElectricalHeaterWithAdjustableTemperatureSetpoint".equals(device.getWidget())) {
+                    deviceDiscovered(getCozytouchHeaterLabel(device), device, THING_TYPE_COZYTOUCH_ELECTRIC_HEATER,
+                            place);
                 } else if (isOnOffHeatingSystem(device)) {
                     deviceDiscovered(device, THING_TYPE_ONOFF_HEATING_SYSTEM, place);
                 } else if (isZwaveHeatingSystem(device)) {
@@ -288,14 +297,16 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
                 break;
             case CLASS_TEMPERATURE_SENSOR:
                 // widget: TemperatureSensor
-                deviceDiscovered(device, THING_TYPE_TEMPERATURESENSOR, place);
+                deviceDiscovered(useGenericLabel ? "Temperature Sensor" : device.getLabel(), device,
+                        THING_TYPE_TEMPERATURESENSOR, place);
                 break;
             case CLASS_GATE:
                 deviceDiscovered(device, THING_TYPE_GATE, place);
                 break;
             case CLASS_ELECTRICITY_SENSOR:
                 if (hasEnergyConsumption(device)) {
-                    deviceDiscovered(device, THING_TYPE_ELECTRICITYSENSOR, place);
+                    deviceDiscovered(useGenericLabel ? "Electricity Sensor" : device.getLabel(), device,
+                            THING_TYPE_ELECTRICITYSENSOR, place);
                 } else {
                     logUnsupportedDevice(device);
                 }
@@ -391,8 +402,34 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
         return device.getDefinition().getCommands().stream().anyMatch(cmd -> command.equals(cmd.getCommandName()));
     }
 
-    private void deviceDiscovered(SomfyTahomaDevice device, ThingTypeUID thingTypeUID, @Nullable String place) {
+    private String getCozytouchHeaterLabel(SomfyTahomaDevice device) {
         String label = device.getLabel();
+        SomfyTahomaState manufacturer = SomfyTahomaBaseThingHandler.getState(device.getStates(),
+                "core:ManufacturerNameState", TYPE_STRING);
+        if (manufacturer != null) {
+            label += " - " + manufacturer.getValue().toString();
+            SomfyTahomaState model = SomfyTahomaBaseThingHandler.getState(device.getStates(), "io:ModelState",
+                    TYPE_STRING);
+            SomfyTahomaState power = SomfyTahomaBaseThingHandler.getState(device.getStates(), "io:PowerState", null);
+            double powerVal = -1.0;
+            if (power != null) {
+                powerVal = Double.parseDouble(power.getValue().toString());
+            }
+            if (model != null) {
+                label += " " + ((powerVal > 0.0) ? String.format("%s %.0f W", model.getValue().toString(), powerVal)
+                        : model.getValue().toString());
+            }
+        }
+        return label;
+    }
+
+    private void deviceDiscovered(SomfyTahomaDevice device, ThingTypeUID thingTypeUID, @Nullable String place) {
+        deviceDiscovered(device.getLabel(), device, thingTypeUID, place);
+    }
+
+    private void deviceDiscovered(String labelWithoutPlace, SomfyTahomaDevice device, ThingTypeUID thingTypeUID,
+            @Nullable String place) {
+        String label = labelWithoutPlace;
         if (place != null && !place.isBlank()) {
             label += " (" + place + ")";
         }
@@ -432,13 +469,14 @@ public class SomfyTahomaItemDiscoveryService extends AbstractDiscoveryService
 
         SomfyTahomaBridgeHandler localBridgeHandler = bridgeHandler;
         if (localBridgeHandler != null) {
+            String label = localBridgeHandler.isCozytouchBridge() ? "Cozytouch Gateway"
+                    : "Somfy Gateway (" + type + ")";
             ThingUID thingUID = new ThingUID(THING_TYPE_GATEWAY, localBridgeHandler.getThing().getUID(), id);
 
             logger.debug("Detected a gateway with id: {} and type: {}", id, type);
-            thingDiscovered(
-                    DiscoveryResultBuilder.create(thingUID).withThingType(THING_TYPE_GATEWAY).withProperties(properties)
-                            .withRepresentationProperty("id").withLabel("Somfy Gateway (" + type + ")")
-                            .withBridge(localBridgeHandler.getThing().getUID()).build());
+            thingDiscovered(DiscoveryResultBuilder.create(thingUID).withThingType(THING_TYPE_GATEWAY)
+                    .withProperties(properties).withRepresentationProperty("id").withLabel(label)
+                    .withBridge(localBridgeHandler.getThing().getUID()).build());
         }
     }
 }
