@@ -131,6 +131,7 @@ public class SysteminfoOSGiTest extends JavaOSGiTest {
     private @NonNullByDefault({}) SysteminfoHandlerFactory systeminfoHandlerFactory;
     private @NonNullByDefault({}) ThingRegistry thingRegistry;
     private @NonNullByDefault({}) ItemRegistry itemRegistry;
+    private @NonNullByDefault({}) UnitProvider unitProvider;
 
     @BeforeEach
     public void setUp() {
@@ -186,6 +187,11 @@ public class SysteminfoOSGiTest extends JavaOSGiTest {
         waitForAssert(() -> {
             itemRegistry = getService(ItemRegistry.class);
             assertThat(itemRegistry, is(notNullValue()));
+        });
+
+        waitForAssert(() -> {
+            unitProvider = getService(UnitProvider.class);
+            assertThat(unitProvider, is(notNullValue()));
         });
     }
 
@@ -347,12 +353,6 @@ public class SysteminfoOSGiTest extends JavaOSGiTest {
     }
 
     private void intializeItem(ChannelUID channelUID, String itemName, String acceptedItemType) {
-        UnitProvider unitProvider = getService(UnitProvider.class);
-        assertThat(unitProvider, is(notNullValue()));
-        if (unitProvider == null) {
-            throw new AssertionError("unitProvider is null");
-        }
-
         GenericItem item = null;
         if (acceptedItemType.startsWith("Number")) {
             item = new NumberItem(acceptedItemType, itemName, unitProvider);
