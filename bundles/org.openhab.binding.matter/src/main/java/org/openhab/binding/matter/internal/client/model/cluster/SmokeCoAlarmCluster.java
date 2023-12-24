@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * SmokeCoAlarm
@@ -33,19 +30,8 @@ public class SmokeCoAlarmCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "SMOKE_CO_ALARM_CLUSTER";
     public static final int CLUSTER_ID = 0x005C;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(72, "expressedState"), entry(150, "smokeState"), entry(220, "COState"),
-                entry(283, "batteryAlert"), entry(332, "deviceMuted"), entry(370, "testInProgress"),
-                entry(406, "hardwareFaultAlert"), entry(437, "endOfServiceAlert"), entry(464, "interconnectSmokeAlarm"),
-                entry(487, "interconnectCOAlarm"), entry(512, "contaminationState"),
-                entry(534, "smokeSensitivityLevel"), entry(551, "expiryDate"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(43, "selfTestRequest"));
-    }
-
     // ZCL Enums
-    public enum AlarmStateEnum implements JsonSerializable {
+    public enum AlarmStateEnum {
         NORMAL(0, "Normal"),
         WARNING(1, "Warning"),
         CRITICAL(2, "Critical"),
@@ -58,13 +44,9 @@ public class SmokeCoAlarmCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ContaminationStateEnum implements JsonSerializable {
+    public enum ContaminationStateEnum {
         NORMAL(0, "Normal"),
         LOW(1, "Low"),
         WARNING(2, "Warning"),
@@ -78,13 +60,9 @@ public class SmokeCoAlarmCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum EndOfServiceEnum implements JsonSerializable {
+    public enum EndOfServiceEnum {
         NORMAL(0, "Normal"),
         EXPIRED(1, "Expired"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -96,13 +74,9 @@ public class SmokeCoAlarmCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ExpressedStateEnum implements JsonSerializable {
+    public enum ExpressedStateEnum {
         NORMAL(0, "Normal"),
         SMOKEALARM(1, "SmokeAlarm"),
         COALARM(2, "COAlarm"),
@@ -121,13 +95,9 @@ public class SmokeCoAlarmCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum MuteStateEnum implements JsonSerializable {
+    public enum MuteStateEnum {
         NOTMUTED(0, "NotMuted"),
         MUTED(1, "Muted"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -139,13 +109,9 @@ public class SmokeCoAlarmCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum SensitivityEnum implements JsonSerializable {
+    public enum SensitivityEnum {
         HIGH(0, "High"),
         STANDARD(1, "Standard"),
         LOW(2, "Low"),
@@ -158,28 +124,16 @@ public class SmokeCoAlarmCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean smokeAlarm;
         public boolean coAlarm;
 
         public Feature(boolean smokeAlarm, boolean coAlarm) {
             this.smokeAlarm = smokeAlarm;
             this.coAlarm = coAlarm;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"smokeAlarm\" : " + smokeAlarm + ",";
-            out += "\"coAlarm\" : " + coAlarm + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -190,28 +144,28 @@ public class SmokeCoAlarmCluster extends BaseCluster {
         }
     }
 
-    public ExpressedStateEnum expressedState; // 72 ExpressedStateEnum
-    public AlarmStateEnum smokeState; // 150 AlarmStateEnum
-    public AlarmStateEnum COState; // 220 AlarmStateEnum
-    public AlarmStateEnum batteryAlert; // 283 AlarmStateEnum
-    public MuteStateEnum deviceMuted; // 332 MuteStateEnum
-    public Boolean testInProgress; // 370 boolean
-    public Boolean hardwareFaultAlert; // 406 boolean
-    public EndOfServiceEnum endOfServiceAlert; // 437 EndOfServiceEnum
-    public AlarmStateEnum interconnectSmokeAlarm; // 464 AlarmStateEnum
-    public AlarmStateEnum interconnectCOAlarm; // 487 AlarmStateEnum
-    public ContaminationStateEnum contaminationState; // 512 ContaminationStateEnum
-    public SensitivityEnum smokeSensitivityLevel; // 534 SensitivityEnum
-    public Integer expiryDate; // 551 epoch_s
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public ExpressedStateEnum expressedState; // 0 ExpressedStateEnum reportable
+    public AlarmStateEnum smokeState; // 1 AlarmStateEnum reportable
+    public AlarmStateEnum COState; // 2 AlarmStateEnum reportable
+    public AlarmStateEnum batteryAlert; // 3 AlarmStateEnum reportable
+    public MuteStateEnum deviceMuted; // 4 MuteStateEnum reportable
+    public Boolean testInProgress; // 5 boolean reportable
+    public Boolean hardwareFaultAlert; // 6 boolean reportable
+    public EndOfServiceEnum endOfServiceAlert; // 7 EndOfServiceEnum reportable
+    public AlarmStateEnum interconnectSmokeAlarm; // 8 AlarmStateEnum reportable
+    public AlarmStateEnum interconnectCOAlarm; // 9 AlarmStateEnum reportable
+    public ContaminationStateEnum contaminationState; // 10 ContaminationStateEnum reportable
+    public SensitivityEnum smokeSensitivityLevel; // 11 SensitivityEnum reportable writable
+    public Integer expiryDate; // 12 epoch_s reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public SmokeCoAlarmCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 67, "SmokeCoAlarm");
+        super(nodeId, endpointId, 64, "SmokeCoAlarm");
     }
 
     public void selfTestRequest(MatterClient client) throws Exception {

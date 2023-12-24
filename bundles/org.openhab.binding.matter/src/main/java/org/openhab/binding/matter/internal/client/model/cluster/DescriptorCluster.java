@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Descriptor
@@ -32,15 +28,7 @@ public class DescriptorCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "DESCRIPTOR_CLUSTER";
     public static final int CLUSTER_ID = 0x001D;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(65, "deviceTypeList"), entry(146, "serverList"),
-                entry(215, "clientList"), entry(279, "partsList"), entry(328, "tagList"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
-    class DeviceTypeStruct implements JsonSerializable {
+    class DeviceTypeStruct {
         public Integer deviceType; // devtype_id
         public Integer revision; // int16u
 
@@ -48,17 +36,9 @@ public class DescriptorCluster extends BaseCluster {
             this.deviceType = deviceType;
             this.revision = revision;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"deviceType\" : " + deviceType + ",";
-            out += "\"revision\" : " + revision + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class SemanticTagStruct implements JsonSerializable {
+    class SemanticTagStruct {
         public Integer mfgCode; // vendor_id
         public Integer namespaceID; // enum8
         public Integer tag; // enum8
@@ -70,31 +50,14 @@ public class DescriptorCluster extends BaseCluster {
             this.tag = tag;
             this.label = label;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"mfgCode\" : " + mfgCode + ",";
-            out += "\"namespaceID\" : " + namespaceID + ",";
-            out += "\"tag\" : " + tag + ",";
-            out += "\"label\" : " + label + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean tagList;
 
         public Feature(boolean tagList) {
             this.tagList = tagList;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"tagList\" : " + tagList + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -105,20 +68,20 @@ public class DescriptorCluster extends BaseCluster {
         }
     }
 
-    public DeviceTypeStruct[] deviceTypeList; // 65 DeviceTypeStruct
-    public List<Integer> serverList; // 146 cluster_id
-    public List<Integer> clientList; // 215 cluster_id
-    public List<Integer> partsList; // 279 endpoint_no
-    public SemanticTagStruct[] tagList; // 328 SemanticTagStruct
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public DeviceTypeStruct[] deviceTypeList; // 0 DeviceTypeStruct reportable
+    public List<Integer> serverList; // 1 cluster_id reportable
+    public List<Integer> clientList; // 2 cluster_id reportable
+    public List<Integer> partsList; // 3 endpoint_no reportable
+    public SemanticTagStruct[] tagList; // 4 SemanticTagStruct reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public DescriptorCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 61, "Descriptor");
+        super(nodeId, endpointId, 16, "Descriptor");
     }
 
     public String toString() {

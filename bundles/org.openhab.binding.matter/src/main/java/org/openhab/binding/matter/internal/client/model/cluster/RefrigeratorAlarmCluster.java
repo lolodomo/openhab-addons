@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * RefrigeratorAlarm
@@ -32,26 +28,12 @@ public class RefrigeratorAlarmCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "REFRIGERATOR_ALARM_CLUSTER";
     public static final int CLUSTER_ID = 0x0057;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(67, "mask"), entry(145, "state"), entry(214, "supported"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Bitmaps
-    public static class AlarmMap implements JsonSerializable {
+    public static class AlarmMap {
         public boolean doorOpen;
 
         public AlarmMap(boolean doorOpen) {
             this.doorOpen = doorOpen;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"doorOpen\" : " + doorOpen + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -62,18 +44,18 @@ public class RefrigeratorAlarmCluster extends BaseCluster {
         }
     }
 
-    public AlarmMap mask; // 67 AlarmMap
-    public AlarmMap state; // 145 AlarmMap
-    public AlarmMap supported; // 214 AlarmMap
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public AlarmMap mask; // 0 AlarmMap reportable
+    public AlarmMap state; // 2 AlarmMap reportable
+    public AlarmMap supported; // 3 AlarmMap reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public RefrigeratorAlarmCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 57, "RefrigeratorAlarm");
+        super(nodeId, endpointId, 58, "RefrigeratorAlarm");
     }
 
     public String toString() {

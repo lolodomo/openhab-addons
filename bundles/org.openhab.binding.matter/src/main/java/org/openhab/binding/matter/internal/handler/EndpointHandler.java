@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.matter.internal.handler;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_1;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.ClusterThingTypes;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
 import org.openhab.core.thing.Bridge;
@@ -29,6 +30,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.BridgeHandler;
 import org.openhab.core.thing.binding.ThingHandler;
@@ -47,7 +49,8 @@ import org.slf4j.LoggerFactory;
 public class EndpointHandler extends AbstractMatterBridgeHandler {
 
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
-    private int endpointId;
+    protected long nodeId;
+    protected int endpointId;
     private List<BaseCluster> clusters = Collections.synchronizedList(new LinkedList<BaseCluster>());
 
     public EndpointHandler(Bridge bridge) {
@@ -110,6 +113,16 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
     }
 
     public void refresh() {
+
+        // step 1 iterate over all clusters
+        // step 2 look up a ClusterHandler by the cluster ID
+        // step 4 create a new instance of the handler
+        // step 5 call createChannels on this
+        // step 6 link channles to the handler in a Map
+        // step 7 make sure to clean up on dispose
+
+        // when a command comes in, we need to lookup the channel to a handler
+
         synchronized (clusters) {
             for (BaseCluster c : clusters) {
                 ClusterHandler handler = clusterHandler(c.id);
@@ -144,12 +157,17 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
     }
 
     private void discoverChildCluster(BaseCluster cluster) {
+        // so we need a map of THING_TYPE_CLUSTER to clusters, so LevelControl, or OnOff
         NodeDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
-            ThingUID bridgeUID = getThing().getUID();
-            ThingUID thingUID = new ThingUID(THING_TYPE_CLUSTER, bridgeUID, String.valueOf(cluster.id));
-            discoveryService.discoverhildThing(thingUID, bridgeUID, (long) cluster.id,
-                    "Matter Cluster " + cluster.name);
+            logger.debug("discoverChildCluster {}", cluster.name);
+            ThingTypeUID clusterThing = ClusterThingTypes.CLUSTER_NAME_TO_THING_TYPE_MAPPING.get(cluster.name);
+            if (clusterThing != null) {
+                ThingUID bridgeUID = getThing().getUID();
+                ThingUID thingUID = new ThingUID(clusterThing, bridgeUID, clusterThing.getId());
+                discoveryService.discoverhildThing(thingUID, bridgeUID, (long) cluster.id,
+                        "Matter Cluster " + cluster.name);
+            }
 
         }
     }

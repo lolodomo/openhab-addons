@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Thermostat
@@ -33,34 +30,7 @@ public class ThermostatCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "THERMOSTAT_CLUSTER";
     public static final int CLUSTER_ID = 0x0201;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(104, "localTemperature"), entry(181, "outdoorTemperature"),
-                entry(246, "occupancy"), entry(302, "absMinHeatSetpointLimit"), entry(347, "absMaxHeatSetpointLimit"),
-                entry(385, "absMinCoolSetpointLimit"), entry(417, "absMaxCoolSetpointLimit"),
-                entry(448, "PICoolingDemand"), entry(475, "PIHeatingDemand"), entry(499, "HVACSystemTypeConfiguration"),
-                entry(520, "localTemperatureCalibration"), entry(542, "occupiedCoolingSetpoint"),
-                entry(561, "occupiedHeatingSetpoint"), entry(576, "unoccupiedCoolingSetpoint"),
-                entry(588, "unoccupiedHeatingSetpoint"), entry(601, "minHeatSetpointLimit"),
-                entry(614, "maxHeatSetpointLimit"), entry(626, "minCoolSetpointLimit"),
-                entry(638, "maxCoolSetpointLimit"), entry(650, "minSetpointDeadBand"), entry(662, "remoteSensing"),
-                entry(674, "controlSequenceOfOperation"), entry(685, "systemMode"), entry(694, "thermostatRunningMode"),
-                entry(703, "startOfWeek"), entry(711, "numberOfWeeklyTransitions"),
-                entry(719, "numberOfDailyTransitions"), entry(727, "temperatureSetpointHold"),
-                entry(735, "temperatureSetpointHoldDuration"), entry(743, "thermostatProgrammingOperationMode"),
-                entry(751, "thermostatRunningState"), entry(759, "setpointChangeSource"),
-                entry(766, "setpointChangeAmount"), entry(773, "setpointChangeSourceTimestamp"),
-                entry(780, "occupiedSetback"), entry(787, "occupiedSetbackMin"), entry(792, "occupiedSetbackMax"),
-                entry(796, "unoccupiedSetback"), entry(801, "unoccupiedSetbackMin"), entry(806, "unoccupiedSetbackMax"),
-                entry(811, "emergencyHeatDelta"), entry(816, "ACType"), entry(821, "ACCapacity"),
-                entry(826, "ACRefrigerantType"), entry(831, "ACCompressorType"), entry(836, "ACErrorCode"),
-                entry(841, "ACLouverPosition"), entry(845, "ACCoilTemperature"), entry(850, "ACCapacityformat"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(65, "setpointRaiseLower"), entry(199, "getWeeklyScheduleResponse"),
-                entry(115, "setWeeklySchedule"), entry(149, "getWeeklySchedule"), entry(176, "clearWeeklySchedule"));
-    }
-
-    class ThermostatScheduleTransition implements JsonSerializable {
+    class ThermostatScheduleTransition {
         public Integer transitionTime; // int16u
         public Integer heatSetpoint; // int16s
         public Integer coolSetpoint; // int16s
@@ -70,19 +40,10 @@ public class ThermostatCluster extends BaseCluster {
             this.heatSetpoint = heatSetpoint;
             this.coolSetpoint = coolSetpoint;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"transitionTime\" : " + transitionTime + ",";
-            out += "\"heatSetpoint\" : " + heatSetpoint + ",";
-            out += "\"coolSetpoint\" : " + coolSetpoint + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum SetpointAdjustMode implements JsonSerializable {
+    public enum SetpointAdjustMode {
         HEAT(0, "Heat"),
         COOL(1, "Cool"),
         BOTH(2, "Both"),
@@ -95,13 +56,9 @@ public class ThermostatCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ThermostatControlSequence implements JsonSerializable {
+    public enum ThermostatControlSequence {
         COOLINGONLY(0, "CoolingOnly"),
         COOLINGWITHREHEAT(1, "CoolingWithReheat"),
         HEATINGONLY(2, "HeatingOnly"),
@@ -117,13 +74,9 @@ public class ThermostatCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ThermostatRunningMode implements JsonSerializable {
+    public enum ThermostatRunningMode {
         OFF(0, "Off"),
         COOL(3, "Cool"),
         HEAT(4, "Heat"),
@@ -136,13 +89,9 @@ public class ThermostatCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ThermostatSystemMode implements JsonSerializable {
+    public enum ThermostatSystemMode {
         OFF(0, "Off"),
         AUTO(1, "Auto"),
         COOL(3, "Cool"),
@@ -161,14 +110,10 @@ public class ThermostatCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class DayOfWeek implements JsonSerializable {
+    public static class DayOfWeek {
         public boolean sunday;
         public boolean monday;
         public boolean tuesday;
@@ -190,20 +135,6 @@ public class ThermostatCluster extends BaseCluster {
             this.away = away;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"sunday\" : " + sunday + ",";
-            out += "\"monday\" : " + monday + ",";
-            out += "\"tuesday\" : " + tuesday + ",";
-            out += "\"wednesday\" : " + wednesday + ",";
-            out += "\"thursday\" : " + thursday + ",";
-            out += "\"friday\" : " + friday + ",";
-            out += "\"saturday\" : " + saturday + ",";
-            out += "\"away\" : " + away + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static DayOfWeek fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -212,7 +143,7 @@ public class ThermostatCluster extends BaseCluster {
         }
     }
 
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean heating;
         public boolean cooling;
         public boolean occupancy;
@@ -232,19 +163,6 @@ public class ThermostatCluster extends BaseCluster {
             this.localTemperatureNotExposed = localTemperatureNotExposed;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"heating\" : " + heating + ",";
-            out += "\"cooling\" : " + cooling + ",";
-            out += "\"occupancy\" : " + occupancy + ",";
-            out += "\"scheduleConfiguration\" : " + scheduleConfiguration + ",";
-            out += "\"setback\" : " + setback + ",";
-            out += "\"autoMode\" : " + autoMode + ",";
-            out += "\"localTemperatureNotExposed\" : " + localTemperatureNotExposed + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -253,21 +171,13 @@ public class ThermostatCluster extends BaseCluster {
         }
     }
 
-    public static class ModeForSequence implements JsonSerializable {
+    public static class ModeForSequence {
         public boolean heatSetpointPresent;
         public boolean coolSetpointPresent;
 
         public ModeForSequence(boolean heatSetpointPresent, boolean coolSetpointPresent) {
             this.heatSetpointPresent = heatSetpointPresent;
             this.coolSetpointPresent = coolSetpointPresent;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"heatSetpointPresent\" : " + heatSetpointPresent + ",";
-            out += "\"coolSetpointPresent\" : " + coolSetpointPresent + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -278,64 +188,64 @@ public class ThermostatCluster extends BaseCluster {
         }
     }
 
-    public Integer localTemperature; // 104 int16s
-    public Integer outdoorTemperature; // 181 int16s
-    public Map<String, Boolean> occupancy; // 246 bitmap8
-    public Integer absMinHeatSetpointLimit; // 302 int16s
-    public Integer absMaxHeatSetpointLimit; // 347 int16s
-    public Integer absMinCoolSetpointLimit; // 385 int16s
-    public Integer absMaxCoolSetpointLimit; // 417 int16s
-    public Integer PICoolingDemand; // 448 int8u
-    public Integer PIHeatingDemand; // 475 int8u
-    public Map<String, Boolean> HVACSystemTypeConfiguration; // 499 bitmap8
-    public Integer localTemperatureCalibration; // 520 int8s
-    public Integer occupiedCoolingSetpoint; // 542 int16s
-    public Integer occupiedHeatingSetpoint; // 561 int16s
-    public Integer unoccupiedCoolingSetpoint; // 576 int16s
-    public Integer unoccupiedHeatingSetpoint; // 588 int16s
-    public Integer minHeatSetpointLimit; // 601 int16s
-    public Integer maxHeatSetpointLimit; // 614 int16s
-    public Integer minCoolSetpointLimit; // 626 int16s
-    public Integer maxCoolSetpointLimit; // 638 int16s
-    public Integer minSetpointDeadBand; // 650 int8s
-    public Map<String, Boolean> remoteSensing; // 662 bitmap8
-    public ThermostatControlSequence controlSequenceOfOperation; // 674 ThermostatControlSequence
-    public Integer systemMode; // 685 enum8
-    public Integer thermostatRunningMode; // 694 enum8
-    public Integer startOfWeek; // 703 enum8
-    public Integer numberOfWeeklyTransitions; // 711 int8u
-    public Integer numberOfDailyTransitions; // 719 int8u
-    public Integer temperatureSetpointHold; // 727 enum8
-    public Integer temperatureSetpointHoldDuration; // 735 int16u
-    public Map<String, Boolean> thermostatProgrammingOperationMode; // 743 bitmap8
-    public Map<String, Boolean> thermostatRunningState; // 751 bitmap16
-    public Integer setpointChangeSource; // 759 enum8
-    public Integer setpointChangeAmount; // 766 int16s
-    public Integer setpointChangeSourceTimestamp; // 773 epoch_s
-    public Integer occupiedSetback; // 780 int8u
-    public Integer occupiedSetbackMin; // 787 int8u
-    public Integer occupiedSetbackMax; // 792 int8u
-    public Integer unoccupiedSetback; // 796 int8u
-    public Integer unoccupiedSetbackMin; // 801 int8u
-    public Integer unoccupiedSetbackMax; // 806 int8u
-    public Integer emergencyHeatDelta; // 811 int8u
-    public Integer ACType; // 816 enum8
-    public Integer ACCapacity; // 821 int16u
-    public Integer ACRefrigerantType; // 826 enum8
-    public Integer ACCompressorType; // 831 enum8
-    public Map<String, Boolean> ACErrorCode; // 836 bitmap32
-    public Integer ACLouverPosition; // 841 enum8
-    public Integer ACCoilTemperature; // 845 int16s
-    public Integer ACCapacityformat; // 850 enum8
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer localTemperature; // 0 int16s reportable
+    public Integer outdoorTemperature; // 1 int16s reportable
+    public Map<String, Boolean> occupancy; // 2 bitmap8 reportable
+    public Integer absMinHeatSetpointLimit; // 3 int16s reportable
+    public Integer absMaxHeatSetpointLimit; // 4 int16s reportable
+    public Integer absMinCoolSetpointLimit; // 5 int16s reportable
+    public Integer absMaxCoolSetpointLimit; // 6 int16s reportable
+    public Integer PICoolingDemand; // 7 int8u reportable
+    public Integer PIHeatingDemand; // 8 int8u reportable
+    public Map<String, Boolean> HVACSystemTypeConfiguration; // 9 bitmap8 reportable writable
+    public Integer localTemperatureCalibration; // 16 int8s reportable writable
+    public Integer occupiedCoolingSetpoint; // 17 int16s reportable writable
+    public Integer occupiedHeatingSetpoint; // 18 int16s reportable writable
+    public Integer unoccupiedCoolingSetpoint; // 19 int16s reportable writable
+    public Integer unoccupiedHeatingSetpoint; // 20 int16s reportable writable
+    public Integer minHeatSetpointLimit; // 21 int16s reportable writable
+    public Integer maxHeatSetpointLimit; // 22 int16s reportable writable
+    public Integer minCoolSetpointLimit; // 23 int16s reportable writable
+    public Integer maxCoolSetpointLimit; // 24 int16s reportable writable
+    public Integer minSetpointDeadBand; // 25 int8s reportable writable
+    public Map<String, Boolean> remoteSensing; // 26 bitmap8 reportable writable
+    public ThermostatControlSequence controlSequenceOfOperation; // 27 ThermostatControlSequence reportable writable
+    public Integer systemMode; // 28 enum8 reportable writable
+    public Integer thermostatRunningMode; // 30 enum8 reportable
+    public Integer startOfWeek; // 32 enum8 reportable
+    public Integer numberOfWeeklyTransitions; // 33 int8u reportable
+    public Integer numberOfDailyTransitions; // 34 int8u reportable
+    public Integer temperatureSetpointHold; // 35 enum8 reportable writable
+    public Integer temperatureSetpointHoldDuration; // 36 int16u reportable writable
+    public Map<String, Boolean> thermostatProgrammingOperationMode; // 37 bitmap8 reportable writable
+    public Map<String, Boolean> thermostatRunningState; // 41 bitmap16 reportable
+    public Integer setpointChangeSource; // 48 enum8 reportable
+    public Integer setpointChangeAmount; // 49 int16s reportable
+    public Integer setpointChangeSourceTimestamp; // 50 epoch_s reportable
+    public Integer occupiedSetback; // 52 int8u reportable writable
+    public Integer occupiedSetbackMin; // 53 int8u reportable
+    public Integer occupiedSetbackMax; // 54 int8u reportable
+    public Integer unoccupiedSetback; // 55 int8u reportable writable
+    public Integer unoccupiedSetbackMin; // 56 int8u reportable
+    public Integer unoccupiedSetbackMax; // 57 int8u reportable
+    public Integer emergencyHeatDelta; // 58 int8u reportable writable
+    public Integer ACType; // 64 enum8 reportable writable
+    public Integer ACCapacity; // 65 int16u reportable writable
+    public Integer ACRefrigerantType; // 66 enum8 reportable writable
+    public Integer ACCompressorType; // 67 enum8 reportable writable
+    public Map<String, Boolean> ACErrorCode; // 68 bitmap32 reportable writable
+    public Integer ACLouverPosition; // 69 enum8 reportable writable
+    public Integer ACCoilTemperature; // 70 int16s reportable
+    public Integer ACCapacityformat; // 71 enum8 reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ThermostatCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 95, "Thermostat");
+        super(nodeId, endpointId, 72, "Thermostat");
     }
 
     public void setpointRaiseLower(MatterClient client, SetpointAdjustMode mode, Integer amount) throws Exception {

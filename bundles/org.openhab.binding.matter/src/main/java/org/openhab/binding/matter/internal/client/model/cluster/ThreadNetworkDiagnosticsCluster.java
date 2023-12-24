@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * ThreadNetworkDiagnostics
@@ -33,36 +30,7 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "THREAD_NETWORK_DIAGNOSTICS_CLUSTER";
     public static final int CLUSTER_ID = 0x0035;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(87, "channel"), entry(167, "routingRole"), entry(234, "networkName"),
-                entry(292, "panId"), entry(341, "extendedPanId"), entry(378, "meshLocalPrefix"),
-                entry(409, "overrunCount"), entry(440, "neighborTable"), entry(468, "routeTable"),
-                entry(492, "partitionId"), entry(515, "weighting"), entry(537, "dataVersion"),
-                entry(557, "stableDataVersion"), entry(573, "leaderRouterId"), entry(586, "detachedRoleCount"),
-                entry(599, "childRoleCount"), entry(611, "routerRoleCount"), entry(623, "leaderRoleCount"),
-                entry(634, "attachAttemptCount"), entry(646, "partitionIdChangeCount"),
-                entry(660, "betterPartitionAttachAttemptCount"), entry(672, "parentChangeCount"),
-                entry(683, "txTotalCount"), entry(692, "txUnicastCount"), entry(701, "txBroadcastCount"),
-                entry(709, "txAckRequestedCount"), entry(717, "txAckedCount"), entry(726, "txNoAckRequestedCount"),
-                entry(734, "txDataCount"), entry(742, "txDataPollCount"), entry(749, "txBeaconCount"),
-                entry(757, "txBeaconRequestCount"), entry(765, "txOtherCount"), entry(772, "txRetryCount"),
-                entry(779, "txDirectMaxRetryExpiryCount"), entry(786, "txIndirectMaxRetryExpiryCount"),
-                entry(791, "txErrCcaCount"), entry(797, "txErrAbortCount"), entry(802, "txErrBusyChannelCount"),
-                entry(807, "rxTotalCount"), entry(812, "rxUnicastCount"), entry(817, "rxBroadcastCount"),
-                entry(822, "rxDataCount"), entry(827, "rxDataPollCount"), entry(832, "rxBeaconCount"),
-                entry(837, "rxBeaconRequestCount"), entry(842, "rxOtherCount"), entry(846, "rxAddressFilteredCount"),
-                entry(853, "rxDestAddrFilteredCount"), entry(857, "rxDuplicatedCount"), entry(861, "rxErrNoFrameCount"),
-                entry(865, "rxErrUnknownNeighborCount"), entry(869, "rxErrInvalidSrcAddrCount"),
-                entry(873, "rxErrSecCount"), entry(877, "rxErrFcsCount"), entry(881, "rxErrOtherCount"),
-                entry(886, "activeTimestamp"), entry(890, "pendingTimestamp"), entry(894, "delay"),
-                entry(898, "securityPolicy"), entry(901, "channelPage0Mask"),
-                entry(905, "operationalDatasetComponents"), entry(908, "activeNetworkFaultsList"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(52, "resetCounts"));
-    }
-
-    class NeighborTableStruct implements JsonSerializable {
+    class NeighborTableStruct {
         public Long extAddress; // int64u
         public Integer age; // int32u
         public Integer rloc16; // int16u
@@ -97,29 +65,9 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.fullNetworkData = fullNetworkData;
             this.isChild = isChild;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"extAddress\" : " + extAddress + ",";
-            out += "\"age\" : " + age + ",";
-            out += "\"rloc16\" : " + rloc16 + ",";
-            out += "\"linkFrameCounter\" : " + linkFrameCounter + ",";
-            out += "\"mleFrameCounter\" : " + mleFrameCounter + ",";
-            out += "\"lqi\" : " + lqi + ",";
-            out += "\"averageRssi\" : " + averageRssi + ",";
-            out += "\"lastRssi\" : " + lastRssi + ",";
-            out += "\"frameErrorRate\" : " + frameErrorRate + ",";
-            out += "\"messageErrorRate\" : " + messageErrorRate + ",";
-            out += "\"rxOnWhenIdle\" : " + rxOnWhenIdle + ",";
-            out += "\"fullThreadDevice\" : " + fullThreadDevice + ",";
-            out += "\"fullNetworkData\" : " + fullNetworkData + ",";
-            out += "\"isChild\" : " + isChild + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class OperationalDatasetComponents implements JsonSerializable {
+    class OperationalDatasetComponents {
         public Boolean activeTimestampPresent; // boolean
         public Boolean pendingTimestampPresent; // boolean
         public Boolean masterKeyPresent; // boolean
@@ -150,27 +98,9 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.securityPolicyPresent = securityPolicyPresent;
             this.channelMaskPresent = channelMaskPresent;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"activeTimestampPresent\" : " + activeTimestampPresent + ",";
-            out += "\"pendingTimestampPresent\" : " + pendingTimestampPresent + ",";
-            out += "\"masterKeyPresent\" : " + masterKeyPresent + ",";
-            out += "\"networkNamePresent\" : " + networkNamePresent + ",";
-            out += "\"extendedPanIdPresent\" : " + extendedPanIdPresent + ",";
-            out += "\"meshLocalPrefixPresent\" : " + meshLocalPrefixPresent + ",";
-            out += "\"delayPresent\" : " + delayPresent + ",";
-            out += "\"panIdPresent\" : " + panIdPresent + ",";
-            out += "\"channelPresent\" : " + channelPresent + ",";
-            out += "\"pskcPresent\" : " + pskcPresent + ",";
-            out += "\"securityPolicyPresent\" : " + securityPolicyPresent + ",";
-            out += "\"channelMaskPresent\" : " + channelMaskPresent + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class RouteTableStruct implements JsonSerializable {
+    class RouteTableStruct {
         public Long extAddress; // int64u
         public Integer rloc16; // int16u
         public Integer routerId; // int8u
@@ -195,25 +125,9 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.allocated = allocated;
             this.linkEstablished = linkEstablished;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"extAddress\" : " + extAddress + ",";
-            out += "\"rloc16\" : " + rloc16 + ",";
-            out += "\"routerId\" : " + routerId + ",";
-            out += "\"nextHop\" : " + nextHop + ",";
-            out += "\"pathCost\" : " + pathCost + ",";
-            out += "\"LQIIn\" : " + LQIIn + ",";
-            out += "\"LQIOut\" : " + LQIOut + ",";
-            out += "\"age\" : " + age + ",";
-            out += "\"allocated\" : " + allocated + ",";
-            out += "\"linkEstablished\" : " + linkEstablished + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class SecurityPolicy implements JsonSerializable {
+    class SecurityPolicy {
         public Integer rotationTime; // int16u
         public Integer flags; // int16u
 
@@ -221,18 +135,10 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.rotationTime = rotationTime;
             this.flags = flags;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"rotationTime\" : " + rotationTime + ",";
-            out += "\"flags\" : " + flags + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ConnectionStatusEnum implements JsonSerializable {
+    public enum ConnectionStatusEnum {
         CONNECTED(0, "Connected"),
         NOTCONNECTED(1, "NotConnected"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -244,13 +150,9 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum NetworkFaultEnum implements JsonSerializable {
+    public enum NetworkFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         LINKDOWN(1, "LinkDown"),
         HARDWAREFAILURE(2, "HardwareFailure"),
@@ -264,13 +166,9 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum RoutingRoleEnum implements JsonSerializable {
+    public enum RoutingRoleEnum {
         UNSPECIFIED(0, "Unspecified"),
         UNASSIGNED(1, "Unassigned"),
         SLEEPYENDDEVICE(2, "SleepyEndDevice"),
@@ -287,14 +185,10 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean packetCounts;
         public boolean errorCounts;
         public boolean MLECounts;
@@ -307,16 +201,6 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
             this.MACCounts = MACCounts;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"packetCounts\" : " + packetCounts + ",";
-            out += "\"errorCounts\" : " + errorCounts + ",";
-            out += "\"MLECounts\" : " + MLECounts + ",";
-            out += "\"MACCounts\" : " + MACCounts + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -325,78 +209,78 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
         }
     }
 
-    public Integer channel; // 87 int16u
-    public RoutingRoleEnum routingRole; // 167 RoutingRoleEnum
-    public String networkName; // 234 char_string
-    public Integer panId; // 292 int16u
-    public Long extendedPanId; // 341 int64u
-    public String meshLocalPrefix; // 378 octet_string
-    public Long overrunCount; // 409 int64u
-    public NeighborTableStruct[] neighborTable; // 440 NeighborTableStruct
-    public RouteTableStruct[] routeTable; // 468 RouteTableStruct
-    public Integer partitionId; // 492 int32u
-    public Integer weighting; // 515 int16u
-    public Integer dataVersion; // 537 int16u
-    public Integer stableDataVersion; // 557 int16u
-    public Integer leaderRouterId; // 573 int8u
-    public Integer detachedRoleCount; // 586 int16u
-    public Integer childRoleCount; // 599 int16u
-    public Integer routerRoleCount; // 611 int16u
-    public Integer leaderRoleCount; // 623 int16u
-    public Integer attachAttemptCount; // 634 int16u
-    public Integer partitionIdChangeCount; // 646 int16u
-    public Integer betterPartitionAttachAttemptCount; // 660 int16u
-    public Integer parentChangeCount; // 672 int16u
-    public Integer txTotalCount; // 683 int32u
-    public Integer txUnicastCount; // 692 int32u
-    public Integer txBroadcastCount; // 701 int32u
-    public Integer txAckRequestedCount; // 709 int32u
-    public Integer txAckedCount; // 717 int32u
-    public Integer txNoAckRequestedCount; // 726 int32u
-    public Integer txDataCount; // 734 int32u
-    public Integer txDataPollCount; // 742 int32u
-    public Integer txBeaconCount; // 749 int32u
-    public Integer txBeaconRequestCount; // 757 int32u
-    public Integer txOtherCount; // 765 int32u
-    public Integer txRetryCount; // 772 int32u
-    public Integer txDirectMaxRetryExpiryCount; // 779 int32u
-    public Integer txIndirectMaxRetryExpiryCount; // 786 int32u
-    public Integer txErrCcaCount; // 791 int32u
-    public Integer txErrAbortCount; // 797 int32u
-    public Integer txErrBusyChannelCount; // 802 int32u
-    public Integer rxTotalCount; // 807 int32u
-    public Integer rxUnicastCount; // 812 int32u
-    public Integer rxBroadcastCount; // 817 int32u
-    public Integer rxDataCount; // 822 int32u
-    public Integer rxDataPollCount; // 827 int32u
-    public Integer rxBeaconCount; // 832 int32u
-    public Integer rxBeaconRequestCount; // 837 int32u
-    public Integer rxOtherCount; // 842 int32u
-    public Integer rxAddressFilteredCount; // 846 int32u
-    public Integer rxDestAddrFilteredCount; // 853 int32u
-    public Integer rxDuplicatedCount; // 857 int32u
-    public Integer rxErrNoFrameCount; // 861 int32u
-    public Integer rxErrUnknownNeighborCount; // 865 int32u
-    public Integer rxErrInvalidSrcAddrCount; // 869 int32u
-    public Integer rxErrSecCount; // 873 int32u
-    public Integer rxErrFcsCount; // 877 int32u
-    public Integer rxErrOtherCount; // 881 int32u
-    public Long activeTimestamp; // 886 int64u
-    public Long pendingTimestamp; // 890 int64u
-    public Integer delay; // 894 int32u
-    public SecurityPolicy securityPolicy; // 898 SecurityPolicy
-    public String channelPage0Mask; // 901 octet_string
-    public OperationalDatasetComponents operationalDatasetComponents; // 905 OperationalDatasetComponents
-    public NetworkFaultEnum activeNetworkFaultsList; // 908 NetworkFaultEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer channel; // 0 int16u reportable
+    public RoutingRoleEnum routingRole; // 1 RoutingRoleEnum reportable
+    public String networkName; // 2 char_string reportable
+    public Integer panId; // 3 int16u reportable
+    public Long extendedPanId; // 4 int64u reportable
+    public String meshLocalPrefix; // 5 octet_string reportable
+    public Long overrunCount; // 6 int64u reportable
+    public NeighborTableStruct[] neighborTable; // 7 NeighborTableStruct reportable
+    public RouteTableStruct[] routeTable; // 8 RouteTableStruct reportable
+    public Integer partitionId; // 9 int32u reportable
+    public Integer weighting; // 10 int16u reportable
+    public Integer dataVersion; // 11 int16u reportable
+    public Integer stableDataVersion; // 12 int16u reportable
+    public Integer leaderRouterId; // 13 int8u reportable
+    public Integer detachedRoleCount; // 14 int16u reportable
+    public Integer childRoleCount; // 15 int16u reportable
+    public Integer routerRoleCount; // 16 int16u reportable
+    public Integer leaderRoleCount; // 17 int16u reportable
+    public Integer attachAttemptCount; // 18 int16u reportable
+    public Integer partitionIdChangeCount; // 19 int16u reportable
+    public Integer betterPartitionAttachAttemptCount; // 20 int16u reportable
+    public Integer parentChangeCount; // 21 int16u reportable
+    public Integer txTotalCount; // 22 int32u reportable
+    public Integer txUnicastCount; // 23 int32u reportable
+    public Integer txBroadcastCount; // 24 int32u reportable
+    public Integer txAckRequestedCount; // 25 int32u reportable
+    public Integer txAckedCount; // 26 int32u reportable
+    public Integer txNoAckRequestedCount; // 27 int32u reportable
+    public Integer txDataCount; // 28 int32u reportable
+    public Integer txDataPollCount; // 29 int32u reportable
+    public Integer txBeaconCount; // 30 int32u reportable
+    public Integer txBeaconRequestCount; // 31 int32u reportable
+    public Integer txOtherCount; // 32 int32u reportable
+    public Integer txRetryCount; // 33 int32u reportable
+    public Integer txDirectMaxRetryExpiryCount; // 34 int32u reportable
+    public Integer txIndirectMaxRetryExpiryCount; // 35 int32u reportable
+    public Integer txErrCcaCount; // 36 int32u reportable
+    public Integer txErrAbortCount; // 37 int32u reportable
+    public Integer txErrBusyChannelCount; // 38 int32u reportable
+    public Integer rxTotalCount; // 39 int32u reportable
+    public Integer rxUnicastCount; // 40 int32u reportable
+    public Integer rxBroadcastCount; // 41 int32u reportable
+    public Integer rxDataCount; // 42 int32u reportable
+    public Integer rxDataPollCount; // 43 int32u reportable
+    public Integer rxBeaconCount; // 44 int32u reportable
+    public Integer rxBeaconRequestCount; // 45 int32u reportable
+    public Integer rxOtherCount; // 46 int32u reportable
+    public Integer rxAddressFilteredCount; // 47 int32u reportable
+    public Integer rxDestAddrFilteredCount; // 48 int32u reportable
+    public Integer rxDuplicatedCount; // 49 int32u reportable
+    public Integer rxErrNoFrameCount; // 50 int32u reportable
+    public Integer rxErrUnknownNeighborCount; // 51 int32u reportable
+    public Integer rxErrInvalidSrcAddrCount; // 52 int32u reportable
+    public Integer rxErrSecCount; // 53 int32u reportable
+    public Integer rxErrFcsCount; // 54 int32u reportable
+    public Integer rxErrOtherCount; // 55 int32u reportable
+    public Long activeTimestamp; // 56 int64u reportable
+    public Long pendingTimestamp; // 57 int64u reportable
+    public Integer delay; // 58 int32u reportable
+    public SecurityPolicy securityPolicy; // 59 SecurityPolicy reportable
+    public String channelPage0Mask; // 60 octet_string reportable
+    public OperationalDatasetComponents operationalDatasetComponents; // 61 OperationalDatasetComponents reportable
+    public NetworkFaultEnum activeNetworkFaultsList; // 62 NetworkFaultEnum reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ThreadNetworkDiagnosticsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 81, "ThreadNetworkDiagnostics");
+        super(nodeId, endpointId, 74, "ThreadNetworkDiagnostics");
     }
 
     public void resetCounts(MatterClient client) throws Exception {

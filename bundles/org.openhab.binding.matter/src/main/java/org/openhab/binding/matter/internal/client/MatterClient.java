@@ -96,7 +96,7 @@ public class MatterClient extends MatterWebsocketClient {
                                     field = getField(clazz, entry.getKey());
                                 } catch (NoSuchFieldException e) {
                                     logger.debug("Skipping field {}", entry.getKey());
-                                    continue; // Skip if the field is not found
+                                    continue;
                                 }
                                 field.setAccessible(true);
                                 field.set(cluster, gson.fromJson(entry.getValue(), field.getType()));

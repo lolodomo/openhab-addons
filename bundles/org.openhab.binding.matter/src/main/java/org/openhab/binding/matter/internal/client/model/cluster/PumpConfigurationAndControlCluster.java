@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * PumpConfigurationAndControl
@@ -32,22 +28,8 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "PUMP_CONFIGURATION_AND_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x0200;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(70, "maxPressure"), entry(158, "maxSpeed"), entry(228, "maxFlow"),
-                entry(287, "minConstPressure"), entry(335, "maxConstPressure"), entry(374, "minCompPressure"),
-                entry(407, "maxCompPressure"), entry(438, "minConstSpeed"), entry(465, "maxConstSpeed"),
-                entry(489, "minConstFlow"), entry(511, "maxConstFlow"), entry(533, "minConstTemp"),
-                entry(552, "maxConstTemp"), entry(570, "pumpStatus"), entry(583, "effectiveOperationMode"),
-                entry(596, "effectiveControlMode"), entry(608, "capacity"), entry(620, "speed"),
-                entry(632, "lifetimeRunningHours"), entry(644, "power"), entry(656, "lifetimeEnergyConsumed"),
-                entry(668, "operationMode"), entry(680, "controlMode"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Enums
-    public enum ControlModeEnum implements JsonSerializable {
+    public enum ControlModeEnum {
         CONSTANTSPEED(0, "ConstantSpeed"),
         CONSTANTPRESSURE(1, "ConstantPressure"),
         PROPORTIONALPRESSURE(2, "ProportionalPressure"),
@@ -63,13 +45,9 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum OperationModeEnum implements JsonSerializable {
+    public enum OperationModeEnum {
         NORMAL(0, "Normal"),
         MINIMUM(1, "Minimum"),
         MAXIMUM(2, "Maximum"),
@@ -83,14 +61,10 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean constantPressure;
         public boolean compensatedPressure;
         public boolean constantFlow;
@@ -110,19 +84,6 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
             this.localOperation = localOperation;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"constantPressure\" : " + constantPressure + ",";
-            out += "\"compensatedPressure\" : " + compensatedPressure + ",";
-            out += "\"constantFlow\" : " + constantFlow + ",";
-            out += "\"constantSpeed\" : " + constantSpeed + ",";
-            out += "\"constantTemperature\" : " + constantTemperature + ",";
-            out += "\"automatic\" : " + automatic + ",";
-            out += "\"localOperation\" : " + localOperation + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -131,7 +92,7 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
         }
     }
 
-    public static class PumpStatusBitmap implements JsonSerializable {
+    public static class PumpStatusBitmap {
         public boolean deviceFault;
         public boolean supplyFault;
         public boolean speedLow;
@@ -156,21 +117,6 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
             this.remoteTemperature = remoteTemperature;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"deviceFault\" : " + deviceFault + ",";
-            out += "\"supplyFault\" : " + supplyFault + ",";
-            out += "\"speedLow\" : " + speedLow + ",";
-            out += "\"speedHigh\" : " + speedHigh + ",";
-            out += "\"localOverride\" : " + localOverride + ",";
-            out += "\"running\" : " + running + ",";
-            out += "\"remotePressure\" : " + remotePressure + ",";
-            out += "\"remoteFlow\" : " + remoteFlow + ",";
-            out += "\"remoteTemperature\" : " + remoteTemperature + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static PumpStatusBitmap fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -180,38 +126,38 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
         }
     }
 
-    public Integer maxPressure; // 70 int16s
-    public Integer maxSpeed; // 158 int16u
-    public Integer maxFlow; // 228 int16u
-    public Integer minConstPressure; // 287 int16s
-    public Integer maxConstPressure; // 335 int16s
-    public Integer minCompPressure; // 374 int16s
-    public Integer maxCompPressure; // 407 int16s
-    public Integer minConstSpeed; // 438 int16u
-    public Integer maxConstSpeed; // 465 int16u
-    public Integer minConstFlow; // 489 int16u
-    public Integer maxConstFlow; // 511 int16u
-    public Integer minConstTemp; // 533 int16s
-    public Integer maxConstTemp; // 552 int16s
-    public PumpStatusBitmap pumpStatus; // 570 PumpStatusBitmap
-    public OperationModeEnum effectiveOperationMode; // 583 OperationModeEnum
-    public ControlModeEnum effectiveControlMode; // 596 ControlModeEnum
-    public Integer capacity; // 608 int16s
-    public Integer speed; // 620 int16u
-    public Integer lifetimeRunningHours; // 632 int24u
-    public Integer power; // 644 int24u
-    public Integer lifetimeEnergyConsumed; // 656 int32u
-    public OperationModeEnum operationMode; // 668 OperationModeEnum
-    public ControlModeEnum controlMode; // 680 ControlModeEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer maxPressure; // 0 int16s reportable
+    public Integer maxSpeed; // 1 int16u reportable
+    public Integer maxFlow; // 2 int16u reportable
+    public Integer minConstPressure; // 3 int16s reportable
+    public Integer maxConstPressure; // 4 int16s reportable
+    public Integer minCompPressure; // 5 int16s reportable
+    public Integer maxCompPressure; // 6 int16s reportable
+    public Integer minConstSpeed; // 7 int16u reportable
+    public Integer maxConstSpeed; // 8 int16u reportable
+    public Integer minConstFlow; // 9 int16u reportable
+    public Integer maxConstFlow; // 10 int16u reportable
+    public Integer minConstTemp; // 11 int16s reportable
+    public Integer maxConstTemp; // 12 int16s reportable
+    public PumpStatusBitmap pumpStatus; // 16 PumpStatusBitmap reportable
+    public OperationModeEnum effectiveOperationMode; // 17 OperationModeEnum reportable
+    public ControlModeEnum effectiveControlMode; // 18 ControlModeEnum reportable
+    public Integer capacity; // 19 int16s reportable
+    public Integer speed; // 20 int16u reportable
+    public Integer lifetimeRunningHours; // 21 int24u reportable writable
+    public Integer power; // 22 int24u reportable
+    public Integer lifetimeEnergyConsumed; // 23 int32u reportable writable
+    public OperationModeEnum operationMode; // 32 OperationModeEnum reportable writable
+    public ControlModeEnum controlMode; // 33 ControlModeEnum reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public PumpConfigurationAndControlCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 66, "PumpConfigurationAndControl");
+        super(nodeId, endpointId, 55, "PumpConfigurationAndControl");
     }
 
     public String toString() {

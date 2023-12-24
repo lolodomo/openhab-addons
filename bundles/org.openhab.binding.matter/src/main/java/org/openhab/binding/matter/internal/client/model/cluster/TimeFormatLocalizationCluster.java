@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * TimeFormatLocalization
@@ -32,16 +28,8 @@ public class TimeFormatLocalizationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "TIME_FORMAT_LOCALIZATION_CLUSTER";
     public static final int CLUSTER_ID = 0x002C;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(83, "hourFormat"), entry(161, "activeCalendarType"),
-                entry(237, "supportedCalendarTypes"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Enums
-    public enum CalendarTypeEnum implements JsonSerializable {
+    public enum CalendarTypeEnum {
         BUDDHIST(0, "Buddhist"),
         CHINESE(1, "Chinese"),
         COPTIC(2, "Coptic"),
@@ -63,13 +51,9 @@ public class TimeFormatLocalizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum HourFormatEnum implements JsonSerializable {
+    public enum HourFormatEnum {
         T12HR(0, "12hr"),
         T24HR(1, "24hr"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -81,25 +65,14 @@ public class TimeFormatLocalizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean calendarFormat;
 
         public Feature(boolean calendarFormat) {
             this.calendarFormat = calendarFormat;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"calendarFormat\" : " + calendarFormat + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -110,18 +83,18 @@ public class TimeFormatLocalizationCluster extends BaseCluster {
         }
     }
 
-    public HourFormatEnum hourFormat; // 83 HourFormatEnum
-    public CalendarTypeEnum activeCalendarType; // 161 CalendarTypeEnum
-    public CalendarTypeEnum supportedCalendarTypes; // 237 CalendarTypeEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public HourFormatEnum hourFormat; // 0 HourFormatEnum reportable writable
+    public CalendarTypeEnum activeCalendarType; // 1 CalendarTypeEnum reportable writable
+    public CalendarTypeEnum supportedCalendarTypes; // 2 CalendarTypeEnum reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public TimeFormatLocalizationCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 80, "TimeFormatLocalization");
+        super(nodeId, endpointId, 94, "TimeFormatLocalization");
     }
 
     public String toString() {

@@ -13,6 +13,7 @@
 package org.openhab.binding.matter.internal.client;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +41,8 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
     protected final Gson gson = new Gson();
     private Session session;
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<AttributeListener, String> attributeListeners = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<NodeStateListener, Long> nodeStateListeners = new ConcurrentHashMap<>();
 
     static class Request {
         public Request(String requestId, String namespace, String function, Object args[]) {
@@ -73,6 +76,68 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         JsonObject message;
     }
 
+    public static class AttributeChangedMessage {
+        public Path path;
+        public Long version;
+        public String value;
+    }
+
+    public static class NodeStateMessage {
+        public Long nodeId;
+        public NodeState nodeState;
+    }
+
+    public enum NodeState {
+        /** Node is connected and all data is up-to-date. */
+        CONNECTED("Connected"),
+
+        /**
+         * Node is disconnected. Data are stale and interactions will most likely return an error. If controller
+         * instance
+         * is still active then the device will be reconnected once it is available again.
+         */
+        DISCONNECTED("Disconnected"),
+
+        /** Node is reconnecting. Data are stale. It is yet unknown if the reconnection is successful. */
+        RECONNECTING("Reconnecting"),
+
+        /**
+         * The node could not be connected and the controller is now waiting for a MDNS announcement and tries every 10
+         * minutes to reconnect.
+         */
+        WAITINGFORDEVICEDISCOVERY("WaitingForDeviceDiscovery"),
+
+        /**
+         * Node structure has changed (Endpoints got added or also removed). Data are up-to-date.
+         * This State information will only be fired when the subscribeAllAttributesAndEvents option is set to true.
+         */
+        STRUCTURECHANGED("StructureChanged"),
+
+        /**
+         * The node was just Decommissioned.
+         */
+        DECOMMISSIONED("Decommissioned");
+
+        private String state;
+
+        NodeState(String state) {
+            this.state = state;
+        }
+
+        @Override
+        public String toString() {
+            return state;
+        }
+    }
+
+    public static class Path {
+        public Long nodeId;
+        public Integer endpointId;
+        public Integer clusterId;
+        public Integer attributeId;
+        public String attributeName;
+    }
+
     public void connect(String host, int port) throws Exception {
         logger.debug("Connecting {}:{} ", host, port);
         String dest = "ws://" + host + ":" + port + "?nodeId=0&storagePath=/Users/daniel/tmp/matter-server";
@@ -87,6 +152,26 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         if (session != null) {
             session.close();
         }
+    }
+
+    public void addAttributeListener(AttributeListener listener, Long nodeId, int endpointId, int clusterId) {
+        attributeListeners.put(listener, attributeListenerId(nodeId, endpointId, clusterId));
+    }
+
+    public void addAttributeListener(AttributeListener listener) {
+        attributeListeners.put(listener, "");
+    }
+
+    public void removeAttributeListener(AttributeListener listener) {
+        attributeListeners.remove(listener);
+    }
+
+    public void addNodeStateListener(NodeStateListener listener, Long nodeId) {
+        nodeStateListeners.put(listener, nodeId);
+    }
+
+    public void removeNodeStateListener(NodeStateListener listener) {
+        nodeStateListeners.remove(listener);
     }
 
     protected CompletableFuture<JsonElement> sendMessage(String namespace, String functionName, Object args[]) {
@@ -123,6 +208,27 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
             }
         } else if (message.type.equals("event")) {
             Event event = gson.fromJson(message.message, Event.class);
+            switch (event.type) {
+                case "attributeChanged":
+                    AttributeChangedMessage changedMessage = gson.fromJson(event.data, AttributeChangedMessage.class);
+                    String id = attributeListenerId(changedMessage.path.nodeId, changedMessage.path.endpointId,
+                            changedMessage.path.clusterId);
+                    for (Map.Entry<AttributeListener, String> entry : attributeListeners.entrySet()) {
+                        String value = entry.getValue();
+                        if (value.length() == 0 || value.equals(id)) {
+                            entry.getKey().onEvent(changedMessage);
+                        }
+                    }
+                    break;
+                case "nodeStateInformation":
+                    NodeStateMessage nodeStateMessage = gson.fromJson(event.data, NodeStateMessage.class);
+                    for (Map.Entry<NodeStateListener, Long> entry : nodeStateListeners.entrySet()) {
+                        Long value = entry.getValue();
+                        if (value.equals(nodeStateMessage.nodeId)) {
+                            entry.getKey().onEvent(nodeStateMessage);
+                        }
+                    }
+            }
         }
     }
 
@@ -142,5 +248,9 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
 
     public boolean isConnected() {
         return session != null && session.isOpen();
+    }
+
+    private String attributeListenerId(Long nodeId, int endpointId, int clusterId) {
+        return nodeId + ":" + endpointId + ":" + clusterId;
     }
 }

@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * UnitLocalization
@@ -32,15 +28,8 @@ public class UnitLocalizationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "UNIT_LOCALIZATION_CLUSTER";
     public static final int CLUSTER_ID = 0x002D;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(86, "temperatureUnit"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Enums
-    public enum TempUnitEnum implements JsonSerializable {
+    public enum TempUnitEnum {
         FAHRENHEIT(0, "Fahrenheit"),
         CELSIUS(1, "Celsius"),
         KELVIN(2, "Kelvin"),
@@ -53,25 +42,14 @@ public class UnitLocalizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean temperatureUnit;
 
         public Feature(boolean temperatureUnit) {
             this.temperatureUnit = temperatureUnit;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"temperatureUnit\" : " + temperatureUnit + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -82,16 +60,16 @@ public class UnitLocalizationCluster extends BaseCluster {
         }
     }
 
-    public TempUnitEnum temperatureUnit; // 86 TempUnitEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public TempUnitEnum temperatureUnit; // 0 TempUnitEnum reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public UnitLocalizationCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 82, "UnitLocalization");
+        super(nodeId, endpointId, 79, "UnitLocalization");
     }
 
     public String toString() {

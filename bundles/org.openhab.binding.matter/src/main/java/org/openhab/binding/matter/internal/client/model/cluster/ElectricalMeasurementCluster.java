@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * ElectricalMeasurement
@@ -33,204 +30,143 @@ public class ElectricalMeasurementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ELECTRICAL_MEASUREMENT_CLUSTER";
     public static final int CLUSTER_ID = 0x0B04;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(41, "measurementType"), entry(126, "dcVoltage"),
-                entry(196, "dcVoltageMin"), entry(267, "dcVoltageMax"), entry(320, "dcCurrent"),
-                entry(362, "dcCurrentMin"), entry(398, "dcCurrentMax"), entry(430, "dcPower"), entry(458, "dcPowerMin"),
-                entry(483, "dcPowerMax"), entry(505, "dcVoltageMultiplier"), entry(527, "dcVoltageDivisor"),
-                entry(547, "dcCurrentMultiplier"), entry(567, "dcCurrentDivisor"), entry(581, "dcPowerMultiplier"),
-                entry(594, "dcPowerDivisor"), entry(606, "acFrequency"), entry(617, "acFrequencyMin"),
-                entry(629, "acFrequencyMax"), entry(641, "neutralCurrent"), entry(653, "totalActivePower"),
-                entry(665, "totalReactivePower"), entry(677, "totalApparentPower"),
-                entry(688, "measured1stHarmonicCurrent"), entry(696, "measured3rdHarmonicCurrent"),
-                entry(704, "measured5thHarmonicCurrent"), entry(712, "measured7thHarmonicCurrent"),
-                entry(720, "measured9thHarmonicCurrent"), entry(728, "measured11thHarmonicCurrent"),
-                entry(736, "measuredPhase1stHarmonicCurrent"), entry(744, "measuredPhase3rdHarmonicCurrent"),
-                entry(752, "measuredPhase5thHarmonicCurrent"), entry(760, "measuredPhase7thHarmonicCurrent"),
-                entry(767, "measuredPhase9thHarmonicCurrent"), entry(774, "measuredPhase11thHarmonicCurrent"),
-                entry(781, "acFrequencyMultiplier"), entry(788, "acFrequencyDivisor"), entry(793, "powerMultiplier"),
-                entry(798, "powerDivisor"), entry(803, "harmonicCurrentMultiplier"),
-                entry(809, "phaseHarmonicCurrentMultiplier"), entry(814, "instantaneousVoltage"),
-                entry(819, "instantaneousLineCurrent"), entry(824, "instantaneousActiveCurrent"),
-                entry(829, "instantaneousReactiveCurrent"), entry(834, "instantaneousPower"), entry(839, "rmsVoltage"),
-                entry(844, "rmsVoltageMin"), entry(849, "rmsVoltageMax"), entry(854, "rmsCurrent"),
-                entry(858, "rmsCurrentMin"), entry(862, "rmsCurrentMax"), entry(866, "activePower"),
-                entry(870, "activePowerMin"), entry(874, "activePowerMax"), entry(878, "reactivePower"),
-                entry(882, "apparentPower"), entry(885, "powerFactor"),
-                entry(889, "averageRmsVoltageMeasurementPeriod"), entry(892, "averageRmsUnderVoltageCounter"),
-                entry(896, "rmsExtremeOverVoltagePeriod"), entry(902, "rmsExtremeUnderVoltagePeriod"),
-                entry(906, "rmsVoltageSagPeriod"), entry(910, "rmsVoltageSwellPeriod"),
-                entry(913, "acVoltageMultiplier"), entry(916, "acVoltageDivisor"), entry(919, "acCurrentMultiplier"),
-                entry(922, "acCurrentDivisor"), entry(925, "acPowerMultiplier"), entry(928, "acPowerDivisor"),
-                entry(931, "overloadAlarmsMask"), entry(935, "voltageOverload"), entry(938, "currentOverload"),
-                entry(941, "acOverloadAlarmsMask"), entry(944, "acVoltageOverload"), entry(947, "acCurrentOverload"),
-                entry(950, "acActivePowerOverload"), entry(953, "acReactivePowerOverload"),
-                entry(956, "averageRmsOverVoltage"), entry(959, "averageRmsUnderVoltage"),
-                entry(962, "rmsExtremeOverVoltage"), entry(964, "rmsExtremeUnderVoltage"), entry(966, "rmsVoltageSag"),
-                entry(968, "rmsVoltageSwell"), entry(970, "lineCurrentPhaseB"), entry(972, "activeCurrentPhaseB"),
-                entry(976, "reactiveCurrentPhaseB"), entry(978, "rmsVoltagePhaseB"), entry(980, "rmsVoltageMinPhaseB"),
-                entry(982, "rmsVoltageMaxPhaseB"), entry(983, "rmsCurrentPhaseB"), entry(985, "rmsCurrentMinPhaseB"),
-                entry(987, "rmsCurrentMaxPhaseB"), entry(989, "activePowerPhaseB"), entry(991, "activePowerMinPhaseB"),
-                entry(993, "activePowerMaxPhaseB"), entry(995, "reactivePowerPhaseB"),
-                entry(997, "apparentPowerPhaseB"), entry(999, "powerFactorPhaseB"),
-                entry(1001, "averageRmsVoltageMeasurementPeriodPhaseB"),
-                entry(1003, "averageRmsOverVoltageCounterPhaseB"), entry(1005, "averageRmsUnderVoltageCounterPhaseB"),
-                entry(1007, "rmsExtremeOverVoltagePeriodPhaseB"), entry(1008, "rmsExtremeUnderVoltagePeriodPhaseB"),
-                entry(1010, "rmsVoltageSagPeriodPhaseB"), entry(1012, "rmsVoltageSwellPeriodPhaseB"),
-                entry(1013, "lineCurrentPhaseC"), entry(1015, "activeCurrentPhaseC"),
-                entry(1018, "reactiveCurrentPhaseC"), entry(1021, "rmsVoltagePhaseC"),
-                entry(1023, "rmsVoltageMinPhaseC"), entry(1025, "rmsVoltageMaxPhaseC"), entry(1027, "rmsCurrentPhaseC"),
-                entry(1029, "rmsCurrentMinPhaseC"), entry(1031, "rmsCurrentMaxPhaseC"),
-                entry(1033, "activePowerPhaseC"), entry(1036, "activePowerMinPhaseC"),
-                entry(1037, "activePowerMaxPhaseC"), entry(1038, "reactivePowerPhaseC"),
-                entry(1039, "apparentPowerPhaseC"), entry(1040, "powerFactorPhaseC"),
-                entry(1041, "averageRmsVoltageMeasurementPeriodPhaseC"),
-                entry(1042, "averageRmsOverVoltageCounterPhaseC"), entry(1043, "averageRmsUnderVoltageCounterPhaseC"),
-                entry(1044, "rmsExtremeOverVoltagePeriodPhaseC"), entry(1045, "rmsExtremeUnderVoltagePeriodPhaseC"),
-                entry(1046, "rmsVoltageSagPeriodPhaseC"), entry(1047, "rmsVoltageSwellPeriodPhaseC"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(24, "getProfileInfoResponseCommand"), entry(126, "getProfileInfoCommand"),
-                entry(82, "getMeasurementProfileResponseCommand"), entry(161, "getMeasurementProfileCommand"));
-    }
-
-    public Map<String, Boolean> measurementType; // 41 bitmap32
-    public Integer dcVoltage; // 126 int16s
-    public Integer dcVoltageMin; // 196 int16s
-    public Integer dcVoltageMax; // 267 int16s
-    public Integer dcCurrent; // 320 int16s
-    public Integer dcCurrentMin; // 362 int16s
-    public Integer dcCurrentMax; // 398 int16s
-    public Integer dcPower; // 430 int16s
-    public Integer dcPowerMin; // 458 int16s
-    public Integer dcPowerMax; // 483 int16s
-    public Integer dcVoltageMultiplier; // 505 int16u
-    public Integer dcVoltageDivisor; // 527 int16u
-    public Integer dcCurrentMultiplier; // 547 int16u
-    public Integer dcCurrentDivisor; // 567 int16u
-    public Integer dcPowerMultiplier; // 581 int16u
-    public Integer dcPowerDivisor; // 594 int16u
-    public Integer acFrequency; // 606 int16u
-    public Integer acFrequencyMin; // 617 int16u
-    public Integer acFrequencyMax; // 629 int16u
-    public Integer neutralCurrent; // 641 int16u
-    public Integer totalActivePower; // 653 int32s
-    public Integer totalReactivePower; // 665 int32s
-    public Integer totalApparentPower; // 677 int32u
-    public Integer measured1stHarmonicCurrent; // 688 int16s
-    public Integer measured3rdHarmonicCurrent; // 696 int16s
-    public Integer measured5thHarmonicCurrent; // 704 int16s
-    public Integer measured7thHarmonicCurrent; // 712 int16s
-    public Integer measured9thHarmonicCurrent; // 720 int16s
-    public Integer measured11thHarmonicCurrent; // 728 int16s
-    public Integer measuredPhase1stHarmonicCurrent; // 736 int16s
-    public Integer measuredPhase3rdHarmonicCurrent; // 744 int16s
-    public Integer measuredPhase5thHarmonicCurrent; // 752 int16s
-    public Integer measuredPhase7thHarmonicCurrent; // 760 int16s
-    public Integer measuredPhase9thHarmonicCurrent; // 767 int16s
-    public Integer measuredPhase11thHarmonicCurrent; // 774 int16s
-    public Integer acFrequencyMultiplier; // 781 int16u
-    public Integer acFrequencyDivisor; // 788 int16u
-    public Integer powerMultiplier; // 793 int32u
-    public Integer powerDivisor; // 798 int32u
-    public Integer harmonicCurrentMultiplier; // 803 int8s
-    public Integer phaseHarmonicCurrentMultiplier; // 809 int8s
-    public Integer instantaneousVoltage; // 814 int16s
-    public Integer instantaneousLineCurrent; // 819 int16u
-    public Integer instantaneousActiveCurrent; // 824 int16s
-    public Integer instantaneousReactiveCurrent; // 829 int16s
-    public Integer instantaneousPower; // 834 int16s
-    public Integer rmsVoltage; // 839 int16u
-    public Integer rmsVoltageMin; // 844 int16u
-    public Integer rmsVoltageMax; // 849 int16u
-    public Integer rmsCurrent; // 854 int16u
-    public Integer rmsCurrentMin; // 858 int16u
-    public Integer rmsCurrentMax; // 862 int16u
-    public Integer activePower; // 866 int16s
-    public Integer activePowerMin; // 870 int16s
-    public Integer activePowerMax; // 874 int16s
-    public Integer reactivePower; // 878 int16s
-    public Integer apparentPower; // 882 int16u
-    public Integer powerFactor; // 885 int8s
-    public Integer averageRmsVoltageMeasurementPeriod; // 889 int16u
-    public Integer averageRmsUnderVoltageCounter; // 892 int16u
-    public Integer rmsExtremeOverVoltagePeriod; // 896 int16u
-    public Integer rmsExtremeUnderVoltagePeriod; // 902 int16u
-    public Integer rmsVoltageSagPeriod; // 906 int16u
-    public Integer rmsVoltageSwellPeriod; // 910 int16u
-    public Integer acVoltageMultiplier; // 913 int16u
-    public Integer acVoltageDivisor; // 916 int16u
-    public Integer acCurrentMultiplier; // 919 int16u
-    public Integer acCurrentDivisor; // 922 int16u
-    public Integer acPowerMultiplier; // 925 int16u
-    public Integer acPowerDivisor; // 928 int16u
-    public Map<String, Boolean> overloadAlarmsMask; // 931 bitmap8
-    public Integer voltageOverload; // 935 int16s
-    public Integer currentOverload; // 938 int16s
-    public Map<String, Boolean> acOverloadAlarmsMask; // 941 bitmap16
-    public Integer acVoltageOverload; // 944 int16s
-    public Integer acCurrentOverload; // 947 int16s
-    public Integer acActivePowerOverload; // 950 int16s
-    public Integer acReactivePowerOverload; // 953 int16s
-    public Integer averageRmsOverVoltage; // 956 int16s
-    public Integer averageRmsUnderVoltage; // 959 int16s
-    public Integer rmsExtremeOverVoltage; // 962 int16s
-    public Integer rmsExtremeUnderVoltage; // 964 int16s
-    public Integer rmsVoltageSag; // 966 int16s
-    public Integer rmsVoltageSwell; // 968 int16s
-    public Integer lineCurrentPhaseB; // 970 int16u
-    public Integer activeCurrentPhaseB; // 972 int16s
-    public Integer reactiveCurrentPhaseB; // 976 int16s
-    public Integer rmsVoltagePhaseB; // 978 int16u
-    public Integer rmsVoltageMinPhaseB; // 980 int16u
-    public Integer rmsVoltageMaxPhaseB; // 982 int16u
-    public Integer rmsCurrentPhaseB; // 983 int16u
-    public Integer rmsCurrentMinPhaseB; // 985 int16u
-    public Integer rmsCurrentMaxPhaseB; // 987 int16u
-    public Integer activePowerPhaseB; // 989 int16s
-    public Integer activePowerMinPhaseB; // 991 int16s
-    public Integer activePowerMaxPhaseB; // 993 int16s
-    public Integer reactivePowerPhaseB; // 995 int16s
-    public Integer apparentPowerPhaseB; // 997 int16u
-    public Integer powerFactorPhaseB; // 999 int8s
-    public Integer averageRmsVoltageMeasurementPeriodPhaseB; // 1001 int16u
-    public Integer averageRmsOverVoltageCounterPhaseB; // 1003 int16u
-    public Integer averageRmsUnderVoltageCounterPhaseB; // 1005 int16u
-    public Integer rmsExtremeOverVoltagePeriodPhaseB; // 1007 int16u
-    public Integer rmsExtremeUnderVoltagePeriodPhaseB; // 1008 int16u
-    public Integer rmsVoltageSagPeriodPhaseB; // 1010 int16u
-    public Integer rmsVoltageSwellPeriodPhaseB; // 1012 int16u
-    public Integer lineCurrentPhaseC; // 1013 int16u
-    public Integer activeCurrentPhaseC; // 1015 int16s
-    public Integer reactiveCurrentPhaseC; // 1018 int16s
-    public Integer rmsVoltagePhaseC; // 1021 int16u
-    public Integer rmsVoltageMinPhaseC; // 1023 int16u
-    public Integer rmsVoltageMaxPhaseC; // 1025 int16u
-    public Integer rmsCurrentPhaseC; // 1027 int16u
-    public Integer rmsCurrentMinPhaseC; // 1029 int16u
-    public Integer rmsCurrentMaxPhaseC; // 1031 int16u
-    public Integer activePowerPhaseC; // 1033 int16s
-    public Integer activePowerMinPhaseC; // 1036 int16s
-    public Integer activePowerMaxPhaseC; // 1037 int16s
-    public Integer reactivePowerPhaseC; // 1038 int16s
-    public Integer apparentPowerPhaseC; // 1039 int16u
-    public Integer powerFactorPhaseC; // 1040 int8s
-    public Integer averageRmsVoltageMeasurementPeriodPhaseC; // 1041 int16u
-    public Integer averageRmsOverVoltageCounterPhaseC; // 1042 int16u
-    public Integer averageRmsUnderVoltageCounterPhaseC; // 1043 int16u
-    public Integer rmsExtremeOverVoltagePeriodPhaseC; // 1044 int16u
-    public Integer rmsExtremeUnderVoltagePeriodPhaseC; // 1045 int16u
-    public Integer rmsVoltageSagPeriodPhaseC; // 1046 int16u
-    public Integer rmsVoltageSwellPeriodPhaseC; // 1047 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Map<String, Boolean> measurementType; // 0 bitmap32 reportable
+    public Integer dcVoltage; // 256 int16s reportable
+    public Integer dcVoltageMin; // 257 int16s reportable
+    public Integer dcVoltageMax; // 258 int16s reportable
+    public Integer dcCurrent; // 259 int16s reportable
+    public Integer dcCurrentMin; // 260 int16s reportable
+    public Integer dcCurrentMax; // 261 int16s reportable
+    public Integer dcPower; // 262 int16s reportable
+    public Integer dcPowerMin; // 263 int16s reportable
+    public Integer dcPowerMax; // 264 int16s reportable
+    public Integer dcVoltageMultiplier; // 512 int16u reportable
+    public Integer dcVoltageDivisor; // 513 int16u reportable
+    public Integer dcCurrentMultiplier; // 514 int16u reportable
+    public Integer dcCurrentDivisor; // 515 int16u reportable
+    public Integer dcPowerMultiplier; // 516 int16u reportable
+    public Integer dcPowerDivisor; // 517 int16u reportable
+    public Integer acFrequency; // 768 int16u reportable
+    public Integer acFrequencyMin; // 769 int16u reportable
+    public Integer acFrequencyMax; // 770 int16u reportable
+    public Integer neutralCurrent; // 771 int16u reportable
+    public Integer totalActivePower; // 772 int32s reportable
+    public Integer totalReactivePower; // 773 int32s reportable
+    public Integer totalApparentPower; // 774 int32u reportable
+    public Integer measured1stHarmonicCurrent; // 775 int16s reportable
+    public Integer measured3rdHarmonicCurrent; // 776 int16s reportable
+    public Integer measured5thHarmonicCurrent; // 777 int16s reportable
+    public Integer measured7thHarmonicCurrent; // 778 int16s reportable
+    public Integer measured9thHarmonicCurrent; // 779 int16s reportable
+    public Integer measured11thHarmonicCurrent; // 780 int16s reportable
+    public Integer measuredPhase1stHarmonicCurrent; // 781 int16s reportable
+    public Integer measuredPhase3rdHarmonicCurrent; // 782 int16s reportable
+    public Integer measuredPhase5thHarmonicCurrent; // 783 int16s reportable
+    public Integer measuredPhase7thHarmonicCurrent; // 784 int16s reportable
+    public Integer measuredPhase9thHarmonicCurrent; // 785 int16s reportable
+    public Integer measuredPhase11thHarmonicCurrent; // 786 int16s reportable
+    public Integer acFrequencyMultiplier; // 1024 int16u reportable
+    public Integer acFrequencyDivisor; // 1025 int16u reportable
+    public Integer powerMultiplier; // 1026 int32u reportable
+    public Integer powerDivisor; // 1027 int32u reportable
+    public Integer harmonicCurrentMultiplier; // 1028 int8s reportable
+    public Integer phaseHarmonicCurrentMultiplier; // 1029 int8s reportable
+    public Integer instantaneousVoltage; // 1280 int16s reportable
+    public Integer instantaneousLineCurrent; // 1281 int16u reportable
+    public Integer instantaneousActiveCurrent; // 1282 int16s reportable
+    public Integer instantaneousReactiveCurrent; // 1283 int16s reportable
+    public Integer instantaneousPower; // 1284 int16s reportable
+    public Integer rmsVoltage; // 1285 int16u reportable
+    public Integer rmsVoltageMin; // 1286 int16u reportable
+    public Integer rmsVoltageMax; // 1287 int16u reportable
+    public Integer rmsCurrent; // 1288 int16u reportable
+    public Integer rmsCurrentMin; // 1289 int16u reportable
+    public Integer rmsCurrentMax; // 1290 int16u reportable
+    public Integer activePower; // 1291 int16s reportable
+    public Integer activePowerMin; // 1292 int16s reportable
+    public Integer activePowerMax; // 1293 int16s reportable
+    public Integer reactivePower; // 1294 int16s reportable
+    public Integer apparentPower; // 1295 int16u reportable
+    public Integer powerFactor; // 1296 int8s reportable
+    public Integer averageRmsVoltageMeasurementPeriod; // 1297 int16u reportable writable
+    public Integer averageRmsUnderVoltageCounter; // 1299 int16u reportable writable
+    public Integer rmsExtremeOverVoltagePeriod; // 1300 int16u reportable writable
+    public Integer rmsExtremeUnderVoltagePeriod; // 1301 int16u reportable writable
+    public Integer rmsVoltageSagPeriod; // 1302 int16u reportable writable
+    public Integer rmsVoltageSwellPeriod; // 1303 int16u reportable writable
+    public Integer acVoltageMultiplier; // 1536 int16u reportable
+    public Integer acVoltageDivisor; // 1537 int16u reportable
+    public Integer acCurrentMultiplier; // 1538 int16u reportable
+    public Integer acCurrentDivisor; // 1539 int16u reportable
+    public Integer acPowerMultiplier; // 1540 int16u reportable
+    public Integer acPowerDivisor; // 1541 int16u reportable
+    public Map<String, Boolean> overloadAlarmsMask; // 1792 bitmap8 reportable writable
+    public Integer voltageOverload; // 1793 int16s reportable
+    public Integer currentOverload; // 1794 int16s reportable
+    public Map<String, Boolean> acOverloadAlarmsMask; // 2048 bitmap16 reportable writable
+    public Integer acVoltageOverload; // 2049 int16s reportable
+    public Integer acCurrentOverload; // 2050 int16s reportable
+    public Integer acActivePowerOverload; // 2051 int16s reportable
+    public Integer acReactivePowerOverload; // 2052 int16s reportable
+    public Integer averageRmsOverVoltage; // 2053 int16s reportable
+    public Integer averageRmsUnderVoltage; // 2054 int16s reportable
+    public Integer rmsExtremeOverVoltage; // 2055 int16s reportable
+    public Integer rmsExtremeUnderVoltage; // 2056 int16s reportable
+    public Integer rmsVoltageSag; // 2057 int16s reportable
+    public Integer rmsVoltageSwell; // 2058 int16s reportable
+    public Integer lineCurrentPhaseB; // 2305 int16u reportable
+    public Integer activeCurrentPhaseB; // 2306 int16s reportable
+    public Integer reactiveCurrentPhaseB; // 2307 int16s reportable
+    public Integer rmsVoltagePhaseB; // 2309 int16u reportable
+    public Integer rmsVoltageMinPhaseB; // 2310 int16u reportable
+    public Integer rmsVoltageMaxPhaseB; // 2311 int16u reportable
+    public Integer rmsCurrentPhaseB; // 2312 int16u reportable
+    public Integer rmsCurrentMinPhaseB; // 2313 int16u reportable
+    public Integer rmsCurrentMaxPhaseB; // 2314 int16u reportable
+    public Integer activePowerPhaseB; // 2315 int16s reportable
+    public Integer activePowerMinPhaseB; // 2316 int16s reportable
+    public Integer activePowerMaxPhaseB; // 2317 int16s reportable
+    public Integer reactivePowerPhaseB; // 2318 int16s reportable
+    public Integer apparentPowerPhaseB; // 2319 int16u reportable
+    public Integer powerFactorPhaseB; // 2320 int8s reportable
+    public Integer averageRmsVoltageMeasurementPeriodPhaseB; // 2321 int16u reportable
+    public Integer averageRmsOverVoltageCounterPhaseB; // 2322 int16u reportable
+    public Integer averageRmsUnderVoltageCounterPhaseB; // 2323 int16u reportable
+    public Integer rmsExtremeOverVoltagePeriodPhaseB; // 2324 int16u reportable
+    public Integer rmsExtremeUnderVoltagePeriodPhaseB; // 2325 int16u reportable
+    public Integer rmsVoltageSagPeriodPhaseB; // 2326 int16u reportable
+    public Integer rmsVoltageSwellPeriodPhaseB; // 2327 int16u reportable
+    public Integer lineCurrentPhaseC; // 2561 int16u reportable
+    public Integer activeCurrentPhaseC; // 2562 int16s reportable
+    public Integer reactiveCurrentPhaseC; // 2563 int16s reportable
+    public Integer rmsVoltagePhaseC; // 2565 int16u reportable
+    public Integer rmsVoltageMinPhaseC; // 2566 int16u reportable
+    public Integer rmsVoltageMaxPhaseC; // 2567 int16u reportable
+    public Integer rmsCurrentPhaseC; // 2568 int16u reportable
+    public Integer rmsCurrentMinPhaseC; // 2569 int16u reportable
+    public Integer rmsCurrentMaxPhaseC; // 2570 int16u reportable
+    public Integer activePowerPhaseC; // 2571 int16s reportable
+    public Integer activePowerMinPhaseC; // 2572 int16s reportable
+    public Integer activePowerMaxPhaseC; // 2573 int16s reportable
+    public Integer reactivePowerPhaseC; // 2574 int16s reportable
+    public Integer apparentPowerPhaseC; // 2575 int16u reportable
+    public Integer powerFactorPhaseC; // 2576 int8s reportable
+    public Integer averageRmsVoltageMeasurementPeriodPhaseC; // 2577 int16u reportable
+    public Integer averageRmsOverVoltageCounterPhaseC; // 2578 int16u reportable
+    public Integer averageRmsUnderVoltageCounterPhaseC; // 2579 int16u reportable
+    public Integer rmsExtremeOverVoltagePeriodPhaseC; // 2580 int16u reportable
+    public Integer rmsExtremeUnderVoltagePeriodPhaseC; // 2581 int16u reportable
+    public Integer rmsVoltageSagPeriodPhaseC; // 2582 int16u reportable
+    public Integer rmsVoltageSwellPeriodPhaseC; // 2583 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ElectricalMeasurementCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 31, "ElectricalMeasurement");
+        super(nodeId, endpointId, 20, "ElectricalMeasurement");
     }
 
     public void getProfileInfoResponseCommand(MatterClient client, Integer profileCount, Integer profileIntervalPeriod,

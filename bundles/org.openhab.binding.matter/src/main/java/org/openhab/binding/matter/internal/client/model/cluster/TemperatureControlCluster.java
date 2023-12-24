@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * TemperatureControl
@@ -33,17 +30,8 @@ public class TemperatureControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "TEMPERATURE_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x0056;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(81, "temperatureSetpoint"), entry(163, "minTemperature"),
-                entry(236, "maxTemperature"), entry(293, "step"), entry(339, "selectedTemperatureLevel"),
-                entry(380, "supportedTemperatureLevels"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(49, "setTemperature"));
-    }
-
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean temperatureNumber;
         public boolean temperatureLevel;
         public boolean temperatureStep;
@@ -54,15 +42,6 @@ public class TemperatureControlCluster extends BaseCluster {
             this.temperatureStep = temperatureStep;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"temperatureNumber\" : " + temperatureNumber + ",";
-            out += "\"temperatureLevel\" : " + temperatureLevel + ",";
-            out += "\"temperatureStep\" : " + temperatureStep + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -71,21 +50,21 @@ public class TemperatureControlCluster extends BaseCluster {
         }
     }
 
-    public Integer temperatureSetpoint; // 81 temperature
-    public Integer minTemperature; // 163 temperature
-    public Integer maxTemperature; // 236 temperature
-    public Integer step; // 293 temperature
-    public Integer selectedTemperatureLevel; // 339 int8u
-    public String supportedTemperatureLevels; // 380 char_string
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer temperatureSetpoint; // 0 temperature reportable
+    public Integer minTemperature; // 1 temperature reportable
+    public Integer maxTemperature; // 2 temperature reportable
+    public Integer step; // 3 temperature reportable
+    public Integer selectedTemperatureLevel; // 4 int8u reportable
+    public String supportedTemperatureLevels; // 5 char_string reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public TemperatureControlCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 78, "TemperatureControl");
+        super(nodeId, endpointId, 68, "TemperatureControl");
     }
 
     public void setTemperature(MatterClient client, Integer targetTemperature, Integer targetTemperatureLevel)

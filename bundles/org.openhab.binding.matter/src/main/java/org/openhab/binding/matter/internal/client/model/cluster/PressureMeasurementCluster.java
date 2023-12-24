@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * PressureMeasurement
@@ -32,28 +28,12 @@ public class PressureMeasurementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "PRESSURE_MEASUREMENT_CLUSTER";
     public static final int CLUSTER_ID = 0x0403;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(58, "measuredValue"), entry(137, "minMeasuredValue"),
-                entry(207, "maxMeasuredValue"), entry(270, "tolerance"), entry(325, "scaledValue"),
-                entry(367, "minScaledValue"), entry(401, "maxScaledValue"), entry(432, "scaledTolerance"),
-                entry(460, "scale"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean extended;
 
         public Feature(boolean extended) {
             this.extended = extended;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"extended\" : " + extended + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -64,24 +44,24 @@ public class PressureMeasurementCluster extends BaseCluster {
         }
     }
 
-    public Integer measuredValue; // 58 int16s
-    public Integer minMeasuredValue; // 137 int16s
-    public Integer maxMeasuredValue; // 207 int16s
-    public Integer tolerance; // 270 int16u
-    public Integer scaledValue; // 325 int16s
-    public Integer minScaledValue; // 367 int16s
-    public Integer maxScaledValue; // 401 int16s
-    public Integer scaledTolerance; // 432 int16u
-    public Integer scale; // 460 int8s
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer measuredValue; // 0 int16s reportable
+    public Integer minMeasuredValue; // 1 int16s reportable
+    public Integer maxMeasuredValue; // 2 int16s reportable
+    public Integer tolerance; // 3 int16u reportable
+    public Integer scaledValue; // 16 int16s reportable
+    public Integer minScaledValue; // 17 int16s reportable
+    public Integer maxScaledValue; // 18 int16s reportable
+    public Integer scaledTolerance; // 19 int16u reportable
+    public Integer scale; // 20 int8s reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public PressureMeasurementCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 53, "PressureMeasurement");
+        super(nodeId, endpointId, 60, "PressureMeasurement");
     }
 
     public String toString() {

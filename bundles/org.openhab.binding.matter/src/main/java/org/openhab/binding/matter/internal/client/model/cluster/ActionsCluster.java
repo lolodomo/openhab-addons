@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Actions
@@ -33,18 +30,7 @@ public class ActionsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ACTIONS_CLUSTER";
     public static final int CLUSTER_ID = 0x0025;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(23, "actionList"), entry(105, "endpointLists"), entry(183, "setupURL"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(16, "instantAction"), entry(70, "instantActionWithTransition"),
-                entry(119, "startAction"), entry(152, "startActionWithDuration"), entry(179, "stopAction"),
-                entry(201, "pauseAction"), entry(217, "pauseActionWithDuration"), entry(230, "resumeAction"),
-                entry(239, "enableAction"), entry(248, "enableActionWithDuration"), entry(256, "disableAction"),
-                entry(263, "disableActionWithDuration"));
-    }
-
-    class ActionStruct implements JsonSerializable {
+    class ActionStruct {
         public Integer actionID; // int16u
         public String name; // char_string
         public ActionTypeEnum type; // ActionTypeEnum
@@ -61,21 +47,9 @@ public class ActionsCluster extends BaseCluster {
             this.supportedCommands = supportedCommands;
             this.state = state;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"actionID\" : " + actionID + ",";
-            out += "\"name\" : " + name + ",";
-            out += "\"type\" : " + type + ",";
-            out += "\"endpointListID\" : " + endpointListID + ",";
-            out += "\"supportedCommands\" : " + supportedCommands + ",";
-            out += "\"state\" : " + state + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class EndpointListStruct implements JsonSerializable {
+    class EndpointListStruct {
         public Integer endpointListID; // int16u
         public String name; // char_string
         public EndpointListTypeEnum type; // EndpointListTypeEnum
@@ -88,20 +62,10 @@ public class ActionsCluster extends BaseCluster {
             this.type = type;
             this.endpoints = endpoints;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"endpointListID\" : " + endpointListID + ",";
-            out += "\"name\" : " + name + ",";
-            out += "\"type\" : " + type + ",";
-            out += "\"endpoints\" : " + endpoints + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ActionErrorEnum implements JsonSerializable {
+    public enum ActionErrorEnum {
         UNKNOWN(0, "Unknown"),
         INTERRUPTED(1, "Interrupted"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -113,13 +77,9 @@ public class ActionsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ActionStateEnum implements JsonSerializable {
+    public enum ActionStateEnum {
         INACTIVE(0, "Inactive"),
         ACTIVE(1, "Active"),
         PAUSED(2, "Paused"),
@@ -133,13 +93,9 @@ public class ActionsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ActionTypeEnum implements JsonSerializable {
+    public enum ActionTypeEnum {
         OTHER(0, "Other"),
         SCENE(1, "Scene"),
         SEQUENCE(2, "Sequence"),
@@ -156,13 +112,9 @@ public class ActionsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum EndpointListTypeEnum implements JsonSerializable {
+    public enum EndpointListTypeEnum {
         OTHER(0, "Other"),
         ROOM(1, "Room"),
         ZONE(2, "Zone"),
@@ -175,14 +127,10 @@ public class ActionsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class CommandBits implements JsonSerializable {
+    public static class CommandBits {
         public boolean instantAction;
         public boolean instantActionWithTransition;
         public boolean startAction;
@@ -214,24 +162,6 @@ public class ActionsCluster extends BaseCluster {
             this.disableActionWithDuration = disableActionWithDuration;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"instantAction\" : " + instantAction + ",";
-            out += "\"instantActionWithTransition\" : " + instantActionWithTransition + ",";
-            out += "\"startAction\" : " + startAction + ",";
-            out += "\"startActionWithDuration\" : " + startActionWithDuration + ",";
-            out += "\"stopAction\" : " + stopAction + ",";
-            out += "\"pauseAction\" : " + pauseAction + ",";
-            out += "\"pauseActionWithDuration\" : " + pauseActionWithDuration + ",";
-            out += "\"resumeAction\" : " + resumeAction + ",";
-            out += "\"enableAction\" : " + enableAction + ",";
-            out += "\"enableActionWithDuration\" : " + enableActionWithDuration + ",";
-            out += "\"disableAction\" : " + disableAction + ",";
-            out += "\"disableActionWithDuration\" : " + disableActionWithDuration + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static CommandBits fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -241,18 +171,18 @@ public class ActionsCluster extends BaseCluster {
         }
     }
 
-    public ActionStruct[] actionList; // 23 ActionStruct
-    public EndpointListStruct[] endpointLists; // 105 EndpointListStruct
-    public String setupURL; // 183 long_char_string
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public ActionStruct[] actionList; // 0 ActionStruct reportable
+    public EndpointListStruct[] endpointLists; // 1 EndpointListStruct reportable
+    public String setupURL; // 2 long_char_string reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ActionsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 11, "Actions");
+        super(nodeId, endpointId, 8, "Actions");
     }
 
     public void instantAction(MatterClient client, Integer actionID, Integer invokeID) throws Exception {

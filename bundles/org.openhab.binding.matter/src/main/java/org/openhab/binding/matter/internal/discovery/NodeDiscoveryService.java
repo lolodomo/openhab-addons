@@ -12,16 +12,12 @@
  */
 package org.openhab.binding.matter.internal.discovery;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
-
-import java.util.Set;
-
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.model.cluster.ClusterThingTypes;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.config.discovery.DiscoveryService;
-import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerService;
@@ -34,14 +30,14 @@ import org.slf4j.LoggerFactory;
  */
 public class NodeDiscoveryService extends AbstractDiscoveryService implements DiscoveryService, ThingHandlerService {
     private final Logger logger = LoggerFactory.getLogger(NodeDiscoveryService.class);
-
-    private static final Set<ThingTypeUID> SUPPORTED_DISCOVERY_THING_TYPES_UIDS = Set.of(THING_TYPE_NODE,
-            THING_TYPE_ENDPOINT, THING_TYPE_CLUSTER);
+    //
+    // private static final Set<ThingTypeUID> SUPPORTED_DISCOVERY_THING_TYPES_UIDS = Set.of(THING_TYPE_NODE,
+    // THING_TYPE_ENDPOINT, THING_TYPE_LEVEL_CONTROL);
 
     private @Nullable ThingHandler thingHandler;
 
     public NodeDiscoveryService() throws IllegalArgumentException {
-        super(SUPPORTED_DISCOVERY_THING_TYPES_UIDS, 5, false);
+        super(ClusterThingTypes.SUPPORTED_DISCOVERY_THING_TYPES_UIDS, 5, false);
     }
 
     @Override

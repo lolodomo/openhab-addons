@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * DishwasherMode
@@ -33,15 +30,7 @@ public class DishwasherModeCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "DISHWASHER_MODE_CLUSTER";
     public static final int CLUSTER_ID = 0x0059;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(93, "supportedModes"), entry(170, "currentMode"),
-                entry(239, "startUpMode"), entry(296, "onMode"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(59, "changeToMode"), entry(107, "changeToModeResponse"));
-    }
-
-    class ModeTagStruct implements JsonSerializable {
+    class ModeTagStruct {
         public Integer mfgCode; // vendor_id
         public Integer value; // enum16
 
@@ -49,17 +38,9 @@ public class DishwasherModeCluster extends BaseCluster {
             this.mfgCode = mfgCode;
             this.value = value;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"mfgCode\" : " + mfgCode + ",";
-            out += "\"value\" : " + value + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class ModeOptionStruct implements JsonSerializable {
+    class ModeOptionStruct {
         public String label; // char_string
         public Integer mode; // int8u
         public ModeTagStruct[] modeTags; // ModeTagStruct
@@ -69,19 +50,10 @@ public class DishwasherModeCluster extends BaseCluster {
             this.mode = mode;
             this.modeTags = modeTags;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"label\" : " + label + ",";
-            out += "\"mode\" : " + mode + ",";
-            out += "\"modeTags\" : " + modeTags + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ModeTag implements JsonSerializable {
+    public enum ModeTag {
         NORMAL(16384, "Normal"),
         HEAVY(16385, "Heavy"),
         LIGHT(16386, "Light"),
@@ -94,25 +66,14 @@ public class DishwasherModeCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean onOff;
 
         public Feature(boolean onOff) {
             this.onOff = onOff;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"onOff\" : " + onOff + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -123,19 +84,19 @@ public class DishwasherModeCluster extends BaseCluster {
         }
     }
 
-    public ModeOptionStruct[] supportedModes; // 93 ModeOptionStruct
-    public Integer currentMode; // 170 int8u
-    public Integer startUpMode; // 239 int8u
-    public Integer onMode; // 296 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public ModeOptionStruct[] supportedModes; // 0 ModeOptionStruct reportable
+    public Integer currentMode; // 1 int8u reportable
+    public Integer startUpMode; // 2 int8u reportable writable
+    public Integer onMode; // 3 int8u reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public DishwasherModeCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 90, "DishwasherMode");
+        super(nodeId, endpointId, 22, "DishwasherMode");
     }
 
     public void changeToMode(MatterClient client, Integer newMode) throws Exception {

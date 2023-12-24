@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * HepaFilterMonitoring
@@ -33,16 +30,7 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "HEPA_FILTER_MONITORING_CLUSTER";
     public static final int CLUSTER_ID = 0x0071;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(148, "condition"), entry(217, "degradationDirection"),
-                entry(281, "changeIndication"), entry(331, "inPlaceIndicator"), entry(372, "lastChangedTime"),
-                entry(405, "replacementProductList"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(94, "resetCondition"));
-    }
-
-    class ReplacementProductStruct implements JsonSerializable {
+    class ReplacementProductStruct {
         public ProductIdentifierTypeEnum productIdentifierType; // ProductIdentifierTypeEnum
         public String productIdentifierValue; // char_string
 
@@ -51,18 +39,10 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
             this.productIdentifierType = productIdentifierType;
             this.productIdentifierValue = productIdentifierValue;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"productIdentifierType\" : " + productIdentifierType + ",";
-            out += "\"productIdentifierValue\" : " + productIdentifierValue + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ChangeIndicationEnum implements JsonSerializable {
+    public enum ChangeIndicationEnum {
         OK(0, "OK"),
         WARNING(1, "Warning"),
         CRITICAL(2, "Critical"),
@@ -75,13 +55,9 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum DegradationDirectionEnum implements JsonSerializable {
+    public enum DegradationDirectionEnum {
         UP(0, "Up"),
         DOWN(1, "Down"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -93,13 +69,9 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ProductIdentifierTypeEnum implements JsonSerializable {
+    public enum ProductIdentifierTypeEnum {
         UPC(0, "UPC"),
         GTIN_8(1, "GTIN-8"),
         EAN(2, "EAN"),
@@ -114,14 +86,10 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean condition;
         public boolean warning;
         public boolean replacementProductList;
@@ -132,15 +100,6 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
             this.replacementProductList = replacementProductList;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"condition\" : " + condition + ",";
-            out += "\"warning\" : " + warning + ",";
-            out += "\"replacementProductList\" : " + replacementProductList + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -149,21 +108,21 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
         }
     }
 
-    public Integer condition; // 148 percent
-    public DegradationDirectionEnum degradationDirection; // 217 DegradationDirectionEnum
-    public ChangeIndicationEnum changeIndication; // 281 ChangeIndicationEnum
-    public Boolean inPlaceIndicator; // 331 boolean
-    public Integer lastChangedTime; // 372 epoch_s
-    public ReplacementProductStruct[] replacementProductList; // 405 ReplacementProductStruct
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer condition; // 0 percent reportable
+    public DegradationDirectionEnum degradationDirection; // 1 DegradationDirectionEnum reportable
+    public ChangeIndicationEnum changeIndication; // 2 ChangeIndicationEnum reportable
+    public Boolean inPlaceIndicator; // 3 boolean reportable
+    public Integer lastChangedTime; // 4 epoch_s reportable writable
+    public ReplacementProductStruct[] replacementProductList; // 5 ReplacementProductStruct reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public HepaFilterMonitoringCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 62, "HepaFilterMonitoring");
+        super(nodeId, endpointId, 63, "HepaFilterMonitoring");
     }
 
     public void resetCondition(MatterClient client) throws Exception {

@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * GroupKeyManagement
@@ -33,17 +30,7 @@ public class GroupKeyManagementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "GROUP_KEY_MANAGEMENT_CLUSTER";
     public static final int CLUSTER_ID = 0x003F;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(38, "groupKeyMap"), entry(117, "groupTable"),
-                entry(190, "maxGroupsPerFabric"), entry(254, "maxGroupKeysPerFabric"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(21, "keySetWrite"), entry(74, "keySetRead"),
-                entry(122, "keySetReadResponse"), entry(155, "keySetRemove"), entry(181, "keySetReadAllIndices"),
-                entry(204, "keySetReadAllIndicesResponse"));
-    }
-
-    class GroupInfoMapStruct implements JsonSerializable {
+    class GroupInfoMapStruct {
         public List<Integer> groupId; // group_id
         public List<Integer> endpoints; // endpoint_no
         public String groupName; // char_string
@@ -56,19 +43,9 @@ public class GroupKeyManagementCluster extends BaseCluster {
             this.groupName = groupName;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"groupId\" : " + groupId + ",";
-            out += "\"endpoints\" : " + endpoints + ",";
-            out += "\"groupName\" : " + groupName + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class GroupKeyMapStruct implements JsonSerializable {
+    class GroupKeyMapStruct {
         public List<Integer> groupId; // group_id
         public Integer groupKeySetID; // int16u
         public Integer fabricIndex; // fabric_idx
@@ -78,18 +55,9 @@ public class GroupKeyManagementCluster extends BaseCluster {
             this.groupKeySetID = groupKeySetID;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"groupId\" : " + groupId + ",";
-            out += "\"groupKeySetID\" : " + groupKeySetID + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class GroupKeySetStruct implements JsonSerializable {
+    class GroupKeySetStruct {
         public Integer groupKeySetID; // int16u
         public GroupKeySecurityPolicyEnum groupKeySecurityPolicy; // GroupKeySecurityPolicyEnum
         public String epochKey0; // octet_string
@@ -111,24 +79,10 @@ public class GroupKeyManagementCluster extends BaseCluster {
             this.epochKey2 = epochKey2;
             this.epochStartTime2 = epochStartTime2;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"groupKeySetID\" : " + groupKeySetID + ",";
-            out += "\"groupKeySecurityPolicy\" : " + groupKeySecurityPolicy + ",";
-            out += "\"epochKey0\" : " + epochKey0 + ",";
-            out += "\"epochStartTime0\" : " + epochStartTime0 + ",";
-            out += "\"epochKey1\" : " + epochKey1 + ",";
-            out += "\"epochStartTime1\" : " + epochStartTime1 + ",";
-            out += "\"epochKey2\" : " + epochKey2 + ",";
-            out += "\"epochStartTime2\" : " + epochStartTime2 + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum GroupKeySecurityPolicyEnum implements JsonSerializable {
+    public enum GroupKeySecurityPolicyEnum {
         TRUSTFIRST(0, "TrustFirst"),
         CACHEANDSYNC(1, "CacheAndSync"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -140,25 +94,14 @@ public class GroupKeyManagementCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean cacheAndSync;
 
         public Feature(boolean cacheAndSync) {
             this.cacheAndSync = cacheAndSync;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"cacheAndSync\" : " + cacheAndSync + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -169,19 +112,19 @@ public class GroupKeyManagementCluster extends BaseCluster {
         }
     }
 
-    public GroupKeyMapStruct[] groupKeyMap; // 38 GroupKeyMapStruct
-    public GroupInfoMapStruct[] groupTable; // 117 GroupInfoMapStruct
-    public Integer maxGroupsPerFabric; // 190 int16u
-    public Integer maxGroupKeysPerFabric; // 254 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public GroupKeyMapStruct[] groupKeyMap; // 0 GroupKeyMapStruct reportable writable
+    public GroupInfoMapStruct[] groupTable; // 1 GroupInfoMapStruct reportable
+    public Integer maxGroupsPerFabric; // 2 int16u reportable
+    public Integer maxGroupKeysPerFabric; // 3 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public GroupKeyManagementCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 28, "GroupKeyManagement");
+        super(nodeId, endpointId, 32, "GroupKeyManagement");
     }
 
     public void keySetWrite(MatterClient client, GroupKeySetStruct[] groupKeySet) throws Exception {

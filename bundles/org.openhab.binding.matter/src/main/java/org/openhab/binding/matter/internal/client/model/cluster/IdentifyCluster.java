@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Identify
@@ -33,15 +30,8 @@ public class IdentifyCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "IDENTIFY_CLUSTER";
     public static final int CLUSTER_ID = 0x0003;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(45, "identifyTime"), entry(122, "identifyType"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(27, "identify"), entry(80, "triggerEffect"));
-    }
-
     // ZCL Enums
-    public enum EffectIdentifierEnum implements JsonSerializable {
+    public enum EffectIdentifierEnum {
         BLINK(0, "Blink"),
         BREATHE(1, "Breathe"),
         OKAY(2, "Okay"),
@@ -57,13 +47,9 @@ public class IdentifyCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum EffectVariantEnum implements JsonSerializable {
+    public enum EffectVariantEnum {
         DEFAULT(0, "Default"),
         UNKNOWN_VALUE(1, "UnknownValue");
 
@@ -74,13 +60,9 @@ public class IdentifyCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum IdentifyTypeEnum implements JsonSerializable {
+    public enum IdentifyTypeEnum {
         NONE(0, "None"),
         LIGHTOUTPUT(1, "LightOutput"),
         VISIBLEINDICATOR(2, "VisibleIndicator"),
@@ -96,23 +78,19 @@ public class IdentifyCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public Integer identifyTime; // 45 int16u
-    public IdentifyTypeEnum identifyType; // 122 IdentifyTypeEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer identifyTime; // 0 int16u reportable writable
+    public IdentifyTypeEnum identifyType; // 1 IdentifyTypeEnum reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public IdentifyCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 36, "Identify");
+        super(nodeId, endpointId, 30, "Identify");
     }
 
     public void identify(MatterClient client, Integer identifyTime) throws Exception {

@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * DishwasherAlarm
@@ -33,15 +30,8 @@ public class DishwasherAlarmCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "DISHWASHER_ALARM_CLUSTER";
     public static final int CLUSTER_ID = 0x005D;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(64, "mask"), entry(142, "latch"), entry(212, "state"),
-                entry(275, "supported"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(39, "reset"), entry(92, "modifyEnabledAlarms"));
-    }
-
     // ZCL Bitmaps
-    public static class AlarmMap implements JsonSerializable {
+    public static class AlarmMap {
         public boolean inflowError;
         public boolean drainError;
         public boolean doorError;
@@ -59,18 +49,6 @@ public class DishwasherAlarmCluster extends BaseCluster {
             this.waterLevelError = waterLevelError;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"inflowError\" : " + inflowError + ",";
-            out += "\"drainError\" : " + drainError + ",";
-            out += "\"doorError\" : " + doorError + ",";
-            out += "\"tempTooLow\" : " + tempTooLow + ",";
-            out += "\"tempTooHigh\" : " + tempTooHigh + ",";
-            out += "\"waterLevelError\" : " + waterLevelError + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static AlarmMap fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -79,18 +57,11 @@ public class DishwasherAlarmCluster extends BaseCluster {
         }
     }
 
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean reset;
 
         public Feature(boolean reset) {
             this.reset = reset;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"reset\" : " + reset + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -101,19 +72,19 @@ public class DishwasherAlarmCluster extends BaseCluster {
         }
     }
 
-    public AlarmMap mask; // 64 AlarmMap
-    public AlarmMap latch; // 142 AlarmMap
-    public AlarmMap state; // 212 AlarmMap
-    public AlarmMap supported; // 275 AlarmMap
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public AlarmMap mask; // 0 AlarmMap reportable
+    public AlarmMap latch; // 1 AlarmMap reportable
+    public AlarmMap state; // 2 AlarmMap reportable
+    public AlarmMap supported; // 3 AlarmMap reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public DishwasherAlarmCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 60, "DishwasherAlarm");
+        super(nodeId, endpointId, 21, "DishwasherAlarm");
     }
 
     public void reset(MatterClient client, AlarmMap alarms) throws Exception {

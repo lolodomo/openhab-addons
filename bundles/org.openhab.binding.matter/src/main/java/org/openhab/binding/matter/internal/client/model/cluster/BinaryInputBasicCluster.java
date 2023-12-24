@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * BinaryInputBasic
@@ -32,33 +28,24 @@ public class BinaryInputBasicCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BINARY_INPUT_BASIC_CLUSTER";
     public static final int CLUSTER_ID = 0x000F;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(42, "activeText"), entry(119, "description"),
-                entry(192, "inactiveText"), entry(266, "outOfService"), entry(319, "polarity"),
-                entry(361, "presentValue"), entry(397, "reliability"), entry(428, "statusFlags"),
-                entry(456, "applicationType"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
-    public String activeText; // 42 char_string
-    public String description; // 119 char_string
-    public String inactiveText; // 192 char_string
-    public Boolean outOfService; // 266 boolean
-    public Integer polarity; // 319 enum8
-    public Boolean presentValue; // 361 boolean
-    public Integer reliability; // 397 enum8
-    public Map<String, Boolean> statusFlags; // 428 bitmap8
-    public Integer applicationType; // 456 int32u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public String activeText; // 4 char_string reportable writable
+    public String description; // 28 char_string reportable writable
+    public String inactiveText; // 46 char_string reportable writable
+    public Boolean outOfService; // 81 boolean reportable writable
+    public Integer polarity; // 84 enum8 reportable
+    public Boolean presentValue; // 85 boolean reportable writable
+    public Integer reliability; // 103 enum8 reportable writable
+    public Map<String, Boolean> statusFlags; // 111 bitmap8 reportable
+    public Integer applicationType; // 256 int32u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public BinaryInputBasicCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 33, "BinaryInputBasic");
+        super(nodeId, endpointId, 36, "BinaryInputBasic");
     }
 
     public String toString() {

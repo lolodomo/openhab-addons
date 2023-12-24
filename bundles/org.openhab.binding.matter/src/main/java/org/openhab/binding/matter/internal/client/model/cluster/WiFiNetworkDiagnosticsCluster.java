@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * WiFiNetworkDiagnostics
@@ -33,18 +30,8 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "WIFI_NETWORK_DIAGNOSTICS_CLUSTER";
     public static final int CLUSTER_ID = 0x0036;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(85, "bssid"), entry(165, "securityType"), entry(232, "wiFiVersion"),
-                entry(290, "channelNumber"), entry(336, "rssi"), entry(375, "beaconLostCount"),
-                entry(410, "beaconRxCount"), entry(441, "packetMulticastRxCount"), entry(467, "packetMulticastTxCount"),
-                entry(491, "packetUnicastRxCount"), entry(514, "packetUnicastTxCount"), entry(536, "currentMaxRate"),
-                entry(554, "overrunCount"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(54, "resetCounts"));
-    }
-
     // ZCL Enums
-    public enum AssociationFailureCauseEnum implements JsonSerializable {
+    public enum AssociationFailureCauseEnum {
         UNKNOWN(0, "Unknown"),
         ASSOCIATIONFAILED(1, "AssociationFailed"),
         AUTHENTICATIONFAILED(2, "AuthenticationFailed"),
@@ -58,13 +45,9 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ConnectionStatusEnum implements JsonSerializable {
+    public enum ConnectionStatusEnum {
         CONNECTED(0, "Connected"),
         NOTCONNECTED(1, "NotConnected"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -76,13 +59,9 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum SecurityTypeEnum implements JsonSerializable {
+    public enum SecurityTypeEnum {
         UNSPECIFIED(0, "Unspecified"),
         NONE(1, "None"),
         WEP(2, "WEP"),
@@ -98,13 +77,9 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum WiFiVersionEnum implements JsonSerializable {
+    public enum WiFiVersionEnum {
         A(0, "a"),
         B(1, "b"),
         G(2, "g"),
@@ -121,28 +96,16 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean packetCounts;
         public boolean errorCounts;
 
         public Feature(boolean packetCounts, boolean errorCounts) {
             this.packetCounts = packetCounts;
             this.errorCounts = errorCounts;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"packetCounts\" : " + packetCounts + ",";
-            out += "\"errorCounts\" : " + errorCounts + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -153,28 +116,28 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
         }
     }
 
-    public String bssid; // 85 octet_string
-    public SecurityTypeEnum securityType; // 165 SecurityTypeEnum
-    public WiFiVersionEnum wiFiVersion; // 232 WiFiVersionEnum
-    public Integer channelNumber; // 290 int16u
-    public Integer rssi; // 336 int8s
-    public Integer beaconLostCount; // 375 int32u
-    public Integer beaconRxCount; // 410 int32u
-    public Integer packetMulticastRxCount; // 441 int32u
-    public Integer packetMulticastTxCount; // 467 int32u
-    public Integer packetUnicastRxCount; // 491 int32u
-    public Integer packetUnicastTxCount; // 514 int32u
-    public Long currentMaxRate; // 536 int64u
-    public Long overrunCount; // 554 int64u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public String bssid; // 0 octet_string reportable
+    public SecurityTypeEnum securityType; // 1 SecurityTypeEnum reportable
+    public WiFiVersionEnum wiFiVersion; // 2 WiFiVersionEnum reportable
+    public Integer channelNumber; // 3 int16u reportable
+    public Integer rssi; // 4 int8s reportable
+    public Integer beaconLostCount; // 5 int32u reportable
+    public Integer beaconRxCount; // 6 int32u reportable
+    public Integer packetMulticastRxCount; // 7 int32u reportable
+    public Integer packetMulticastTxCount; // 8 int32u reportable
+    public Integer packetUnicastRxCount; // 9 int32u reportable
+    public Integer packetUnicastTxCount; // 10 int32u reportable
+    public Long currentMaxRate; // 11 int64u reportable
+    public Long overrunCount; // 12 int64u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public WiFiNetworkDiagnosticsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 84, "WiFiNetworkDiagnostics");
+        super(nodeId, endpointId, 83, "WiFiNetworkDiagnostics");
     }
 
     public void resetCounts(MatterClient client) throws Exception {

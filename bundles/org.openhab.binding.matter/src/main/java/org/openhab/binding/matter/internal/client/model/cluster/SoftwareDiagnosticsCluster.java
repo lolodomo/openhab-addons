@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * SoftwareDiagnostics
@@ -33,15 +30,7 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "SOFTWARE_DIAGNOSTICS_CLUSTER";
     public static final int CLUSTER_ID = 0x0034;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(80, "threadMetrics"), entry(160, "currentHeapFree"),
-                entry(229, "currentHeapUsed"), entry(288, "currentHeapHighWatermark"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(48, "resetWatermarks"));
-    }
-
-    class ThreadMetricsStruct implements JsonSerializable {
+    class ThreadMetricsStruct {
         public Long id; // int64u
         public String name; // char_string
         public Integer stackFreeCurrent; // int32u
@@ -56,32 +45,14 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
             this.stackFreeMinimum = stackFreeMinimum;
             this.stackSize = stackSize;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"id\" : " + id + ",";
-            out += "\"name\" : " + name + ",";
-            out += "\"stackFreeCurrent\" : " + stackFreeCurrent + ",";
-            out += "\"stackFreeMinimum\" : " + stackFreeMinimum + ",";
-            out += "\"stackSize\" : " + stackSize + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean watermarks;
 
         public Feature(boolean watermarks) {
             this.watermarks = watermarks;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"watermarks\" : " + watermarks + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -92,19 +63,19 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
         }
     }
 
-    public ThreadMetricsStruct[] threadMetrics; // 80 ThreadMetricsStruct
-    public Long currentHeapFree; // 160 int64u
-    public Long currentHeapUsed; // 229 int64u
-    public Long currentHeapHighWatermark; // 288 int64u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public ThreadMetricsStruct[] threadMetrics; // 0 ThreadMetricsStruct reportable
+    public Long currentHeapFree; // 1 int64u reportable
+    public Long currentHeapUsed; // 2 int64u reportable
+    public Long currentHeapHighWatermark; // 3 int64u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public SoftwareDiagnosticsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 76, "SoftwareDiagnostics");
+        super(nodeId, endpointId, 65, "SoftwareDiagnostics");
     }
 
     public void resetWatermarks(MatterClient client) throws Exception {

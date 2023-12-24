@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * FanControl
@@ -33,18 +30,8 @@ public class FanControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "FAN_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x0202;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(31, "fanMode"), entry(111, "fanModeSequence"),
-                entry(187, "percentSetting"), entry(251, "percentCurrent"), entry(307, "speedMax"),
-                entry(351, "speedSetting"), entry(389, "speedCurrent"), entry(421, "rockSupport"),
-                entry(449, "rockSetting"), entry(477, "windSupport"), entry(501, "windSetting"),
-                entry(523, "airflowDirection"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(15, "step"));
-    }
-
     // ZCL Enums
-    public enum AirflowDirectionEnum implements JsonSerializable {
+    public enum AirflowDirectionEnum {
         FORWARD(0, "Forward"),
         REVERSE(1, "Reverse"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -56,13 +43,9 @@ public class FanControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum FanModeEnum implements JsonSerializable {
+    public enum FanModeEnum {
         OFF(0, "Off"),
         LOW(1, "Low"),
         MEDIUM(2, "Medium"),
@@ -79,13 +62,9 @@ public class FanControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum FanModeSequenceEnum implements JsonSerializable {
+    public enum FanModeSequenceEnum {
         OFF_LOW_MED_HIGH(0, "Off/Low/Med/High"),
         OFF_LOW_HIGH(1, "Off/Low/High"),
         OFF_LOW_MED_HIGH_AUTO(2, "Off/Low/Med/High/Auto"),
@@ -101,13 +80,9 @@ public class FanControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum StepDirectionEnum implements JsonSerializable {
+    public enum StepDirectionEnum {
         INCREASE(0, "Increase"),
         DECREASE(1, "Decrease"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -119,14 +94,10 @@ public class FanControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean multiSpeed;
         public boolean auto;
         public boolean rocking;
@@ -144,18 +115,6 @@ public class FanControlCluster extends BaseCluster {
             this.airflowDirection = airflowDirection;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"multiSpeed\" : " + multiSpeed + ",";
-            out += "\"auto\" : " + auto + ",";
-            out += "\"rocking\" : " + rocking + ",";
-            out += "\"wind\" : " + wind + ",";
-            out += "\"step\" : " + step + ",";
-            out += "\"airflowDirection\" : " + airflowDirection + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -164,7 +123,7 @@ public class FanControlCluster extends BaseCluster {
         }
     }
 
-    public static class RockBitmap implements JsonSerializable {
+    public static class RockBitmap {
         public boolean rockLeftRight;
         public boolean rockUpDown;
         public boolean rockRound;
@@ -175,15 +134,6 @@ public class FanControlCluster extends BaseCluster {
             this.rockRound = rockRound;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"rockLeftRight\" : " + rockLeftRight + ",";
-            out += "\"rockUpDown\" : " + rockUpDown + ",";
-            out += "\"rockRound\" : " + rockRound + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static RockBitmap fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -192,21 +142,13 @@ public class FanControlCluster extends BaseCluster {
         }
     }
 
-    public static class WindBitmap implements JsonSerializable {
+    public static class WindBitmap {
         public boolean sleepWind;
         public boolean naturalWind;
 
         public WindBitmap(boolean sleepWind, boolean naturalWind) {
             this.sleepWind = sleepWind;
             this.naturalWind = naturalWind;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"sleepWind\" : " + sleepWind + ",";
-            out += "\"naturalWind\" : " + naturalWind + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -217,27 +159,27 @@ public class FanControlCluster extends BaseCluster {
         }
     }
 
-    public FanModeEnum fanMode; // 31 FanModeEnum
-    public FanModeSequenceEnum fanModeSequence; // 111 FanModeSequenceEnum
-    public Integer percentSetting; // 187 percent
-    public Integer percentCurrent; // 251 percent
-    public Integer speedMax; // 307 int8u
-    public Integer speedSetting; // 351 int8u
-    public Integer speedCurrent; // 389 int8u
-    public RockBitmap rockSupport; // 421 RockBitmap
-    public RockBitmap rockSetting; // 449 RockBitmap
-    public WindBitmap windSupport; // 477 WindBitmap
-    public WindBitmap windSetting; // 501 WindBitmap
-    public AirflowDirectionEnum airflowDirection; // 523 AirflowDirectionEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public FanModeEnum fanMode; // 0 FanModeEnum reportable writable
+    public FanModeSequenceEnum fanModeSequence; // 1 FanModeSequenceEnum reportable
+    public Integer percentSetting; // 2 percent reportable writable
+    public Integer percentCurrent; // 3 percent reportable
+    public Integer speedMax; // 4 int8u reportable
+    public Integer speedSetting; // 5 int8u reportable writable
+    public Integer speedCurrent; // 6 int8u reportable
+    public RockBitmap rockSupport; // 7 RockBitmap reportable
+    public RockBitmap rockSetting; // 8 RockBitmap reportable writable
+    public WindBitmap windSupport; // 9 WindBitmap reportable
+    public WindBitmap windSetting; // 10 WindBitmap reportable writable
+    public AirflowDirectionEnum airflowDirection; // 11 AirflowDirectionEnum reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public FanControlCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 20, "FanControl");
+        super(nodeId, endpointId, 25, "FanControl");
     }
 
     public void step(MatterClient client, StepDirectionEnum direction, Boolean wrap, Boolean lowestOff)

@@ -18,9 +18,9 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.matter.internal.handler.ClusterHandler;
 import org.openhab.binding.matter.internal.handler.ControllerHandler;
 import org.openhab.binding.matter.internal.handler.EndpointHandler;
+import org.openhab.binding.matter.internal.handler.LevelControlHandler;
 import org.openhab.binding.matter.internal.handler.NodeHandler;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
@@ -28,9 +28,7 @@ import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.binding.BaseThingHandlerFactory;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
-import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 
 /**
  * The {@link MatterHandlerFactory} is responsible for creating things and thing
@@ -41,19 +39,14 @@ import org.osgi.service.component.annotations.Deactivate;
 @NonNullByDefault
 @Component(configurationPid = "binding.matter", service = ThingHandlerFactory.class)
 public class MatterHandlerFactory extends BaseThingHandlerFactory {
+    // private final Logger logger = LoggerFactory.getLogger(MatterHandlerFactory.class);
 
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(THING_TYPE_CONTROLLER, THING_TYPE_NODE,
-            THING_TYPE_ENDPOINT, THING_TYPE_CLUSTER);
+            THING_TYPE_ENDPOINT, THING_TYPE_CLUSTER, THING_TYPE_LEVEL_CONTROL);
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
         return SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
-    }
-
-    @Deactivate
-    @Override
-    protected void deactivate(ComponentContext componentContext) {
-        super.deactivate(componentContext);
     }
 
     @Override
@@ -72,10 +65,26 @@ public class MatterHandlerFactory extends BaseThingHandlerFactory {
             return new EndpointHandler((Bridge) thing);
         }
 
-        if (THING_TYPE_CLUSTER.equals(thingTypeUID)) {
-            return new ClusterHandler(thing);
+        if (THING_TYPE_LEVEL_CONTROL.equals(thingTypeUID)) {
+            return new LevelControlHandler(thing);
         }
-
         return null;
+        // try {
+        // String handlerName = THING_TYPE_HANDLER_MAPPING.get(thingTypeUID);
+        // if (handlerName == null) {
+        // logger.warn("No handler found for {}", thingTypeUID);
+        // return null;
+        // }
+        // Class<?> clazz = Class.forName(MatterHandlerFactory.class.getPackageName() + ".handler." + handlerName);
+        // Constructor<?> constructor = clazz.getConstructor(Thing.class);
+        // Object instance = constructor.newInstance(thing);
+        // return (ThingHandler) instance;
+        // } catch (ClassNotFoundException e) {
+        // logger.warn("No handler found for {}", thingTypeUID);
+        // return null;
+        // } catch (Exception e) {
+        // logger.warn("Could not create handler", e);
+        // return null;
+        // }
     }
 }

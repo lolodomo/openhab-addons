@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * AccessControl
@@ -32,16 +28,7 @@ public class AccessControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ACCESS_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x001F;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(14, "acl"), entry(96, "extension"),
-                entry(175, "subjectsPerAccessControlEntry"), entry(241, "targetsPerAccessControlEntry"),
-                entry(298, "accessControlEntriesPerFabric"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
-    class AccessControlTargetStruct implements JsonSerializable {
+    class AccessControlTargetStruct {
         public List<Integer> cluster; // cluster_id
         public List<Integer> endpoint; // endpoint_no
         public Integer deviceType; // devtype_id
@@ -51,18 +38,9 @@ public class AccessControlCluster extends BaseCluster {
             this.endpoint = endpoint;
             this.deviceType = deviceType;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"cluster\" : " + cluster + ",";
-            out += "\"endpoint\" : " + endpoint + ",";
-            out += "\"deviceType\" : " + deviceType + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class AccessControlEntryStruct implements JsonSerializable {
+    class AccessControlEntryStruct {
         public AccessControlEntryPrivilegeEnum privilege; // AccessControlEntryPrivilegeEnum
         public AccessControlEntryAuthModeEnum authMode; // AccessControlEntryAuthModeEnum
         public Long subjects; // int64u
@@ -78,20 +56,9 @@ public class AccessControlCluster extends BaseCluster {
             this.targets = targets;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"privilege\" : " + privilege + ",";
-            out += "\"authMode\" : " + authMode + ",";
-            out += "\"subjects\" : " + subjects + ",";
-            out += "\"targets\" : " + targets + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class AccessControlExtensionStruct implements JsonSerializable {
+    class AccessControlExtensionStruct {
         public String data; // octet_string
         public Integer fabricIndex; // fabric_idx
 
@@ -99,18 +66,10 @@ public class AccessControlCluster extends BaseCluster {
             this.data = data;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"data\" : " + data + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum AccessControlEntryAuthModeEnum implements JsonSerializable {
+    public enum AccessControlEntryAuthModeEnum {
         PASE(1, "PASE"),
         CASE(2, "CASE"),
         GROUP(3, "Group"),
@@ -123,13 +82,9 @@ public class AccessControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum AccessControlEntryPrivilegeEnum implements JsonSerializable {
+    public enum AccessControlEntryPrivilegeEnum {
         VIEW(1, "View"),
         PROXY_VIEW(2, "Proxy View"),
         OPERATE(3, "Operate"),
@@ -144,13 +99,9 @@ public class AccessControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ChangeTypeEnum implements JsonSerializable {
+    public enum ChangeTypeEnum {
         CHANGED(0, "Changed"),
         ADDED(1, "Added"),
         REMOVED(2, "Removed"),
@@ -163,26 +114,22 @@ public class AccessControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public AccessControlEntryStruct[] acl; // 14 AccessControlEntryStruct
-    public AccessControlExtensionStruct[] extension; // 96 AccessControlExtensionStruct
-    public Integer subjectsPerAccessControlEntry; // 175 int16u
-    public Integer targetsPerAccessControlEntry; // 241 int16u
-    public Integer accessControlEntriesPerFabric; // 298 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public AccessControlEntryStruct[] acl; // 0 AccessControlEntryStruct reportable writable
+    public AccessControlExtensionStruct[] extension; // 1 AccessControlExtensionStruct reportable writable
+    public Integer subjectsPerAccessControlEntry; // 2 int16u reportable
+    public Integer targetsPerAccessControlEntry; // 3 int16u reportable
+    public Integer accessControlEntriesPerFabric; // 4 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public AccessControlCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 4, "AccessControl");
+        super(nodeId, endpointId, 41, "AccessControl");
     }
 
     public String toString() {

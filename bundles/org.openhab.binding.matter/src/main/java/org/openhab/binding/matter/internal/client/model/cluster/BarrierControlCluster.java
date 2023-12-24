@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * BarrierControl
@@ -33,29 +30,12 @@ public class BarrierControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BARRIER_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x0103;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(28, "barrierMovingState"), entry(109, "barrierSafetyStatus"),
-                entry(184, "barrierCapabilities"), entry(249, "barrierOpenEvents"), entry(305, "barrierCloseEvents"),
-                entry(350, "barrierCommandOpenEvents"), entry(388, "barrierCommandCloseEvents"),
-                entry(420, "barrierOpenPeriod"), entry(450, "barrierClosePeriod"), entry(478, "barrierPosition"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(11, "barrierControlGoToPercent"), entry(67, "barrierControlStop"));
-    }
-
     // ZCL Bitmaps
-    public static class BarrierControlCapabilities implements JsonSerializable {
+    public static class BarrierControlCapabilities {
         public boolean partialBarrier;
 
         public BarrierControlCapabilities(boolean partialBarrier) {
             this.partialBarrier = partialBarrier;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"partialBarrier\" : " + partialBarrier + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -66,7 +46,7 @@ public class BarrierControlCluster extends BaseCluster {
         }
     }
 
-    public static class BarrierControlSafetyStatus implements JsonSerializable {
+    public static class BarrierControlSafetyStatus {
         public boolean remoteLockout;
         public boolean temperDetected;
         public boolean failedCommunication;
@@ -80,16 +60,6 @@ public class BarrierControlCluster extends BaseCluster {
             this.positionFailure = positionFailure;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"remoteLockout\" : " + remoteLockout + ",";
-            out += "\"temperDetected\" : " + temperDetected + ",";
-            out += "\"failedCommunication\" : " + failedCommunication + ",";
-            out += "\"positionFailure\" : " + positionFailure + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static BarrierControlSafetyStatus fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -98,25 +68,25 @@ public class BarrierControlCluster extends BaseCluster {
         }
     }
 
-    public Integer barrierMovingState; // 28 enum8
-    public Map<String, Boolean> barrierSafetyStatus; // 109 bitmap16
-    public Map<String, Boolean> barrierCapabilities; // 184 bitmap8
-    public Integer barrierOpenEvents; // 249 int16u
-    public Integer barrierCloseEvents; // 305 int16u
-    public Integer barrierCommandOpenEvents; // 350 int16u
-    public Integer barrierCommandCloseEvents; // 388 int16u
-    public Integer barrierOpenPeriod; // 420 int16u
-    public Integer barrierClosePeriod; // 450 int16u
-    public Integer barrierPosition; // 478 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer barrierMovingState; // 1 enum8 reportable
+    public Map<String, Boolean> barrierSafetyStatus; // 2 bitmap16 reportable
+    public Map<String, Boolean> barrierCapabilities; // 3 bitmap8 reportable
+    public Integer barrierOpenEvents; // 4 int16u reportable writable
+    public Integer barrierCloseEvents; // 5 int16u reportable writable
+    public Integer barrierCommandOpenEvents; // 6 int16u reportable writable
+    public Integer barrierCommandCloseEvents; // 7 int16u reportable writable
+    public Integer barrierOpenPeriod; // 8 int16u reportable writable
+    public Integer barrierClosePeriod; // 9 int16u reportable writable
+    public Integer barrierPosition; // 10 int8u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public BarrierControlCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 13, "BarrierControl");
+        super(nodeId, endpointId, 3, "BarrierControl");
     }
 
     public void barrierControlGoToPercent(MatterClient client, Integer percentOpen) throws Exception {

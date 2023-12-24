@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * RvcOperationalState
@@ -33,16 +30,7 @@ public class RvcOperationalStateCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OPERATIONAL_STATE_RVC_CLUSTER";
     public static final int CLUSTER_ID = 0x0061;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(61, "phaseList"), entry(139, "currentPhase"),
-                entry(209, "countdownTime"), entry(272, "operationalStateList"), entry(324, "operationalState"),
-                entry(366, "operationalError"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(37, "pause"), entry(90, "stop"), entry(133, "start"),
-                entry(164, "resume"), entry(188, "operationalCommandResponse"));
-    }
-
-    class ErrorStateStruct implements JsonSerializable {
+    class ErrorStateStruct {
         public Integer errorStateID; // enum8
         public String errorStateLabel; // char_string
         public String errorStateDetails; // char_string
@@ -52,18 +40,9 @@ public class RvcOperationalStateCluster extends BaseCluster {
             this.errorStateLabel = errorStateLabel;
             this.errorStateDetails = errorStateDetails;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"errorStateID\" : " + errorStateID + ",";
-            out += "\"errorStateLabel\" : " + errorStateLabel + ",";
-            out += "\"errorStateDetails\" : " + errorStateDetails + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class OperationalStateStruct implements JsonSerializable {
+    class OperationalStateStruct {
         public Integer operationalStateID; // enum8
         public String operationalStateLabel; // char_string
 
@@ -71,18 +50,10 @@ public class RvcOperationalStateCluster extends BaseCluster {
             this.operationalStateID = operationalStateID;
             this.operationalStateLabel = operationalStateLabel;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"operationalStateID\" : " + operationalStateID + ",";
-            out += "\"operationalStateLabel\" : " + operationalStateLabel + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ErrorStateEnum implements JsonSerializable {
+    public enum ErrorStateEnum {
         FAILEDTOFINDCHARGINGDOCK(64, "FailedToFindChargingDock"),
         STUCK(65, "Stuck"),
         DUSTBINMISSING(66, "DustBinMissing"),
@@ -100,13 +71,9 @@ public class RvcOperationalStateCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum OperationalStateEnum implements JsonSerializable {
+    public enum OperationalStateEnum {
         SEEKINGCHARGER(64, "SeekingCharger"),
         CHARGING(65, "Charging"),
         DOCKED(66, "Docked"),
@@ -119,27 +86,23 @@ public class RvcOperationalStateCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public String phaseList; // 61 char_string
-    public Integer currentPhase; // 139 int8u
-    public Integer countdownTime; // 209 elapsed_s
-    public OperationalStateStruct[] operationalStateList; // 272 OperationalStateStruct
-    public Integer operationalState; // 324 enum8
-    public ErrorStateStruct[] operationalError; // 366 ErrorStateStruct
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public String phaseList; // 0 char_string reportable
+    public Integer currentPhase; // 1 int8u reportable
+    public Integer countdownTime; // 2 elapsed_s reportable
+    public OperationalStateStruct[] operationalStateList; // 3 OperationalStateStruct reportable
+    public Integer operationalState; // 4 enum8 reportable
+    public ErrorStateStruct[] operationalError; // 5 ErrorStateStruct reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public RvcOperationalStateCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 55, "RvcOperationalState");
+        super(nodeId, endpointId, 48, "RvcOperationalState");
     }
 
     public void pause(MatterClient client) throws Exception {

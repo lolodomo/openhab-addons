@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * OperationalState
@@ -33,16 +30,7 @@ public class OperationalStateCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OPERATIONAL_STATE_CLUSTER";
     public static final int CLUSTER_ID = 0x0060;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(52, "phaseList"), entry(132, "currentPhase"),
-                entry(201, "countdownTime"), entry(264, "operationalStateList"), entry(317, "operationalState"),
-                entry(359, "operationalError"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(38, "pause"), entry(91, "stop"), entry(134, "start"),
-                entry(165, "resume"), entry(189, "operationalCommandResponse"));
-    }
-
-    class ErrorStateStruct implements JsonSerializable {
+    class ErrorStateStruct {
         public Integer errorStateID; // enum8
         public String errorStateLabel; // char_string
         public String errorStateDetails; // char_string
@@ -52,18 +40,9 @@ public class OperationalStateCluster extends BaseCluster {
             this.errorStateLabel = errorStateLabel;
             this.errorStateDetails = errorStateDetails;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"errorStateID\" : " + errorStateID + ",";
-            out += "\"errorStateLabel\" : " + errorStateLabel + ",";
-            out += "\"errorStateDetails\" : " + errorStateDetails + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class OperationalStateStruct implements JsonSerializable {
+    class OperationalStateStruct {
         public Integer operationalStateID; // enum8
         public String operationalStateLabel; // char_string
 
@@ -71,18 +50,10 @@ public class OperationalStateCluster extends BaseCluster {
             this.operationalStateID = operationalStateID;
             this.operationalStateLabel = operationalStateLabel;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"operationalStateID\" : " + operationalStateID + ",";
-            out += "\"operationalStateLabel\" : " + operationalStateLabel + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ErrorStateEnum implements JsonSerializable {
+    public enum ErrorStateEnum {
         NOERROR(0, "NoError"),
         UNABLETOSTARTORRESUME(1, "UnableToStartOrResume"),
         UNABLETOCOMPLETEOPERATION(2, "UnableToCompleteOperation"),
@@ -96,13 +67,9 @@ public class OperationalStateCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum OperationalStateEnum implements JsonSerializable {
+    public enum OperationalStateEnum {
         STOPPED(0, "Stopped"),
         RUNNING(1, "Running"),
         PAUSED(2, "Paused"),
@@ -116,27 +83,23 @@ public class OperationalStateCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public String phaseList; // 52 char_string
-    public Integer currentPhase; // 132 int8u
-    public Integer countdownTime; // 201 elapsed_s
-    public OperationalStateStruct[] operationalStateList; // 264 OperationalStateStruct
-    public OperationalStateEnum operationalState; // 317 OperationalStateEnum
-    public ErrorStateStruct[] operationalError; // 359 ErrorStateStruct
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public String phaseList; // 0 char_string reportable
+    public Integer currentPhase; // 1 int8u reportable
+    public Integer countdownTime; // 2 elapsed_s reportable
+    public OperationalStateStruct[] operationalStateList; // 3 OperationalStateStruct reportable
+    public OperationalStateEnum operationalState; // 4 OperationalStateEnum reportable
+    public ErrorStateStruct[] operationalError; // 5 ErrorStateStruct reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OperationalStateCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 45, "OperationalState");
+        super(nodeId, endpointId, 43, "OperationalState");
     }
 
     public void pause(MatterClient client) throws Exception {

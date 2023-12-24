@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * ColorControl
@@ -33,39 +30,8 @@ public class ColorControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "COLOR_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x0300;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(4, "currentHue"), entry(6, "currentSaturation"),
-                entry(8, "remainingTime"), entry(10, "currentX"), entry(12, "currentY"), entry(19, "driftCompensation"),
-                entry(100, "compensationText"), entry(176, "colorTemperatureMireds"), entry(244, "colorMode"),
-                entry(301, "options"), entry(343, "numberOfPrimaries"), entry(382, "primary1X"),
-                entry(414, "primary1Y"), entry(445, "primary1Intensity"), entry(472, "primary2X"),
-                entry(496, "primary2Y"), entry(517, "primary2Intensity"), entry(539, "primary3X"),
-                entry(558, "primary3Y"), entry(574, "primary3Intensity"), entry(587, "primary4X"),
-                entry(600, "primary4Y"), entry(612, "primary4Intensity"), entry(624, "primary5X"),
-                entry(636, "primary5Y"), entry(648, "primary5Intensity"), entry(659, "primary6X"),
-                entry(670, "primary6Y"), entry(682, "primary6Intensity"), entry(690, "whitePointX"),
-                entry(699, "whitePointY"), entry(708, "colorPointRX"), entry(716, "colorPointRY"),
-                entry(724, "colorPointRIntensity"), entry(732, "colorPointGX"), entry(740, "colorPointGY"),
-                entry(748, "colorPointGIntensity"), entry(756, "colorPointBX"), entry(763, "colorPointBY"),
-                entry(770, "colorPointBIntensity"), entry(1048, "enhancedCurrentHue"), entry(1049, "enhancedColorMode"),
-                entry(1050, "colorLoopActive"), entry(1051, "colorLoopDirection"), entry(1052, "colorLoopTime"),
-                entry(1053, "colorLoopStartEnhancedHue"), entry(1054, "colorLoopStoredEnhancedHue"),
-                entry(1055, "colorCapabilities"), entry(1056, "colorTempPhysicalMinMireds"),
-                entry(1057, "colorTempPhysicalMaxMireds"), entry(777, "coupleColorTempToLevelMinMireds"),
-                entry(784, "startUpColorTemperatureMireds"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(1, "moveToHue"), entry(2, "moveHue"), entry(3, "stepHue"),
-                entry(4, "moveToSaturation"), entry(5, "moveSaturation"), entry(9, "stepSaturation"),
-                entry(63, "moveToHueAndSaturation"), entry(112, "moveToColor"), entry(146, "moveColor"),
-                entry(175, "stepColor"), entry(198, "moveToColorTemperature"), entry(312, "enhancedMoveToHue"),
-                entry(314, "enhancedMoveHue"), entry(315, "enhancedStepHue"),
-                entry(316, "enhancedMoveToHueAndSaturation"), entry(317, "colorLoopSet"), entry(318, "stopMoveStep"),
-                entry(319, "moveColorTemperature"), entry(320, "stepColorTemperature"));
-    }
-
     // ZCL Enums
-    public enum ColorLoopAction implements JsonSerializable {
+    public enum ColorLoopAction {
         DEACTIVATE(0, "Deactivate"),
         ACTIVATEFROMCOLORLOOPSTARTENHANCEDHUE(1, "ActivateFromColorLoopStartEnhancedHue"),
         ACTIVATEFROMENHANCEDCURRENTHUE(2, "ActivateFromEnhancedCurrentHue"),
@@ -78,13 +44,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ColorLoopDirection implements JsonSerializable {
+    public enum ColorLoopDirection {
         DECREMENTHUE(0, "DecrementHue"),
         INCREMENTHUE(1, "IncrementHue"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -96,13 +58,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ColorMode implements JsonSerializable {
+    public enum ColorMode {
         CURRENTHUEANDCURRENTSATURATION(0, "CurrentHueAndCurrentSaturation"),
         CURRENTXANDCURRENTY(1, "CurrentXAndCurrentY"),
         COLORTEMPERATURE(2, "ColorTemperature"),
@@ -115,13 +73,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum HueDirection implements JsonSerializable {
+    public enum HueDirection {
         SHORTESTDISTANCE(0, "ShortestDistance"),
         LONGESTDISTANCE(1, "LongestDistance"),
         UP(2, "Up"),
@@ -135,13 +89,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum HueMoveMode implements JsonSerializable {
+    public enum HueMoveMode {
         STOP(0, "Stop"),
         UP(1, "Up"),
         DOWN(3, "Down"),
@@ -154,13 +104,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum HueStepMode implements JsonSerializable {
+    public enum HueStepMode {
         UP(1, "Up"),
         DOWN(3, "Down"),
         UNKNOWN_VALUE(0, "UnknownValue");
@@ -172,13 +118,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum SaturationMoveMode implements JsonSerializable {
+    public enum SaturationMoveMode {
         STOP(0, "Stop"),
         UP(1, "Up"),
         DOWN(3, "Down"),
@@ -191,13 +133,9 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum SaturationStepMode implements JsonSerializable {
+    public enum SaturationStepMode {
         UP(1, "Up"),
         DOWN(3, "Down"),
         UNKNOWN_VALUE(0, "UnknownValue");
@@ -209,14 +147,10 @@ public class ColorControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class ColorCapabilities implements JsonSerializable {
+    public static class ColorCapabilities {
         public boolean hueSaturationSupported;
         public boolean enhancedHueSupported;
         public boolean colorLoopSupported;
@@ -232,17 +166,6 @@ public class ColorControlCluster extends BaseCluster {
             this.colorTemperatureSupported = colorTemperatureSupported;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"hueSaturationSupported\" : " + hueSaturationSupported + ",";
-            out += "\"enhancedHueSupported\" : " + enhancedHueSupported + ",";
-            out += "\"colorLoopSupported\" : " + colorLoopSupported + ",";
-            out += "\"XYAttributesSupported\" : " + XYAttributesSupported + ",";
-            out += "\"colorTemperatureSupported\" : " + colorTemperatureSupported + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static ColorCapabilities fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -251,7 +174,7 @@ public class ColorControlCluster extends BaseCluster {
         }
     }
 
-    public static class ColorLoopUpdateFlags implements JsonSerializable {
+    public static class ColorLoopUpdateFlags {
         public boolean updateAction;
         public boolean updateDirection;
         public boolean updateTime;
@@ -265,16 +188,6 @@ public class ColorControlCluster extends BaseCluster {
             this.updateStartHue = updateStartHue;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"updateAction\" : " + updateAction + ",";
-            out += "\"updateDirection\" : " + updateDirection + ",";
-            out += "\"updateTime\" : " + updateTime + ",";
-            out += "\"updateStartHue\" : " + updateStartHue + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static ColorLoopUpdateFlags fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -283,7 +196,7 @@ public class ColorControlCluster extends BaseCluster {
         }
     }
 
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean hueAndSaturation;
         public boolean enhancedHue;
         public boolean colorLoop;
@@ -299,17 +212,6 @@ public class ColorControlCluster extends BaseCluster {
             this.colorTemperature = colorTemperature;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"hueAndSaturation\" : " + hueAndSaturation + ",";
-            out += "\"enhancedHue\" : " + enhancedHue + ",";
-            out += "\"colorLoop\" : " + colorLoop + ",";
-            out += "\"xy\" : " + xy + ",";
-            out += "\"colorTemperature\" : " + colorTemperature + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -318,64 +220,64 @@ public class ColorControlCluster extends BaseCluster {
         }
     }
 
-    public Integer currentHue; // 4 int8u
-    public Integer currentSaturation; // 6 int8u
-    public Integer remainingTime; // 8 int16u
-    public Integer currentX; // 10 int16u
-    public Integer currentY; // 12 int16u
-    public Integer driftCompensation; // 19 enum8
-    public String compensationText; // 100 char_string
-    public Integer colorTemperatureMireds; // 176 int16u
-    public Integer colorMode; // 244 enum8
-    public Map<String, Boolean> options; // 301 bitmap8
-    public Integer numberOfPrimaries; // 343 int8u
-    public Integer primary1X; // 382 int16u
-    public Integer primary1Y; // 414 int16u
-    public Integer primary1Intensity; // 445 int8u
-    public Integer primary2X; // 472 int16u
-    public Integer primary2Y; // 496 int16u
-    public Integer primary2Intensity; // 517 int8u
-    public Integer primary3X; // 539 int16u
-    public Integer primary3Y; // 558 int16u
-    public Integer primary3Intensity; // 574 int8u
-    public Integer primary4X; // 587 int16u
-    public Integer primary4Y; // 600 int16u
-    public Integer primary4Intensity; // 612 int8u
-    public Integer primary5X; // 624 int16u
-    public Integer primary5Y; // 636 int16u
-    public Integer primary5Intensity; // 648 int8u
-    public Integer primary6X; // 659 int16u
-    public Integer primary6Y; // 670 int16u
-    public Integer primary6Intensity; // 682 int8u
-    public Integer whitePointX; // 690 int16u
-    public Integer whitePointY; // 699 int16u
-    public Integer colorPointRX; // 708 int16u
-    public Integer colorPointRY; // 716 int16u
-    public Integer colorPointRIntensity; // 724 int8u
-    public Integer colorPointGX; // 732 int16u
-    public Integer colorPointGY; // 740 int16u
-    public Integer colorPointGIntensity; // 748 int8u
-    public Integer colorPointBX; // 756 int16u
-    public Integer colorPointBY; // 763 int16u
-    public Integer colorPointBIntensity; // 770 int8u
-    public Integer enhancedCurrentHue; // 1048 int16u
-    public Integer enhancedColorMode; // 1049 enum8
-    public Integer colorLoopActive; // 1050 int8u
-    public Integer colorLoopDirection; // 1051 int8u
-    public Integer colorLoopTime; // 1052 int16u
-    public Integer colorLoopStartEnhancedHue; // 1053 int16u
-    public Integer colorLoopStoredEnhancedHue; // 1054 int16u
-    public Map<String, Boolean> colorCapabilities; // 1055 bitmap16
-    public Integer colorTempPhysicalMinMireds; // 1056 int16u
-    public Integer colorTempPhysicalMaxMireds; // 1057 int16u
-    public Integer coupleColorTempToLevelMinMireds; // 777 int16u
-    public Integer startUpColorTemperatureMireds; // 784 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer currentHue; // 0 int8u reportable
+    public Integer currentSaturation; // 1 int8u reportable
+    public Integer remainingTime; // 2 int16u reportable
+    public Integer currentX; // 3 int16u reportable
+    public Integer currentY; // 4 int16u reportable
+    public Integer driftCompensation; // 5 enum8 reportable
+    public String compensationText; // 6 char_string reportable
+    public Integer colorTemperatureMireds; // 7 int16u reportable
+    public Integer colorMode; // 8 enum8 reportable
+    public Map<String, Boolean> options; // 15 bitmap8 reportable writable
+    public Integer numberOfPrimaries; // 16 int8u reportable
+    public Integer primary1X; // 17 int16u reportable
+    public Integer primary1Y; // 18 int16u reportable
+    public Integer primary1Intensity; // 19 int8u reportable
+    public Integer primary2X; // 21 int16u reportable
+    public Integer primary2Y; // 22 int16u reportable
+    public Integer primary2Intensity; // 23 int8u reportable
+    public Integer primary3X; // 25 int16u reportable
+    public Integer primary3Y; // 26 int16u reportable
+    public Integer primary3Intensity; // 27 int8u reportable
+    public Integer primary4X; // 32 int16u reportable
+    public Integer primary4Y; // 33 int16u reportable
+    public Integer primary4Intensity; // 34 int8u reportable
+    public Integer primary5X; // 36 int16u reportable
+    public Integer primary5Y; // 37 int16u reportable
+    public Integer primary5Intensity; // 38 int8u reportable
+    public Integer primary6X; // 40 int16u reportable
+    public Integer primary6Y; // 41 int16u reportable
+    public Integer primary6Intensity; // 42 int8u reportable
+    public Integer whitePointX; // 48 int16u reportable writable
+    public Integer whitePointY; // 49 int16u reportable writable
+    public Integer colorPointRX; // 50 int16u reportable writable
+    public Integer colorPointRY; // 51 int16u reportable writable
+    public Integer colorPointRIntensity; // 52 int8u reportable writable
+    public Integer colorPointGX; // 54 int16u reportable writable
+    public Integer colorPointGY; // 55 int16u reportable writable
+    public Integer colorPointGIntensity; // 56 int8u reportable writable
+    public Integer colorPointBX; // 58 int16u reportable writable
+    public Integer colorPointBY; // 59 int16u reportable writable
+    public Integer colorPointBIntensity; // 60 int8u reportable writable
+    public Integer enhancedCurrentHue; // 16384 int16u reportable
+    public Integer enhancedColorMode; // 16385 enum8 reportable
+    public Integer colorLoopActive; // 16386 int8u reportable
+    public Integer colorLoopDirection; // 16387 int8u reportable
+    public Integer colorLoopTime; // 16388 int16u reportable
+    public Integer colorLoopStartEnhancedHue; // 16389 int16u reportable
+    public Integer colorLoopStoredEnhancedHue; // 16390 int16u reportable
+    public Map<String, Boolean> colorCapabilities; // 16394 bitmap16 reportable
+    public Integer colorTempPhysicalMinMireds; // 16395 int16u reportable
+    public Integer colorTempPhysicalMaxMireds; // 16396 int16u reportable
+    public Integer coupleColorTempToLevelMinMireds; // 16397 int16u reportable
+    public Integer startUpColorTemperatureMireds; // 16400 int16u reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ColorControlCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 1, "ColorControl");

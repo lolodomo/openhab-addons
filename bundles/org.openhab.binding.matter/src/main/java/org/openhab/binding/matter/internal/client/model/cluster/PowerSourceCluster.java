@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * PowerSource
@@ -32,25 +28,7 @@ public class PowerSourceCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "POWER_SOURCE_CLUSTER";
     public static final int CLUSTER_ID = 0x002F;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(53, "status"), entry(133, "order"), entry(202, "description"),
-                entry(265, "wiredAssessedInputVoltage"), entry(315, "wiredAssessedInputFrequency"),
-                entry(357, "wiredCurrentType"), entry(394, "wiredAssessedCurrent"), entry(425, "wiredNominalVoltage"),
-                entry(454, "wiredMaximumCurrent"), entry(480, "wiredPresent"), entry(503, "activeWiredFaults"),
-                entry(525, "batVoltage"), entry(546, "batPercentRemaining"), entry(565, "batTimeRemaining"),
-                entry(579, "batChargeLevel"), entry(592, "batReplacementNeeded"), entry(604, "batReplaceability"),
-                entry(616, "batPresent"), entry(628, "activeBatFaults"), entry(640, "batReplacementDescription"),
-                entry(652, "batCommonDesignation"), entry(664, "batANSIDesignation"), entry(676, "batIECDesignation"),
-                entry(687, "batApprovedChemistry"), entry(697, "batCapacity"), entry(705, "batQuantity"),
-                entry(713, "batChargeState"), entry(721, "batTimeToFullCharge"),
-                entry(729, "batFunctionalWhileCharging"), entry(737, "batChargingCurrent"),
-                entry(745, "activeBatChargeFaults"), entry(753, "endpointList"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
-    class BatChargeFaultChangeType implements JsonSerializable {
+    class BatChargeFaultChangeType {
         public BatChargeFaultEnum current; // BatChargeFaultEnum
         public BatChargeFaultEnum previous; // BatChargeFaultEnum
 
@@ -58,17 +36,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.current = current;
             this.previous = previous;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"current\" : " + current + ",";
-            out += "\"previous\" : " + previous + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class BatFaultChangeType implements JsonSerializable {
+    class BatFaultChangeType {
         public BatFaultEnum current; // BatFaultEnum
         public BatFaultEnum previous; // BatFaultEnum
 
@@ -76,17 +46,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.current = current;
             this.previous = previous;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"current\" : " + current + ",";
-            out += "\"previous\" : " + previous + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class WiredFaultChangeType implements JsonSerializable {
+    class WiredFaultChangeType {
         public WiredFaultEnum current; // WiredFaultEnum
         public WiredFaultEnum previous; // WiredFaultEnum
 
@@ -94,18 +56,10 @@ public class PowerSourceCluster extends BaseCluster {
             this.current = current;
             this.previous = previous;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"current\" : " + current + ",";
-            out += "\"previous\" : " + previous + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum BatApprovedChemistryEnum implements JsonSerializable {
+    public enum BatApprovedChemistryEnum {
         UNSPECIFIED(0, "Unspecified"),
         ALKALINE(1, "Alkaline"),
         LITHIUMCARBONFLUORIDE(2, "LithiumCarbonFluoride"),
@@ -148,13 +102,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum BatChargeFaultEnum implements JsonSerializable {
+    public enum BatChargeFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         AMBIENTTOOHOT(1, "AmbientTooHot"),
         AMBIENTTOOCOLD(2, "AmbientTooCold"),
@@ -175,13 +125,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum BatChargeLevelEnum implements JsonSerializable {
+    public enum BatChargeLevelEnum {
         OK(0, "OK"),
         WARNING(1, "Warning"),
         CRITICAL(2, "Critical"),
@@ -194,13 +140,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum BatChargeStateEnum implements JsonSerializable {
+    public enum BatChargeStateEnum {
         UNKNOWN(0, "Unknown"),
         ISCHARGING(1, "IsCharging"),
         ISATFULLCHARGE(2, "IsAtFullCharge"),
@@ -214,13 +156,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum BatCommonDesignationEnum implements JsonSerializable {
+    public enum BatCommonDesignationEnum {
         UNSPECIFIED(0, "Unspecified"),
         AAA(1, "AAA"),
         AA(2, "AA"),
@@ -311,13 +249,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum BatFaultEnum implements JsonSerializable {
+    public enum BatFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         OVERTEMP(1, "OverTemp"),
         UNDERTEMP(2, "UnderTemp"),
@@ -330,13 +264,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum BatReplaceabilityEnum implements JsonSerializable {
+    public enum BatReplaceabilityEnum {
         UNSPECIFIED(0, "Unspecified"),
         NOTREPLACEABLE(1, "NotReplaceable"),
         USERREPLACEABLE(2, "UserReplaceable"),
@@ -350,13 +280,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum PowerSourceStatusEnum implements JsonSerializable {
+    public enum PowerSourceStatusEnum {
         UNSPECIFIED(0, "Unspecified"),
         ACTIVE(1, "Active"),
         STANDBY(2, "Standby"),
@@ -370,13 +296,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum WiredCurrentTypeEnum implements JsonSerializable {
+    public enum WiredCurrentTypeEnum {
         AC(0, "AC"),
         DC(1, "DC"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -388,13 +310,9 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum WiredFaultEnum implements JsonSerializable {
+    public enum WiredFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         OVERVOLTAGE(1, "OverVoltage"),
         UNDERVOLTAGE(2, "UnderVoltage"),
@@ -407,14 +325,10 @@ public class PowerSourceCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean wired;
         public boolean battery;
         public boolean rechargeable;
@@ -427,16 +341,6 @@ public class PowerSourceCluster extends BaseCluster {
             this.replaceable = replaceable;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"wired\" : " + wired + ",";
-            out += "\"battery\" : " + battery + ",";
-            out += "\"rechargeable\" : " + rechargeable + ",";
-            out += "\"replaceable\" : " + replaceable + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -445,47 +349,47 @@ public class PowerSourceCluster extends BaseCluster {
         }
     }
 
-    public PowerSourceStatusEnum status; // 53 PowerSourceStatusEnum
-    public Integer order; // 133 int8u
-    public String description; // 202 char_string
-    public Integer wiredAssessedInputVoltage; // 265 int32u
-    public Integer wiredAssessedInputFrequency; // 315 int16u
-    public WiredCurrentTypeEnum wiredCurrentType; // 357 WiredCurrentTypeEnum
-    public Integer wiredAssessedCurrent; // 394 int32u
-    public Integer wiredNominalVoltage; // 425 int32u
-    public Integer wiredMaximumCurrent; // 454 int32u
-    public Boolean wiredPresent; // 480 boolean
-    public WiredFaultEnum activeWiredFaults; // 503 WiredFaultEnum
-    public Integer batVoltage; // 525 int32u
-    public Integer batPercentRemaining; // 546 int8u
-    public Integer batTimeRemaining; // 565 int32u
-    public BatChargeLevelEnum batChargeLevel; // 579 BatChargeLevelEnum
-    public Boolean batReplacementNeeded; // 592 boolean
-    public BatReplaceabilityEnum batReplaceability; // 604 BatReplaceabilityEnum
-    public Boolean batPresent; // 616 boolean
-    public BatFaultEnum activeBatFaults; // 628 BatFaultEnum
-    public String batReplacementDescription; // 640 char_string
-    public BatCommonDesignationEnum batCommonDesignation; // 652 BatCommonDesignationEnum
-    public String batANSIDesignation; // 664 char_string
-    public String batIECDesignation; // 676 char_string
-    public BatApprovedChemistryEnum batApprovedChemistry; // 687 BatApprovedChemistryEnum
-    public Integer batCapacity; // 697 int32u
-    public Integer batQuantity; // 705 int8u
-    public BatChargeStateEnum batChargeState; // 713 BatChargeStateEnum
-    public Integer batTimeToFullCharge; // 721 int32u
-    public Boolean batFunctionalWhileCharging; // 729 boolean
-    public Integer batChargingCurrent; // 737 int32u
-    public BatChargeFaultEnum activeBatChargeFaults; // 745 BatChargeFaultEnum
-    public List<Integer> endpointList; // 753 endpoint_no
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public PowerSourceStatusEnum status; // 0 PowerSourceStatusEnum reportable
+    public Integer order; // 1 int8u reportable
+    public String description; // 2 char_string reportable
+    public Integer wiredAssessedInputVoltage; // 3 int32u reportable
+    public Integer wiredAssessedInputFrequency; // 4 int16u reportable
+    public WiredCurrentTypeEnum wiredCurrentType; // 5 WiredCurrentTypeEnum reportable
+    public Integer wiredAssessedCurrent; // 6 int32u reportable
+    public Integer wiredNominalVoltage; // 7 int32u reportable
+    public Integer wiredMaximumCurrent; // 8 int32u reportable
+    public Boolean wiredPresent; // 9 boolean reportable
+    public WiredFaultEnum activeWiredFaults; // 10 WiredFaultEnum reportable
+    public Integer batVoltage; // 11 int32u reportable
+    public Integer batPercentRemaining; // 12 int8u reportable
+    public Integer batTimeRemaining; // 13 int32u reportable
+    public BatChargeLevelEnum batChargeLevel; // 14 BatChargeLevelEnum reportable
+    public Boolean batReplacementNeeded; // 15 boolean reportable
+    public BatReplaceabilityEnum batReplaceability; // 16 BatReplaceabilityEnum reportable
+    public Boolean batPresent; // 17 boolean reportable
+    public BatFaultEnum activeBatFaults; // 18 BatFaultEnum reportable
+    public String batReplacementDescription; // 19 char_string reportable
+    public BatCommonDesignationEnum batCommonDesignation; // 20 BatCommonDesignationEnum reportable
+    public String batANSIDesignation; // 21 char_string reportable
+    public String batIECDesignation; // 22 char_string reportable
+    public BatApprovedChemistryEnum batApprovedChemistry; // 23 BatApprovedChemistryEnum reportable
+    public Integer batCapacity; // 24 int32u reportable
+    public Integer batQuantity; // 25 int8u reportable
+    public BatChargeStateEnum batChargeState; // 26 BatChargeStateEnum reportable
+    public Integer batTimeToFullCharge; // 27 int32u reportable
+    public Boolean batFunctionalWhileCharging; // 28 boolean reportable
+    public Integer batChargingCurrent; // 29 int32u reportable
+    public BatChargeFaultEnum activeBatChargeFaults; // 30 BatChargeFaultEnum reportable
+    public List<Integer> endpointList; // 31 endpoint_no reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public PowerSourceCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 46, "PowerSource");
+        super(nodeId, endpointId, 57, "PowerSource");
     }
 
     public String toString() {

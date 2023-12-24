@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * OperationalCredentials
@@ -33,18 +30,7 @@ public class OperationalCredentialsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OPERATIONAL_CREDENTIALS_CLUSTER";
     public static final int CLUSTER_ID = 0x003E;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(59, "NOCs"), entry(138, "fabrics"), entry(208, "supportedFabrics"),
-                entry(271, "commissionedFabrics"), entry(323, "trustedRootCertificates"),
-                entry(365, "currentFabricIndex"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(35, "attestationRequest"), entry(88, "attestationResponse"),
-                entry(132, "certificateChainRequest"), entry(163, "certificateChainResponse"), entry(187, "CSRRequest"),
-                entry(208, "CSRResponse"), entry(222, "addNOC"), entry(234, "updateNOC"), entry(243, "NOCResponse"),
-                entry(251, "updateFabricLabel"), entry(258, "removeFabric"), entry(265, "addTrustedRootCertificate"));
-    }
-
-    class FabricDescriptorStruct implements JsonSerializable {
+    class FabricDescriptorStruct {
         public String rootPublicKey; // octet_string
         public Integer vendorID; // vendor_id
         public Long fabricID; // fabric_id
@@ -61,21 +47,9 @@ public class OperationalCredentialsCluster extends BaseCluster {
             this.label = label;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"rootPublicKey\" : " + rootPublicKey + ",";
-            out += "\"vendorID\" : " + vendorID + ",";
-            out += "\"fabricID\" : " + fabricID + ",";
-            out += "\"nodeID\" : " + nodeID + ",";
-            out += "\"label\" : " + label + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class NOCStruct implements JsonSerializable {
+    class NOCStruct {
         public String noc; // octet_string
         public String icac; // octet_string
         public Integer fabricIndex; // fabric_idx
@@ -85,19 +59,10 @@ public class OperationalCredentialsCluster extends BaseCluster {
             this.icac = icac;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"noc\" : " + noc + ",";
-            out += "\"icac\" : " + icac + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum CertificateChainTypeEnum implements JsonSerializable {
+    public enum CertificateChainTypeEnum {
         DACCERTIFICATE(1, "DACCertificate"),
         PAICERTIFICATE(2, "PAICertificate"),
         UNKNOWN_VALUE(0, "UnknownValue");
@@ -109,13 +74,9 @@ public class OperationalCredentialsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum NodeOperationalCertStatusEnum implements JsonSerializable {
+    public enum NodeOperationalCertStatusEnum {
         OK(0, "OK"),
         INVALIDPUBLICKEY(1, "InvalidPublicKey"),
         INVALIDNODEOPID(2, "InvalidNodeOpId"),
@@ -135,27 +96,23 @@ public class OperationalCredentialsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public NOCStruct[] NOCs; // 59 NOCStruct
-    public FabricDescriptorStruct[] fabrics; // 138 FabricDescriptorStruct
-    public Integer supportedFabrics; // 208 int8u
-    public Integer commissionedFabrics; // 271 int8u
-    public String trustedRootCertificates; // 323 octet_string
-    public Integer currentFabricIndex; // 365 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public NOCStruct[] NOCs; // 0 NOCStruct reportable
+    public FabricDescriptorStruct[] fabrics; // 1 FabricDescriptorStruct reportable
+    public Integer supportedFabrics; // 2 int8u reportable
+    public Integer commissionedFabrics; // 3 int8u reportable
+    public String trustedRootCertificates; // 4 octet_string reportable
+    public Integer currentFabricIndex; // 5 int8u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OperationalCredentialsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 54, "OperationalCredentials");
+        super(nodeId, endpointId, 42, "OperationalCredentials");
     }
 
     public void attestationRequest(MatterClient client, String attestationNonce) throws Exception {

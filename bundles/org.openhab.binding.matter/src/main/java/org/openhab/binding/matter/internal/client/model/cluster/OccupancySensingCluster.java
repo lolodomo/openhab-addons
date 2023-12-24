@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * OccupancySensing
@@ -32,22 +28,8 @@ public class OccupancySensingCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OCCUPANCY_SENSING_CLUSTER";
     public static final int CLUSTER_ID = 0x0406;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(56, "occupancy"), entry(134, "occupancySensorType"),
-                entry(203, "occupancySensorTypeBitmap"), entry(277, "PIROccupiedToUnoccupiedDelay"),
-                entry(327, "PIRUnoccupiedToOccupiedDelay"), entry(368, "PIRUnoccupiedToOccupiedThreshold"),
-                entry(402, "ultrasonicOccupiedToUnoccupiedDelay"), entry(433, "ultrasonicUnoccupiedToOccupiedDelay"),
-                entry(461, "ultrasonicUnoccupiedToOccupiedThreshold"),
-                entry(485, "physicalContactOccupiedToUnoccupiedDelay"),
-                entry(508, "physicalContactUnoccupiedToOccupiedDelay"),
-                entry(530, "physicalContactUnoccupiedToOccupiedThreshold"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Enums
-    public enum OccupancySensorTypeEnum implements JsonSerializable {
+    public enum OccupancySensorTypeEnum {
         PIR(0, "PIR"),
         ULTRASONIC(1, "Ultrasonic"),
         PIRANDULTRASONIC(2, "PIRAndUltrasonic"),
@@ -61,25 +43,14 @@ public class OccupancySensingCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class OccupancyBitmap implements JsonSerializable {
+    public static class OccupancyBitmap {
         public boolean occupied;
 
         public OccupancyBitmap(boolean occupied) {
             this.occupied = occupied;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"occupied\" : " + occupied + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -90,7 +61,7 @@ public class OccupancySensingCluster extends BaseCluster {
         }
     }
 
-    public static class OccupancySensorTypeBitmap implements JsonSerializable {
+    public static class OccupancySensorTypeBitmap {
         public boolean pir;
         public boolean ultrasonic;
         public boolean physicalContact;
@@ -101,15 +72,6 @@ public class OccupancySensingCluster extends BaseCluster {
             this.physicalContact = physicalContact;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"pir\" : " + pir + ",";
-            out += "\"ultrasonic\" : " + ultrasonic + ",";
-            out += "\"physicalContact\" : " + physicalContact + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static OccupancySensorTypeBitmap fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -118,27 +80,27 @@ public class OccupancySensingCluster extends BaseCluster {
         }
     }
 
-    public OccupancyBitmap occupancy; // 56 OccupancyBitmap
-    public OccupancySensorTypeEnum occupancySensorType; // 134 OccupancySensorTypeEnum
-    public OccupancySensorTypeBitmap occupancySensorTypeBitmap; // 203 OccupancySensorTypeBitmap
-    public Integer PIROccupiedToUnoccupiedDelay; // 277 int16u
-    public Integer PIRUnoccupiedToOccupiedDelay; // 327 int16u
-    public Integer PIRUnoccupiedToOccupiedThreshold; // 368 int8u
-    public Integer ultrasonicOccupiedToUnoccupiedDelay; // 402 int16u
-    public Integer ultrasonicUnoccupiedToOccupiedDelay; // 433 int16u
-    public Integer ultrasonicUnoccupiedToOccupiedThreshold; // 461 int8u
-    public Integer physicalContactOccupiedToUnoccupiedDelay; // 485 int16u
-    public Integer physicalContactUnoccupiedToOccupiedDelay; // 508 int16u
-    public Integer physicalContactUnoccupiedToOccupiedThreshold; // 530 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public OccupancyBitmap occupancy; // 0 OccupancyBitmap reportable
+    public OccupancySensorTypeEnum occupancySensorType; // 1 OccupancySensorTypeEnum reportable
+    public OccupancySensorTypeBitmap occupancySensorTypeBitmap; // 2 OccupancySensorTypeBitmap reportable
+    public Integer PIROccupiedToUnoccupiedDelay; // 16 int16u reportable writable
+    public Integer PIRUnoccupiedToOccupiedDelay; // 17 int16u reportable writable
+    public Integer PIRUnoccupiedToOccupiedThreshold; // 18 int8u reportable writable
+    public Integer ultrasonicOccupiedToUnoccupiedDelay; // 32 int16u reportable writable
+    public Integer ultrasonicUnoccupiedToOccupiedDelay; // 33 int16u reportable writable
+    public Integer ultrasonicUnoccupiedToOccupiedThreshold; // 34 int8u reportable writable
+    public Integer physicalContactOccupiedToUnoccupiedDelay; // 48 int16u reportable writable
+    public Integer physicalContactUnoccupiedToOccupiedDelay; // 49 int16u reportable writable
+    public Integer physicalContactUnoccupiedToOccupiedThreshold; // 50 int8u reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OccupancySensingCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 49, "OccupancySensing");
+        super(nodeId, endpointId, 51, "OccupancySensing");
     }
 
     public String toString() {

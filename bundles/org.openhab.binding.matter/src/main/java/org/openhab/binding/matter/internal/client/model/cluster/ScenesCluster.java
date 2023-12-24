@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Scenes
@@ -33,22 +30,7 @@ public class ScenesCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "SCENES_CLUSTER";
     public static final int CLUSTER_ID = 0x0005;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(68, "sceneCount"), entry(147, "currentScene"),
-                entry(216, "currentGroup"), entry(280, "sceneValid"), entry(329, "nameSupport"),
-                entry(369, "lastConfiguredBy"), entry(403, "sceneTableSize"), entry(434, "fabricSceneInfo"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(41, "addScene"), entry(260, "addSceneResponse"), entry(95, "viewScene"),
-                entry(267, "viewSceneResponse"), entry(136, "removeScene"), entry(270, "removeSceneResponse"),
-                entry(167, "removeAllScenes"), entry(273, "removeAllScenesResponse"), entry(192, "storeScene"),
-                entry(276, "storeSceneResponse"), entry(211, "recallScene"), entry(224, "getSceneMembership"),
-                entry(279, "getSceneMembershipResponse"), entry(236, "enhancedAddScene"),
-                entry(282, "enhancedAddSceneResponse"), entry(245, "enhancedViewScene"),
-                entry(285, "enhancedViewSceneResponse"), entry(253, "copyScene"), entry(288, "copySceneResponse"));
-    }
-
-    class AttributeValuePair implements JsonSerializable {
+    class AttributeValuePair {
         public List<Integer> attributeID; // attrib_id
         public Integer attributeValue; // int32u
 
@@ -56,17 +38,9 @@ public class ScenesCluster extends BaseCluster {
             this.attributeID = attributeID;
             this.attributeValue = attributeValue;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"attributeID\" : " + attributeID + ",";
-            out += "\"attributeValue\" : " + attributeValue + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class ExtensionFieldSet implements JsonSerializable {
+    class ExtensionFieldSet {
         public List<Integer> clusterID; // cluster_id
         public AttributeValuePair attributeValueList; // AttributeValuePair
 
@@ -74,17 +48,9 @@ public class ScenesCluster extends BaseCluster {
             this.clusterID = clusterID;
             this.attributeValueList = attributeValueList;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"clusterID\" : " + clusterID + ",";
-            out += "\"attributeValueList\" : " + attributeValueList + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class SceneInfoStruct implements JsonSerializable {
+    class SceneInfoStruct {
         public Integer sceneCount; // int8u
         public Integer currentScene; // int8u
         public List<Integer> currentGroup; // group_id
@@ -101,33 +67,14 @@ public class ScenesCluster extends BaseCluster {
             this.remainingCapacity = remainingCapacity;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"sceneCount\" : " + sceneCount + ",";
-            out += "\"currentScene\" : " + currentScene + ",";
-            out += "\"currentGroup\" : " + currentGroup + ",";
-            out += "\"sceneValid\" : " + sceneValid + ",";
-            out += "\"remainingCapacity\" : " + remainingCapacity + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Bitmaps
-    public static class CopyModeBitmap implements JsonSerializable {
+    public static class CopyModeBitmap {
         public boolean copyAllScenes;
 
         public CopyModeBitmap(boolean copyAllScenes) {
             this.copyAllScenes = copyAllScenes;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"copyAllScenes\" : " + copyAllScenes + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -138,7 +85,7 @@ public class ScenesCluster extends BaseCluster {
         }
     }
 
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean sceneNames;
         public boolean explicit;
         public boolean tableSize;
@@ -151,16 +98,6 @@ public class ScenesCluster extends BaseCluster {
             this.fabricScenes = fabricScenes;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"sceneNames\" : " + sceneNames + ",";
-            out += "\"explicit\" : " + explicit + ",";
-            out += "\"tableSize\" : " + tableSize + ",";
-            out += "\"fabricScenes\" : " + fabricScenes + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -169,18 +106,11 @@ public class ScenesCluster extends BaseCluster {
         }
     }
 
-    public static class NameSupportBitmap implements JsonSerializable {
+    public static class NameSupportBitmap {
         public boolean sceneNames;
 
         public NameSupportBitmap(boolean sceneNames) {
             this.sceneNames = sceneNames;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"sceneNames\" : " + sceneNames + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -191,23 +121,23 @@ public class ScenesCluster extends BaseCluster {
         }
     }
 
-    public Integer sceneCount; // 68 int8u
-    public Integer currentScene; // 147 int8u
-    public List<Integer> currentGroup; // 216 group_id
-    public Boolean sceneValid; // 280 boolean
-    public NameSupportBitmap nameSupport; // 329 NameSupportBitmap
-    public Long lastConfiguredBy; // 369 node_id
-    public Integer sceneTableSize; // 403 int16u
-    public SceneInfoStruct[] fabricSceneInfo; // 434 SceneInfoStruct
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer sceneCount; // 0 int8u reportable
+    public Integer currentScene; // 1 int8u reportable
+    public List<Integer> currentGroup; // 2 group_id reportable
+    public Boolean sceneValid; // 3 boolean reportable
+    public NameSupportBitmap nameSupport; // 4 NameSupportBitmap reportable
+    public Long lastConfiguredBy; // 5 node_id reportable
+    public Integer sceneTableSize; // 6 int16u reportable
+    public SceneInfoStruct[] fabricSceneInfo; // 7 SceneInfoStruct reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ScenesCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 64, "Scenes");
+        super(nodeId, endpointId, 62, "Scenes");
     }
 
     public void addScene(MatterClient client, List<Integer> groupID, Integer sceneID, Integer transitionTime,

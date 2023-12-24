@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * NetworkCommissioning
@@ -33,21 +30,7 @@ public class NetworkCommissioningCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "NETWORK_COMMISSIONING_CLUSTER";
     public static final int CLUSTER_ID = 0x0031;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(131, "maxNetworks"), entry(199, "networks"),
-                entry(262, "scanMaxTimeSeconds"), entry(318, "connectMaxTimeSeconds"), entry(360, "interfaceEnabled"),
-                entry(396, "lastNetworkingStatus"), entry(429, "lastNetworkID"), entry(457, "lastConnectErrorValue"),
-                entry(482, "supportedWiFiBands"), entry(504, "supportedThreadFeatures"), entry(526, "threadVersion"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(85, "scanNetworks"), entry(131, "scanNetworksResponse"),
-                entry(162, "addOrUpdateWiFiNetwork"), entry(190, "addOrUpdateThreadNetwork"),
-                entry(209, "removeNetwork"), entry(223, "networkConfigResponse"), entry(235, "connectNetwork"),
-                entry(244, "connectNetworkResponse"), entry(252, "reorderNetwork"), entry(259, "queryIdentity"),
-                entry(266, "queryIdentityResponse"));
-    }
-
-    class NetworkInfoStruct implements JsonSerializable {
+    class NetworkInfoStruct {
         public String networkID; // octet_string
         public Boolean connected; // boolean
         public String networkIdentifier; // octet_string
@@ -60,19 +43,9 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.networkIdentifier = networkIdentifier;
             this.clientIdentifier = clientIdentifier;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"networkID\" : " + networkID + ",";
-            out += "\"connected\" : " + connected + ",";
-            out += "\"networkIdentifier\" : " + networkIdentifier + ",";
-            out += "\"clientIdentifier\" : " + clientIdentifier + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class ThreadInterfaceScanResultStruct implements JsonSerializable {
+    class ThreadInterfaceScanResultStruct {
         public Integer panId; // int16u
         public Long extendedPanId; // int64u
         public String networkName; // char_string
@@ -93,23 +66,9 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.rssi = rssi;
             this.lqi = lqi;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"panId\" : " + panId + ",";
-            out += "\"extendedPanId\" : " + extendedPanId + ",";
-            out += "\"networkName\" : " + networkName + ",";
-            out += "\"channel\" : " + channel + ",";
-            out += "\"version\" : " + version + ",";
-            out += "\"extendedAddress\" : " + extendedAddress + ",";
-            out += "\"rssi\" : " + rssi + ",";
-            out += "\"lqi\" : " + lqi + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class WiFiInterfaceScanResultStruct implements JsonSerializable {
+    class WiFiInterfaceScanResultStruct {
         public WiFiSecurityBitmap security; // WiFiSecurityBitmap
         public String ssid; // octet_string
         public String bssid; // octet_string
@@ -126,22 +85,10 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.wiFiBand = wiFiBand;
             this.rssi = rssi;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"security\" : " + security + ",";
-            out += "\"ssid\" : " + ssid + ",";
-            out += "\"bssid\" : " + bssid + ",";
-            out += "\"channel\" : " + channel + ",";
-            out += "\"wiFiBand\" : " + wiFiBand + ",";
-            out += "\"rssi\" : " + rssi + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum NetworkCommissioningStatusEnum implements JsonSerializable {
+    public enum NetworkCommissioningStatusEnum {
         SUCCESS(0, "Success"),
         OUTOFRANGE(1, "OutOfRange"),
         BOUNDSEXCEEDED(2, "BoundsExceeded"),
@@ -164,13 +111,9 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum WiFiBandEnum implements JsonSerializable {
+    public enum WiFiBandEnum {
         T2G4(0, "2G4"),
         T3G65(1, "3G65"),
         T5G(2, "5G"),
@@ -186,14 +129,10 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean wiFiNetworkInterface;
         public boolean threadNetworkInterface;
         public boolean ethernetNetworkInterface;
@@ -207,16 +146,6 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.perDeviceCredentials = perDeviceCredentials;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"wiFiNetworkInterface\" : " + wiFiNetworkInterface + ",";
-            out += "\"threadNetworkInterface\" : " + threadNetworkInterface + ",";
-            out += "\"ethernetNetworkInterface\" : " + ethernetNetworkInterface + ",";
-            out += "\"perDeviceCredentials\" : " + perDeviceCredentials + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -225,7 +154,7 @@ public class NetworkCommissioningCluster extends BaseCluster {
         }
     }
 
-    public static class ThreadCapabilitiesBitmap implements JsonSerializable {
+    public static class ThreadCapabilitiesBitmap {
         public boolean isBorderRouterCapable;
         public boolean isRouterCapable;
         public boolean isSleepyEndDeviceCapable;
@@ -242,17 +171,6 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.isSynchronizedSleepyEndDeviceCapable = isSynchronizedSleepyEndDeviceCapable;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"isBorderRouterCapable\" : " + isBorderRouterCapable + ",";
-            out += "\"isRouterCapable\" : " + isRouterCapable + ",";
-            out += "\"isSleepyEndDeviceCapable\" : " + isSleepyEndDeviceCapable + ",";
-            out += "\"isFullThreadDevice\" : " + isFullThreadDevice + ",";
-            out += "\"isSynchronizedSleepyEndDeviceCapable\" : " + isSynchronizedSleepyEndDeviceCapable + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static ThreadCapabilitiesBitmap fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -261,7 +179,7 @@ public class NetworkCommissioningCluster extends BaseCluster {
         }
     }
 
-    public static class WiFiSecurityBitmap implements JsonSerializable {
+    public static class WiFiSecurityBitmap {
         public boolean unencrypted;
         public boolean wep;
         public boolean wpaPersonal;
@@ -279,18 +197,6 @@ public class NetworkCommissioningCluster extends BaseCluster {
             this.wpa3MatterPdc = wpa3MatterPdc;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"unencrypted\" : " + unencrypted + ",";
-            out += "\"wep\" : " + wep + ",";
-            out += "\"wpaPersonal\" : " + wpaPersonal + ",";
-            out += "\"wpa2Personal\" : " + wpa2Personal + ",";
-            out += "\"wpa3Personal\" : " + wpa3Personal + ",";
-            out += "\"wpa3MatterPdc\" : " + wpa3MatterPdc + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static WiFiSecurityBitmap fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -299,23 +205,23 @@ public class NetworkCommissioningCluster extends BaseCluster {
         }
     }
 
-    public Integer maxNetworks; // 131 int8u
-    public NetworkInfoStruct[] networks; // 199 NetworkInfoStruct
-    public Integer scanMaxTimeSeconds; // 262 int8u
-    public Integer connectMaxTimeSeconds; // 318 int8u
-    public Boolean interfaceEnabled; // 360 boolean
-    public NetworkCommissioningStatusEnum lastNetworkingStatus; // 396 NetworkCommissioningStatusEnum
-    public String lastNetworkID; // 429 octet_string
-    public Integer lastConnectErrorValue; // 457 int32s
-    public WiFiBandEnum supportedWiFiBands; // 482 WiFiBandEnum
-    public ThreadCapabilitiesBitmap supportedThreadFeatures; // 504 ThreadCapabilitiesBitmap
-    public Integer threadVersion; // 526 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer maxNetworks; // 0 int8u reportable
+    public NetworkInfoStruct[] networks; // 1 NetworkInfoStruct reportable
+    public Integer scanMaxTimeSeconds; // 2 int8u reportable
+    public Integer connectMaxTimeSeconds; // 3 int8u reportable
+    public Boolean interfaceEnabled; // 4 boolean reportable writable
+    public NetworkCommissioningStatusEnum lastNetworkingStatus; // 5 NetworkCommissioningStatusEnum reportable
+    public String lastNetworkID; // 6 octet_string reportable
+    public Integer lastConnectErrorValue; // 7 int32s reportable
+    public WiFiBandEnum supportedWiFiBands; // 8 WiFiBandEnum reportable
+    public ThreadCapabilitiesBitmap supportedThreadFeatures; // 9 ThreadCapabilitiesBitmap reportable
+    public Integer threadVersion; // 10 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public NetworkCommissioningCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 98, "NetworkCommissioning");

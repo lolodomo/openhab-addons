@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * LevelControl
@@ -33,21 +30,8 @@ public class LevelControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "LEVEL_CONTROL_CLUSTER";
     public static final int CLUSTER_ID = 0x0008;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(49, "currentLevel"), entry(127, "remainingTime"),
-                entry(197, "minLevel"), entry(260, "maxLevel"), entry(313, "currentFrequency"),
-                entry(364, "minFrequency"), entry(400, "maxFrequency"), entry(549, "options"),
-                entry(431, "onOffTransitionTime"), entry(459, "onLevel"), entry(484, "onTransitionTime"),
-                entry(507, "offTransitionTime"), entry(529, "defaultMoveRate"), entry(568, "startUpCurrentLevel"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(30, "moveToLevel"), entry(83, "move"), entry(127, "step"),
-                entry(158, "stop"), entry(185, "moveToLevelWithOnOff"), entry(206, "moveWithOnOff"),
-                entry(219, "stepWithOnOff"), entry(232, "stopWithOnOff"), entry(241, "moveToClosestFrequency"));
-    }
-
     // ZCL Enums
-    public enum MoveModeEnum implements JsonSerializable {
+    public enum MoveModeEnum {
         UP(0, "Up"),
         DOWN(1, "Down"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -59,13 +43,9 @@ public class LevelControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum StepModeEnum implements JsonSerializable {
+    public enum StepModeEnum {
         UP(0, "Up"),
         DOWN(1, "Down"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -77,14 +57,10 @@ public class LevelControlCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean onOff;
         public boolean lighting;
         public boolean frequency;
@@ -95,15 +71,6 @@ public class LevelControlCluster extends BaseCluster {
             this.frequency = frequency;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"onOff\" : " + onOff + ",";
-            out += "\"lighting\" : " + lighting + ",";
-            out += "\"frequency\" : " + frequency + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -112,21 +79,13 @@ public class LevelControlCluster extends BaseCluster {
         }
     }
 
-    public static class OptionsBitmap implements JsonSerializable {
+    public static class OptionsBitmap {
         public boolean executeIfOff;
         public boolean coupleColorTempToLevel;
 
         public OptionsBitmap(boolean executeIfOff, boolean coupleColorTempToLevel) {
             this.executeIfOff = executeIfOff;
             this.coupleColorTempToLevel = coupleColorTempToLevel;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"executeIfOff\" : " + executeIfOff + ",";
-            out += "\"coupleColorTempToLevel\" : " + coupleColorTempToLevel + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -137,26 +96,26 @@ public class LevelControlCluster extends BaseCluster {
         }
     }
 
-    public Integer currentLevel; // 49 int8u
-    public Integer remainingTime; // 127 int16u
-    public Integer minLevel; // 197 int8u
-    public Integer maxLevel; // 260 int8u
-    public Integer currentFrequency; // 313 int16u
-    public Integer minFrequency; // 364 int16u
-    public Integer maxFrequency; // 400 int16u
-    public OptionsBitmap options; // 549 OptionsBitmap
-    public Integer onOffTransitionTime; // 431 int16u
-    public Integer onLevel; // 459 int8u
-    public Integer onTransitionTime; // 484 int16u
-    public Integer offTransitionTime; // 507 int16u
-    public Integer defaultMoveRate; // 529 int8u
-    public Integer startUpCurrentLevel; // 568 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer currentLevel; // 0 int8u reportable
+    public Integer remainingTime; // 1 int16u reportable
+    public Integer minLevel; // 2 int8u reportable
+    public Integer maxLevel; // 3 int8u reportable
+    public Integer currentFrequency; // 4 int16u reportable
+    public Integer minFrequency; // 5 int16u reportable
+    public Integer maxFrequency; // 6 int16u reportable
+    public OptionsBitmap options; // 15 OptionsBitmap reportable writable
+    public Integer onOffTransitionTime; // 16 int16u reportable writable
+    public Integer onLevel; // 17 int8u reportable writable
+    public Integer onTransitionTime; // 18 int16u reportable writable
+    public Integer offTransitionTime; // 19 int16u reportable writable
+    public Integer defaultMoveRate; // 20 int8u reportable writable
+    public Integer startUpCurrentLevel; // 16384 int8u reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public LevelControlCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 39, "LevelControl");

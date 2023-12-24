@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * MicrowaveOvenMode
@@ -32,14 +28,7 @@ public class MicrowaveOvenModeCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "MICROWAVE_OVEN_MODE_CLUSTER";
     public static final int CLUSTER_ID = 0x005E;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(27, "supportedModes"), entry(108, "currentMode"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
-    class ModeTagStruct implements JsonSerializable {
+    class ModeTagStruct {
         public Integer mfgCode; // vendor_id
         public Integer value; // enum16
 
@@ -47,17 +36,9 @@ public class MicrowaveOvenModeCluster extends BaseCluster {
             this.mfgCode = mfgCode;
             this.value = value;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"mfgCode\" : " + mfgCode + ",";
-            out += "\"value\" : " + value + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class ModeOptionStruct implements JsonSerializable {
+    class ModeOptionStruct {
         public String label; // char_string
         public Integer mode; // int8u
         public ModeTagStruct[] modeTags; // ModeTagStruct
@@ -67,19 +48,10 @@ public class MicrowaveOvenModeCluster extends BaseCluster {
             this.mode = mode;
             this.modeTags = modeTags;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"label\" : " + label + ",";
-            out += "\"mode\" : " + mode + ",";
-            out += "\"modeTags\" : " + modeTags + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ModeTag implements JsonSerializable {
+    public enum ModeTag {
         NORMAL(16384, "Normal"),
         DEFROST(16385, "Defrost"),
         UNKNOWN_VALUE(0, "UnknownValue");
@@ -91,25 +63,14 @@ public class MicrowaveOvenModeCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean onOff;
 
         public Feature(boolean onOff) {
             this.onOff = onOff;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"onOff\" : " + onOff + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -120,14 +81,14 @@ public class MicrowaveOvenModeCluster extends BaseCluster {
         }
     }
 
-    public ModeOptionStruct[] supportedModes; // 27 ModeOptionStruct
-    public Integer currentMode; // 108 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public ModeOptionStruct[] supportedModes; // 0 ModeOptionStruct reportable
+    public Integer currentMode; // 1 int8u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public MicrowaveOvenModeCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 17, "MicrowaveOvenMode");

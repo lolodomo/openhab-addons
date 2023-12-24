@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * CarbonDioxideConcentrationMeasurement
@@ -32,18 +28,8 @@ public class CarbonDioxideConcentrationMeasurementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "CARBON_DIOXIDE_CONCENTRATION_MEASUREMENT_CLUSTER";
     public static final int CLUSTER_ID = 0x040D;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(649, "measuredValue"), entry(661, "minMeasuredValue"),
-                entry(673, "maxMeasuredValue"), entry(684, "peakMeasuredValue"), entry(693, "peakMeasuredValueWindow"),
-                entry(702, "averageMeasuredValue"), entry(710, "averageMeasuredValueWindow"), entry(718, "uncertainty"),
-                entry(725, "measurementUnit"), entry(733, "measurementMedium"), entry(741, "levelValue"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Enums
-    public enum LevelValueEnum implements JsonSerializable {
+    public enum LevelValueEnum {
         UNKNOWN(0, "Unknown"),
         LOW(1, "Low"),
         MEDIUM(2, "Medium"),
@@ -58,13 +44,9 @@ public class CarbonDioxideConcentrationMeasurementCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum MeasurementMediumEnum implements JsonSerializable {
+    public enum MeasurementMediumEnum {
         AIR(0, "Air"),
         WATER(1, "Water"),
         SOIL(2, "Soil"),
@@ -77,13 +59,9 @@ public class CarbonDioxideConcentrationMeasurementCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum MeasurementUnitEnum implements JsonSerializable {
+    public enum MeasurementUnitEnum {
         PPM(0, "PPM"),
         PPB(1, "PPB"),
         PPT(2, "PPT"),
@@ -101,14 +79,10 @@ public class CarbonDioxideConcentrationMeasurementCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean numericMeasurement;
         public boolean levelIndication;
         public boolean mediumLevel;
@@ -126,18 +100,6 @@ public class CarbonDioxideConcentrationMeasurementCluster extends BaseCluster {
             this.averageMeasurement = averageMeasurement;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"numericMeasurement\" : " + numericMeasurement + ",";
-            out += "\"levelIndication\" : " + levelIndication + ",";
-            out += "\"mediumLevel\" : " + mediumLevel + ",";
-            out += "\"criticalLevel\" : " + criticalLevel + ",";
-            out += "\"peakMeasurement\" : " + peakMeasurement + ",";
-            out += "\"averageMeasurement\" : " + averageMeasurement + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -146,26 +108,26 @@ public class CarbonDioxideConcentrationMeasurementCluster extends BaseCluster {
         }
     }
 
-    public Float measuredValue; // 649 single
-    public Float minMeasuredValue; // 661 single
-    public Float maxMeasuredValue; // 673 single
-    public Float peakMeasuredValue; // 684 single
-    public Integer peakMeasuredValueWindow; // 693 elapsed_s
-    public Float averageMeasuredValue; // 702 single
-    public Integer averageMeasuredValueWindow; // 710 elapsed_s
-    public Float uncertainty; // 718 single
-    public MeasurementUnitEnum measurementUnit; // 725 MeasurementUnitEnum
-    public MeasurementMediumEnum measurementMedium; // 733 MeasurementMediumEnum
-    public LevelValueEnum levelValue; // 741 LevelValueEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Float measuredValue; // 0 single reportable
+    public Float minMeasuredValue; // 1 single reportable
+    public Float maxMeasuredValue; // 2 single reportable
+    public Float peakMeasuredValue; // 3 single reportable
+    public Integer peakMeasuredValueWindow; // 4 elapsed_s reportable
+    public Float averageMeasuredValue; // 5 single reportable
+    public Integer averageMeasuredValueWindow; // 6 elapsed_s reportable
+    public Float uncertainty; // 7 single reportable
+    public MeasurementUnitEnum measurementUnit; // 8 MeasurementUnitEnum reportable
+    public MeasurementMediumEnum measurementMedium; // 9 MeasurementMediumEnum reportable
+    public LevelValueEnum levelValue; // 10 LevelValueEnum reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public CarbonDioxideConcentrationMeasurementCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 97, "CarbonDioxideConcentrationMeasurement");
+        super(nodeId, endpointId, 96, "CarbonDioxideConcentrationMeasurement");
     }
 
     public String toString() {

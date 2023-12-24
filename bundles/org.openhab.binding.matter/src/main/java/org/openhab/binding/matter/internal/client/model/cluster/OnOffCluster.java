@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * OnOff
@@ -33,17 +30,8 @@ public class OnOffCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ON_OFF_CLUSTER";
     public static final int CLUSTER_ID = 0x0006;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(55, "onOff"), entry(135, "globalSceneControl"), entry(204, "onTime"),
-                entry(274, "offWaitTime"), entry(326, "startUpOnOff"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(34, "off"), entry(87, "on"), entry(130, "toggle"),
-                entry(166, "offWithEffect"), entry(191, "onWithRecallGlobalScene"), entry(210, "onWithTimedOff"));
-    }
-
     // ZCL Enums
-    public enum DelayedAllOffEffectVariantEnum implements JsonSerializable {
+    public enum DelayedAllOffEffectVariantEnum {
         DELAYEDOFFFASTFADE(0, "DelayedOffFastFade"),
         NOFADE(1, "NoFade"),
         DELAYEDOFFSLOWFADE(2, "DelayedOffSlowFade"),
@@ -56,13 +44,9 @@ public class OnOffCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum DyingLightEffectVariantEnum implements JsonSerializable {
+    public enum DyingLightEffectVariantEnum {
         DYINGLIGHTFADEOFF(0, "DyingLightFadeOff"),
         UNKNOWN_VALUE(1, "UnknownValue");
 
@@ -73,13 +57,9 @@ public class OnOffCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum EffectIdentifierEnum implements JsonSerializable {
+    public enum EffectIdentifierEnum {
         DELAYEDALLOFF(0, "DelayedAllOff"),
         DYINGLIGHT(1, "DyingLight"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -91,13 +71,9 @@ public class OnOffCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum StartUpOnOffEnum implements JsonSerializable {
+    public enum StartUpOnOffEnum {
         OFF(0, "Off"),
         ON(1, "On"),
         TOGGLE(2, "Toggle"),
@@ -110,14 +86,10 @@ public class OnOffCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean lighting;
         public boolean deadFrontBehavior;
         public boolean offOnly;
@@ -128,15 +100,6 @@ public class OnOffCluster extends BaseCluster {
             this.offOnly = offOnly;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"lighting\" : " + lighting + ",";
-            out += "\"deadFrontBehavior\" : " + deadFrontBehavior + ",";
-            out += "\"offOnly\" : " + offOnly + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -145,18 +108,11 @@ public class OnOffCluster extends BaseCluster {
         }
     }
 
-    public static class OnOffControlBitmap implements JsonSerializable {
+    public static class OnOffControlBitmap {
         public boolean acceptOnlyWhenOn;
 
         public OnOffControlBitmap(boolean acceptOnlyWhenOn) {
             this.acceptOnlyWhenOn = acceptOnlyWhenOn;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"acceptOnlyWhenOn\" : " + acceptOnlyWhenOn + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -167,20 +123,20 @@ public class OnOffCluster extends BaseCluster {
         }
     }
 
-    public Boolean onOff; // 55 boolean
-    public Boolean globalSceneControl; // 135 boolean
-    public Integer onTime; // 204 int16u
-    public Integer offWaitTime; // 274 int16u
-    public StartUpOnOffEnum startUpOnOff; // 326 StartUpOnOffEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Boolean onOff; // 0 boolean reportable
+    public Boolean globalSceneControl; // 16384 boolean reportable
+    public Integer onTime; // 16385 int16u reportable writable
+    public Integer offWaitTime; // 16386 int16u reportable writable
+    public StartUpOnOffEnum startUpOnOff; // 16387 StartUpOnOffEnum reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OnOffCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 48, "OnOff");
+        super(nodeId, endpointId, 46, "OnOff");
     }
 
     public void off(MatterClient client) throws Exception {

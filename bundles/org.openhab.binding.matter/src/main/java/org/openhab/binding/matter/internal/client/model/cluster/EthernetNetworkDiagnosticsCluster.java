@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * EthernetNetworkDiagnostics
@@ -33,17 +30,8 @@ public class EthernetNetworkDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ETHERNET_NETWORK_DIAGNOSTICS_CLUSTER";
     public static final int CLUSTER_ID = 0x0037;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(29, "PHYRate"), entry(110, "fullDuplex"), entry(186, "packetRxCount"),
-                entry(252, "packetTxCount"), entry(308, "txErrCount"), entry(352, "collisionCount"),
-                entry(390, "overrunCount"), entry(423, "carrierDetect"), entry(452, "timeSinceReset"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(14, "resetCounts"));
-    }
-
     // ZCL Enums
-    public enum PHYRateEnum implements JsonSerializable {
+    public enum PHYRateEnum {
         RATE10M(0, "Rate10M"),
         RATE100M(1, "Rate100M"),
         RATE1G(2, "Rate1G"),
@@ -63,28 +51,16 @@ public class EthernetNetworkDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean packetCounts;
         public boolean errorCounts;
 
         public Feature(boolean packetCounts, boolean errorCounts) {
             this.packetCounts = packetCounts;
             this.errorCounts = errorCounts;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"packetCounts\" : " + packetCounts + ",";
-            out += "\"errorCounts\" : " + errorCounts + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -95,24 +71,24 @@ public class EthernetNetworkDiagnosticsCluster extends BaseCluster {
         }
     }
 
-    public PHYRateEnum PHYRate; // 29 PHYRateEnum
-    public Boolean fullDuplex; // 110 boolean
-    public Long packetRxCount; // 186 int64u
-    public Long packetTxCount; // 252 int64u
-    public Long txErrCount; // 308 int64u
-    public Long collisionCount; // 352 int64u
-    public Long overrunCount; // 390 int64u
-    public Boolean carrierDetect; // 423 boolean
-    public Long timeSinceReset; // 452 int64u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public PHYRateEnum PHYRate; // 0 PHYRateEnum reportable
+    public Boolean fullDuplex; // 1 boolean reportable
+    public Long packetRxCount; // 2 int64u reportable
+    public Long packetTxCount; // 3 int64u reportable
+    public Long txErrCount; // 4 int64u reportable
+    public Long collisionCount; // 5 int64u reportable
+    public Long overrunCount; // 6 int64u reportable
+    public Boolean carrierDetect; // 7 boolean reportable
+    public Long timeSinceReset; // 8 int64u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public EthernetNetworkDiagnosticsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 19, "EthernetNetworkDiagnostics");
+        super(nodeId, endpointId, 27, "EthernetNetworkDiagnostics");
     }
 
     public void resetCounts(MatterClient client) throws Exception {

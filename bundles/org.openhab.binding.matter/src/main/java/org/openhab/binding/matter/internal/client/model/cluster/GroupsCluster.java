@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Groups
@@ -33,29 +30,12 @@ public class GroupsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "GROUPS_CLUSTER";
     public static final int CLUSTER_ID = 0x0004;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(39, "nameSupport"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(22, "addGroup"), entry(220, "addGroupResponse"), entry(75, "viewGroup"),
-                entry(233, "viewGroupResponse"), entry(125, "getGroupMembership"),
-                entry(242, "getGroupMembershipResponse"), entry(157, "removeGroup"), entry(250, "removeGroupResponse"),
-                entry(183, "removeAllGroups"), entry(205, "addGroupIfIdentifying"));
-    }
-
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean groupNames;
 
         public Feature(boolean groupNames) {
             this.groupNames = groupNames;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"groupNames\" : " + groupNames + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -66,18 +46,11 @@ public class GroupsCluster extends BaseCluster {
         }
     }
 
-    public static class NameSupportBitmap implements JsonSerializable {
+    public static class NameSupportBitmap {
         public boolean groupNames;
 
         public NameSupportBitmap(boolean groupNames) {
             this.groupNames = groupNames;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"groupNames\" : " + groupNames + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -88,13 +61,13 @@ public class GroupsCluster extends BaseCluster {
         }
     }
 
-    public NameSupportBitmap nameSupport; // 39 NameSupportBitmap
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public NameSupportBitmap nameSupport; // 0 NameSupportBitmap reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public GroupsCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 29, "Groups");

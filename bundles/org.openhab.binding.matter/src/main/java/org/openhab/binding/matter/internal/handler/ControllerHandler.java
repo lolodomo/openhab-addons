@@ -21,7 +21,9 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.AttributeListener;
 import org.openhab.binding.matter.internal.client.MatterClient;
+import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.config.ControllerConfiguration;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
@@ -53,6 +55,12 @@ public class ControllerHandler extends AbstractMatterBridgeHandler {
     public ControllerHandler(Bridge bridge) {
         super(bridge);
         this.matterClient = new MatterClient();
+        this.matterClient.addAttributeListener(new AttributeListener() {
+            @Override
+            public void onEvent(AttributeChangedMessage message) {
+                logger.debug("AttributeChangedMessage {} {}", message.path.attributeName, message.value);
+            }
+        });
     }
 
     @Override

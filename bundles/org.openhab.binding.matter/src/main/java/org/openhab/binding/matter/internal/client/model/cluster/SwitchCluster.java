@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * Switch
@@ -32,15 +28,8 @@ public class SwitchCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "SWITCH_CLUSTER";
     public static final int CLUSTER_ID = 0x003B;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(75, "numberOfPositions"), entry(153, "currentPosition"),
-                entry(222, "multiPressMax"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean latchingSwitch;
         public boolean momentarySwitch;
         public boolean momentarySwitchRelease;
@@ -56,17 +45,6 @@ public class SwitchCluster extends BaseCluster {
             this.momentarySwitchMultiPress = momentarySwitchMultiPress;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"latchingSwitch\" : " + latchingSwitch + ",";
-            out += "\"momentarySwitch\" : " + momentarySwitch + ",";
-            out += "\"momentarySwitchRelease\" : " + momentarySwitchRelease + ",";
-            out += "\"momentarySwitchLongPress\" : " + momentarySwitchLongPress + ",";
-            out += "\"momentarySwitchMultiPress\" : " + momentarySwitchMultiPress + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -75,18 +53,18 @@ public class SwitchCluster extends BaseCluster {
         }
     }
 
-    public Integer numberOfPositions; // 75 int8u
-    public Integer currentPosition; // 153 int8u
-    public Integer multiPressMax; // 222 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer numberOfPositions; // 0 int8u reportable
+    public Integer currentPosition; // 1 int8u reportable
+    public Integer multiPressMax; // 2 int8u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public SwitchCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 71, "Switch");
+        super(nodeId, endpointId, 69, "Switch");
     }
 
     public String toString() {

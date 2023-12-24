@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * AdministratorCommissioning
@@ -33,16 +30,8 @@ public class AdministratorCommissioningCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ADMINISTRATOR_COMMISSIONING_CLUSTER";
     public static final int CLUSTER_ID = 0x003C;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(15, "windowStatus"), entry(97, "adminFabricIndex"),
-                entry(173, "adminVendorId"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(7, "openCommissioningWindow"), entry(61, "openBasicCommissioningWindow"),
-                entry(110, "revokeCommissioning"));
-    }
-
     // ZCL Enums
-    public enum CommissioningWindowStatusEnum implements JsonSerializable {
+    public enum CommissioningWindowStatusEnum {
         WINDOWNOTOPEN(0, "WindowNotOpen"),
         ENHANCEDWINDOWOPEN(1, "EnhancedWindowOpen"),
         BASICWINDOWOPEN(2, "BasicWindowOpen"),
@@ -55,13 +44,9 @@ public class AdministratorCommissioningCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum StatusCode implements JsonSerializable {
+    public enum StatusCode {
         BUSY(2, "Busy"),
         PAKEPARAMETERERROR(3, "PAKEParameterError"),
         WINDOWNOTOPEN(4, "WindowNotOpen"),
@@ -74,25 +59,14 @@ public class AdministratorCommissioningCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean basic;
 
         public Feature(boolean basic) {
             this.basic = basic;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"basic\" : " + basic + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -103,18 +77,18 @@ public class AdministratorCommissioningCluster extends BaseCluster {
         }
     }
 
-    public CommissioningWindowStatusEnum windowStatus; // 15 CommissioningWindowStatusEnum
-    public Integer adminFabricIndex; // 97 fabric_idx
-    public Integer adminVendorId; // 173 vendor_id
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public CommissioningWindowStatusEnum windowStatus; // 0 CommissioningWindowStatusEnum reportable
+    public Integer adminFabricIndex; // 1 fabric_idx reportable
+    public Integer adminVendorId; // 2 vendor_id reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public AdministratorCommissioningCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 3, "AdministratorCommissioning");
+        super(nodeId, endpointId, 14, "AdministratorCommissioning");
     }
 
     public void openCommissioningWindow(MatterClient client, Integer commissioningTimeout, String PAKEPasscodeVerifier,

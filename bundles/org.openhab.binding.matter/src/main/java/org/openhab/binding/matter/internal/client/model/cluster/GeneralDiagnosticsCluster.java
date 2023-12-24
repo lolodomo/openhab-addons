@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * GeneralDiagnostics
@@ -33,18 +30,7 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "GENERAL_DIAGNOSTICS_CLUSTER";
     public static final int CLUSTER_ID = 0x0033;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(36, "networkInterfaces"), entry(115, "rebootCount"),
-                entry(188, "upTime"), entry(255, "totalOperationalHours"), entry(310, "bootReason"),
-                entry(353, "activeHardwareFaults"), entry(391, "activeRadioFaults"), entry(422, "activeNetworkFaults"),
-                entry(451, "testEventTriggersEnabled"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(19, "testEventTrigger"), entry(77, "timeSnapshot"),
-                entry(124, "timeSnapshotResponse"));
-    }
-
-    class NetworkInterface implements JsonSerializable {
+    class NetworkInterface {
         public String name; // char_string
         public Boolean isOperational; // boolean
         public Boolean offPremiseServicesReachableIPv4; // boolean
@@ -66,24 +52,10 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
             this.IPv6Addresses = IPv6Addresses;
             this.type = type;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"name\" : " + name + ",";
-            out += "\"isOperational\" : " + isOperational + ",";
-            out += "\"offPremiseServicesReachableIPv4\" : " + offPremiseServicesReachableIPv4 + ",";
-            out += "\"offPremiseServicesReachableIPv6\" : " + offPremiseServicesReachableIPv6 + ",";
-            out += "\"hardwareAddress\" : " + hardwareAddress + ",";
-            out += "\"IPv4Addresses\" : " + IPv4Addresses + ",";
-            out += "\"IPv6Addresses\" : " + IPv6Addresses + ",";
-            out += "\"type\" : " + type + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum BootReasonEnum implements JsonSerializable {
+    public enum BootReasonEnum {
         UNSPECIFIED(0, "Unspecified"),
         POWERONREBOOT(1, "PowerOnReboot"),
         BROWNOUTRESET(2, "BrownOutReset"),
@@ -100,13 +72,9 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum HardwareFaultEnum implements JsonSerializable {
+    public enum HardwareFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         RADIO(1, "Radio"),
         SENSOR(2, "Sensor"),
@@ -127,13 +95,9 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum InterfaceTypeEnum implements JsonSerializable {
+    public enum InterfaceTypeEnum {
         UNSPECIFIED(0, "Unspecified"),
         WIFI(1, "WiFi"),
         ETHERNET(2, "Ethernet"),
@@ -148,13 +112,9 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum NetworkFaultEnum implements JsonSerializable {
+    public enum NetworkFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         HARDWAREFAILURE(1, "HardwareFailure"),
         NETWORKJAMMED(2, "NetworkJammed"),
@@ -168,13 +128,9 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum RadioFaultEnum implements JsonSerializable {
+    public enum RadioFaultEnum {
         UNSPECIFIED(0, "Unspecified"),
         WIFIFAULT(1, "WiFiFault"),
         CELLULARFAULT(2, "CellularFault"),
@@ -191,30 +147,26 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public NetworkInterface networkInterfaces; // 36 NetworkInterface
-    public Integer rebootCount; // 115 int16u
-    public Long upTime; // 188 int64u
-    public Integer totalOperationalHours; // 255 int32u
-    public BootReasonEnum bootReason; // 310 BootReasonEnum
-    public HardwareFaultEnum activeHardwareFaults; // 353 HardwareFaultEnum
-    public RadioFaultEnum activeRadioFaults; // 391 RadioFaultEnum
-    public NetworkFaultEnum activeNetworkFaults; // 422 NetworkFaultEnum
-    public Boolean testEventTriggersEnabled; // 451 boolean
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public NetworkInterface networkInterfaces; // 0 NetworkInterface reportable
+    public Integer rebootCount; // 1 int16u reportable
+    public Long upTime; // 2 int64u reportable
+    public Integer totalOperationalHours; // 3 int32u reportable
+    public BootReasonEnum bootReason; // 4 BootReasonEnum reportable
+    public HardwareFaultEnum activeHardwareFaults; // 5 HardwareFaultEnum reportable
+    public RadioFaultEnum activeRadioFaults; // 6 RadioFaultEnum reportable
+    public NetworkFaultEnum activeNetworkFaults; // 7 NetworkFaultEnum reportable
+    public Boolean testEventTriggersEnabled; // 8 boolean reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public GeneralDiagnosticsCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 26, "GeneralDiagnostics");
+        super(nodeId, endpointId, 31, "GeneralDiagnostics");
     }
 
     public void testEventTrigger(MatterClient client, String enableKey, Long eventTrigger) throws Exception {

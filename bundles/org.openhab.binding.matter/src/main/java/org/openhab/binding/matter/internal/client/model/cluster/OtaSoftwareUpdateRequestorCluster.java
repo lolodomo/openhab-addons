@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * OtaSoftwareUpdateRequestor
@@ -33,15 +30,7 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OTA_SOFTWARE_UPDATE_REQUESTOR_CLUSTER";
     public static final int CLUSTER_ID = 0x002A;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(179, "defaultOTAProviders"), entry(247, "updatePossible"),
-                entry(303, "updateState"), entry(346, "updateStateProgress"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(228, "announceOTAProvider"));
-    }
-
-    class ProviderLocation implements JsonSerializable {
+    class ProviderLocation {
         public Long providerNodeID; // node_id
         public List<Integer> endpoint; // endpoint_no
         public Integer fabricIndex; // fabric_idx
@@ -51,19 +40,10 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
             this.endpoint = endpoint;
             this.fabricIndex = fabricIndex;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"providerNodeID\" : " + providerNodeID + ",";
-            out += "\"endpoint\" : " + endpoint + ",";
-            out += "\"fabricIndex\" : " + fabricIndex + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum AnnouncementReasonEnum implements JsonSerializable {
+    public enum AnnouncementReasonEnum {
         SIMPLEANNOUNCEMENT(0, "SimpleAnnouncement"),
         UPDATEAVAILABLE(1, "UpdateAvailable"),
         URGENTUPDATEAVAILABLE(2, "UrgentUpdateAvailable"),
@@ -76,13 +56,9 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ChangeReasonEnum implements JsonSerializable {
+    public enum ChangeReasonEnum {
         UNKNOWN(0, "Unknown"),
         SUCCESS(1, "Success"),
         FAILURE(2, "Failure"),
@@ -97,13 +73,9 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum UpdateStateEnum implements JsonSerializable {
+    public enum UpdateStateEnum {
         UNKNOWN(0, "Unknown"),
         IDLE(1, "Idle"),
         QUERYING(2, "Querying"),
@@ -122,22 +94,18 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public ProviderLocation defaultOTAProviders; // 179 ProviderLocation
-    public Boolean updatePossible; // 247 boolean
-    public UpdateStateEnum updateState; // 303 UpdateStateEnum
-    public Integer updateStateProgress; // 346 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public ProviderLocation defaultOTAProviders; // 0 ProviderLocation reportable writable
+    public Boolean updatePossible; // 1 boolean reportable
+    public UpdateStateEnum updateState; // 2 UpdateStateEnum reportable
+    public Integer updateStateProgress; // 3 int8u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OtaSoftwareUpdateRequestorCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 100, "OtaSoftwareUpdateRequestor");

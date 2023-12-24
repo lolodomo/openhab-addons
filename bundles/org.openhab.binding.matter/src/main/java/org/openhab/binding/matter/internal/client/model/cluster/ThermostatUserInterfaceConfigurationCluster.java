@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * ThermostatUserInterfaceConfiguration
@@ -32,16 +28,8 @@ public class ThermostatUserInterfaceConfigurationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "THERMOSTAT_USER_INTERFACE_CONFIGURATION_CLUSTER";
     public static final int CLUSTER_ID = 0x0204;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(79, "temperatureDisplayMode"), entry(157, "keypadLockout"),
-                entry(227, "scheduleProgrammingVisibility"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Enums
-    public enum KeypadLockoutEnum implements JsonSerializable {
+    public enum KeypadLockoutEnum {
         NOLOCKOUT(0, "NoLockout"),
         LOCKOUT1(1, "Lockout1"),
         LOCKOUT2(2, "Lockout2"),
@@ -57,13 +45,9 @@ public class ThermostatUserInterfaceConfigurationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ScheduleProgrammingVisibilityEnum implements JsonSerializable {
+    public enum ScheduleProgrammingVisibilityEnum {
         SCHEDULEPROGRAMMINGPERMITTED(0, "ScheduleProgrammingPermitted"),
         SCHEDULEPROGRAMMINGDENIED(1, "ScheduleProgrammingDenied"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -75,13 +59,9 @@ public class ThermostatUserInterfaceConfigurationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum TemperatureDisplayModeEnum implements JsonSerializable {
+    public enum TemperatureDisplayModeEnum {
         CELSIUS(0, "Celsius"),
         FAHRENHEIT(1, "Fahrenheit"),
         UNKNOWN_VALUE(2, "UnknownValue");
@@ -93,24 +73,21 @@ public class ThermostatUserInterfaceConfigurationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public TemperatureDisplayModeEnum temperatureDisplayMode; // 79 TemperatureDisplayModeEnum
-    public KeypadLockoutEnum keypadLockout; // 157 KeypadLockoutEnum
-    public ScheduleProgrammingVisibilityEnum scheduleProgrammingVisibility; // 227 ScheduleProgrammingVisibilityEnum
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public TemperatureDisplayModeEnum temperatureDisplayMode; // 0 TemperatureDisplayModeEnum reportable writable
+    public KeypadLockoutEnum keypadLockout; // 1 KeypadLockoutEnum reportable writable
+    public ScheduleProgrammingVisibilityEnum scheduleProgrammingVisibility; // 2 ScheduleProgrammingVisibilityEnum
+                                                                            // reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ThermostatUserInterfaceConfigurationCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 75, "ThermostatUserInterfaceConfiguration");
+        super(nodeId, endpointId, 84, "ThermostatUserInterfaceConfiguration");
     }
 
     public String toString() {

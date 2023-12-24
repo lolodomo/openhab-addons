@@ -14,17 +14,25 @@ package org.openhab.binding.matter.internal.handler;
 
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.MatterClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.config.ClusterConfiguration;
 import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.thing.binding.BridgeHandler;
+import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.thing.binding.builder.ThingBuilder;
+import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
@@ -37,11 +45,14 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class ClusterHandler extends BaseThingHandler {
+public abstract class ClusterHandler extends BaseThingHandler implements MatterClientSetter {
 
     private final Logger logger = LoggerFactory.getLogger(ClusterHandler.class);
-    private int clusterId;
-    private @Nullable BaseCluster cluster;
+    protected long nodeId;
+    protected long endpointId;
+    protected int clusterId;
+    protected @Nullable BaseCluster cluster;
+    protected @Nullable MatterClient client;
 
     public ClusterHandler(Thing thing) {
         super(thing);
@@ -67,22 +78,13 @@ public class ClusterHandler extends BaseThingHandler {
         initializeCluster();
     }
 
-    private void initializeCluster() {
-        EndpointHandler handler = endpointHandler();
-        if (handler == null) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
-        } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-        } else {
-            updateStatus(ThingStatus.ONLINE);
-            scheduler.execute(() -> {
-                handler.refresh();
-            });
-        }
+    @Override
+    public void dispose() {
     }
 
     @Override
-    public void dispose() {
+    public void setMatterClient(MatterClient client) {
+        this.client = client;
     }
 
     public int getClusterId() {
@@ -93,9 +95,10 @@ public class ClusterHandler extends BaseThingHandler {
         this.cluster = cluster;
         logger.debug("Endpoint: {} Cluster: {} ", cluster.id, cluster.name);
         logger.debug("{} ", cluster);
+        createChannels();
     }
 
-    private @Nullable EndpointHandler endpointHandler() {
+    protected @Nullable EndpointHandler endpointHandler() {
         Bridge bridge = getBridge();
         if (bridge != null) {
             BridgeHandler handler = bridge.getHandler();
@@ -104,5 +107,50 @@ public class ClusterHandler extends BaseThingHandler {
             }
         }
         return null;
+    }
+
+    protected abstract void createChannels();
+
+    protected abstract void registerListeners();
+
+    protected void createChannel(String channelName, ChannelTypeUID channelType, String channelLabel, String itemType) {
+        BaseCluster cluster = this.cluster;
+        if (cluster != null) {
+            Channel channel = ChannelBuilder.create(createChannelUID(cluster, channelName), itemType)
+                    .withType(channelType).withLabel(channelLabel).build();
+            // replace existing buttonPress with updated one
+            List<Channel> newChannels = new ArrayList<>();
+            for (Channel c : getThing().getChannels()) {
+                if (!c.getUID().equals(channel.getUID())) {
+                    newChannels.add(c);
+                }
+            }
+            newChannels.add(channel);
+            ThingBuilder thingBuilder = editThing();
+            thingBuilder.withChannels(newChannels);
+            updateThing(thingBuilder.build());
+        }
+    }
+
+    protected ChannelUID createChannelUID(BaseCluster cluster, String channelName) {
+        return new ChannelUID(getThing().getUID(), cluster.name + "_" + channelName);
+    }
+
+    private void initializeCluster() {
+        EndpointHandler handler = endpointHandler();
+        if (handler == null) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
+        } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        } else {
+            updateStatus(ThingStatus.ONLINE);
+            EndpointHandler eh = endpointHandler();
+            if (eh != null) {
+
+            }
+            scheduler.execute(() -> {
+                handler.refresh();
+            });
+        }
     }
 }

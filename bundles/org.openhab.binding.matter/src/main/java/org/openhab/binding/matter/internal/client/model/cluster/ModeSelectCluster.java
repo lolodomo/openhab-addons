@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * ModeSelect
@@ -33,15 +30,7 @@ public class ModeSelectCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "MODE_SELECT_CLUSTER";
     public static final int CLUSTER_ID = 0x0050;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(48, "description"), entry(128, "standardNamespace"),
-                entry(198, "supportedModes"), entry(261, "currentMode"), entry(314, "startUpMode"),
-                entry(356, "onMode"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(29, "changeToMode"));
-    }
-
-    class SemanticTagStruct implements JsonSerializable {
+    class SemanticTagStruct {
         public Integer mfgCode; // vendor_id
         public Integer value; // enum16
 
@@ -49,17 +38,9 @@ public class ModeSelectCluster extends BaseCluster {
             this.mfgCode = mfgCode;
             this.value = value;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"mfgCode\" : " + mfgCode + ",";
-            out += "\"value\" : " + value + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class ModeOptionStruct implements JsonSerializable {
+    class ModeOptionStruct {
         public String label; // char_string
         public Integer mode; // int8u
         public SemanticTagStruct[] semanticTags; // SemanticTagStruct
@@ -69,30 +50,14 @@ public class ModeSelectCluster extends BaseCluster {
             this.mode = mode;
             this.semanticTags = semanticTags;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"label\" : " + label + ",";
-            out += "\"mode\" : " + mode + ",";
-            out += "\"semanticTags\" : " + semanticTags + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean onOff;
 
         public Feature(boolean onOff) {
             this.onOff = onOff;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"onOff\" : " + onOff + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -103,21 +68,21 @@ public class ModeSelectCluster extends BaseCluster {
         }
     }
 
-    public String description; // 48 char_string
-    public Integer standardNamespace; // 128 enum16
-    public ModeOptionStruct[] supportedModes; // 198 ModeOptionStruct
-    public Integer currentMode; // 261 int8u
-    public Integer startUpMode; // 314 int8u
-    public Integer onMode; // 356 int8u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public String description; // 0 char_string reportable
+    public Integer standardNamespace; // 1 enum16 reportable
+    public ModeOptionStruct[] supportedModes; // 2 ModeOptionStruct reportable
+    public Integer currentMode; // 3 int8u reportable
+    public Integer startUpMode; // 4 int8u reportable writable
+    public Integer onMode; // 5 int8u reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ModeSelectCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 40, "ModeSelect");
+        super(nodeId, endpointId, 49, "ModeSelect");
     }
 
     public void changeToMode(MatterClient client, Integer newMode) throws Exception {

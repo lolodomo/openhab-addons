@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * TimeSynchronization
@@ -33,19 +30,7 @@ public class TimeSynchronizationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "TIME_SYNCHRONIZATION_CLUSTER";
     public static final int CLUSTER_ID = 0x0038;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(84, "UTCTime"), entry(164, "granularity"), entry(231, "timeSource"),
-                entry(289, "trustedTimeSource"), entry(337, "defaultNTP"), entry(376, "timeZone"),
-                entry(413, "DSTOffset"), entry(444, "localTime"), entry(471, "timeZoneDatabase"),
-                entry(495, "NTPServerAvailable"), entry(521, "timeZoneListMaxSize"), entry(543, "DSTOffsetListMaxSize"),
-                entry(562, "supportsDNSResolve"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(53, "setUTCTime"), entry(103, "setTrustedTimeSource"),
-                entry(141, "setTimeZone"), entry(172, "setTimeZoneResponse"), entry(195, "setDSTOffset"),
-                entry(213, "setDefaultNTP"));
-    }
-
-    class DSTOffsetStruct implements JsonSerializable {
+    class DSTOffsetStruct {
         public Integer offset; // int32s
         public Long validStarting; // epoch_us
         public Long validUntil; // epoch_us
@@ -55,18 +40,9 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.validStarting = validStarting;
             this.validUntil = validUntil;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"offset\" : " + offset + ",";
-            out += "\"validStarting\" : " + validStarting + ",";
-            out += "\"validUntil\" : " + validUntil + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class FabricScopedTrustedTimeSourceStruct implements JsonSerializable {
+    class FabricScopedTrustedTimeSourceStruct {
         public Long nodeID; // node_id
         public List<Integer> endpoint; // endpoint_no
 
@@ -74,17 +50,9 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.nodeID = nodeID;
             this.endpoint = endpoint;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"nodeID\" : " + nodeID + ",";
-            out += "\"endpoint\" : " + endpoint + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class TimeZoneStruct implements JsonSerializable {
+    class TimeZoneStruct {
         public Integer offset; // int32s
         public Long validAt; // epoch_us
         public String name; // char_string
@@ -94,18 +62,9 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.validAt = validAt;
             this.name = name;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"offset\" : " + offset + ",";
-            out += "\"validAt\" : " + validAt + ",";
-            out += "\"name\" : " + name + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class TrustedTimeSourceStruct implements JsonSerializable {
+    class TrustedTimeSourceStruct {
         public Integer fabricIndex; // fabric_idx
         public Long nodeID; // node_id
         public List<Integer> endpoint; // endpoint_no
@@ -115,19 +74,10 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.nodeID = nodeID;
             this.endpoint = endpoint;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"fabricIndex\" : " + fabricIndex + ",";
-            out += "\"nodeID\" : " + nodeID + ",";
-            out += "\"endpoint\" : " + endpoint + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum GranularityEnum implements JsonSerializable {
+    public enum GranularityEnum {
         NOTIMEGRANULARITY(0, "NoTimeGranularity"),
         MINUTESGRANULARITY(1, "MinutesGranularity"),
         SECONDSGRANULARITY(2, "SecondsGranularity"),
@@ -142,13 +92,9 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum StatusCode implements JsonSerializable {
+    public enum StatusCode {
         TIMENOTACCEPTED(2, "TimeNotAccepted"),
         UNKNOWN_VALUE(0, "UnknownValue");
 
@@ -159,13 +105,9 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum TimeSourceEnum implements JsonSerializable {
+    public enum TimeSourceEnum {
         NONE(0, "None"),
         UNKNOWN(1, "Unknown"),
         ADMIN(2, "Admin"),
@@ -192,13 +134,9 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum TimeZoneDatabaseEnum implements JsonSerializable {
+    public enum TimeZoneDatabaseEnum {
         FULL(0, "Full"),
         PARTIAL(1, "Partial"),
         NONE(2, "None"),
@@ -211,14 +149,10 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean timeZone;
         public boolean NTPClient;
         public boolean NTPServer;
@@ -231,16 +165,6 @@ public class TimeSynchronizationCluster extends BaseCluster {
             this.timeSyncClient = timeSyncClient;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"timeZone\" : " + timeZone + ",";
-            out += "\"NTPClient\" : " + NTPClient + ",";
-            out += "\"NTPServer\" : " + NTPServer + ",";
-            out += "\"timeSyncClient\" : " + timeSyncClient + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -249,28 +173,28 @@ public class TimeSynchronizationCluster extends BaseCluster {
         }
     }
 
-    public Long UTCTime; // 84 epoch_us
-    public GranularityEnum granularity; // 164 GranularityEnum
-    public TimeSourceEnum timeSource; // 231 TimeSourceEnum
-    public TrustedTimeSourceStruct[] trustedTimeSource; // 289 TrustedTimeSourceStruct
-    public String defaultNTP; // 337 char_string
-    public TimeZoneStruct[] timeZone; // 376 TimeZoneStruct
-    public DSTOffsetStruct[] DSTOffset; // 413 DSTOffsetStruct
-    public Long localTime; // 444 epoch_us
-    public TimeZoneDatabaseEnum timeZoneDatabase; // 471 TimeZoneDatabaseEnum
-    public Boolean NTPServerAvailable; // 495 boolean
-    public Integer timeZoneListMaxSize; // 521 int8u
-    public Integer DSTOffsetListMaxSize; // 543 int8u
-    public Boolean supportsDNSResolve; // 562 boolean
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Long UTCTime; // 0 epoch_us reportable
+    public GranularityEnum granularity; // 1 GranularityEnum reportable
+    public TimeSourceEnum timeSource; // 2 TimeSourceEnum reportable
+    public TrustedTimeSourceStruct[] trustedTimeSource; // 3 TrustedTimeSourceStruct reportable
+    public String defaultNTP; // 4 char_string reportable
+    public TimeZoneStruct[] timeZone; // 5 TimeZoneStruct reportable
+    public DSTOffsetStruct[] DSTOffset; // 6 DSTOffsetStruct reportable
+    public Long localTime; // 7 epoch_us reportable
+    public TimeZoneDatabaseEnum timeZoneDatabase; // 8 TimeZoneDatabaseEnum reportable
+    public Boolean NTPServerAvailable; // 9 boolean reportable
+    public Integer timeZoneListMaxSize; // 10 int8u reportable
+    public Integer DSTOffsetListMaxSize; // 11 int8u reportable
+    public Boolean supportsDNSResolve; // 12 boolean reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public TimeSynchronizationCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 83, "TimeSynchronization");
+        super(nodeId, endpointId, 76, "TimeSynchronization");
     }
 
     public void setUTCTime(MatterClient client, Long UTCTime, GranularityEnum granularity, TimeSourceEnum timeSource)

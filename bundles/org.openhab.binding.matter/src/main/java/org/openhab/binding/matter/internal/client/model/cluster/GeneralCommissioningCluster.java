@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * GeneralCommissioning
@@ -33,18 +30,7 @@ public class GeneralCommissioningCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "GENERAL_COMMISSIONING_CLUSTER";
     public static final int CLUSTER_ID = 0x0030;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(37, "breadcrumb"), entry(116, "basicCommissioningInfo"),
-                entry(189, "regulatoryConfig"), entry(253, "locationCapability"),
-                entry(309, "supportsConcurrentConnection"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(20, "armFailSafe"), entry(73, "armFailSafeResponse"),
-                entry(121, "setRegulatoryConfig"), entry(156, "setRegulatoryConfigResponse"),
-                entry(182, "commissioningComplete"), entry(203, "commissioningCompleteResponse"));
-    }
-
-    class BasicCommissioningInfo implements JsonSerializable {
+    class BasicCommissioningInfo {
         public Integer failSafeExpiryLengthSeconds; // int16u
         public Integer maxCumulativeFailsafeSeconds; // int16u
 
@@ -52,18 +38,10 @@ public class GeneralCommissioningCluster extends BaseCluster {
             this.failSafeExpiryLengthSeconds = failSafeExpiryLengthSeconds;
             this.maxCumulativeFailsafeSeconds = maxCumulativeFailsafeSeconds;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"failSafeExpiryLengthSeconds\" : " + failSafeExpiryLengthSeconds + ",";
-            out += "\"maxCumulativeFailsafeSeconds\" : " + maxCumulativeFailsafeSeconds + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum CommissioningErrorEnum implements JsonSerializable {
+    public enum CommissioningErrorEnum {
         OK(0, "OK"),
         VALUEOUTSIDERANGE(1, "ValueOutsideRange"),
         INVALIDAUTHENTICATION(2, "InvalidAuthentication"),
@@ -78,13 +56,9 @@ public class GeneralCommissioningCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum RegulatoryLocationTypeEnum implements JsonSerializable {
+    public enum RegulatoryLocationTypeEnum {
         INDOOR(0, "Indoor"),
         OUTDOOR(1, "Outdoor"),
         INDOOROUTDOOR(2, "IndoorOutdoor"),
@@ -97,26 +71,22 @@ public class GeneralCommissioningCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public Long breadcrumb; // 37 int64u
-    public BasicCommissioningInfo basicCommissioningInfo; // 116 BasicCommissioningInfo
-    public RegulatoryLocationTypeEnum regulatoryConfig; // 189 RegulatoryLocationTypeEnum
-    public RegulatoryLocationTypeEnum locationCapability; // 253 RegulatoryLocationTypeEnum
-    public Boolean supportsConcurrentConnection; // 309 boolean
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Long breadcrumb; // 0 int64u reportable writable
+    public BasicCommissioningInfo basicCommissioningInfo; // 1 BasicCommissioningInfo reportable
+    public RegulatoryLocationTypeEnum regulatoryConfig; // 2 RegulatoryLocationTypeEnum reportable
+    public RegulatoryLocationTypeEnum locationCapability; // 3 RegulatoryLocationTypeEnum reportable
+    public Boolean supportsConcurrentConnection; // 4 boolean reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public GeneralCommissioningCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 27, "GeneralCommissioning");
+        super(nodeId, endpointId, 24, "GeneralCommissioning");
     }
 
     public void armFailSafe(MatterClient client, Integer expiryLengthSeconds, Long breadcrumb) throws Exception {

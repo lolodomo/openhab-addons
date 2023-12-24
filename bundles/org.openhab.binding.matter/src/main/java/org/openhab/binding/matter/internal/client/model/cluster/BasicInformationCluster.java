@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * BasicInformation
@@ -33,21 +30,7 @@ public class BasicInformationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BASIC_INFORMATION_CLUSTER";
     public static final int CLUSTER_ID = 0x0028;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(35, "dataModelRevision"), entry(125, "vendorName"),
-                entry(200, "vendorID"), entry(263, "productName"), entry(316, "productID"), entry(358, "nodeLabel"),
-                entry(395, "location"), entry(426, "hardwareVersion"), entry(455, "hardwareVersionString"),
-                entry(481, "softwareVersion"), entry(506, "softwareVersionString"), entry(528, "manufacturingDate"),
-                entry(548, "partNumber"), entry(566, "productURL"), entry(580, "productLabel"),
-                entry(593, "serialNumber"), entry(605, "localConfigDisabled"), entry(618, "reachable"),
-                entry(630, "uniqueID"), entry(642, "capabilityMinima"), entry(654, "productAppearance"),
-                entry(666, "specificationVersion"), entry(678, "maxPathsPerInvoke"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(313, "mfgSpecificPing"));
-    }
-
-    class CapabilityMinimaStruct implements JsonSerializable {
+    class CapabilityMinimaStruct {
         public Integer caseSessionsPerFabric; // int16u
         public Integer subscriptionsPerFabric; // int16u
 
@@ -55,17 +38,9 @@ public class BasicInformationCluster extends BaseCluster {
             this.caseSessionsPerFabric = caseSessionsPerFabric;
             this.subscriptionsPerFabric = subscriptionsPerFabric;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"caseSessionsPerFabric\" : " + caseSessionsPerFabric + ",";
-            out += "\"subscriptionsPerFabric\" : " + subscriptionsPerFabric + "";
-            out += "}";
-            return out;
-        }
     }
 
-    class ProductAppearanceStruct implements JsonSerializable {
+    class ProductAppearanceStruct {
         public ProductFinishEnum finish; // ProductFinishEnum
         public ColorEnum primaryColor; // ColorEnum
 
@@ -73,18 +48,10 @@ public class BasicInformationCluster extends BaseCluster {
             this.finish = finish;
             this.primaryColor = primaryColor;
         }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"finish\" : " + finish + ",";
-            out += "\"primaryColor\" : " + primaryColor + "";
-            out += "}";
-            return out;
-        }
     }
 
     // ZCL Enums
-    public enum ColorEnum implements JsonSerializable {
+    public enum ColorEnum {
         BLACK(0, "Black"),
         NAVY(1, "Navy"),
         GREEN(2, "Green"),
@@ -115,13 +82,9 @@ public class BasicInformationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum ProductFinishEnum implements JsonSerializable {
+    public enum ProductFinishEnum {
         OTHER(0, "Other"),
         MATTE(1, "Matte"),
         SATIN(2, "Satin"),
@@ -137,44 +100,40 @@ public class BasicInformationCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public Integer dataModelRevision; // 35 int16u
-    public String vendorName; // 125 char_string
-    public Integer vendorID; // 200 vendor_id
-    public String productName; // 263 char_string
-    public Integer productID; // 316 int16u
-    public String nodeLabel; // 358 char_string
-    public String location; // 395 char_string
-    public Integer hardwareVersion; // 426 int16u
-    public String hardwareVersionString; // 455 char_string
-    public Integer softwareVersion; // 481 int32u
-    public String softwareVersionString; // 506 char_string
-    public String manufacturingDate; // 528 char_string
-    public String partNumber; // 548 char_string
-    public String productURL; // 566 long_char_string
-    public String productLabel; // 580 char_string
-    public String serialNumber; // 593 char_string
-    public Boolean localConfigDisabled; // 605 boolean
-    public Boolean reachable; // 618 boolean
-    public String uniqueID; // 630 char_string
-    public CapabilityMinimaStruct[] capabilityMinima; // 642 CapabilityMinimaStruct
-    public ProductAppearanceStruct[] productAppearance; // 654 ProductAppearanceStruct
-    public Integer specificationVersion; // 666 int32u
-    public Integer maxPathsPerInvoke; // 678 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer dataModelRevision; // 0 int16u reportable
+    public String vendorName; // 1 char_string reportable
+    public Integer vendorID; // 2 vendor_id reportable
+    public String productName; // 3 char_string reportable
+    public Integer productID; // 4 int16u reportable
+    public String nodeLabel; // 5 char_string reportable writable
+    public String location; // 6 char_string reportable writable
+    public Integer hardwareVersion; // 7 int16u reportable
+    public String hardwareVersionString; // 8 char_string reportable
+    public Integer softwareVersion; // 9 int32u reportable
+    public String softwareVersionString; // 10 char_string reportable
+    public String manufacturingDate; // 11 char_string reportable
+    public String partNumber; // 12 char_string reportable
+    public String productURL; // 13 long_char_string reportable
+    public String productLabel; // 14 char_string reportable
+    public String serialNumber; // 15 char_string reportable
+    public Boolean localConfigDisabled; // 16 boolean reportable writable
+    public Boolean reachable; // 17 boolean reportable
+    public String uniqueID; // 18 char_string reportable
+    public CapabilityMinimaStruct[] capabilityMinima; // 19 CapabilityMinimaStruct reportable
+    public ProductAppearanceStruct[] productAppearance; // 20 ProductAppearanceStruct reportable
+    public Integer specificationVersion; // 21 int32u reportable
+    public Integer maxPathsPerInvoke; // 22 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public BasicInformationCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 25, "BasicInformation");
+        super(nodeId, endpointId, 5, "BasicInformation");
     }
 
     public void mfgSpecificPing(MatterClient client) throws Exception {

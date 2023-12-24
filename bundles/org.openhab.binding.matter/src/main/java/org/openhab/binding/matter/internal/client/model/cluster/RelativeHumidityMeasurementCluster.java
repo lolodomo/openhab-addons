@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * RelativeHumidityMeasurement
@@ -32,27 +28,19 @@ public class RelativeHumidityMeasurementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "RELATIVE_HUMIDITY_MEASUREMENT_CLUSTER";
     public static final int CLUSTER_ID = 0x0405;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(63, "measuredValue"), entry(143, "minMeasuredValue"),
-                entry(211, "maxMeasuredValue"), entry(278, "tolerance"), entry(13, "generatedCommandList"),
-                entry(11, "acceptedCommandList"), entry(9, "eventList"), entry(7, "attributeList"),
-                entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
-    public Integer measuredValue; // 63 int16u
-    public Integer minMeasuredValue; // 143 int16u
-    public Integer maxMeasuredValue; // 211 int16u
-    public Integer tolerance; // 278 int16u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer measuredValue; // 0 int16u reportable
+    public Integer minMeasuredValue; // 1 int16u reportable
+    public Integer maxMeasuredValue; // 2 int16u reportable
+    public Integer tolerance; // 3 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public RelativeHumidityMeasurementCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 59, "RelativeHumidityMeasurement");
+        super(nodeId, endpointId, 86, "RelativeHumidityMeasurement");
     }
 
     public String toString() {

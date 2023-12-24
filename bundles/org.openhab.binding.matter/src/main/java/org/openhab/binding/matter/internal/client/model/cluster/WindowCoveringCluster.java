@@ -15,13 +15,10 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * WindowCovering
@@ -33,26 +30,8 @@ public class WindowCoveringCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "WINDOW_COVERING_CLUSTER";
     public static final int CLUSTER_ID = 0x0102;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(88, "type"), entry(166, "physicalClosedLimitLift"),
-                entry(233, "physicalClosedLimitTilt"), entry(291, "currentPositionLift"),
-                entry(338, "currentPositionTilt"), entry(377, "numberOfActuationsLift"),
-                entry(408, "numberOfActuationsTilt"), entry(439, "configStatus"),
-                entry(466, "currentPositionLiftPercentage"), entry(490, "currentPositionTiltPercentage"),
-                entry(513, "operationalStatus"), entry(535, "targetPositionLiftPercent100ths"),
-                entry(553, "targetPositionTiltPercent100ths"), entry(571, "endProductType"),
-                entry(584, "currentPositionLiftPercent100ths"), entry(597, "currentPositionTiltPercent100ths"),
-                entry(609, "installedOpenLimitLift"), entry(621, "installedClosedLimitLift"),
-                entry(633, "installedOpenLimitTilt"), entry(645, "installedClosedLimitTilt"), entry(657, "mode"),
-                entry(669, "safetyStatus"), entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"),
-                entry(9, "eventList"), entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries(entry(55, "upOrOpen"), entry(104, "downOrClose"), entry(142, "stopMotion"),
-                entry(173, "goToLiftValue"), entry(196, "goToLiftPercentage"), entry(214, "goToTiltValue"),
-                entry(226, "goToTiltPercentage"));
-    }
-
     // ZCL Enums
-    public enum EndProductType implements JsonSerializable {
+    public enum EndProductType {
         ROLLERSHADE(0, "RollerShade"),
         ROMANSHADE(1, "RomanShade"),
         BALLOONSHADE(2, "BalloonShade"),
@@ -87,13 +66,9 @@ public class WindowCoveringCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
-    public enum Type implements JsonSerializable {
+    public enum Type {
         ROLLERSHADE(0, "RollerShade"),
         ROLLERSHADE2MOTOR(1, "RollerShade2Motor"),
         ROLLERSHADEEXTERIOR(2, "RollerShadeExterior"),
@@ -114,14 +89,10 @@ public class WindowCoveringCluster extends BaseCluster {
             this.value = value;
             this.label = label;
         }
-
-        public String toJson() {
-            return "\"" + this.label + "\"";
-        }
     };
 
     // ZCL Bitmaps
-    public static class ConfigStatus implements JsonSerializable {
+    public static class ConfigStatus {
         public boolean operational;
         public boolean onlineReserved;
         public boolean liftMovementReversed;
@@ -142,19 +113,6 @@ public class WindowCoveringCluster extends BaseCluster {
             this.tiltEncoderControlled = tiltEncoderControlled;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"operational\" : " + operational + ",";
-            out += "\"onlineReserved\" : " + onlineReserved + ",";
-            out += "\"liftMovementReversed\" : " + liftMovementReversed + ",";
-            out += "\"liftPositionAware\" : " + liftPositionAware + ",";
-            out += "\"tiltPositionAware\" : " + tiltPositionAware + ",";
-            out += "\"liftEncoderControlled\" : " + liftEncoderControlled + ",";
-            out += "\"tiltEncoderControlled\" : " + tiltEncoderControlled + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static ConfigStatus fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -163,7 +121,7 @@ public class WindowCoveringCluster extends BaseCluster {
         }
     }
 
-    public static class Feature implements JsonSerializable {
+    public static class Feature {
         public boolean lift;
         public boolean tilt;
         public boolean positionAwareLift;
@@ -179,17 +137,6 @@ public class WindowCoveringCluster extends BaseCluster {
             this.positionAwareTilt = positionAwareTilt;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"lift\" : " + lift + ",";
-            out += "\"tilt\" : " + tilt + ",";
-            out += "\"positionAwareLift\" : " + positionAwareLift + ",";
-            out += "\"absolutePosition\" : " + absolutePosition + ",";
-            out += "\"positionAwareTilt\" : " + positionAwareTilt + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Feature fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -198,7 +145,7 @@ public class WindowCoveringCluster extends BaseCluster {
         }
     }
 
-    public static class Mode implements JsonSerializable {
+    public static class Mode {
         public boolean motorDirectionReversed;
         public boolean calibrationMode;
         public boolean maintenanceMode;
@@ -212,16 +159,6 @@ public class WindowCoveringCluster extends BaseCluster {
             this.ledFeedback = ledFeedback;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"motorDirectionReversed\" : " + motorDirectionReversed + ",";
-            out += "\"calibrationMode\" : " + calibrationMode + ",";
-            out += "\"maintenanceMode\" : " + maintenanceMode + ",";
-            out += "\"ledFeedback\" : " + ledFeedback + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static Mode fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -230,7 +167,7 @@ public class WindowCoveringCluster extends BaseCluster {
         }
     }
 
-    public static class OperationalStatus implements JsonSerializable {
+    public static class OperationalStatus {
         public boolean global;
         public boolean lift;
         public boolean tilt;
@@ -241,15 +178,6 @@ public class WindowCoveringCluster extends BaseCluster {
             this.tilt = tilt;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"global\" : " + global + ",";
-            out += "\"lift\" : " + lift + ",";
-            out += "\"tilt\" : " + tilt + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static OperationalStatus fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -258,7 +186,7 @@ public class WindowCoveringCluster extends BaseCluster {
         }
     }
 
-    public static class SafetyStatus implements JsonSerializable {
+    public static class SafetyStatus {
         public boolean remoteLockout;
         public boolean tamperDetection;
         public boolean failedCommunication;
@@ -290,24 +218,6 @@ public class WindowCoveringCluster extends BaseCluster {
             this.protection = protection;
         }
 
-        public String toJson() {
-            String out = "{";
-            out += "\"remoteLockout\" : " + remoteLockout + ",";
-            out += "\"tamperDetection\" : " + tamperDetection + ",";
-            out += "\"failedCommunication\" : " + failedCommunication + ",";
-            out += "\"positionFailure\" : " + positionFailure + ",";
-            out += "\"thermalProtection\" : " + thermalProtection + ",";
-            out += "\"obstacleDetected\" : " + obstacleDetected + ",";
-            out += "\"power\" : " + power + ",";
-            out += "\"stopInput\" : " + stopInput + ",";
-            out += "\"motorJammed\" : " + motorJammed + ",";
-            out += "\"hardwareFailure\" : " + hardwareFailure + ",";
-            out += "\"manualOperation\" : " + manualOperation + ",";
-            out += "\"protection\" : " + protection + "";
-            out += "}";
-            return out;
-        }
-
         @SuppressWarnings({ "unchecked", "null" })
         public static SafetyStatus fromJson(String json) {
             Map<String, Boolean> m = GSON.fromJson(json, Map.class);
@@ -317,34 +227,34 @@ public class WindowCoveringCluster extends BaseCluster {
         }
     }
 
-    public Type type; // 88 Type
-    public Integer physicalClosedLimitLift; // 166 int16u
-    public Integer physicalClosedLimitTilt; // 233 int16u
-    public Integer currentPositionLift; // 291 int16u
-    public Integer currentPositionTilt; // 338 int16u
-    public Integer numberOfActuationsLift; // 377 int16u
-    public Integer numberOfActuationsTilt; // 408 int16u
-    public ConfigStatus configStatus; // 439 ConfigStatus
-    public Integer currentPositionLiftPercentage; // 466 percent
-    public Integer currentPositionTiltPercentage; // 490 percent
-    public OperationalStatus operationalStatus; // 513 OperationalStatus
-    public Integer targetPositionLiftPercent100ths; // 535 percent100ths
-    public Integer targetPositionTiltPercent100ths; // 553 percent100ths
-    public EndProductType endProductType; // 571 EndProductType
-    public Integer currentPositionLiftPercent100ths; // 584 percent100ths
-    public Integer currentPositionTiltPercent100ths; // 597 percent100ths
-    public Integer installedOpenLimitLift; // 609 int16u
-    public Integer installedClosedLimitLift; // 621 int16u
-    public Integer installedOpenLimitTilt; // 633 int16u
-    public Integer installedClosedLimitTilt; // 645 int16u
-    public Mode mode; // 657 Mode
-    public SafetyStatus safetyStatus; // 669 SafetyStatus
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Type type; // 0 Type reportable
+    public Integer physicalClosedLimitLift; // 1 int16u reportable
+    public Integer physicalClosedLimitTilt; // 2 int16u reportable
+    public Integer currentPositionLift; // 3 int16u reportable
+    public Integer currentPositionTilt; // 4 int16u reportable
+    public Integer numberOfActuationsLift; // 5 int16u reportable
+    public Integer numberOfActuationsTilt; // 6 int16u reportable
+    public ConfigStatus configStatus; // 7 ConfigStatus reportable
+    public Integer currentPositionLiftPercentage; // 8 percent reportable
+    public Integer currentPositionTiltPercentage; // 9 percent reportable
+    public OperationalStatus operationalStatus; // 10 OperationalStatus reportable
+    public Integer targetPositionLiftPercent100ths; // 11 percent100ths reportable
+    public Integer targetPositionTiltPercent100ths; // 12 percent100ths reportable
+    public EndProductType endProductType; // 13 EndProductType reportable
+    public Integer currentPositionLiftPercent100ths; // 14 percent100ths reportable
+    public Integer currentPositionTiltPercent100ths; // 15 percent100ths reportable
+    public Integer installedOpenLimitLift; // 16 int16u reportable
+    public Integer installedClosedLimitLift; // 17 int16u reportable
+    public Integer installedOpenLimitTilt; // 18 int16u reportable
+    public Integer installedClosedLimitTilt; // 19 int16u reportable
+    public Mode mode; // 23 Mode reportable writable
+    public SafetyStatus safetyStatus; // 26 SafetyStatus reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public WindowCoveringCluster(long nodeId, int endpointId) {
         super(nodeId, endpointId, 85, "WindowCovering");

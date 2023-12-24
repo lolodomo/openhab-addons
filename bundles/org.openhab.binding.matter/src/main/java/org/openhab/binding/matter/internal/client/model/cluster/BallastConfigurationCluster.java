@@ -15,12 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster;
 
-import static java.util.Map.entry;
-
 import java.util.List;
 import java.util.Map;
-
-import org.openhab.binding.matter.internal.client.model.cluster.types.*;
 
 /**
  * BallastConfiguration
@@ -32,33 +28,14 @@ public class BallastConfigurationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BALLAST_CONFIGURATION_CLUSTER";
     public static final int CLUSTER_ID = 0x0301;
 
-    static {
-        ATTRIBUTE_MAPPING = Map.ofEntries(entry(20, "physicalMinLevel"), entry(102, "physicalMaxLevel"),
-                entry(178, "ballastStatus"), entry(243, "minLevel"), entry(300, "maxLevel"),
-                entry(344, "intrinsicBallastFactor"), entry(383, "ballastFactorAdjustment"), entry(415, "lampQuantity"),
-                entry(446, "lampType"), entry(473, "lampManufacturer"), entry(497, "lampRatedHours"),
-                entry(518, "lampBurnHours"), entry(540, "lampAlarmMode"), entry(559, "lampBurnHoursTripPoint"),
-                entry(13, "generatedCommandList"), entry(11, "acceptedCommandList"), entry(9, "eventList"),
-                entry(7, "attributeList"), entry(5, "featureMap"), entry(2, "clusterRevision"));
-        COMMAND_MAPPING = Map.ofEntries();
-    }
-
     // ZCL Bitmaps
-    public static class BallastStatusBitmap implements JsonSerializable {
+    public static class BallastStatusBitmap {
         public boolean ballastNonOperational;
         public boolean lampFailure;
 
         public BallastStatusBitmap(boolean ballastNonOperational, boolean lampFailure) {
             this.ballastNonOperational = ballastNonOperational;
             this.lampFailure = lampFailure;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"ballastNonOperational\" : " + ballastNonOperational + ",";
-            out += "\"lampFailure\" : " + lampFailure + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -69,18 +46,11 @@ public class BallastConfigurationCluster extends BaseCluster {
         }
     }
 
-    public static class LampAlarmModeBitmap implements JsonSerializable {
+    public static class LampAlarmModeBitmap {
         public boolean lampBurnHours;
 
         public LampAlarmModeBitmap(boolean lampBurnHours) {
             this.lampBurnHours = lampBurnHours;
-        }
-
-        public String toJson() {
-            String out = "{";
-            out += "\"lampBurnHours\" : " + lampBurnHours + "";
-            out += "}";
-            return out;
         }
 
         @SuppressWarnings({ "unchecked", "null" })
@@ -91,29 +61,29 @@ public class BallastConfigurationCluster extends BaseCluster {
         }
     }
 
-    public Integer physicalMinLevel; // 20 int8u
-    public Integer physicalMaxLevel; // 102 int8u
-    public BallastStatusBitmap ballastStatus; // 178 BallastStatusBitmap
-    public Integer minLevel; // 243 int8u
-    public Integer maxLevel; // 300 int8u
-    public Integer intrinsicBallastFactor; // 344 int8u
-    public Integer ballastFactorAdjustment; // 383 int8u
-    public Integer lampQuantity; // 415 int8u
-    public String lampType; // 446 char_string
-    public String lampManufacturer; // 473 char_string
-    public Integer lampRatedHours; // 497 int24u
-    public Integer lampBurnHours; // 518 int24u
-    public LampAlarmModeBitmap lampAlarmMode; // 540 LampAlarmModeBitmap
-    public Integer lampBurnHoursTripPoint; // 559 int24u
-    public List<Integer> generatedCommandList; // 13 command_id
-    public List<Integer> acceptedCommandList; // 11 command_id
-    public List<Integer> eventList; // 9 event_id
-    public List<Integer> attributeList; // 7 attrib_id
-    public Map<String, Boolean> featureMap; // 5 bitmap32
-    public Integer clusterRevision; // 2 int16u
+    public Integer physicalMinLevel; // 0 int8u reportable
+    public Integer physicalMaxLevel; // 1 int8u reportable
+    public BallastStatusBitmap ballastStatus; // 2 BallastStatusBitmap reportable
+    public Integer minLevel; // 16 int8u reportable writable
+    public Integer maxLevel; // 17 int8u reportable writable
+    public Integer intrinsicBallastFactor; // 20 int8u reportable writable
+    public Integer ballastFactorAdjustment; // 21 int8u reportable writable
+    public Integer lampQuantity; // 32 int8u reportable
+    public String lampType; // 48 char_string reportable writable
+    public String lampManufacturer; // 49 char_string reportable writable
+    public Integer lampRatedHours; // 50 int24u reportable writable
+    public Integer lampBurnHours; // 51 int24u reportable writable
+    public LampAlarmModeBitmap lampAlarmMode; // 52 LampAlarmModeBitmap reportable writable
+    public Integer lampBurnHoursTripPoint; // 53 int24u reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public BallastConfigurationCluster(long nodeId, int endpointId) {
-        super(nodeId, endpointId, 7, "BallastConfiguration");
+        super(nodeId, endpointId, 6, "BallastConfiguration");
     }
 
     public String toString() {
