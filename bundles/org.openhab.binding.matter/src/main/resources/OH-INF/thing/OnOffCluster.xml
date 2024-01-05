@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="matter"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	<thing-type id="cluster">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="endpoint"/>
+		</supported-bridge-type-refs>
+		<label>Matter Cluster</label>
+		<description>The Matter Cluster describes the attributes and commands of a Endpoint Cluster</description>
+
+        <channels>
+            <channel id="pair_code" typeId="pair_code"/>
+            <channel id="command" typeId="command"/>
+        </channels>
+
+		<representation-property>id</representation-property>
+
+		<config-description>
+			<parameter name="id" type="integer" required="true">
+				<label>ID</label>
+				<description>The Matter Cluster ID</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+	
+	<channel-type id="pair_code">
+        <item-type>String</item-type>
+        <label>Pair Node with Code</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+        <description>Pairs a Matter Node with a device code</description>
+    </channel-type>
+    
+    <channel-type id="command">
+        <item-type>String</item-type>
+        <label>Send a generic command</label><!-- Use uppercase words, except prepositions. 2-3 words, max 25 chars -->
+        <description>Send a generic command for testing</description>
+    </channel-type>
+    
+</thing:thing-descriptions>
