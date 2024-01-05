@@ -154,8 +154,8 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         }
     }
 
-    public void addAttributeListener(AttributeListener listener, Long nodeId, int endpointId, int clusterId) {
-        attributeListeners.put(listener, attributeListenerId(nodeId, endpointId, clusterId));
+    public void addAttributeListener(AttributeListener listener, long nodeId, int endpointId) {
+        attributeListeners.put(listener, attributeListenerId(nodeId, endpointId));
     }
 
     public void addAttributeListener(AttributeListener listener) {
@@ -211,11 +211,10 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
             switch (event.type) {
                 case "attributeChanged":
                     AttributeChangedMessage changedMessage = gson.fromJson(event.data, AttributeChangedMessage.class);
-                    String id = attributeListenerId(changedMessage.path.nodeId, changedMessage.path.endpointId,
-                            changedMessage.path.clusterId);
+                    String id = attributeListenerId(changedMessage.path.nodeId, changedMessage.path.endpointId);
                     for (Map.Entry<AttributeListener, String> entry : attributeListeners.entrySet()) {
                         String value = entry.getValue();
-                        if (value.length() == 0 || value.equals(id)) {
+                        if (value.equals(id)) {
                             entry.getKey().onEvent(changedMessage);
                         }
                     }
@@ -250,7 +249,7 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         return session != null && session.isOpen();
     }
 
-    private String attributeListenerId(Long nodeId, int endpointId, int clusterId) {
-        return nodeId + ":" + endpointId + ":" + clusterId;
+    private String attributeListenerId(Long nodeId, int endpointId) {
+        return nodeId + ":" + endpointId;
     }
 }

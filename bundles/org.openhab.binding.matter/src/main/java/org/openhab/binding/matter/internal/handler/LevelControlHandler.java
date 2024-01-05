@@ -19,12 +19,7 @@ import org.openhab.binding.matter.internal.client.MatterClient;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.LevelControlCluster;
 import org.openhab.core.library.types.DecimalType;
-import org.openhab.core.library.types.IncreaseDecreaseType;
 import org.openhab.core.library.types.OnOffType;
-import org.openhab.core.library.types.PercentType;
-import org.openhab.core.thing.ChannelUID;
-import org.openhab.core.thing.Thing;
-import org.openhab.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +29,10 @@ import org.slf4j.LoggerFactory;
  */
 public class LevelControlHandler extends ClusterHandler {
     private final Logger logger = LoggerFactory.getLogger(ClusterHandler.class);
+    private LevelControlCluster levelControlCluster;
 
-    public LevelControlHandler(Thing thing) {
-        super(thing);
+    public LevelControlHandler(EndpointHandler handler, long nodeId, int endpointId) {
+        super(handler, nodeId, endpointId, LevelControlCluster.CLUSTER_ID);
     }
 
     @Override
@@ -54,28 +50,13 @@ public class LevelControlHandler extends ClusterHandler {
             public void onEvent(MatterWebsocketClient.AttributeChangedMessage message) {
                 switch (message.path.attributeName) {
                     case "onOff":
-                        updateState(CHANNEL_NAME_SWITCH_LEVEL, OnOffType.from(Boolean.valueOf(message.value)));
+                        handler.updateState(CHANNEL_NAME_SWITCH_LEVEL, OnOffType.from(Boolean.valueOf(message.value)));
                         break;
                     case "currentLevel":
-                        updateState(CHANNEL_NAME_SWITCH_LEVEL, new DecimalType(message.value));
+                        handler.updateState(CHANNEL_NAME_SWITCH_LEVEL, new DecimalType(message.value));
                 }
             }
-        }, null, getClusterId(), getClusterId());
-    }
-
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        if (command instanceof OnOffType) {
-
-        } else if (command instanceof PercentType) {
-
-        } else if (command instanceof IncreaseDecreaseType) {
-
-        } else {
-            logger.warn("{}: Level converter only accepts PercentType, IncreaseDecreaseType and OnOffType - not {}", "",
-                    command.getClass().getSimpleName());
-            return;
-        }
+        }, nodeId, endpointId);
     }
 
     public void updateCluster(LevelControlCluster cluster) {
