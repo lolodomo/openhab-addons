@@ -12,8 +12,8 @@
  */
 package org.openhab.binding.matter.internal.handler;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_1;
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,22 +24,16 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterThingTypes;
 import org.openhab.binding.matter.internal.client.model.cluster.LevelControlCluster;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
-import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
-import org.openhab.core.thing.ThingTypeUID;
-import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.BridgeHandler;
-import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.builder.BridgeBuilder;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.RefreshType;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +52,7 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
     protected int endpointId;
     private List<BaseCluster> clusters = Collections.synchronizedList(new LinkedList<BaseCluster>());
     private Map<Integer, Class<? extends ClusterHandler>> handlersMapping = new HashMap();
-    private Map<ChannelUID, ClusterHandler> channelUidMap = new HashMap<ChannelUID, ClusterHandler>();
+    private Map<String, ClusterHandler> channelIdMap = new HashMap<String, ClusterHandler>();
     private Map<Integer, ClusterHandler> clusterIdMap = new HashMap<Integer, ClusterHandler>();
 
     public EndpointHandler(Bridge bridge) {
@@ -69,14 +63,18 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (CHANNEL_1.equals(channelUID.getId())) {
-            if (command instanceof RefreshType) {
-                NodeHandler handler = nodeHandler();
-                if (handler != null) {
-                    handler.refresh();
-                }
-            }
-
+        // if (CHANNEL_1.equals(channelUID.getId())) {
+        // if (command instanceof RefreshType) {
+        // NodeHandler handler = nodeHandler();
+        // if (handler != null) {
+        // handler.refresh();
+        // }
+        // }
+        //
+        // }
+        ClusterHandler c = channelIdMap.get(channelUID.getId());
+        if (c != null) {
+            c.handleCommand(channelUID, command);
         }
     }
 
@@ -121,35 +119,41 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         return endpointId;
     }
 
-    // public void updateEndpoint(Endpoint endpoint) {
-    // logger.debug("updateEndpoint {}", endpoint.id);
-    // synchronized (clusters) {
-    // clusters.clear();
-    // for (BaseCluster c : endpoint.clusters.values()) {
-    // clusters.add(c);
-    // discoverChildCluster(c);
-    // }
-    // }
-    // refresh();
-    // }
-
     public void updateEndpoint(Endpoint endpoint) {
-        if(endpoint.id != endpointId) {
+        if (endpoint.id != endpointId) {
             return;
         }
-        endpoint.clusters.forEach((k,v) -> {
+        endpoint.clusters.forEach((k, v) -> {
             Integer id = v.id;
             ClusterHandler c = clusterIdMap.get(id);
-            if(c == null) {
-                //lookup handler
-                //c = new handler
-                c.updateCluster(v);
+            if (c == null) {
+                // lookup handler
+                // c = new handler
+                Class<? extends ClusterHandler> clazz = handlersMapping.get(id);
+                if (clazz != null) {
+                    try {
+                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class, Long.class,
+                                int.class };
+                        Constructor<? extends ClusterHandler> constructor = clazz
+                                .getConstructor(constructorParameterTypes);
+                        final ClusterHandler handler = constructor.newInstance(this, nodeId, endpointId);
+                        clusterIdMap.put(id, handler);
+                        // now we need to create channels and add those to the channel map
+                        handler.createChannels(v).forEach(channel -> {
+                            channelIdMap.put(channel.getId(), handler);
+                        });
+                        c = handler;
+                    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                            | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+                        logger.debug("Could not create cluster handler", e);
+                    }
+                }
             }
-            if(c == null) {
-                //no handler found
+            if (c == null) {
+                // no handler found
                 return;
             }
-            c.
+            c.updateCluster(v);
         });
     }
 
@@ -165,14 +169,14 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
 
         // when a command comes in, we need to lookup the channel to a handler
 
-        synchronized (clusters) {
-            for (BaseCluster c : clusters) {
-                ClusterHandler handler = clusterHandler(c.id);
-                if (handler != null) {
-                    handler.updateCluster(c);
-                }
-            }
-        }
+        // synchronized (clusters) {
+        // for (BaseCluster c : clusters) {
+        // ClusterHandler handler = clusterHandler(c.id);
+        // if (handler != null) {
+        // handler.updateCluster(c);
+        // }
+        // }
+        // }
     }
 
     private @Nullable NodeHandler nodeHandler() {

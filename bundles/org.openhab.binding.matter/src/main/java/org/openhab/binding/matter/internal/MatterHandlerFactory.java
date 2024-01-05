@@ -20,7 +20,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.handler.ControllerHandler;
 import org.openhab.binding.matter.internal.handler.EndpointHandler;
-import org.openhab.binding.matter.internal.handler.LevelControlHandler;
 import org.openhab.binding.matter.internal.handler.NodeHandler;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
@@ -42,7 +41,7 @@ public class MatterHandlerFactory extends BaseThingHandlerFactory {
     // private final Logger logger = LoggerFactory.getLogger(MatterHandlerFactory.class);
 
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(THING_TYPE_CONTROLLER, THING_TYPE_NODE,
-            THING_TYPE_ENDPOINT, THING_TYPE_CLUSTER, THING_TYPE_LEVEL_CONTROL);
+            THING_TYPE_ENDPOINT, THING_TYPE_CLUSTER);
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -65,9 +64,6 @@ public class MatterHandlerFactory extends BaseThingHandlerFactory {
             return new EndpointHandler((Bridge) thing);
         }
 
-        if (THING_TYPE_LEVEL_CONTROL.equals(thingTypeUID)) {
-            return new LevelControlHandler(thing);
-        }
         return null;
         // try {
         // String handlerName = THING_TYPE_HANDLER_MAPPING.get(thingTypeUID);

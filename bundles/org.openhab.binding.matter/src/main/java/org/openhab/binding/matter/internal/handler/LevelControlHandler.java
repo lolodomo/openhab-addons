@@ -14,12 +14,17 @@ package org.openhab.binding.matter.internal.handler;
 
 import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
 
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.AttributeListener;
 import org.openhab.binding.matter.internal.client.MatterClient;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
+import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.LevelControlCluster;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +38,11 @@ public class LevelControlHandler extends ClusterHandler {
 
     public LevelControlHandler(EndpointHandler handler, long nodeId, int endpointId) {
         super(handler, nodeId, endpointId, LevelControlCluster.CLUSTER_ID);
+    }
+
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
+
     }
 
     @Override
@@ -59,12 +69,20 @@ public class LevelControlHandler extends ClusterHandler {
         }, nodeId, endpointId);
     }
 
-    public void updateCluster(LevelControlCluster cluster) {
-        this.cluster = cluster;
+    @Override
+    public void updateCluster(BaseCluster cluster) {
+        if (cluster instanceof LevelControlCluster) {
+            // update channels with new state, how do we handle onOff?
+            // maybe this handler needs to advertise what other base clusters it needs? Map.of LevelControlCluster
+            // OnOffControlCluster
+            handler.updateState(CHANNEL_NAME_SWITCH_LEVEL,
+                    new DecimalType(((LevelControlCluster) cluster).currentLevel));
+        }
     }
 
     @Override
-    protected void createChannels() {
-        createChannel(CHANNEL_NAME_SWITCH_LEVEL, CHANNEL_SWITCH_LEVEL, CHANNEL_LABEL_SWITCH_LEVEL, ITEM_TYPE_DIMMER);
+    public List<ChannelUID> createChannels(BaseCluster cluster) {
+        return List.of(createChannel(cluster, CHANNEL_NAME_SWITCH_LEVEL, CHANNEL_SWITCH_LEVEL,
+                CHANNEL_LABEL_SWITCH_LEVEL, ITEM_TYPE_DIMMER));
     }
 }

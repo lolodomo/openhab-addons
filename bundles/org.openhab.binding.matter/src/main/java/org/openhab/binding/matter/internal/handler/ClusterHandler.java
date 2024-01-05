@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.matter.internal.handler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -24,6 +23,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.type.ChannelTypeUID;
+import org.openhab.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,37 +55,29 @@ public abstract class ClusterHandler {
         return clusterId;
     }
 
-    public void updateCluster(BaseCluster cluster) {
-        this.cluster = cluster;
-        logger.debug("Endpoint: {} Cluster: {} ", cluster.id, cluster.name);
-        logger.debug("{} ", cluster);
-        createChannels();
-    }
+    public abstract void handleCommand(ChannelUID channelUID, Command command);
 
-    protected abstract void createChannels();
+    public abstract void updateCluster(BaseCluster cluster);
+
+    public abstract List<ChannelUID> createChannels(BaseCluster cluster);
 
     protected abstract void registerListeners();
 
-    // handlers should go through all channels and update state?
-    protected abstract void updateState();
+    protected ChannelUID createChannel(BaseCluster cluster, String channelName, ChannelTypeUID channelType,
+            String channelLabel, String itemType) {
 
-    protected void createChannel(String channelName, ChannelTypeUID channelType, String channelLabel, String itemType) {
-        BaseCluster cluster = this.cluster;
-        if (cluster != null) {
-            Channel channel = ChannelBuilder.create(createChannelUID(cluster, channelName), itemType)
-                    .withType(channelType).withLabel(channelLabel).build();
-            // replace existing buttonPress with updated one
-            List<Channel> newChannels = new ArrayList<>();
-            for (Channel c : handler.getThing().getChannels()) {
-                if (!c.getUID().equals(channel.getUID())) {
-                    newChannels.add(c);
-                }
-            }
-            newChannels.add(channel);
+        Channel channel = ChannelBuilder.create(createChannelUID(cluster, channelName), itemType).withType(channelType)
+                .withLabel(channelLabel).build();
+        List<Channel> channels = handler.getThing().getChannels();
+
+        boolean hasMatchingUID = channels.stream().anyMatch(c -> channel.getUID().equals(c.getUID()));
+        if (!hasMatchingUID) {
+            channels.add(channel);
             ThingBuilder thingBuilder = handler.editThing();
-            thingBuilder.withChannels(newChannels);
+            thingBuilder.withChannels(channels);
             handler.updateThing(thingBuilder.build());
         }
+        return channel.getUID();
     }
 
     protected ChannelUID createChannelUID(BaseCluster cluster, String channelName) {
