@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2023 Contributors to the openHAB project
+ * Copyright (c) 2010-2024 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,10 +13,10 @@
 package org.openhab.binding.matter.internal.client;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
@@ -41,8 +41,8 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
     protected final Gson gson = new Gson();
     private Session session;
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<AttributeListener, String> attributeListeners = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<NodeStateListener, Long> nodeStateListeners = new ConcurrentHashMap<>();
+    private final CopyOnWriteArrayList<AttributeListener> attributeListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
 
     static class Request {
         public Request(String requestId, String namespace, String function, Object args[]) {
@@ -84,7 +84,7 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
 
     public static class NodeStateMessage {
         public Long nodeId;
-        public NodeState nodeState;
+        public NodeState state;
     }
 
     public enum NodeState {
@@ -154,20 +154,16 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         }
     }
 
-    public void addAttributeListener(AttributeListener listener, long nodeId, int endpointId) {
-        attributeListeners.put(listener, attributeListenerId(nodeId, endpointId));
-    }
-
     public void addAttributeListener(AttributeListener listener) {
-        attributeListeners.put(listener, "");
+        attributeListeners.add(listener);
     }
 
     public void removeAttributeListener(AttributeListener listener) {
         attributeListeners.remove(listener);
     }
 
-    public void addNodeStateListener(NodeStateListener listener, Long nodeId) {
-        nodeStateListeners.put(listener, nodeId);
+    public void addNodeStateListener(NodeStateListener listener) {
+        nodeStateListeners.add(listener);
     }
 
     public void removeNodeStateListener(NodeStateListener listener) {
@@ -195,6 +191,10 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
     public void onWebSocketText(String msg) {
         logger.debug("onWebSocketText {}", msg);
         Message message = gson.fromJson(msg, Message.class);
+        if (message == null) {
+            logger.debug("invalid Message");
+            return;
+        }
         if (message.type.equals("response")) {
             Response response = gson.fromJson(message.message, Response.class);
             CompletableFuture<JsonElement> future = pendingRequests.remove(response.id);
@@ -208,24 +208,39 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
             }
         } else if (message.type.equals("event")) {
             Event event = gson.fromJson(message.message, Event.class);
+            if (event == null) {
+                logger.debug("invalid Event");
+                return;
+            }
             switch (event.type) {
                 case "attributeChanged":
+                    logger.debug("attributeChanged message {}", event.data);
                     AttributeChangedMessage changedMessage = gson.fromJson(event.data, AttributeChangedMessage.class);
-                    String id = attributeListenerId(changedMessage.path.nodeId, changedMessage.path.endpointId);
-                    for (Map.Entry<AttributeListener, String> entry : attributeListeners.entrySet()) {
-                        String value = entry.getValue();
-                        if (value.equals(id)) {
-                            entry.getKey().onEvent(changedMessage);
-                        }
+                    if (changedMessage == null) {
+                        logger.debug("invalid AttributeChangedMessage");
+                        return;
                     }
+                    for (AttributeListener listener : attributeListeners) {
+                        listener.onEvent(changedMessage);
+                    }
+                    // String id = attributeListenerId(changedMessage.path.nodeId, changedMessage.path.endpointId);
+                    // for (Map.Entry<AttributeListener, String> entry : attributeListeners.entrySet()) {
+                    // String value = entry.getValue();
+                    // logger.debug("checking {} == {}", id, value);
+                    // if (value.equals(id)) {
+                    // entry.getKey().onEvent(changedMessage);
+                    // }
+                    // }
                     break;
                 case "nodeStateInformation":
+                    logger.debug("nodeStateInformation message {}", event.data);
                     NodeStateMessage nodeStateMessage = gson.fromJson(event.data, NodeStateMessage.class);
-                    for (Map.Entry<NodeStateListener, Long> entry : nodeStateListeners.entrySet()) {
-                        Long value = entry.getValue();
-                        if (value.equals(nodeStateMessage.nodeId)) {
-                            entry.getKey().onEvent(nodeStateMessage);
-                        }
+                    if (nodeStateMessage == null) {
+                        logger.debug("invalid NodeStateMessage");
+                        return;
+                    }
+                    for (NodeStateListener listener : nodeStateListeners) {
+                        listener.onEvent(nodeStateMessage);
                     }
             }
         }
@@ -249,7 +264,7 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         return session != null && session.isOpen();
     }
 
-    private String attributeListenerId(Long nodeId, int endpointId) {
-        return nodeId + ":" + endpointId;
-    }
+    // private String attributeListenerId(Long nodeId, int endpointId) {
+    // return nodeId + ":" + endpointId;
+    // }
 }

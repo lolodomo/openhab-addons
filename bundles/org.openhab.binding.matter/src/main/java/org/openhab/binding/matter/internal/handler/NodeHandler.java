@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2023 Contributors to the openHAB project
+ * Copyright (c) 2010-2024 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.config.NodeConfiguration;
@@ -96,6 +97,14 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         refresh();
     }
 
+    @Override
+    public void onEvent(AttributeChangedMessage message) {
+        EndpointHandler handler = endpointHandler(message.path.endpointId);
+        if (handler != null) {
+            handler.onEvent(message);
+        }
+    }
+
     public void refresh() {
         synchronized (endpoints) {
             for (Endpoint e : endpoints) {
@@ -136,7 +145,7 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         return null;
     }
 
-    private @Nullable ControllerHandler controllerHandler() {
+    protected @Nullable ControllerHandler controllerHandler() {
         Bridge bridge = getBridge();
         if (bridge != null) {
             BridgeHandler handler = bridge.getHandler();

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2023 Contributors to the openHAB project
+ * Copyright (c) 2010-2024 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -48,8 +48,14 @@ public class MatterClient extends MatterWebsocketClient {
         JsonElement obj = future.get();
         Map<String, Node> nodes = gson.fromJson(obj, new TypeToken<Map<String, Node>>() {
         }.getType());
-
         return nodes;
+    }
+
+    public Node getNode(long id) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { String.valueOf(id) });
+        JsonElement obj = future.get();
+        Node node = gson.fromJson(obj, Node.class);
+        return node;
     }
 
     public void pairNode(String code) throws Exception {
@@ -111,7 +117,6 @@ public class MatterClient extends MatterWebsocketClient {
                 }
                 node.endpoints.put(endpoint.id, endpoint);
             }
-
             return node;
         }
 

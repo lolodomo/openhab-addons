@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2023 Contributors to the openHAB project
+ * Copyright (c) 2010-2024 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -22,9 +22,12 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.MatterClient;
+import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.LevelControlCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.OnOffCluster;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
@@ -54,11 +57,12 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
     private Map<Integer, Class<? extends ClusterHandler>> handlersMapping = new HashMap();
     private Map<String, ClusterHandler> channelIdMap = new HashMap<String, ClusterHandler>();
     private Map<Integer, ClusterHandler> clusterIdMap = new HashMap<Integer, ClusterHandler>();
+    private @Nullable MatterClient cachedClient;
 
     public EndpointHandler(Bridge bridge) {
         super(bridge);
         handlersMapping.put(LevelControlCluster.CLUSTER_ID, LevelControlHandler.class);
-
+        handlersMapping.put(OnOffCluster.CLUSTER_ID, LevelControlHandler.class);
     }
 
     @Override
@@ -72,9 +76,10 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         // }
         //
         // }
-        ClusterHandler c = channelIdMap.get(channelUID.getId());
-        if (c != null) {
-            c.handleCommand(channelUID, command);
+        ClusterHandler handler = channelIdMap.get(channelUID.getId());
+        MatterClient client = getClient();
+        if (handler != null && client != null) {
+            handler.handleCommand(channelUID, command);
         }
     }
 
@@ -89,6 +94,7 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
         } else {
+            nodeId = handler.getNodeId();
             updateStatus(ThingStatus.ONLINE);
             scheduler.execute(() -> {
                 handler.refresh();
@@ -123,23 +129,25 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         if (endpoint.id != endpointId) {
             return;
         }
-        endpoint.clusters.forEach((k, v) -> {
-            Integer id = v.id;
+        endpoint.clusters.forEach((clusterName, cluster) -> {
+            Integer id = cluster.id;
             ClusterHandler c = clusterIdMap.get(id);
             if (c == null) {
                 // lookup handler
                 // c = new handler
                 Class<? extends ClusterHandler> clazz = handlersMapping.get(id);
+                logger.debug("Creating handler {}", clazz);
                 if (clazz != null) {
                     try {
-                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class, Long.class,
+                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class, long.class,
                                 int.class };
                         Constructor<? extends ClusterHandler> constructor = clazz
                                 .getConstructor(constructorParameterTypes);
                         final ClusterHandler handler = constructor.newInstance(this, nodeId, endpointId);
                         clusterIdMap.put(id, handler);
                         // now we need to create channels and add those to the channel map
-                        handler.createChannels(v).forEach(channel -> {
+                        handler.createChannels(cluster).forEach(channel -> {
+                            logger.debug("Added channel {}", channel.getId());
                             channelIdMap.put(channel.getId(), handler);
                         });
                         c = handler;
@@ -153,8 +161,18 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
                 // no handler found
                 return;
             }
-            c.updateCluster(v);
+            c.updateCluster(cluster);
         });
+    }
+
+    @Override
+    public void onEvent(AttributeChangedMessage message) {
+        ClusterHandler c = clusterIdMap.get(message.path.clusterId);
+        if (c == null) {
+            logger.debug("No cluster found for id {}", message.path.clusterId);
+            return;
+        }
+        c.onEvent(message);
     }
 
     public void refresh() {
@@ -188,6 +206,19 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
             }
         }
         return null;
+    }
+
+    protected @Nullable MatterClient getClient() {
+        if (cachedClient == null) {
+            NodeHandler n = nodeHandler();
+            if (n != null) {
+                ControllerHandler c = n.controllerHandler();
+                if (c != null) {
+                    cachedClient = c.getClient();
+                }
+            }
+        }
+        return cachedClient;
     }
 
     // private @Nullable ClusterHandler clusterHandler(int clusterId) {

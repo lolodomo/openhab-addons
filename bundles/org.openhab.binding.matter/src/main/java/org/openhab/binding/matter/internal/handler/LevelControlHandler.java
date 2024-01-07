@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2023 Contributors to the openHAB project
+ * Copyright (c) 2010-2024 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,13 +16,13 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
 
 import java.util.List;
 
-import org.openhab.binding.matter.internal.client.AttributeListener;
-import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
+import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.LevelControlCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.OnOffCluster;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.PercentType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.types.Command;
 import org.slf4j.Logger;
@@ -35,38 +35,15 @@ import org.slf4j.LoggerFactory;
 public class LevelControlHandler extends ClusterHandler {
     private final Logger logger = LoggerFactory.getLogger(ClusterHandler.class);
     private LevelControlCluster levelControlCluster;
+    private PercentType lastLevel = new PercentType(0);
+    private OnOffType lastOnOff = OnOffType.OFF;
 
     public LevelControlHandler(EndpointHandler handler, long nodeId, int endpointId) {
-        super(handler, nodeId, endpointId, LevelControlCluster.CLUSTER_ID);
+        super(handler, LevelControlCluster.CLUSTER_ID);
     }
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-
-    }
-
-    @Override
-    protected void registerListeners() {
-        // we should pass in the matter client, we should register to listen for cluster events for this
-        // node/endpoint/cluster and use generics <T> for the specific cluster
-        MatterClient client = this.client;
-        if (client == null) {
-            logger.debug("Can not register for listeners, client not set");
-            return;
-        }
-        // maybe we should just listen to all events, so we can respond to multiple clusterss
-        client.addAttributeListener(new AttributeListener() {
-            @Override
-            public void onEvent(MatterWebsocketClient.AttributeChangedMessage message) {
-                switch (message.path.attributeName) {
-                    case "onOff":
-                        handler.updateState(CHANNEL_NAME_SWITCH_LEVEL, OnOffType.from(Boolean.valueOf(message.value)));
-                        break;
-                    case "currentLevel":
-                        handler.updateState(CHANNEL_NAME_SWITCH_LEVEL, new DecimalType(message.value));
-                }
-            }
-        }, nodeId, endpointId);
     }
 
     @Override
@@ -75,8 +52,11 @@ public class LevelControlHandler extends ClusterHandler {
             // update channels with new state, how do we handle onOff?
             // maybe this handler needs to advertise what other base clusters it needs? Map.of LevelControlCluster
             // OnOffControlCluster
+            lastLevel = levelToPercent(((LevelControlCluster) cluster).currentLevel);
             handler.updateState(CHANNEL_NAME_SWITCH_LEVEL,
                     new DecimalType(((LevelControlCluster) cluster).currentLevel));
+        } else if (cluster instanceof OnOffCluster) {
+            handler.updateState(CHANNEL_NAME_SWITCH_LEVEL, OnOffType.from(((OnOffCluster) cluster).onOff));
         }
     }
 
@@ -84,5 +64,25 @@ public class LevelControlHandler extends ClusterHandler {
     public List<ChannelUID> createChannels(BaseCluster cluster) {
         return List.of(createChannel(cluster, CHANNEL_NAME_SWITCH_LEVEL, CHANNEL_SWITCH_LEVEL,
                 CHANNEL_LABEL_SWITCH_LEVEL, ITEM_TYPE_DIMMER));
+    }
+
+    @Override
+    public void onEvent(AttributeChangedMessage message) {
+        logger.debug("OnEvent: {}", message.path.attributeName);
+        switch (message.path.attributeName) {
+            case "onOff":
+                Boolean on = Boolean.valueOf(message.value);
+                handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(on));
+                handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, on ? lastLevel : new PercentType(0));
+                break;
+            case "currentLevel":
+                logger.debug("currentLevel {}", message.value);
+                lastLevel = levelToPercent(Integer.parseInt(message.value));
+                handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
+                handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+                break;
+            default:
+                logger.debug("Unknow attribute {}", message.path.attributeName);
+        }
     }
 }
