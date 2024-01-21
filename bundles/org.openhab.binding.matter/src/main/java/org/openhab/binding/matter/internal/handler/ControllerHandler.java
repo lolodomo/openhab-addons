@@ -14,18 +14,23 @@ package org.openhab.binding.matter.internal.handler;
 
 import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
 
+import java.io.File;
 import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.AttributeListener;
-import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
-import org.openhab.binding.matter.internal.client.MatterWebsocketClient.NodeStateMessage;
+import org.openhab.binding.matter.internal.client.ControllerStateListener;
+import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.NodeStateListener;
 import org.openhab.binding.matter.internal.client.model.Node;
+import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
+import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
 import org.openhab.binding.matter.internal.config.ControllerConfiguration;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
+import org.openhab.core.OpenHAB;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -45,18 +50,22 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class ControllerHandler extends AbstractMatterBridgeHandler implements AttributeListener, NodeStateListener {
+public class ControllerHandler extends AbstractMatterBridgeHandler
+        implements AttributeListener, NodeStateListener, ControllerStateListener {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
     // private int nodeId; // the controller nodeId?
     // private List<Node> nodes = Collections.synchronizedList(new LinkedList<Node>());
-    private MatterClient client;
+    private MatterWebsocketClient client;
+    private @Nullable ScheduledFuture<?> reconnectFuture;
+    private boolean running = true;
 
     public ControllerHandler(Bridge bridge) {
         super(bridge);
-        client = new MatterClient();
+        client = new MatterWebsocketClient();
         client.addAttributeListener(this);
         client.addNodeStateListener(this);
+        client.addControllerStateListener(this);
     }
 
     @Override
@@ -71,6 +80,8 @@ public class ControllerHandler extends AbstractMatterBridgeHandler implements At
                 });
                 break;
             case DISCONNECTED:
+                NodeHandler handler = nodeHandler(message.nodeId);
+                // TODO We need to set the node offline
                 break;
             case WAITINGFORDEVICEDISCOVERY:
                 break;
@@ -92,6 +103,27 @@ public class ControllerHandler extends AbstractMatterBridgeHandler implements At
             return;
         }
         handler.onEvent(message);
+    }
+
+    @Override
+    public void onDisconnect(String reason) {
+        if (!running) {
+            return;
+        }
+        client.disconnect();
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, reason);
+        reconnect();
+    }
+
+    private synchronized void reconnect() {
+        if (reconnectFuture != null) {
+            reconnectFuture.cancel(true);
+        }
+        reconnectFuture = scheduler.schedule(this::initialize, 30, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void onConnect() {
     }
 
     @Override
@@ -123,25 +155,38 @@ public class ControllerHandler extends AbstractMatterBridgeHandler implements At
     @Override
     public void initialize() {
         logger.debug("initialize");
-        updateStatus(ThingStatus.UNKNOWN);
         ControllerConfiguration c = getConfigAs(ControllerConfiguration.class);
         // nodeId = c.nodeId;
         scheduler.execute(() -> {
             try {
-                client.connect("localhost", 8888);
+                String folderName = OpenHAB.getUserDataFolder() + File.separator + "matter";
+                File folder = new File(folderName);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                String storagePath = folder.getAbsolutePath() + File.separator + "controler-"
+                        + getThing().getUID().getId();
+                logger.debug("matter config: {}", storagePath);
+                client.connect("localhost", 8888, storagePath);
                 updateStatus(ThingStatus.ONLINE);
             } catch (Exception e) {
                 logger.debug("Could init", e);
+                updateStatus(ThingStatus.ONLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getLocalizedMessage());
+                reconnect();
             }
         });
     }
 
     @Override
     public void dispose() {
+        running = false;
+        if (reconnectFuture != null) {
+            reconnectFuture.cancel(true);
+        }
         client.disconnect();
     }
 
-    public MatterClient getClient() {
+    public MatterWebsocketClient getClient() {
         return client;
     }
 
@@ -195,8 +240,11 @@ public class ControllerHandler extends AbstractMatterBridgeHandler implements At
 
     private @Nullable NodeHandler nodeHandler(long nodeId) {
         for (Thing thing : getThing().getThings()) {
+
             ThingHandler handler = thing.getHandler();
+            logger.debug("Checking Thing {} {}", thing.getLabel(), handler);
             if (handler instanceof NodeHandler nodeHandler) {
+                logger.debug("Checking {} == {} ", nodeHandler.getNodeId(), nodeId);
                 if (nodeHandler.getNodeId() == nodeId) {
                     return nodeHandler;
                 }

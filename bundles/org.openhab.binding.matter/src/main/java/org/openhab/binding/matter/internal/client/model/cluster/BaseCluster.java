@@ -14,7 +14,6 @@ package org.openhab.binding.matter.internal.client.model.cluster;
 
 import java.util.Map;
 
-import org.openhab.binding.matter.internal.client.MatterClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,28 +38,5 @@ public abstract class BaseCluster {
         this.endpointId = endpointId;
         this.id = clusterId;
         this.name = clusterName;
-    }
-
-    // protected void sendCommand(MatterClient client, String command, JsonSerializable... args) throws Exception {
-    // logger.debug("sendCommand {} {}", command, args);
-    // StringBuilder sb = new StringBuilder();
-    // // args should be even, as its name,value,name,value
-    // if (args.length > 1 && args.length % 2 == 0) {
-    // sb.append("{");
-    // for (int i = 0; i < args.length; i += 2) {
-    // sb.append("\"").append(args[i]).append("\":").append(args[i + 1].toJson());
-    // if (i < args.length - 2) {
-    // sb.append(",");
-    // }
-    // }
-    // sb.append("}");
-    // }
-    // logger.debug("sendCommand {}", sb);
-    // client.clusterCommand(clusterName, command, sb.toString());
-    // }
-
-    protected void sendCommand(MatterClient client, String command, Object arg) throws Exception {
-        logger.debug("sendCommand {} {}", command, arg);
-        client.clusterCommand(name, command, arg);
     }
 }

@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
+import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.NodeConfiguration;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
 import org.openhab.core.thing.Bridge;
@@ -78,6 +78,7 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
 
     @Override
     public void dispose() {
+        logger.debug("Disposing Handler");
     }
 
     public long getNodeId() {
@@ -115,9 +116,6 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
             }
         }
     }
-
-    // public void endpointsUpdate(Map<String, Endpoint> endpoints) {
-    // }
 
     private void initializeNode() {
         ControllerHandler handler = controllerHandler();

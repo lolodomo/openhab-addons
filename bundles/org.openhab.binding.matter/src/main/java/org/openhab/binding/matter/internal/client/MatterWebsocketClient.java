@@ -12,7 +12,13 @@
  */
 package org.openhab.binding.matter.internal.client;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,125 +28,50 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.openhab.binding.matter.internal.client.model.Endpoint;
+import org.openhab.binding.matter.internal.client.model.Node;
+import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
+import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
+import org.openhab.binding.matter.internal.client.model.ws.Event;
+import org.openhab.binding.matter.internal.client.model.ws.Message;
+import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
+import org.openhab.binding.matter.internal.client.model.ws.Request;
+import org.openhab.binding.matter.internal.client.model.ws.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 
 /**
  *
  * @author Dan Cunningham
  *
  */
-public abstract class MatterWebsocketClient implements WebSocketListener {
+public class MatterWebsocketClient implements WebSocketListener {
 
     private final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
 
-    protected final Gson gson = new Gson();
+    Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer()).create();
+
     private Session session;
+    WebSocketClient client = new WebSocketClient();
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<AttributeListener> attributeListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<ControllerStateListener> controllerStateListeners = new CopyOnWriteArrayList<>();
 
-    static class Request {
-        public Request(String requestId, String namespace, String function, Object args[]) {
-            this.id = requestId;
-            this.namespace = namespace;
-            this.function = function;
-            this.args = args;
-        }
-
-        String id;
-        String namespace;
-        String function;
-        Object args[];
-        // Constructor, getters and setters
-    }
-
-    static class Response {
-        String type;
-        String id;
-        JsonElement result;
-        String error;
-    }
-
-    static class Event {
-        String type;
-        JsonElement data;
-    }
-
-    static class Message {
-        String type;
-        JsonObject message;
-    }
-
-    public static class AttributeChangedMessage {
-        public Path path;
-        public Long version;
-        public String value;
-    }
-
-    public static class NodeStateMessage {
-        public Long nodeId;
-        public NodeState state;
-    }
-
-    public enum NodeState {
-        /** Node is connected and all data is up-to-date. */
-        CONNECTED("Connected"),
-
-        /**
-         * Node is disconnected. Data are stale and interactions will most likely return an error. If controller
-         * instance
-         * is still active then the device will be reconnected once it is available again.
-         */
-        DISCONNECTED("Disconnected"),
-
-        /** Node is reconnecting. Data are stale. It is yet unknown if the reconnection is successful. */
-        RECONNECTING("Reconnecting"),
-
-        /**
-         * The node could not be connected and the controller is now waiting for a MDNS announcement and tries every 10
-         * minutes to reconnect.
-         */
-        WAITINGFORDEVICEDISCOVERY("WaitingForDeviceDiscovery"),
-
-        /**
-         * Node structure has changed (Endpoints got added or also removed). Data are up-to-date.
-         * This State information will only be fired when the subscribeAllAttributesAndEvents option is set to true.
-         */
-        STRUCTURECHANGED("StructureChanged"),
-
-        /**
-         * The node was just Decommissioned.
-         */
-        DECOMMISSIONED("Decommissioned");
-
-        private String state;
-
-        NodeState(String state) {
-            this.state = state;
-        }
-
-        @Override
-        public String toString() {
-            return state;
-        }
-    }
-
-    public static class Path {
-        public Long nodeId;
-        public Integer endpointId;
-        public Integer clusterId;
-        public Integer attributeId;
-        public String attributeName;
-    }
-
-    public void connect(String host, int port) throws Exception {
+    public void connect(String host, int port, String storagePath) throws Exception {
+        disconnect();
         logger.debug("Connecting {}:{} ", host, port);
-        String dest = "ws://" + host + ":" + port + "?nodeId=0&storagePath=/Users/daniel/tmp/matter-server";
+        String dest = "ws://" + host + ":" + port + "?nodeId=0&storagePath=" + storagePath;
         WebSocketClient client = new WebSocketClient();
         client.setMaxIdleTimeout(Long.MAX_VALUE);
         client.start();
@@ -149,8 +80,21 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
     }
 
     public void disconnect() {
-        if (session != null) {
-            session.close();
+        Session session = this.session;
+        try {
+            if (session != null && session.isOpen()) {
+                session.disconnect();
+                session.close();
+                session = null;
+            }
+        } catch (IOException e) {
+            logger.debug("Error trying to disconnect", e);
+        } finally {
+            try {
+                client.stop();
+            } catch (Exception e) {
+                logger.debug("Error closing Web Socket", e);
+            }
         }
     }
 
@@ -170,6 +114,14 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         nodeStateListeners.remove(listener);
     }
 
+    public void addControllerStateListener(ControllerStateListener listener) {
+        controllerStateListeners.add(listener);
+    }
+
+    public void removeControllerStateListener(ControllerStateListener listener) {
+        controllerStateListeners.remove(listener);
+    }
+
     protected CompletableFuture<JsonElement> sendMessage(String namespace, String functionName, Object args[]) {
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<JsonElement> responseFuture = new CompletableFuture<>();
@@ -185,6 +137,9 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
     @Override
     public void onWebSocketConnect(Session session) {
         this.session = session;
+        for (ControllerStateListener listener : controllerStateListeners) {
+            listener.onConnect();
+        }
     }
 
     @Override
@@ -221,16 +176,12 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
                         return;
                     }
                     for (AttributeListener listener : attributeListeners) {
-                        listener.onEvent(changedMessage);
+                        try {
+                            listener.onEvent(changedMessage);
+                        } catch (Exception e) {
+                            logger.debug("Error notifing listener", e);
+                        }
                     }
-                    // String id = attributeListenerId(changedMessage.path.nodeId, changedMessage.path.endpointId);
-                    // for (Map.Entry<AttributeListener, String> entry : attributeListeners.entrySet()) {
-                    // String value = entry.getValue();
-                    // logger.debug("checking {} == {}", id, value);
-                    // if (value.equals(id)) {
-                    // entry.getKey().onEvent(changedMessage);
-                    // }
-                    // }
                     break;
                 case "nodeStateInformation":
                     logger.debug("nodeStateInformation message {}", event.data);
@@ -240,7 +191,11 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
                         return;
                     }
                     for (NodeStateListener listener : nodeStateListeners) {
-                        listener.onEvent(nodeStateMessage);
+                        try {
+                            listener.onEvent(nodeStateMessage);
+                        } catch (Exception e) {
+                            logger.debug("Error notifing listener", e);
+                        }
                     }
             }
         }
@@ -249,6 +204,9 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         logger.debug("onWebSocketClose {} {}", statusCode, reason);
+        for (ControllerStateListener listener : controllerStateListeners) {
+            listener.onDisconnect(reason);
+        }
     }
 
     @Override
@@ -264,7 +222,94 @@ public abstract class MatterWebsocketClient implements WebSocketListener {
         return session != null && session.isOpen();
     }
 
-    // private String attributeListenerId(Long nodeId, int endpointId) {
-    // return nodeId + ":" + endpointId;
-    // }
+    public Map<String, Node> getNodes() throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "getNodes", null);
+        JsonElement obj = future.get();
+        Map<String, Node> nodes = gson.fromJson(obj, new TypeToken<Map<String, Node>>() {
+        }.getType());
+        return nodes;
+    }
+
+    public Node getNode(long id) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { String.valueOf(id) });
+        JsonElement obj = future.get();
+        Node node = gson.fromJson(obj, Node.class);
+        return node;
+    }
+
+    public void pairNode(String code) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "pair", new Object[] { code });
+        future.get();
+    }
+
+    public void clusterCommand(Long nodeId, Integer endpointId, String clusterName, ClusterCommand command)
+            throws Exception {
+        Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };
+        CompletableFuture<JsonElement> future = sendMessage("clusters", "command", clusterArgs);
+        future.get();
+    }
+
+    public class NodeDeserializer implements JsonDeserializer<Node> {
+        @Override
+        public Node deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            JsonObject jsonObjectNode = json.getAsJsonObject();
+            Node node = new Node();
+            node.id = jsonObjectNode.get("id").getAsLong();
+            node.endpoints = new HashMap<>();
+            JsonObject endpointsJson = jsonObjectNode.get("endpoints").getAsJsonObject();
+            Set<Map.Entry<String, JsonElement>> endpointEntries = endpointsJson.entrySet();
+            for (Map.Entry<String, JsonElement> endpointEntry : endpointEntries) {
+                JsonObject jsonObjectElement = endpointEntry.getValue().getAsJsonObject();
+                Endpoint endpoint = new Endpoint();
+                endpoint.id = jsonObjectElement.get("id").getAsInt();
+                endpoint.clusters = new HashMap<>();
+                JsonObject clustersJson = jsonObjectElement.get("clusters").getAsJsonObject();
+                Set<Map.Entry<String, JsonElement>> clusterEntries = clustersJson.entrySet();
+                for (Map.Entry<String, JsonElement> clusterEntry : clusterEntries) {
+                    String clusterName = clusterEntry.getKey();
+                    JsonElement clusterElement = clusterEntry.getValue();
+
+                    try {
+                        Class<?> clazz = Class
+                                .forName(BaseCluster.class.getPackageName() + ".gen." + clusterName + "Cluster");
+                        if (BaseCluster.class.isAssignableFrom(clazz)) {
+                            BaseCluster cluster = context.deserialize(clusterElement, clazz);
+                            for (Map.Entry<String, JsonElement> entry : clusterElement.getAsJsonObject().entrySet()) {
+                                Field field;
+                                try {
+                                    field = getField(clazz, entry.getKey());
+                                } catch (NoSuchFieldException e) {
+                                    logger.debug("Skipping field {}", entry.getKey());
+                                    continue;
+                                }
+                                field.setAccessible(true);
+                                field.set(cluster, gson.fromJson(entry.getValue(), field.getType()));
+                            }
+                            endpoint.clusters.put(clusterName, cluster);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        logger.debug("Cluster not found: {} ", clusterName);
+                    } catch (IllegalArgumentException | SecurityException | IllegalAccessException e) {
+                        logger.debug("Exception for cluster " + clusterName, e);
+                    }
+                }
+                node.endpoints.put(endpoint.id, endpoint);
+            }
+            return node;
+        }
+
+        private Field getField(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                Class<?> superClass = clazz.getSuperclass();
+                if (superClass == null) {
+                    throw e;
+                } else {
+                    return getField(superClass, fieldName);
+                }
+            }
+        }
+    }
 }

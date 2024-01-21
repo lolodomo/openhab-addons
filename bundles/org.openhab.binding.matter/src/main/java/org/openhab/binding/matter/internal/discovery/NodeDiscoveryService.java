@@ -13,7 +13,7 @@
 package org.openhab.binding.matter.internal.discovery;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterThingTypes;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.ClusterThingTypes;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;

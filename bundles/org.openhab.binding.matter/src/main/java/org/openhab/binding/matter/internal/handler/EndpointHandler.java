@@ -22,13 +22,14 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.matter.internal.client.MatterClient;
-import org.openhab.binding.matter.internal.client.MatterWebsocketClient.AttributeChangedMessage;
+import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.LevelControlCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.OnOffCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
+import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
+import org.openhab.binding.matter.internal.converter.ClusterConverter;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -51,35 +52,29 @@ import org.slf4j.LoggerFactory;
 public class EndpointHandler extends AbstractMatterBridgeHandler {
 
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
-    protected long nodeId;
+    // protected long nodeId;
     protected int endpointId;
     private List<BaseCluster> clusters = Collections.synchronizedList(new LinkedList<BaseCluster>());
-    private Map<Integer, Class<? extends ClusterHandler>> handlersMapping = new HashMap();
-    private Map<String, ClusterHandler> channelIdMap = new HashMap<String, ClusterHandler>();
-    private Map<Integer, ClusterHandler> clusterIdMap = new HashMap<Integer, ClusterHandler>();
-    private @Nullable MatterClient cachedClient;
+    private Map<String, ClusterConverter> channelIdMap = new HashMap<String, ClusterConverter>();
+    private Map<Integer, ClusterConverter> clusterIdMap = new HashMap<Integer, ClusterConverter>();
+    private @Nullable MatterWebsocketClient cachedClient;
 
     public EndpointHandler(Bridge bridge) {
         super(bridge);
-        handlersMapping.put(LevelControlCluster.CLUSTER_ID, LevelControlHandler.class);
-        handlersMapping.put(OnOffCluster.CLUSTER_ID, LevelControlHandler.class);
     }
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        // if (CHANNEL_1.equals(channelUID.getId())) {
-        // if (command instanceof RefreshType) {
-        // NodeHandler handler = nodeHandler();
-        // if (handler != null) {
-        // handler.refresh();
-        // }
-        // }
-        //
-        // }
-        ClusterHandler handler = channelIdMap.get(channelUID.getId());
-        MatterClient client = getClient();
-        if (handler != null && client != null) {
-            handler.handleCommand(channelUID, command);
+        MatterWebsocketClient client = getClient();
+        if (client == null) {
+            logger.debug("Matter client not present, ignoring command");
+            return;
+        }
+        logger.debug("Looking up converter for {}", channelUID);
+        ClusterConverter converter = channelIdMap.get(channelUID.getId());
+        if (converter != null) {
+            logger.debug("Found converter for {} : {} ", channelUID, converter);
+            converter.handleCommand(channelUID, command);
         }
     }
 
@@ -94,7 +89,7 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
         } else {
-            nodeId = handler.getNodeId();
+            // nodeId = handler.getNodeId();
             updateStatus(ThingStatus.ONLINE);
             scheduler.execute(() -> {
                 handler.refresh();
@@ -125,49 +120,68 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         return endpointId;
     }
 
-    public void updateEndpoint(Endpoint endpoint) {
-        if (endpoint.id != endpointId) {
-            return;
+    public long getNodeId() {
+        NodeHandler handler = nodeHandler();
+        if (handler != null) {
+            return handler.getNodeId();
         }
+        return -1;
+    }
+
+    public void updateEndpoint(Endpoint endpoint) {
+        // if (endpoint.id.intValue() != endpointId) {
+        // return;
+        // }
+        Map<String, BaseCluster> clusters = endpoint.clusters;
+
+        // hack to support a single handler when Level or ColorCotrol
+        if (clusters.containsKey(LevelControlCluster.CLUSTER_NAME)) {
+            clusters.remove(OnOffCluster.CLUSTER_NAME);
+        }
+        // if (clusters.containsKey(ColorControlCluster.CLUSTER_NAME)) {
+        // clusters.remove(LevelControlCluster.CLUSTER_NAME);
+        // }
         endpoint.clusters.forEach((clusterName, cluster) -> {
+            logger.debug("checking cluster {} for handler", clusterName);
             Integer id = cluster.id;
-            ClusterHandler c = clusterIdMap.get(id);
-            if (c == null) {
+            ClusterConverter clusterConverter = clusterIdMap.get(id);
+            if (clusterConverter == null) {
                 // lookup handler
                 // c = new handler
-                Class<? extends ClusterHandler> clazz = handlersMapping.get(id);
+                Class<? extends ClusterConverter> clazz = ClusterConverter.getConverterClass(id);
                 logger.debug("Creating handler {}", clazz);
                 if (clazz != null) {
                     try {
-                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class, long.class,
-                                int.class };
-                        Constructor<? extends ClusterHandler> constructor = clazz
+                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class };
+                        Constructor<? extends ClusterConverter> constructor = clazz
                                 .getConstructor(constructorParameterTypes);
-                        final ClusterHandler handler = constructor.newInstance(this, nodeId, endpointId);
-                        clusterIdMap.put(id, handler);
+                        final ClusterConverter converter = constructor.newInstance(this);
+                        for (Integer i : converter.supportedClusters()) {
+                            clusterIdMap.put(i, converter);
+                        }
                         // now we need to create channels and add those to the channel map
-                        handler.createChannels(cluster).forEach(channel -> {
+                        converter.createChannels(cluster).forEach(channel -> {
                             logger.debug("Added channel {}", channel.getId());
-                            channelIdMap.put(channel.getId(), handler);
+                            channelIdMap.put(channel.getId(), converter);
                         });
-                        c = handler;
+                        clusterConverter = converter;
                     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                             | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                         logger.debug("Could not create cluster handler", e);
                     }
                 }
             }
-            if (c == null) {
+            if (clusterConverter == null) {
                 // no handler found
                 return;
             }
-            c.updateCluster(cluster);
+            clusterConverter.updateCluster(cluster);
         });
     }
 
     @Override
     public void onEvent(AttributeChangedMessage message) {
-        ClusterHandler c = clusterIdMap.get(message.path.clusterId);
+        ClusterConverter c = clusterIdMap.get(message.path.clusterId);
         if (c == null) {
             logger.debug("No cluster found for id {}", message.path.clusterId);
             return;
@@ -176,25 +190,6 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
     }
 
     public void refresh() {
-
-        /// this is old
-        // step 1 iterate over all clusters in the endpoint
-        // step 2 look up a ClusterHandler by the cluster ID
-        // step 4 create a new instance of the handler
-        // step 5 call createChannels on this
-        // step 6 link channles to the handler in a Map
-        // step 7 make sure to clean up on dispose
-
-        // when a command comes in, we need to lookup the channel to a handler
-
-        // synchronized (clusters) {
-        // for (BaseCluster c : clusters) {
-        // ClusterHandler handler = clusterHandler(c.id);
-        // if (handler != null) {
-        // handler.updateCluster(c);
-        // }
-        // }
-        // }
     }
 
     private @Nullable NodeHandler nodeHandler() {
@@ -208,7 +203,7 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         return null;
     }
 
-    protected @Nullable MatterClient getClient() {
+    public @Nullable MatterWebsocketClient getClient() {
         if (cachedClient == null) {
             NodeHandler n = nodeHandler();
             if (n != null) {
@@ -220,32 +215,4 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         }
         return cachedClient;
     }
-
-    // private @Nullable ClusterHandler clusterHandler(int clusterId) {
-    // for (Thing thing : getThing().getThings()) {
-    // ThingHandler handler = thing.getHandler();
-    // if (handler instanceof ClusterHandler clusterHandler) {
-    // if (clusterHandler.getClusterId() == clusterId) {
-    // return clusterHandler;
-    // }
-    // }
-    // }
-    // return null;
-    // }
-
-    // private void discoverChildCluster(BaseCluster cluster) {
-    // // so we need a map of THING_TYPE_CLUSTER to clusters, so LevelControl, or OnOff
-    // NodeDiscoveryService discoveryService = this.discoveryService;
-    // if (discoveryService != null) {
-    // logger.debug("discoverChildCluster {}", cluster.name);
-    // ThingTypeUID clusterThing = ClusterThingTypes.CLUSTER_NAME_TO_THING_TYPE_MAPPING.get(cluster.name);
-    // if (clusterThing != null) {
-    // ThingUID bridgeUID = getThing().getUID();
-    // ThingUID thingUID = new ThingUID(clusterThing, bridgeUID, clusterThing.getId());
-    // discoveryService.discoverhildThing(thingUID, bridgeUID, (long) cluster.id,
-    // "Matter Cluster " + cluster.name);
-    // }
-    //
-    // }
-    // }
 }
