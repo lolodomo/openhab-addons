@@ -150,8 +150,12 @@ public class MatterWebsocketClient implements WebSocketListener {
             logger.debug("invalid Message");
             return;
         }
-        if (message.type.equals("response")) {
+        if ("response".equals(message.type)) {
             Response response = gson.fromJson(message.message, Response.class);
+            if (response == null) {
+                logger.debug("invalid response Message");
+                return;
+            }
             CompletableFuture<JsonElement> future = pendingRequests.remove(response.id);
             if (future != null) {
                 logger.debug("result type: {} ", response.type);
@@ -161,7 +165,7 @@ public class MatterWebsocketClient implements WebSocketListener {
                     future.complete(response.result);
                 }
             }
-        } else if (message.type.equals("event")) {
+        } else if ("event".equals(message.type)) {
             Event event = gson.fromJson(message.message, Event.class);
             if (event == null) {
                 logger.debug("invalid Event");
