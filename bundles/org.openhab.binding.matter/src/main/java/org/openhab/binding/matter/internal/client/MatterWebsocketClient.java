@@ -215,7 +215,7 @@ public class MatterWebsocketClient implements WebSocketListener {
 
     @Override
     public void onWebSocketError(Throwable cause) {
-        logger.debug("onWebSocketError {}", cause);
+        logger.debug("onWebSocketError", cause);
     }
 
     @Override
@@ -295,7 +295,7 @@ public class MatterWebsocketClient implements WebSocketListener {
                     } catch (ClassNotFoundException e) {
                         logger.debug("Cluster not found: {} ", clusterName);
                     } catch (IllegalArgumentException | SecurityException | IllegalAccessException e) {
-                        logger.debug("Exception for cluster " + clusterName, e);
+                        logger.debug("Exception for cluster {}", clusterName, e);
                     }
                 }
                 node.endpoints.put(endpoint.id, endpoint);

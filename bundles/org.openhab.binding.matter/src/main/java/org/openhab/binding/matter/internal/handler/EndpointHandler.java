@@ -75,6 +75,8 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         if (converter != null) {
             logger.debug("Found converter for {} : {} ", channelUID, converter);
             converter.handleCommand(channelUID, command);
+        } else {
+            logger.debug("No converter found for {}", channelUID);
         }
     }
 
@@ -128,6 +130,7 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         return -1;
     }
 
+    @SuppressWarnings({ "null", "unused" })
     public void updateEndpoint(Endpoint endpoint) {
         // if (endpoint.id.intValue() != endpointId) {
         // return;
@@ -172,7 +175,7 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
                 }
             }
             if (clusterConverter == null) {
-                // no handler found
+                logger.debug("No handler found for cluster {}", clusterName);
                 return;
             }
             clusterConverter.updateCluster(cluster);
