@@ -21,6 +21,6 @@ import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
  *
  */
 public class Endpoint {
-    public Integer id;
+    public Integer number;
     public Map<String, BaseCluster> clusters;
 }

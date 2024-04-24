@@ -111,8 +111,7 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
             return;
         }
         client.disconnect();
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, reason);
-        reconnect();
+        setOffline(reason);
     }
 
     private synchronized void reconnect() {
@@ -171,8 +170,7 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
                 updateStatus(ThingStatus.ONLINE);
             } catch (Exception e) {
                 logger.debug("Could init", e);
-                updateStatus(ThingStatus.ONLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getLocalizedMessage());
-                reconnect();
+                setOffline(e.getLocalizedMessage());
             }
         });
     }
@@ -225,7 +223,8 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
 
     private void setOffline(@Nullable String message) {
         client.disconnect();
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, message);
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, message);
+        reconnect();
     }
 
     private void discoverChildNode(Node node) {

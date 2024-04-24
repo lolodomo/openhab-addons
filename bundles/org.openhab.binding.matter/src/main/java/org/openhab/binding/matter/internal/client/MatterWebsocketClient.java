@@ -266,7 +266,7 @@ public class MatterWebsocketClient implements WebSocketListener {
             for (Map.Entry<String, JsonElement> endpointEntry : endpointEntries) {
                 JsonObject jsonObjectElement = endpointEntry.getValue().getAsJsonObject();
                 Endpoint endpoint = new Endpoint();
-                endpoint.id = jsonObjectElement.get("id").getAsInt();
+                endpoint.number = jsonObjectElement.get("number").getAsInt();
                 endpoint.clusters = new HashMap<>();
                 JsonObject clustersJson = jsonObjectElement.get("clusters").getAsJsonObject();
                 Set<Map.Entry<String, JsonElement>> clusterEntries = clustersJson.entrySet();
@@ -298,7 +298,7 @@ public class MatterWebsocketClient implements WebSocketListener {
                         logger.debug("Exception for cluster {}", clusterName, e);
                     }
                 }
-                node.endpoints.put(endpoint.id, endpoint);
+                node.endpoints.put(endpoint.number, endpoint);
             }
             return node;
         }

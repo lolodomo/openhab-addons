@@ -109,7 +109,7 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
     public void refresh() {
         synchronized (endpoints) {
             for (Endpoint e : endpoints) {
-                EndpointHandler handler = endpointHandler(e.id);
+                EndpointHandler handler = endpointHandler(e.number);
                 if (handler != null) {
                     handler.updateEndpoint(e);
                 }
@@ -126,7 +126,8 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         } else {
             updateStatus(ThingStatus.ONLINE);
             scheduler.execute(() -> {
-                handler.refresh();
+                // this is breaking things, why are we doing this?
+                // handler.refresh();
             });
         }
     }
@@ -155,13 +156,13 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
     }
 
     private void discoverChildEndpoint(Endpoint endpoint) {
-        logger.debug("discoverChildEndpoint {}", endpoint.id);
+        logger.debug("discoverChildEndpoint {}", endpoint.number);
         NodeDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
-            ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, String.valueOf(endpoint.id));
-            discoveryService.discoverhildThing(thingUID, bridgeUID, (long) endpoint.id,
-                    "Matter Endpoint " + endpoint.id);
+            ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, String.valueOf(endpoint.number));
+            discoveryService.discoverhildThing(thingUID, bridgeUID, (long) endpoint.number,
+                    "Matter Endpoint " + endpoint.number);
 
         }
     }
