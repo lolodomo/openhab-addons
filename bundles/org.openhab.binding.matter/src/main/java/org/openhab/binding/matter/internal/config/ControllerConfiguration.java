@@ -22,10 +22,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault
 public class ControllerConfiguration {
 
-    /**
-     * Sample configuration parameters. Replace with your own.
-     */
     public int nodeId = 0;
-
+    public String host = "";
     public int port = 0;
 }

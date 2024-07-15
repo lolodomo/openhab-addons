@@ -12,7 +12,10 @@
  */
 package org.openhab.binding.matter.internal.handler;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_1;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_COMMAND;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_PAIR_CODE;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_NODE;
 
 import java.io.File;
 import java.util.Map;
@@ -81,6 +84,9 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
                 break;
             case DISCONNECTED:
                 NodeHandler handler = nodeHandler(message.nodeId);
+                if (handler != null) {
+                    handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+                }
                 // TODO We need to set the node offline
                 break;
             case WAITINGFORDEVICEDISCOVERY:
@@ -166,10 +172,17 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
                 String storagePath = folder.getAbsolutePath() + File.separator + "controler-"
                         + getThing().getUID().getId();
                 logger.debug("matter config: {}", storagePath);
-                client.connect("localhost", 8888, storagePath);
+                ControllerConfiguration config = getConfigAs(ControllerConfiguration.class);
+                if (!config.host.isBlank() && config.port > 0) {
+                    logger.debug("Connecting to custom host {} and port {}", config.host, config.port);
+                    client.connect(config.host, config.port, storagePath);
+                } else {
+                    logger.debug("Connecting to embedded service");
+                    client.connect(storagePath);
+                }
                 updateStatus(ThingStatus.ONLINE);
             } catch (Exception e) {
-                logger.debug("Could init", e);
+                logger.debug("Could not init", e);
                 setOffline(e.getLocalizedMessage());
             }
         });

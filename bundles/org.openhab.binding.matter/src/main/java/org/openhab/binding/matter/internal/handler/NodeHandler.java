@@ -95,6 +95,9 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
                 discoverChildEndpoint(e);
             }
         }
+        if (getThing().getStatus() != ThingStatus.ONLINE) {
+            updateStatus(ThingStatus.ONLINE);
+        }
         refresh();
     }
 
@@ -115,6 +118,10 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
                 }
             }
         }
+    }
+
+    public void setNodeStatus(ThingStatus status, ThingStatusDetail detail) {
+        updateStatus(status, detail);
     }
 
     private void initializeNode() {

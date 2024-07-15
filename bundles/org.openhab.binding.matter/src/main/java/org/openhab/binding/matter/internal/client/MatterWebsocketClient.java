@@ -23,6 +23,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
@@ -38,6 +40,9 @@ import org.openhab.binding.matter.internal.client.model.ws.Message;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
 import org.openhab.binding.matter.internal.client.model.ws.Request;
 import org.openhab.binding.matter.internal.client.model.ws.Response;
+import org.openhab.binding.matter.internal.util.NodeManager;
+import org.openhab.binding.matter.internal.util.NodeRunner;
+import org.openhab.core.common.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,16 +65,38 @@ public class MatterWebsocketClient implements WebSocketListener {
     private final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
 
     Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer()).create();
-
+    private final ScheduledExecutorService scheduler = ThreadPoolManager
+            .getScheduledPool("matter-js.MatterWebsocketClient");
     private Session session;
     WebSocketClient client = new WebSocketClient();
+    NodeRunner nodeRunner;
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<AttributeListener> attributeListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<ControllerStateListener> controllerStateListeners = new CopyOnWriteArrayList<>();
 
     public void connect(String host, int port, String storagePath) throws Exception {
+        connectWebsocket(host, port, storagePath);
+    }
+
+    public void connect(String storagePath) throws Exception {
         disconnect();
+        final int port = startNodeJs();
+        scheduler.schedule(() -> {
+            try {
+                connectWebsocket("localhost", port, storagePath);
+            } catch (Exception e) {
+                disconnect();
+                logger.error("Could not connect", e);
+                for (ControllerStateListener listener : controllerStateListeners) {
+                    String msg = e.getLocalizedMessage();
+                    listener.onDisconnect(msg != null ? msg : "Exception connecting");
+                }
+            }
+        }, 5, TimeUnit.SECONDS);
+    }
+
+    private void connectWebsocket(String host, int port, String storagePath) throws Exception {
         logger.debug("Connecting {}:{} ", host, port);
         String dest = "ws://" + host + ":" + port + "?nodeId=0&storagePath=" + storagePath;
         WebSocketClient client = new WebSocketClient();
@@ -95,6 +122,10 @@ public class MatterWebsocketClient implements WebSocketListener {
             } catch (Exception e) {
                 logger.debug("Error closing Web Socket", e);
             }
+        }
+        NodeRunner nodeRunner = this.nodeRunner;
+        if (nodeRunner != null) {
+            nodeRunner.stopNode();
         }
     }
 
@@ -315,5 +346,13 @@ public class MatterWebsocketClient implements WebSocketListener {
                 }
             }
         }
+    }
+
+    private int startNodeJs() throws IOException {
+        NodeManager nodeManager = new NodeManager();
+        String nodePath = nodeManager.getNodePath();
+        nodeRunner = new NodeRunner(nodePath);
+        nodeRunner.addExitListener(exitCode -> logger.error("Node.js process exited with code: {}", exitCode));
+        return nodeRunner.runNodeWithResource("/matter.js");
     }
 }
