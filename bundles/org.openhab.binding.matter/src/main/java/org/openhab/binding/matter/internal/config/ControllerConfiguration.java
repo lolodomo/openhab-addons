@@ -25,4 +25,5 @@ public class ControllerConfiguration {
     public int nodeId = 0;
     public String host = "";
     public int port = 0;
+    public String pairCode = "";
 }

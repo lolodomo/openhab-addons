@@ -155,10 +155,57 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         }
     }
 
+    // @Override
+    // public void handleConfigurationUpdate(Map<String, Object> configurationParameters)
+    // throws ConfigValidationException {
+    // logger.debug("handleConfigurationUpdate");
+    // validateConfigurationParameters(configurationParameters);
+    // Configuration configuration = editConfiguration();
+    // boolean reinitialize = false;
+    // String pairCode = null;
+    // for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
+    // Object value = configurationParameter.getValue();
+
+    // logger.debug("{}: old: {} new: {}", configurationParameter.getKey(),
+    // configuration.get(configurationParameter.getKey()), configurationParameter.getValue());
+    // // Ignore any configuration parameters that have not changed
+    // if (Objects.equals(configurationParameter.getValue(), configuration.get(configurationParameter.getKey()))) {
+    // logger.debug("Controller Configuration update ignored {} to {} ({})", configurationParameter.getKey(),
+    // value, value == null ? "null" : value.getClass().getSimpleName());
+    // continue;
+    // }
+    // logger.debug("Controller Configuration update {} to {}", configurationParameter.getKey(), value);
+    // switch (configurationParameter.getKey()) {
+    // case "host":
+    // case "port":
+    // case "nodeId":
+    // reinitialize = true;
+    // break;
+    // case "pairCode":
+    // if (!value.toString().isBlank()) {
+    // pairCode = value.toString();
+    // value = "";
+    // }
+    // }
+    // configuration.put(configurationParameter.getKey(), value);
+    // }
+    // updateConfiguration(configuration);
+    // if (reinitialize) {
+    // dispose();
+    // updateStatus(ThingStatus.INITIALIZING);
+    // initialize();
+    // } else if (pairCode != null && ready) {
+    // try {
+    // client.pairNode(pairCode);
+    // } catch (Exception e) {
+    // logger.debug("Could not pair", e);
+    // }
+    // }
+    // }
+
     @Override
     public void initialize() {
         logger.debug("initialize");
-        // nodeId = c.nodeId;
         scheduler.execute(() -> {
             try {
                 String folderName = OpenHAB.getUserDataFolder() + File.separator + "matter";
@@ -166,8 +213,8 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
                 if (!folder.exists()) {
                     folder.mkdirs();
                 }
-                String storagePath = folder.getAbsolutePath() + File.separator + "controler-"
-                        + getThing().getUID().getId();
+                String storagePath = folder.getAbsolutePath() + File.separator + "controller-"
+                        + getThing().getUID().getId() + ".json";
                 logger.debug("matter config: {}", storagePath);
                 ControllerConfiguration config = getConfigAs(ControllerConfiguration.class);
                 if (!config.host.isBlank() && config.port > 0) {

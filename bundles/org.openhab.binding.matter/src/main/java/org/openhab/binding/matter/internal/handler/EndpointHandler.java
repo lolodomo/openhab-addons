@@ -90,6 +90,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         if (parts.length != 2) {
             throw new IllegalArgumentException("Endpoints should have an ID in the format 'nodeID:endpointNum'");
         }
+        nodeId = parts[0];
         endpointId = Integer.parseInt(parts[1]);
         logger.debug("initialize endpoint {}", endpointId);
         NodeHandler handler = nodeHandler();
@@ -132,19 +133,9 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         return endpointId;
     }
 
-    public String getNodeId() {
-        if (nodeId.isBlank()) {
-            NodeHandler handler = nodeHandler();
-            if (handler != null) {
-                nodeId = handler.getNodeId();
-            }
-        }
-        return nodeId;
-    }
-
     @SuppressWarnings({ "null", "unused" })
     public void updateEndpoint(Endpoint endpoint) {
-        logger.debug("updateEndpoint {} {}", endpoint.number, getNodeId());
+        logger.debug("updateEndpoint {} {}", endpoint.number, nodeId);
         if (getThing().getStatus() != ThingStatus.ONLINE) {
             updateStatus(ThingStatus.ONLINE);
         }

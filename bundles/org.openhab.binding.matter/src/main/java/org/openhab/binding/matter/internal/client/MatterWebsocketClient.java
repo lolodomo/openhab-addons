@@ -295,12 +295,13 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     }
 
     public void pairNode(String code) throws Exception {
-        String[] parts = code.split(" ");
+        String formattedCode = code.replaceAll("-", "");
+        String[] parts = formattedCode.split(" ");
         CompletableFuture<JsonElement> future = null;
         if (parts.length == 2) {
             future = sendMessage("nodes", "pair", new Object[] { "", parts[0], parts[1] });
         } else {
-            future = sendMessage("nodes", "pair", new Object[] { code });
+            future = sendMessage("nodes", "pair", new Object[] { formattedCode });
         }
         future.get();
     }

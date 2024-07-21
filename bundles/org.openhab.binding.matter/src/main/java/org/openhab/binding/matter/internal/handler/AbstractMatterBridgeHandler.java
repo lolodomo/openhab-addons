@@ -49,13 +49,4 @@ public abstract class AbstractMatterBridgeHandler extends BaseBridgeHandler impl
     @Override
     public void startDiscovery() {
     }
-
-    // @Override
-    // public void childHandlerInitialized(ThingHandler childHandler, Thing childThing) {
-    // logger.debug("childHandlerInitialized: {} {}", childHandler, childThing);
-    // MatterClient client = this.client;
-    // if (childHandler instanceof AbstractMatterBridgeHandler && client != null) {
-    // ((AbstractMatterBridgeHandler) childHandler).setMatterClient(client);
-    // }
-    // }
 }
