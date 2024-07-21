@@ -206,6 +206,10 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     public void refresh() {
     }
 
+    public String getNodeId() {
+        return nodeId;
+    }
+
     private @Nullable NodeHandler nodeHandler() {
         Bridge bridge = getBridge();
         if (bridge != null) {
