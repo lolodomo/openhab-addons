@@ -17,6 +17,6 @@ package org.openhab.binding.matter.internal.client.model.ws;
  *
  */
 public class NodeStateMessage {
-    public Long nodeId;
+    public String nodeId;
     public NodeState state;
 }

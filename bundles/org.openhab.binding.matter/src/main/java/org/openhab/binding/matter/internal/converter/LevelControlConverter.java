@@ -12,7 +12,11 @@
  */
 package org.openhab.binding.matter.internal.converter;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_LABEL_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_ONOFF;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_DIMMER;
 
 import java.util.List;
 
@@ -96,10 +100,12 @@ public class LevelControlConverter extends ClusterConverter {
     public void updateCluster(BaseCluster cluster) {
         if (cluster instanceof LevelControlCluster) {
             lastLevel = levelToPercent(((LevelControlCluster) cluster).currentLevel);
+            logger.debug("LevelControl {}", lastLevel);
             handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
             handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
         } else if (cluster instanceof OnOffCluster) {
             lastOnOff = OnOffType.from(Boolean.valueOf(((OnOffCluster) cluster).onOff));
+            logger.debug("OnOff {}", lastOnOff);
             handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, lastOnOff);
             handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL,
                     lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));

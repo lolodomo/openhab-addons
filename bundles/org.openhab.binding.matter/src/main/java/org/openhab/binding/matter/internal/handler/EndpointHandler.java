@@ -22,11 +22,12 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.AttributeListener;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
 import org.openhab.binding.matter.internal.converter.ClusterConverter;
@@ -35,8 +36,10 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingStatusInfo;
+import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.thing.binding.BridgeHandler;
-import org.openhab.core.thing.binding.builder.BridgeBuilder;
+import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
@@ -49,18 +52,18 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class EndpointHandler extends AbstractMatterBridgeHandler {
+public class EndpointHandler extends BaseThingHandler implements AttributeListener {
 
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
-    // protected long nodeId;
+    private String nodeId = "";
     protected int endpointId;
     private List<BaseCluster> clusters = Collections.synchronizedList(new LinkedList<BaseCluster>());
     private Map<String, ClusterConverter> channelIdMap = new HashMap<String, ClusterConverter>();
     private Map<Integer, ClusterConverter> clusterIdMap = new HashMap<Integer, ClusterConverter>();
     private @Nullable MatterWebsocketClient cachedClient;
 
-    public EndpointHandler(Bridge bridge) {
-        super(bridge);
+    public EndpointHandler(Thing thing) {
+        super(thing);
     }
 
     @Override
@@ -83,7 +86,11 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
     @Override
     public void initialize() {
         EndpointConfiguration config = getConfigAs(EndpointConfiguration.class);
-        endpointId = config.id;
+        String[] parts = config.id.split(":");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Endpoints should have an ID in the format 'nodeID:endpointNum'");
+        }
+        endpointId = Integer.parseInt(parts[1]);
         logger.debug("initialize endpoint {}", endpointId);
         NodeHandler handler = nodeHandler();
         if (handler == null) {
@@ -91,21 +98,19 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
         } else {
-            // nodeId = handler.getNodeId();
-            updateStatus(ThingStatus.ONLINE);
-            scheduler.execute(() -> {
-                handler.refresh();
-            });
+            updateStatus(ThingStatus.UNKNOWN);
+        }
+    }
+
+    @Override
+    public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
+        if (bridgeStatusInfo.getStatus() != ThingStatus.ONLINE) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
         }
     }
 
     @Override
     public void dispose() {
-    }
-
-    @Override
-    public BridgeBuilder editThing() {
-        return super.editThing();
     }
 
     @Override
@@ -118,35 +123,50 @@ public class EndpointHandler extends AbstractMatterBridgeHandler {
         super.updateState(channelID, state);
     }
 
+    @Override
+    public ThingBuilder editThing() {
+        return super.editThing();
+    }
+
     public int getEndpointId() {
         return endpointId;
     }
 
-    public long getNodeId() {
-        NodeHandler handler = nodeHandler();
-        if (handler != null) {
-            return handler.getNodeId();
+    public String getNodeId() {
+        if (nodeId.isBlank()) {
+            NodeHandler handler = nodeHandler();
+            if (handler != null) {
+                nodeId = handler.getNodeId();
+            }
         }
-        return -1;
+        return nodeId;
     }
 
     @SuppressWarnings({ "null", "unused" })
     public void updateEndpoint(Endpoint endpoint) {
-        // if (endpoint.id.intValue() != endpointId) {
-        // return;
-        // }
-        Map<String, BaseCluster> clusters = endpoint.clusters;
-
-        // hack to support a single handler when Level or ColorCotrol
-        if (clusters.containsKey(LevelControlCluster.CLUSTER_NAME)) {
-            clusters.remove(OnOffCluster.CLUSTER_NAME);
+        logger.debug("updateEndpoint {} {}", endpoint.number, getNodeId());
+        if (getThing().getStatus() != ThingStatus.ONLINE) {
+            updateStatus(ThingStatus.ONLINE);
         }
-        // if (clusters.containsKey(ColorControlCluster.CLUSTER_NAME)) {
-        // clusters.remove(LevelControlCluster.CLUSTER_NAME);
-        // }
+        Map<String, BaseCluster> clusters = endpoint.clusters;
+        boolean hasLevelControl = clusters.containsKey(LevelControlCluster.CLUSTER_NAME);
+
+        Object basicInfoObject = clusters.get(BasicInformationCluster.CLUSTER_NAME);
+        if (basicInfoObject == null) {
+            basicInfoObject = clusters.get("BridgedDeviceBasicInformation");
+        }
+        if (basicInfoObject != null) {
+            BasicInformationCluster basicInfo = (BasicInformationCluster) basicInfoObject;
+            String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
+            updateProperty("label", label);
+        }
         endpoint.clusters.forEach((clusterName, cluster) -> {
             logger.debug("checking cluster {} for handler", clusterName);
             Integer id = cluster.id;
+            // hack to support a single handler when Level and OnOff
+            // if (hasLevelControl && OnOffCluster.CLUSTER_NAME.equals(clusterName)) {
+            // id = LevelControlCluster.CLUSTER_ID;
+            // }
             ClusterConverter clusterConverter = clusterIdMap.get(id);
             if (clusterConverter == null) {
                 // lookup handler

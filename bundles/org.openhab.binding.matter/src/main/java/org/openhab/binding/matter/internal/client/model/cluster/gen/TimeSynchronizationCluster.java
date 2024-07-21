@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.TimeSynchronizationClusterTypes.*;
@@ -31,27 +31,27 @@ public class TimeSynchronizationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "TimeSynchronization";
     public static final int CLUSTER_ID = 0x0038;
 
-    public Long UTCTime; // 0 epoch_us reportable
-    public GranularityEnum granularity; // 1 GranularityEnum reportable
-    public TimeSourceEnum timeSource; // 2 TimeSourceEnum reportable
-    public TrustedTimeSourceStruct[] trustedTimeSource; // 3 TrustedTimeSourceStruct reportable
-    public String defaultNTP; // 4 char_string reportable
-    public TimeZoneStruct[] timeZone; // 5 TimeZoneStruct reportable
-    public DSTOffsetStruct[] DSTOffset; // 6 DSTOffsetStruct reportable
-    public Long localTime; // 7 epoch_us reportable
-    public TimeZoneDatabaseEnum timeZoneDatabase; // 8 TimeZoneDatabaseEnum reportable
-    public Boolean NTPServerAvailable; // 9 boolean reportable
-    public Integer timeZoneListMaxSize; // 10 int8u reportable
-    public Integer DSTOffsetListMaxSize; // 11 int8u reportable
-    public Boolean supportsDNSResolve; // 12 boolean reportable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public Long UTCTime; // 0 epoch_us reportable 
+    public GranularityEnum granularity; // 1 GranularityEnum reportable 
+    public TimeSourceEnum timeSource; // 2 TimeSourceEnum reportable 
+    public TrustedTimeSourceStruct[] trustedTimeSource; // 3 TrustedTimeSourceStruct reportable 
+    public String defaultNTP; // 4 char_string reportable 
+    public TimeZoneStruct[] timeZone; // 5 TimeZoneStruct reportable 
+    public DSTOffsetStruct[] DSTOffset; // 6 DSTOffsetStruct reportable 
+    public Long localTime; // 7 epoch_us reportable 
+    public TimeZoneDatabaseEnum timeZoneDatabase; // 8 TimeZoneDatabaseEnum reportable 
+    public Boolean NTPServerAvailable; // 9 boolean reportable 
+    public Integer timeZoneListMaxSize; // 10 int8u reportable 
+    public Integer DSTOffsetListMaxSize; // 11 int8u reportable 
+    public Boolean supportsDNSResolve; // 12 boolean reportable 
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public TimeSynchronizationCluster(long nodeId, int endpointId) {
+    public TimeSynchronizationCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 90, "TimeSynchronization");
     }
 

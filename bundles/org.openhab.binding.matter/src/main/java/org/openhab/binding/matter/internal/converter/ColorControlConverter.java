@@ -12,7 +12,12 @@
  */
 package org.openhab.binding.matter.internal.converter;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_COLOR_COLOR;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_LABEL_COLOR_COLOR;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_COLOR_COLOR;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_ONOFF;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_COLOR;
 
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +103,7 @@ public class ColorControlConverter extends ClusterConverter {
                 sendOnOff(client, ((OnOffType) command) == OnOffType.ON);
             }
         } catch (Exception e) {
-
+            logger.debug("Could not handle command {}", command, e);
         }
     }
 

@@ -12,14 +12,16 @@
  */
 package org.openhab.binding.matter.internal.handler;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_1;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_ENDPOINT;
 
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.matter.internal.client.AttributeListener;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
@@ -30,6 +32,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.BridgeHandler;
 import org.openhab.core.thing.binding.ThingHandler;
@@ -45,12 +48,14 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class NodeHandler extends AbstractMatterBridgeHandler {
+public class NodeHandler extends AbstractMatterBridgeHandler implements AttributeListener {
 
     private final Logger logger = LoggerFactory.getLogger(NodeHandler.class);
-    private List<Endpoint> endpoints = Collections.synchronizedList(new LinkedList<Endpoint>());
+    // private List<Endpoint> endpoints2 = Collections.synchronizedList(new LinkedList<Endpoint>());
 
-    private long nodeId;
+    private Map<Integer, Endpoint> endpoints = Collections.synchronizedMap(new HashMap<>());
+
+    private String nodeId = "";
 
     public NodeHandler(Bridge bridge) {
         super(bridge);
@@ -73,7 +78,21 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         NodeConfiguration config = getConfigAs(NodeConfiguration.class);
         nodeId = config.id;
         logger.debug("initialize node {}", nodeId);
-        initializeNode();
+        ControllerHandler handler = controllerHandler();
+        if (handler == null) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
+        } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        } else {
+            updateStatus(ThingStatus.UNKNOWN);
+        }
+    }
+
+    @Override
+    public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
+        if (bridgeStatusInfo.getStatus() != ThingStatus.ONLINE) {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        }
     }
 
     @Override
@@ -81,7 +100,26 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         logger.debug("Disposing Handler");
     }
 
-    public long getNodeId() {
+    @Override
+    public void childHandlerInitialized(ThingHandler childHandler, Thing childThing) {
+        super.childHandlerInitialized(childHandler, childThing);
+        logger.debug("childHandlerInitialized {}", childHandler);
+        if (childHandler instanceof EndpointHandler) {
+            EndpointHandler handler = (EndpointHandler) childHandler;
+            int id = handler.getEndpointId();
+            Endpoint e = endpoints.get(id);
+            if (e != null) {
+                handler.updateEndpoint(e);
+            }
+        }
+    }
+
+    @Override
+    public void childHandlerDisposed(ThingHandler childHandler, Thing childThing) {
+        // do nothing by default, can be overridden by subclasses
+    }
+
+    public String getNodeId() {
         return nodeId;
     }
 
@@ -91,7 +129,7 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         synchronized (endpoints) {
             endpoints.clear();
             for (Endpoint e : node.endpoints.values()) {
-                endpoints.add(e);
+                endpoints.put(e.number, e);
                 discoverChildEndpoint(e);
             }
         }
@@ -111,7 +149,18 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
 
     public void refresh() {
         synchronized (endpoints) {
-            for (Endpoint e : endpoints) {
+            for (Endpoint e : endpoints.values()) {
+                EndpointHandler handler = endpointHandler(e.number);
+                if (handler != null) {
+                    handler.updateEndpoint(e);
+                }
+            }
+        }
+    }
+
+    public void updateEndpoint(int endpointNum) {
+        synchronized (endpoints) {
+            for (Endpoint e : endpoints.values()) {
                 EndpointHandler handler = endpointHandler(e.number);
                 if (handler != null) {
                     handler.updateEndpoint(e);
@@ -124,25 +173,11 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         updateStatus(status, detail);
     }
 
-    private void initializeNode() {
-        ControllerHandler handler = controllerHandler();
-        if (handler == null) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
-        } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-        } else {
-            updateStatus(ThingStatus.ONLINE);
-            scheduler.execute(() -> {
-                // this is breaking things, why are we doing this?
-                // handler.refresh();
-            });
-        }
-    }
-
     private @Nullable EndpointHandler endpointHandler(int endpointId) {
         for (Thing thing : getThing().getThings()) {
             ThingHandler handler = thing.getHandler();
             if (handler instanceof EndpointHandler endpointHandler) {
+                logger.debug("endpointHandler checking {} == {}", endpointHandler.getEndpointId(), endpointId);
                 if (endpointHandler.getEndpointId() == endpointId) {
                     return endpointHandler;
                 }
@@ -168,8 +203,7 @@ public class NodeHandler extends AbstractMatterBridgeHandler {
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
             ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, String.valueOf(endpoint.number));
-            discoveryService.discoverhildThing(thingUID, bridgeUID, (long) endpoint.number,
-                    "Matter Endpoint " + endpoint.number);
+            discoveryService.discoverChildEndpointThing(thingUID, bridgeUID, nodeId, endpoint.number);
 
         }
     }

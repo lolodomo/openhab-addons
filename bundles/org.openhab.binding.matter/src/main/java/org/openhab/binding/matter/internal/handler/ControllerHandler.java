@@ -12,13 +12,12 @@
  */
 package org.openhab.binding.matter.internal.handler;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_1;
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_COMMAND;
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_PAIR_CODE;
 import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_NODE;
 
 import java.io.File;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -62,6 +61,7 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     private MatterWebsocketClient client;
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
+    private boolean ready = false;
 
     public ControllerHandler(Bridge bridge) {
         super(bridge);
@@ -75,25 +75,21 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     public void onEvent(NodeStateMessage message) {
         switch (message.state) {
             case CONNECTED:
-                // we need to set the child node online here, it should be offline until we get this message
-                // we have a concurency issue, proabbly some synchroniced method in the client that is still in recieve
-                // when we try and send
-                scheduler.execute(() -> {
-                    updateNode(message.nodeId);
-                });
+                if (ready) {
+                    scheduler.execute(() -> {
+                        updateNode(message.nodeId);
+                    });
+                }
                 break;
             case DISCONNECTED:
+            case DECOMMISSIONED:
+            case RECONNECTING:
                 NodeHandler handler = nodeHandler(message.nodeId);
                 if (handler != null) {
                     handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
                 }
-                // TODO We need to set the node offline
                 break;
             case WAITINGFORDEVICEDISCOVERY:
-                break;
-            case RECONNECTING:
-                break;
-            case DECOMMISSIONED:
                 break;
             case STRUCTURECHANGED:
                 break;
@@ -112,6 +108,10 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     }
 
     @Override
+    public void onConnect() {
+    }
+
+    @Override
     public void onDisconnect(String reason) {
         if (!running) {
             return;
@@ -120,15 +120,10 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         setOffline(reason);
     }
 
-    private synchronized void reconnect() {
-        if (reconnectFuture != null) {
-            reconnectFuture.cancel(true);
-        }
-        reconnectFuture = scheduler.schedule(this::initialize, 30, TimeUnit.SECONDS);
-    }
-
     @Override
-    public void onConnect() {
+    public void onReady() {
+        updateStatus(ThingStatus.ONLINE);
+        ready = true;
     }
 
     @Override
@@ -137,8 +132,11 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
             logger.debug("not connected");
             return;
         }
-        if (CHANNEL_1.equals(channelUID.getId())) {
-            if (command instanceof RefreshType) {
+
+        if (command instanceof RefreshType) {
+            if (ready) {
+                refresh();
+                return;
             }
         }
         if (CHANNEL_PAIR_CODE.equals(channelUID.getId())) {
@@ -160,7 +158,6 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     @Override
     public void initialize() {
         logger.debug("initialize");
-        ControllerConfiguration c = getConfigAs(ControllerConfiguration.class);
         // nodeId = c.nodeId;
         scheduler.execute(() -> {
             try {
@@ -180,7 +177,6 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
                     logger.debug("Connecting to embedded service");
                     client.connect(storagePath);
                 }
-                updateStatus(ThingStatus.ONLINE);
             } catch (Exception e) {
                 logger.debug("Could not init", e);
                 setOffline(e.getLocalizedMessage());
@@ -190,11 +186,27 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
 
     @Override
     public void dispose() {
+        logger.debug("dispose");
         running = false;
         if (reconnectFuture != null) {
             reconnectFuture.cancel(true);
         }
         client.disconnect();
+    }
+
+    @Override
+    public void childHandlerInitialized(ThingHandler childHandler, Thing childThing) {
+        super.childHandlerInitialized(childHandler, childThing);
+        logger.debug("childHandlerInitialized {}", childHandler);
+        if (childHandler instanceof NodeHandler) {
+            String id = ((NodeHandler) childHandler).getNodeId();
+            updateNode(id);
+        }
+    }
+
+    @Override
+    public void childHandlerDisposed(ThingHandler childHandler, Thing childThing) {
+        // do nothing by default, can be overridden by subclasses
     }
 
     public MatterWebsocketClient getClient() {
@@ -204,38 +216,50 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     public void refresh() {
         logger.debug("refresh");
         try {
-            Map<String, Node> nodesMap = client.getNodes();
-            for (Node n : nodesMap.values()) {
-                discoverChildNode(n);
-                NodeHandler handler = nodeHandler(n.id);
-                if (handler != null) {
-                    handler.updateNode(n);
-                }
+            List<String> nodeIds = client.getCommissionedNodeIds();
+            for (String id : nodeIds) {
+                updateNode(id);
             }
+            // wait until we have at least one update before becoming ready
+            ready = true;
         } catch (Exception e) {
             logger.debug("Error communicating with controller", e);
             setOffline(e.getLocalizedMessage());
         }
     }
 
-    private void updateNode(long id) {
+    private synchronized void reconnect() {
+        if (reconnectFuture != null) {
+            reconnectFuture.cancel(true);
+        }
+        reconnectFuture = scheduler.schedule(this::initialize, 30, TimeUnit.SECONDS);
+    }
+
+    void updateNode(Node node) {
+        discoverChildNode(node);
+        NodeHandler handler = nodeHandler(node.id);
+        if (handler != null) {
+            handler.updateNode(node);
+        }
+    }
+
+    void updateNode(String id) {
+        logger.debug("updateNode {}", id);
         try {
-            logger.debug("updateNode {}", id);
-            // TODO handle when the id is not found as well
-            Node node = client.getNode(id);
-            discoverChildNode(node);
-            NodeHandler handler = nodeHandler(node.id);
-            if (handler != null) {
-                handler.updateNode(node);
-            }
+            Node n = client.getNode(id);
+            updateNode(n);
         } catch (Exception e) {
-            logger.debug("Error communicating with controller", e);
-            setOffline(e.getLocalizedMessage());
+            logger.debug("Could not update node {}", id, e);
+            NodeHandler handler = nodeHandler(id);
+            if (handler != null) {
+                handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+            }
         }
     }
 
     private void setOffline(@Nullable String message) {
         client.disconnect();
+        ready = false;
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, message);
         reconnect();
     }
@@ -244,20 +268,20 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         NodeDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
-            ThingUID thingUID = new ThingUID(THING_TYPE_NODE, bridgeUID, String.valueOf(node.id));
-            discoveryService.discoverhildThing(thingUID, bridgeUID, node.id, "Matter Node " + node.id);
+            ThingUID thingUID = new ThingUID(THING_TYPE_NODE, bridgeUID, node.id);
+            discoveryService.discoverChildNodeThing(thingUID, bridgeUID, node.id);
 
         }
     }
 
-    private @Nullable NodeHandler nodeHandler(long nodeId) {
+    private @Nullable NodeHandler nodeHandler(String nodeId) {
         for (Thing thing : getThing().getThings()) {
 
             ThingHandler handler = thing.getHandler();
             logger.debug("Checking Thing {} {}", thing.getLabel(), handler);
             if (handler instanceof NodeHandler nodeHandler) {
                 logger.debug("Checking {} == {} ", nodeHandler.getNodeId(), nodeId);
-                if (nodeHandler.getNodeId() == nodeId) {
+                if (nodeHandler.getNodeId().equals(nodeId)) {
                     return nodeHandler;
                 }
             }

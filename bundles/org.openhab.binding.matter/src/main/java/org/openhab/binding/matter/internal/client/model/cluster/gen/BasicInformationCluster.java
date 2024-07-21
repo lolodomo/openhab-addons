@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationClusterTypes.*;
@@ -31,37 +31,37 @@ public class BasicInformationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BasicInformation";
     public static final int CLUSTER_ID = 0x0028;
 
-    public Integer dataModelRevision; // 0 int16u reportable
-    public String vendorName; // 1 char_string reportable
-    public Integer vendorID; // 2 vendor_id reportable
-    public String productName; // 3 char_string reportable
-    public Integer productID; // 4 int16u reportable
+    public Integer dataModelRevision; // 0 int16u reportable 
+    public String vendorName; // 1 char_string reportable 
+    public Integer vendorID; // 2 vendor_id reportable 
+    public String productName; // 3 char_string reportable 
+    public Integer productID; // 4 int16u reportable 
     public String nodeLabel; // 5 char_string reportable writable
     public String location; // 6 char_string reportable writable
-    public Integer hardwareVersion; // 7 int16u reportable
-    public String hardwareVersionString; // 8 char_string reportable
-    public Integer softwareVersion; // 9 int32u reportable
-    public String softwareVersionString; // 10 char_string reportable
-    public String manufacturingDate; // 11 char_string reportable
-    public String partNumber; // 12 char_string reportable
-    public String productURL; // 13 long_char_string reportable
-    public String productLabel; // 14 char_string reportable
-    public String serialNumber; // 15 char_string reportable
+    public Integer hardwareVersion; // 7 int16u reportable 
+    public String hardwareVersionString; // 8 char_string reportable 
+    public Integer softwareVersion; // 9 int32u reportable 
+    public String softwareVersionString; // 10 char_string reportable 
+    public String manufacturingDate; // 11 char_string reportable 
+    public String partNumber; // 12 char_string reportable 
+    public String productURL; // 13 long_char_string reportable 
+    public String productLabel; // 14 char_string reportable 
+    public String serialNumber; // 15 char_string reportable 
     public Boolean localConfigDisabled; // 16 boolean reportable writable
-    public Boolean reachable; // 17 boolean reportable
-    public String uniqueID; // 18 char_string reportable
-    public CapabilityMinimaStruct[] capabilityMinima; // 19 CapabilityMinimaStruct reportable
-    public ProductAppearanceStruct[] productAppearance; // 20 ProductAppearanceStruct reportable
-    public Integer specificationVersion; // 21 int32u reportable
-    public Integer maxPathsPerInvoke; // 22 int16u reportable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public Boolean reachable; // 17 boolean reportable 
+    public String uniqueID; // 18 char_string reportable 
+    public CapabilityMinimaStruct[] capabilityMinima; // 19 CapabilityMinimaStruct reportable 
+    public ProductAppearanceStruct[] productAppearance; // 20 ProductAppearanceStruct reportable 
+    public Integer specificationVersion; // 21 int32u reportable 
+    public Integer maxPathsPerInvoke; // 22 int16u reportable 
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public BasicInformationCluster(long nodeId, int endpointId) {
+    public BasicInformationCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 19, "BasicInformation");
     }
 

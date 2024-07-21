@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.AdministratorCommissioningClusterTypes.*;
-
 /**
  * AdministratorCommissioning
  *
@@ -25,15 +27,12 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.Administrato
  */
 public class AdministratorCommissioningClusterCommands {
 
-    public static ClusterCommand openCommissioningWindow(Integer commissioningTimeout, String PAKEPasscodeVerifier,
-            Integer discriminator, Integer iterations, String salt) {
-        return new ClusterCommand("openCommissioningWindow", new OpenCommissioningWindowCommandOptions(
-                commissioningTimeout, PAKEPasscodeVerifier, discriminator, iterations, salt));
+    public static ClusterCommand openCommissioningWindow(Integer commissioningTimeout, String PAKEPasscodeVerifier, Integer discriminator, Integer iterations, String salt) {
+        return new ClusterCommand("openCommissioningWindow", new OpenCommissioningWindowCommandOptions(commissioningTimeout, PAKEPasscodeVerifier, discriminator, iterations, salt));
     }
 
     public static ClusterCommand openBasicCommissioningWindow(Integer commissioningTimeout) {
-        return new ClusterCommand("openBasicCommissioningWindow",
-                new OpenBasicCommissioningWindowCommandOptions(commissioningTimeout));
+        return new ClusterCommand("openBasicCommissioningWindow", new OpenBasicCommissioningWindowCommandOptions(commissioningTimeout));
     }
 
     public static ClusterCommand revokeCommissioning() {

@@ -17,14 +17,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
@@ -42,6 +46,7 @@ import org.openhab.binding.matter.internal.client.model.ws.Request;
 import org.openhab.binding.matter.internal.client.model.ws.Response;
 import org.openhab.binding.matter.internal.util.NodeManager;
 import org.openhab.binding.matter.internal.util.NodeRunner;
+import org.openhab.binding.matter.internal.util.NodeRunner.NodeExitListener;
 import org.openhab.core.common.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +65,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Dan Cunningham
  *
  */
-public class MatterWebsocketClient implements WebSocketListener {
+public class MatterWebsocketClient implements WebSocketListener, NodeExitListener {
 
     private final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
 
@@ -160,8 +165,13 @@ public class MatterWebsocketClient implements WebSocketListener {
         Request message = new Request(requestId, namespace, functionName, args);
         String jsonMessage = gson.toJson(message);
         logger.debug("sendMessage: {}", jsonMessage);
-        session.getRemote().sendStringByFuture(jsonMessage);
-
+        Future<Void> future = session.getRemote().sendStringByFuture(jsonMessage);
+        try {
+            future.get(5, TimeUnit.SECONDS); // Wait for up to 5 seconds for the message to be sent
+            logger.debug("Message sent successfully {}", requestId);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            logger.debug("Failed to send message: {}", requestId, e);
+        }
         return responseFuture;
     }
 
@@ -176,64 +186,75 @@ public class MatterWebsocketClient implements WebSocketListener {
     @Override
     public void onWebSocketText(String msg) {
         logger.debug("onWebSocketText {}", msg);
-        Message message = gson.fromJson(msg, Message.class);
-        if (message == null) {
-            logger.debug("invalid Message");
-            return;
-        }
-        if ("response".equals(message.type)) {
-            Response response = gson.fromJson(message.message, Response.class);
-            if (response == null) {
-                logger.debug("invalid response Message");
+        scheduler.submit(() -> {
+            Message message = gson.fromJson(msg, Message.class);
+            if (message == null) {
+                logger.debug("invalid Message");
                 return;
             }
-            CompletableFuture<JsonElement> future = pendingRequests.remove(response.id);
-            if (future != null) {
-                logger.debug("result type: {} ", response.type);
-                if (!"resultSuccess".equals(response.type)) {
-                    future.completeExceptionally(new Exception(response.error));
-                } else {
-                    future.complete(response.result);
+            if ("response".equals(message.type)) {
+                Response response = gson.fromJson(message.message, Response.class);
+                if (response == null) {
+                    logger.debug("invalid response Message");
+                    return;
+                }
+                CompletableFuture<JsonElement> future = pendingRequests.remove(response.id);
+                if (future != null) {
+                    logger.debug("result type: {} ", response.type);
+                    if (!"resultSuccess".equals(response.type)) {
+                        future.completeExceptionally(new Exception(response.error));
+                    } else {
+                        future.complete(response.result);
+                    }
+                }
+            } else if ("event".equals(message.type)) {
+                Event event = gson.fromJson(message.message, Event.class);
+                if (event == null) {
+                    logger.debug("invalid Event");
+                    return;
+                }
+                switch (event.type) {
+                    case "attributeChanged":
+                        logger.debug("attributeChanged message {}", event.data);
+                        AttributeChangedMessage changedMessage = gson.fromJson(event.data,
+                                AttributeChangedMessage.class);
+                        if (changedMessage == null) {
+                            logger.debug("invalid AttributeChangedMessage");
+                            return;
+                        }
+                        for (AttributeListener listener : attributeListeners) {
+                            try {
+                                listener.onEvent(changedMessage);
+                            } catch (Exception e) {
+                                logger.debug("Error notifing listener", e);
+                            }
+                        }
+                        break;
+                    case "nodeStateInformation":
+                        logger.debug("nodeStateInformation message {}", event.data);
+                        NodeStateMessage nodeStateMessage = gson.fromJson(event.data, NodeStateMessage.class);
+                        if (nodeStateMessage == null) {
+                            logger.debug("invalid NodeStateMessage");
+                            return;
+                        }
+                        for (NodeStateListener listener : nodeStateListeners) {
+                            try {
+                                listener.onEvent(nodeStateMessage);
+                            } catch (Exception e) {
+                                logger.debug("Error notifying listener", e);
+                            }
+                        }
+                        break;
+                    case "ready":
+                        for (ControllerStateListener listener : controllerStateListeners) {
+                            listener.onReady();
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
-        } else if ("event".equals(message.type)) {
-            Event event = gson.fromJson(message.message, Event.class);
-            if (event == null) {
-                logger.debug("invalid Event");
-                return;
-            }
-            switch (event.type) {
-                case "attributeChanged":
-                    logger.debug("attributeChanged message {}", event.data);
-                    AttributeChangedMessage changedMessage = gson.fromJson(event.data, AttributeChangedMessage.class);
-                    if (changedMessage == null) {
-                        logger.debug("invalid AttributeChangedMessage");
-                        return;
-                    }
-                    for (AttributeListener listener : attributeListeners) {
-                        try {
-                            listener.onEvent(changedMessage);
-                        } catch (Exception e) {
-                            logger.debug("Error notifing listener", e);
-                        }
-                    }
-                    break;
-                case "nodeStateInformation":
-                    logger.debug("nodeStateInformation message {}", event.data);
-                    NodeStateMessage nodeStateMessage = gson.fromJson(event.data, NodeStateMessage.class);
-                    if (nodeStateMessage == null) {
-                        logger.debug("invalid NodeStateMessage");
-                        return;
-                    }
-                    for (NodeStateListener listener : nodeStateListeners) {
-                        try {
-                            listener.onEvent(nodeStateMessage);
-                        } catch (Exception e) {
-                            logger.debug("Error notifing listener", e);
-                        }
-                    }
-            }
-        }
+        });
     }
 
     @Override
@@ -251,33 +272,40 @@ public class MatterWebsocketClient implements WebSocketListener {
 
     @Override
     public void onWebSocketBinary(byte[] payload, int offset, int len) {
+        logger.debug("onWebSocketBinary data, not supported");
     }
 
     public boolean isConnected() {
         return session != null && session.isOpen();
     }
 
-    public Map<String, Node> getNodes() throws Exception {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "getNodes", null);
+    public List<String> getCommissionedNodeIds() throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", null);
         JsonElement obj = future.get();
-        Map<String, Node> nodes = gson.fromJson(obj, new TypeToken<Map<String, Node>>() {
+        List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
         }.getType());
         return nodes;
     }
 
-    public Node getNode(long id) throws Exception {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { String.valueOf(id) });
+    public Node getNode(String id) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { id });
         JsonElement obj = future.get();
         Node node = gson.fromJson(obj, Node.class);
         return node;
     }
 
     public void pairNode(String code) throws Exception {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "pair", new Object[] { code });
+        String[] parts = code.split(" ");
+        CompletableFuture<JsonElement> future = null;
+        if (parts.length == 2) {
+            future = sendMessage("nodes", "pair", new Object[] { "", parts[0], parts[1] });
+        } else {
+            future = sendMessage("nodes", "pair", new Object[] { code });
+        }
         future.get();
     }
 
-    public void clusterCommand(Long nodeId, Integer endpointId, String clusterName, ClusterCommand command)
+    public void clusterCommand(String nodeId, Integer endpointId, String clusterName, ClusterCommand command)
             throws Exception {
         Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };
         CompletableFuture<JsonElement> future = sendMessage("clusters", "command", clusterArgs);
@@ -290,7 +318,7 @@ public class MatterWebsocketClient implements WebSocketListener {
                 throws JsonParseException {
             JsonObject jsonObjectNode = json.getAsJsonObject();
             Node node = new Node();
-            node.id = jsonObjectNode.get("id").getAsLong();
+            node.id = jsonObjectNode.get("id").getAsString();
             node.endpoints = new HashMap<>();
             JsonObject endpointsJson = jsonObjectNode.get("endpoints").getAsJsonObject();
             Set<Map.Entry<String, JsonElement>> endpointEntries = endpointsJson.entrySet();
@@ -351,8 +379,21 @@ public class MatterWebsocketClient implements WebSocketListener {
     private int startNodeJs() throws IOException {
         NodeManager nodeManager = new NodeManager();
         String nodePath = nodeManager.getNodePath();
+        NodeRunner oldRunner = this.nodeRunner;
+        if (oldRunner != null) {
+            oldRunner.removeExitListener(this);
+            oldRunner.stopNode();
+        }
         nodeRunner = new NodeRunner(nodePath);
-        nodeRunner.addExitListener(exitCode -> logger.error("Node.js process exited with code: {}", exitCode));
+        nodeRunner.addExitListener(this);
         return nodeRunner.runNodeWithResource("/matter.js");
+    }
+
+    @Override
+    public void onNodeExit(int exitCode) {
+        disconnect();
+        for (ControllerStateListener listener : controllerStateListeners) {
+            listener.onDisconnect("Exit code " + exitCode);
+        }
     }
 }

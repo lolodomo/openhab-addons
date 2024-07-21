@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.RefrigeratorAndTemperatureControlledCabinetModeClusterTypes.*;
@@ -31,18 +31,18 @@ public class RefrigeratorAndTemperatureControlledCabinetModeCluster extends Base
     public static final String CLUSTER_NAME = "RefrigeratorAndTemperatureControlledCabinetMode";
     public static final int CLUSTER_ID = 0x0052;
 
-    public ModeOptionStruct[] supportedModes; // 0 ModeOptionStruct reportable
-    public Integer currentMode; // 1 int8u reportable
+    public ModeOptionStruct[] supportedModes; // 0 ModeOptionStruct reportable 
+    public Integer currentMode; // 1 int8u reportable 
     public Integer startUpMode; // 2 int8u reportable writable
     public Integer onMode; // 3 int8u reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public RefrigeratorAndTemperatureControlledCabinetModeCluster(long nodeId, int endpointId) {
+    public RefrigeratorAndTemperatureControlledCabinetModeCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 57, "RefrigeratorAndTemperatureControlledCabinetMode");
     }
 

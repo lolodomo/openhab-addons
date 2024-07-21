@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.WiFiNetworkDiagnosticsClusterTypes.*;
@@ -31,27 +31,27 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "WiFiNetworkDiagnostics";
     public static final int CLUSTER_ID = 0x0036;
 
-    public String bssid; // 0 octet_string reportable
-    public SecurityTypeEnum securityType; // 1 SecurityTypeEnum reportable
-    public WiFiVersionEnum wiFiVersion; // 2 WiFiVersionEnum reportable
-    public Integer channelNumber; // 3 int16u reportable
-    public Integer rssi; // 4 int8s reportable
-    public Integer beaconLostCount; // 5 int32u reportable
-    public Integer beaconRxCount; // 6 int32u reportable
-    public Integer packetMulticastRxCount; // 7 int32u reportable
-    public Integer packetMulticastTxCount; // 8 int32u reportable
-    public Integer packetUnicastRxCount; // 9 int32u reportable
-    public Integer packetUnicastTxCount; // 10 int32u reportable
-    public Long currentMaxRate; // 11 int64u reportable
-    public Long overrunCount; // 12 int64u reportable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public String bssid; // 0 octet_string reportable 
+    public SecurityTypeEnum securityType; // 1 SecurityTypeEnum reportable 
+    public WiFiVersionEnum wiFiVersion; // 2 WiFiVersionEnum reportable 
+    public Integer channelNumber; // 3 int16u reportable 
+    public Integer rssi; // 4 int8s reportable 
+    public Integer beaconLostCount; // 5 int32u reportable 
+    public Integer beaconRxCount; // 6 int32u reportable 
+    public Integer packetMulticastRxCount; // 7 int32u reportable 
+    public Integer packetMulticastTxCount; // 8 int32u reportable 
+    public Integer packetUnicastRxCount; // 9 int32u reportable 
+    public Integer packetUnicastTxCount; // 10 int32u reportable 
+    public Long currentMaxRate; // 11 int64u reportable 
+    public Long overrunCount; // 12 int64u reportable 
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public WiFiNetworkDiagnosticsCluster(long nodeId, int endpointId) {
+    public WiFiNetworkDiagnosticsCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 86, "WiFiNetworkDiagnostics");
     }
 

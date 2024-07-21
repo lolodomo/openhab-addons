@@ -25,5 +25,5 @@ public class EndpointConfiguration {
     /**
      * Sample configuration parameters. Replace with your own.
      */
-    public int id;
+    public String id = "";
 }

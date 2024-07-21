@@ -47,7 +47,7 @@ public abstract class ClusterConverter implements AttributeListener {
 
     private final Logger logger = LoggerFactory.getLogger(ClusterConverter.class);
     private static final Map<Integer, Class<? extends ClusterConverter>> converterMapping = new HashMap();
-    protected long nodeId;
+    protected String nodeId;
     protected int endpointId;
     // protected @Nullable BaseCluster cluster;
     protected EndpointHandler handler;
@@ -66,7 +66,6 @@ public abstract class ClusterConverter implements AttributeListener {
         this.handler = handler;
         this.nodeId = handler.getNodeId();
         this.endpointId = handler.getEndpointId();
-        // registerListener();
     }
 
     public abstract List<Integer> supportedClusters();
@@ -119,13 +118,4 @@ public abstract class ClusterConverter implements AttributeListener {
     protected int percentToLevel(PercentType percent) {
         return (int) (percent.floatValue() * 254.0f / 100.0f + 0.5f);
     }
-
-    // private void registerListener() {
-    // MatterClient client = handler.client;
-    // if (client != null) {
-    // client.addAttributeListener(this, nodeId, endpointId);
-    // } else {
-    // logger.debug("COULD NOT REGISTER ATTRIBUTE LISTENER!");
-    // }
-    // }
 }

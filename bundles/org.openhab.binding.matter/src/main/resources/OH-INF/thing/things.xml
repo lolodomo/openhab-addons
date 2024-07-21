@@ -42,14 +42,14 @@
 		<representation-property>id</representation-property>
 
 		<config-description>
-			<parameter name="id" type="integer" required="true">
+			<parameter name="id" type="text" required="true">
 				<label>Node ID</label>
 				<description>The Matter Node ID</description>
 			</parameter>
 		</config-description>
 	</bridge-type>
 
-	<bridge-type id="endpoint">
+	<thing-type id="endpoint">
 		<supported-bridge-type-refs>
 			<bridge-type-ref id="node"/>
 		</supported-bridge-type-refs>
@@ -59,13 +59,12 @@
 		<representation-property>id</representation-property>
 
 		<config-description>
-			<parameter name="id" type="integer" required="true">
+			<parameter name="id" type="text" required="true">
 				<label>ID</label>
-				<description>The Matter Endpoint ID</description>
-				<default>0</default>
+				<description>The Matter Endpoint ID in the format 'nodeId:endpointNum'</description>
 			</parameter>
 		</config-description>
-	</bridge-type>
+	</thing-type>
 
 	<channel-type id="pair_code">
 		<item-type>String</item-type>

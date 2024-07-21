@@ -25,5 +25,5 @@ public class NodeConfiguration {
     /**
      * Sample configuration parameters. Replace with your own.
      */
-    public long id;
+    public String id = "";
 }

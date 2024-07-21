@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.NetworkCommissioningClusterTypes.*;
-
 /**
  * NetworkCommissioning
  *
@@ -29,46 +31,36 @@ public class NetworkCommissioningClusterCommands {
         return new ClusterCommand("scanNetworks", new ScanNetworksCommandOptions(ssid, breadcrumb));
     }
 
-    public static ClusterCommand scanNetworksResponse(NetworkCommissioningStatusEnum networkingStatus, String debugText,
-            WiFiInterfaceScanResultStruct[] wiFiScanResults, ThreadInterfaceScanResultStruct[] threadScanResults) {
-        return new ClusterCommand("scanNetworksResponse", new ScanNetworksResponseCommandOptions(networkingStatus,
-                debugText, wiFiScanResults, threadScanResults));
+    public static ClusterCommand scanNetworksResponse(NetworkCommissioningStatusEnum networkingStatus, String debugText, WiFiInterfaceScanResultStruct[] wiFiScanResults, ThreadInterfaceScanResultStruct[] threadScanResults) {
+        return new ClusterCommand("scanNetworksResponse", new ScanNetworksResponseCommandOptions(networkingStatus, debugText, wiFiScanResults, threadScanResults));
     }
 
-    public static ClusterCommand addOrUpdateWiFiNetwork(String ssid, String credentials, Long breadcrumb,
-            String networkIdentity, String clientIdentifier, String possessionNonce) {
-        return new ClusterCommand("addOrUpdateWiFiNetwork", new AddOrUpdateWiFiNetworkCommandOptions(ssid, credentials,
-                breadcrumb, networkIdentity, clientIdentifier, possessionNonce));
+    public static ClusterCommand addOrUpdateWiFiNetwork(String ssid, String credentials, Long breadcrumb, String networkIdentity, String clientIdentifier, String possessionNonce) {
+        return new ClusterCommand("addOrUpdateWiFiNetwork", new AddOrUpdateWiFiNetworkCommandOptions(ssid, credentials, breadcrumb, networkIdentity, clientIdentifier, possessionNonce));
     }
 
     public static ClusterCommand addOrUpdateThreadNetwork(String operationalDataset, Long breadcrumb) {
-        return new ClusterCommand("addOrUpdateThreadNetwork",
-                new AddOrUpdateThreadNetworkCommandOptions(operationalDataset, breadcrumb));
+        return new ClusterCommand("addOrUpdateThreadNetwork", new AddOrUpdateThreadNetworkCommandOptions(operationalDataset, breadcrumb));
     }
 
     public static ClusterCommand removeNetwork(String networkID, Long breadcrumb) {
         return new ClusterCommand("removeNetwork", new RemoveNetworkCommandOptions(networkID, breadcrumb));
     }
 
-    public static ClusterCommand networkConfigResponse(NetworkCommissioningStatusEnum networkingStatus,
-            String debugText, Integer networkIndex, String clientIdentity, String possessionSignature) {
-        return new ClusterCommand("networkConfigResponse", new NetworkConfigResponseCommandOptions(networkingStatus,
-                debugText, networkIndex, clientIdentity, possessionSignature));
+    public static ClusterCommand networkConfigResponse(NetworkCommissioningStatusEnum networkingStatus, String debugText, Integer networkIndex, String clientIdentity, String possessionSignature) {
+        return new ClusterCommand("networkConfigResponse", new NetworkConfigResponseCommandOptions(networkingStatus, debugText, networkIndex, clientIdentity, possessionSignature));
     }
 
     public static ClusterCommand connectNetwork(String networkID, Long breadcrumb) {
         return new ClusterCommand("connectNetwork", new ConnectNetworkCommandOptions(networkID, breadcrumb));
     }
 
-    public static ClusterCommand connectNetworkResponse(NetworkCommissioningStatusEnum networkingStatus,
-            String debugText, Integer errorValue) {
-        return new ClusterCommand("connectNetworkResponse",
-                new ConnectNetworkResponseCommandOptions(networkingStatus, debugText, errorValue));
+    public static ClusterCommand connectNetworkResponse(NetworkCommissioningStatusEnum networkingStatus, String debugText, Integer errorValue) {
+        return new ClusterCommand("connectNetworkResponse", new ConnectNetworkResponseCommandOptions(networkingStatus, debugText, errorValue));
     }
 
     public static ClusterCommand reorderNetwork(String networkID, Integer networkIndex, Long breadcrumb) {
-        return new ClusterCommand("reorderNetwork",
-                new ReorderNetworkCommandOptions(networkID, networkIndex, breadcrumb));
+        return new ClusterCommand("reorderNetwork", new ReorderNetworkCommandOptions(networkID, networkIndex, breadcrumb));
     }
 
     public static ClusterCommand queryIdentity(String keyIdentifier, String possessionNonce) {
@@ -76,7 +68,6 @@ public class NetworkCommissioningClusterCommands {
     }
 
     public static ClusterCommand queryIdentityResponse(String identity, String possessionSignature) {
-        return new ClusterCommand("queryIdentityResponse",
-                new QueryIdentityResponseCommandOptions(identity, possessionSignature));
+        return new ClusterCommand("queryIdentityResponse", new QueryIdentityResponseCommandOptions(identity, possessionSignature));
     }
 }

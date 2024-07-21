@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,8 @@ import org.slf4j.LoggerFactory;
  */
 public class NodeRunner {
     private static final Logger logger = LoggerFactory.getLogger(NodeRunner.class);
+    private static final Pattern LOG_PATTERN = Pattern
+            .compile("^\\S+\\s+\\S+\\s+(TRACE|DEBUG|INFO|WARN|ERROR)\\s+(\\S+)\\s+(.*)$");
 
     private final String nodePath;
     private Process nodeProcess;
@@ -78,16 +82,17 @@ public class NodeRunner {
 
         // Wait for the process to exit in a separate thread
         executorService.submit(() -> {
+            int exitCode = -1;
             try {
-                int exitCode = nodeProcess.waitFor();
+                exitCode = nodeProcess.waitFor();
                 logger.debug("Node process exited with code: {}", exitCode);
-                notifyExitListeners(exitCode);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 logger.debug("Interrupted while waiting for Node process to exit", e);
             } finally {
                 try {
                     Files.deleteIfExists(scriptPath);
+                    notifyExitListeners(exitCode);
                 } catch (IOException e) {
                     logger.debug("Failed to delete temporary script file", e);
                 }
@@ -96,49 +101,45 @@ public class NodeRunner {
         return port;
     }
 
-    public void runNode(String... args) throws IOException {
-        List<String> command = new ArrayList<>();
-        command.add(nodePath);
-        command.addAll(List.of(args));
-
-        ProcessBuilder pb = new ProcessBuilder(command);
-        nodeProcess = pb.start();
-
-        executorService.submit(this::readOutputStream);
-        executorService.submit(this::readErrorStream);
-
-        // Wait for the process to exit in a separate thread
-        executorService.submit(() -> {
-            try {
-                int exitCode = nodeProcess.waitFor();
-                logger.debug("Node process exited with code: {}", exitCode);
-                notifyExitListeners(exitCode);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                logger.debug("Interrupted while waiting for Node process to exit", e);
-            }
-        });
-    }
-
     private void readOutputStream() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(nodeProcess.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                logger.debug(line);
-            }
-        } catch (IOException e) {
-            logger.debug("Error reading Node process output", e);
-        }
+        processStream(nodeProcess.getInputStream(), "Error reading Node process output");
     }
 
     private void readErrorStream() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(nodeProcess.getErrorStream()))) {
+        processStream(nodeProcess.getErrorStream(), "Error reading Node process error stream");
+    }
+
+    private void processStream(InputStream inputStream, String errorMessage) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                logger.debug(line);
+                Matcher matcher = LOG_PATTERN.matcher(line);
+                if (matcher.matches()) {
+                    String logLevel = matcher.group(1);
+                    String component = matcher.group(2);
+                    String message = matcher.group(3);
+                    logMessage(logLevel, component + ": " + message);
+                } else {
+                    logger.debug("{}", line);
+                }
             }
         } catch (IOException e) {
-            logger.debug("Error reading Node process error stream", e);
+            logger.debug("{}", errorMessage, e);
+        }
+    }
+
+    private void logMessage(String logLevel, String message) {
+        switch (logLevel) {
+            case "TRACE":
+            case "DEBUG":
+                logger.trace("{}", message);
+                break;
+            case "INFO":
+            case "WARN":
+            case "ERROR":
+            default:
+                logger.debug("{}", message);
+
         }
     }
 
@@ -149,6 +150,7 @@ public class NodeRunner {
     }
 
     public void stopNode() {
+        logger.debug("stopNode");
         if (nodeProcess != null && nodeProcess.isAlive()) {
             nodeProcess.destroy();
             try {
@@ -190,28 +192,6 @@ public class NodeRunner {
                     logger.debug("Failed to close ServerSocket", e);
                 }
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            NodeManager nodeManager = new NodeManager();
-            String nodePath = nodeManager.getNodePath();
-
-            NodeRunner nodeRunner = new NodeRunner(nodePath);
-            nodeRunner.addExitListener(exitCode -> logger.info("Node.js process exited with code: {}", exitCode));
-
-            nodeRunner.runNode("src/main/resources/matter.js");
-
-            // Wait for a bit to allow the process to complete
-            Thread.sleep(10000);
-
-            nodeRunner.stopNode();
-        } catch (IOException e) {
-            logger.error("Error running Node.js", e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            logger.error("Interrupted while waiting", e);
         }
     }
 }

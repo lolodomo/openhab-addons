@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffClusterTypes.*;
-
 /**
  * OnOff
  *
@@ -46,7 +48,6 @@ public class OnOffClusterCommands {
     }
 
     public static ClusterCommand onWithTimedOff(OnOffControlBitmap onOffControl, Integer onTime, Integer offWaitTime) {
-        return new ClusterCommand("onWithTimedOff",
-                new OnWithTimedOffCommandOptions(onOffControl, onTime, offWaitTime));
+        return new ClusterCommand("onWithTimedOff", new OnWithTimedOffCommandOptions(onOffControl, onTime, offWaitTime));
     }
 }

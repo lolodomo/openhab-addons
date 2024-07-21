@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.matter.internal.client.AttributeListener;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryHandler;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
 import org.openhab.core.thing.Bridge;
@@ -29,8 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham
  *
  */
-public abstract class AbstractMatterBridgeHandler extends BaseBridgeHandler
-        implements NodeDiscoveryHandler, AttributeListener {
+public abstract class AbstractMatterBridgeHandler extends BaseBridgeHandler implements NodeDiscoveryHandler {
     private final Logger logger = LoggerFactory.getLogger(AbstractMatterBridgeHandler.class);
     protected @Nullable NodeDiscoveryService discoveryService;
 

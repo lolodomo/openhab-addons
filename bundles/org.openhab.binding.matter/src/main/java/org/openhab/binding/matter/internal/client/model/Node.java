@@ -19,6 +19,6 @@ import java.util.Map;
  *
  */
 public class Node {
-    public Long id;
+    public String id;
     public Map<Integer, Endpoint> endpoints;
 }

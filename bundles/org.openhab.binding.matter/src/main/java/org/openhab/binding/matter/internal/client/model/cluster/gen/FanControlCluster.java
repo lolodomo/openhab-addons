@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.FanControlClusterTypes.*;
@@ -32,25 +32,25 @@ public class FanControlCluster extends BaseCluster {
     public static final int CLUSTER_ID = 0x0202;
 
     public FanModeEnum fanMode; // 0 FanModeEnum reportable writable
-    public FanModeSequenceEnum fanModeSequence; // 1 FanModeSequenceEnum reportable
+    public FanModeSequenceEnum fanModeSequence; // 1 FanModeSequenceEnum reportable 
     public Integer percentSetting; // 2 percent reportable writable
-    public Integer percentCurrent; // 3 percent reportable
-    public Integer speedMax; // 4 int8u reportable
+    public Integer percentCurrent; // 3 percent reportable 
+    public Integer speedMax; // 4 int8u reportable 
     public Integer speedSetting; // 5 int8u reportable writable
-    public Integer speedCurrent; // 6 int8u reportable
-    public RockBitmap rockSupport; // 7 RockBitmap reportable
+    public Integer speedCurrent; // 6 int8u reportable 
+    public RockBitmap rockSupport; // 7 RockBitmap reportable 
     public RockBitmap rockSetting; // 8 RockBitmap reportable writable
-    public WindBitmap windSupport; // 9 WindBitmap reportable
+    public WindBitmap windSupport; // 9 WindBitmap reportable 
     public WindBitmap windSetting; // 10 WindBitmap reportable writable
     public AirflowDirectionEnum airflowDirection; // 11 AirflowDirectionEnum reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public FanControlCluster(long nodeId, int endpointId) {
+    public FanControlCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 30, "FanControl");
     }
 

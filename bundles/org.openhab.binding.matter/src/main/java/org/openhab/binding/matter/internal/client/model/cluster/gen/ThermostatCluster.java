@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ThermostatClusterTypes.*;
@@ -31,15 +31,15 @@ public class ThermostatCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "Thermostat";
     public static final int CLUSTER_ID = 0x0201;
 
-    public Integer localTemperature; // 0 int16s reportable
-    public Integer outdoorTemperature; // 1 int16s reportable
-    public Map<String, Boolean> occupancy; // 2 bitmap8 reportable
-    public Integer absMinHeatSetpointLimit; // 3 int16s reportable
-    public Integer absMaxHeatSetpointLimit; // 4 int16s reportable
-    public Integer absMinCoolSetpointLimit; // 5 int16s reportable
-    public Integer absMaxCoolSetpointLimit; // 6 int16s reportable
-    public Integer PICoolingDemand; // 7 int8u reportable
-    public Integer PIHeatingDemand; // 8 int8u reportable
+    public Integer localTemperature; // 0 int16s reportable 
+    public Integer outdoorTemperature; // 1 int16s reportable 
+    public Map<String, Boolean> occupancy; // 2 bitmap8 reportable 
+    public Integer absMinHeatSetpointLimit; // 3 int16s reportable 
+    public Integer absMaxHeatSetpointLimit; // 4 int16s reportable 
+    public Integer absMinCoolSetpointLimit; // 5 int16s reportable 
+    public Integer absMaxCoolSetpointLimit; // 6 int16s reportable 
+    public Integer PICoolingDemand; // 7 int8u reportable 
+    public Integer PIHeatingDemand; // 8 int8u reportable 
     public Map<String, Boolean> HVACSystemTypeConfiguration; // 9 bitmap8 reportable writable
     public Integer localTemperatureCalibration; // 16 int8s reportable writable
     public Integer occupiedCoolingSetpoint; // 17 int16s reportable writable
@@ -54,23 +54,23 @@ public class ThermostatCluster extends BaseCluster {
     public Map<String, Boolean> remoteSensing; // 26 bitmap8 reportable writable
     public ThermostatControlSequence controlSequenceOfOperation; // 27 ThermostatControlSequence reportable writable
     public Integer systemMode; // 28 enum8 reportable writable
-    public Integer thermostatRunningMode; // 30 enum8 reportable
-    public Integer startOfWeek; // 32 enum8 reportable
-    public Integer numberOfWeeklyTransitions; // 33 int8u reportable
-    public Integer numberOfDailyTransitions; // 34 int8u reportable
+    public Integer thermostatRunningMode; // 30 enum8 reportable 
+    public Integer startOfWeek; // 32 enum8 reportable 
+    public Integer numberOfWeeklyTransitions; // 33 int8u reportable 
+    public Integer numberOfDailyTransitions; // 34 int8u reportable 
     public Integer temperatureSetpointHold; // 35 enum8 reportable writable
     public Integer temperatureSetpointHoldDuration; // 36 int16u reportable writable
     public Map<String, Boolean> thermostatProgrammingOperationMode; // 37 bitmap8 reportable writable
-    public Map<String, Boolean> thermostatRunningState; // 41 bitmap16 reportable
-    public Integer setpointChangeSource; // 48 enum8 reportable
-    public Integer setpointChangeAmount; // 49 int16s reportable
-    public Integer setpointChangeSourceTimestamp; // 50 epoch_s reportable
+    public Map<String, Boolean> thermostatRunningState; // 41 bitmap16 reportable 
+    public Integer setpointChangeSource; // 48 enum8 reportable 
+    public Integer setpointChangeAmount; // 49 int16s reportable 
+    public Integer setpointChangeSourceTimestamp; // 50 epoch_s reportable 
     public Integer occupiedSetback; // 52 int8u reportable writable
-    public Integer occupiedSetbackMin; // 53 int8u reportable
-    public Integer occupiedSetbackMax; // 54 int8u reportable
+    public Integer occupiedSetbackMin; // 53 int8u reportable 
+    public Integer occupiedSetbackMax; // 54 int8u reportable 
     public Integer unoccupiedSetback; // 55 int8u reportable writable
-    public Integer unoccupiedSetbackMin; // 56 int8u reportable
-    public Integer unoccupiedSetbackMax; // 57 int8u reportable
+    public Integer unoccupiedSetbackMin; // 56 int8u reportable 
+    public Integer unoccupiedSetbackMax; // 57 int8u reportable 
     public Integer emergencyHeatDelta; // 58 int8u reportable writable
     public Integer ACType; // 64 enum8 reportable writable
     public Integer ACCapacity; // 65 int16u reportable writable
@@ -78,16 +78,16 @@ public class ThermostatCluster extends BaseCluster {
     public Integer ACCompressorType; // 67 enum8 reportable writable
     public Map<String, Boolean> ACErrorCode; // 68 bitmap32 reportable writable
     public Integer ACLouverPosition; // 69 enum8 reportable writable
-    public Integer ACCoilTemperature; // 70 int16s reportable
+    public Integer ACCoilTemperature; // 70 int16s reportable 
     public Integer ACCapacityformat; // 71 enum8 reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public ThermostatCluster(long nodeId, int endpointId) {
+    public ThermostatCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 75, "Thermostat");
     }
 

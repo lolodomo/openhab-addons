@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BarrierControlClusterTypes.*;
-
 /**
  * BarrierControl
  *
@@ -26,8 +28,7 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.BarrierContr
 public class BarrierControlClusterCommands {
 
     public static ClusterCommand barrierControlGoToPercent(Integer percentOpen) {
-        return new ClusterCommand("barrierControlGoToPercent",
-                new BarrierControlGoToPercentCommandOptions(percentOpen));
+        return new ClusterCommand("barrierControlGoToPercent", new BarrierControlGoToPercentCommandOptions(percentOpen));
     }
 
     public static ClusterCommand barrierControlStop() {

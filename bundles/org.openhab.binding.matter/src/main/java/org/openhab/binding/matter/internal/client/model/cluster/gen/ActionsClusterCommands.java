@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ActionsClusterTypes.*;
-
 /**
  * Actions
  *
@@ -29,10 +31,8 @@ public class ActionsClusterCommands {
         return new ClusterCommand("instantAction", new InstantActionCommandOptions(actionID, invokeID));
     }
 
-    public static ClusterCommand instantActionWithTransition(Integer actionID, Integer invokeID,
-            Integer transitionTime) {
-        return new ClusterCommand("instantActionWithTransition",
-                new InstantActionWithTransitionCommandOptions(actionID, invokeID, transitionTime));
+    public static ClusterCommand instantActionWithTransition(Integer actionID, Integer invokeID, Integer transitionTime) {
+        return new ClusterCommand("instantActionWithTransition", new InstantActionWithTransitionCommandOptions(actionID, invokeID, transitionTime));
     }
 
     public static ClusterCommand startAction(Integer actionID, Integer invokeID) {
@@ -40,8 +40,7 @@ public class ActionsClusterCommands {
     }
 
     public static ClusterCommand startActionWithDuration(Integer actionID, Integer invokeID, Integer duration) {
-        return new ClusterCommand("startActionWithDuration",
-                new StartActionWithDurationCommandOptions(actionID, invokeID, duration));
+        return new ClusterCommand("startActionWithDuration", new StartActionWithDurationCommandOptions(actionID, invokeID, duration));
     }
 
     public static ClusterCommand stopAction(Integer actionID, Integer invokeID) {
@@ -53,8 +52,7 @@ public class ActionsClusterCommands {
     }
 
     public static ClusterCommand pauseActionWithDuration(Integer actionID, Integer invokeID, Integer duration) {
-        return new ClusterCommand("pauseActionWithDuration",
-                new PauseActionWithDurationCommandOptions(actionID, invokeID, duration));
+        return new ClusterCommand("pauseActionWithDuration", new PauseActionWithDurationCommandOptions(actionID, invokeID, duration));
     }
 
     public static ClusterCommand resumeAction(Integer actionID, Integer invokeID) {
@@ -66,8 +64,7 @@ public class ActionsClusterCommands {
     }
 
     public static ClusterCommand enableActionWithDuration(Integer actionID, Integer invokeID, Integer duration) {
-        return new ClusterCommand("enableActionWithDuration",
-                new EnableActionWithDurationCommandOptions(actionID, invokeID, duration));
+        return new ClusterCommand("enableActionWithDuration", new EnableActionWithDurationCommandOptions(actionID, invokeID, duration));
     }
 
     public static ClusterCommand disableAction(Integer actionID, Integer invokeID) {
@@ -75,7 +72,6 @@ public class ActionsClusterCommands {
     }
 
     public static ClusterCommand disableActionWithDuration(Integer actionID, Integer invokeID, Integer duration) {
-        return new ClusterCommand("disableActionWithDuration",
-                new DisableActionWithDurationCommandOptions(actionID, invokeID, duration));
+        return new ClusterCommand("disableActionWithDuration", new DisableActionWithDurationCommandOptions(actionID, invokeID, duration));
     }
 }

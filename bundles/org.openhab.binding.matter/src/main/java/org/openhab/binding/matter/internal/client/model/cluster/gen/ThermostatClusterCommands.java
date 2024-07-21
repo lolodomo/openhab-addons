@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ThermostatClusterTypes.*;
-
 /**
  * Thermostat
  *
@@ -29,16 +31,12 @@ public class ThermostatClusterCommands {
         return new ClusterCommand("setpointRaiseLower", new SetpointRaiseLowerCommandOptions(mode, amount));
     }
 
-    public static ClusterCommand getWeeklyScheduleResponse(Integer numberOfTransitionsForSequence,
-            DayOfWeek dayOfWeekForSequence, ModeForSequence modeForSequence, ThermostatScheduleTransition transitions) {
-        return new ClusterCommand("getWeeklyScheduleResponse", new GetWeeklyScheduleResponseCommandOptions(
-                numberOfTransitionsForSequence, dayOfWeekForSequence, modeForSequence, transitions));
+    public static ClusterCommand getWeeklyScheduleResponse(Integer numberOfTransitionsForSequence, DayOfWeek dayOfWeekForSequence, ModeForSequence modeForSequence, ThermostatScheduleTransition transitions) {
+        return new ClusterCommand("getWeeklyScheduleResponse", new GetWeeklyScheduleResponseCommandOptions(numberOfTransitionsForSequence, dayOfWeekForSequence, modeForSequence, transitions));
     }
 
-    public static ClusterCommand setWeeklySchedule(Integer numberOfTransitionsForSequence,
-            DayOfWeek dayOfWeekForSequence, ModeForSequence modeForSequence, ThermostatScheduleTransition transitions) {
-        return new ClusterCommand("setWeeklySchedule", new SetWeeklyScheduleCommandOptions(
-                numberOfTransitionsForSequence, dayOfWeekForSequence, modeForSequence, transitions));
+    public static ClusterCommand setWeeklySchedule(Integer numberOfTransitionsForSequence, DayOfWeek dayOfWeekForSequence, ModeForSequence modeForSequence, ThermostatScheduleTransition transitions) {
+        return new ClusterCommand("setWeeklySchedule", new SetWeeklyScheduleCommandOptions(numberOfTransitionsForSequence, dayOfWeekForSequence, modeForSequence, transitions));
     }
 
     public static ClusterCommand getWeeklySchedule(DayOfWeek daysToReturn, ModeForSequence modeToReturn) {

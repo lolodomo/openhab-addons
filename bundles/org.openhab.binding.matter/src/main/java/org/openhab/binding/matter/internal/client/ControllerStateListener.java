@@ -24,4 +24,6 @@ public interface ControllerStateListener {
     public void onDisconnect(String reason);
 
     public void onConnect();
+
+    public void onReady();
 }

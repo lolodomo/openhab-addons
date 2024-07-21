@@ -15,11 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
 import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OtaSoftwareUpdateRequestorClusterTypes.*;
-
 /**
  * OtaSoftwareUpdateRequestor
  *
@@ -27,9 +27,7 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.OtaSoftwareU
  */
 public class OtaSoftwareUpdateRequestorClusterCommands {
 
-    public static ClusterCommand announceOTAProvider(Long providerNodeID, Integer vendorID,
-            AnnouncementReasonEnum announcementReason, String metadataForNode, List<Integer> endpoint) {
-        return new ClusterCommand("announceOTAProvider", new AnnounceOTAProviderCommandOptions(providerNodeID, vendorID,
-                announcementReason, metadataForNode, endpoint));
+    public static ClusterCommand announceOTAProvider(Long providerNodeID, Integer vendorID, AnnouncementReasonEnum announcementReason, String metadataForNode, List<Integer> endpoint) {
+        return new ClusterCommand("announceOTAProvider", new AnnounceOTAProviderCommandOptions(providerNodeID, vendorID, announcementReason, metadataForNode, endpoint));
     }
 }

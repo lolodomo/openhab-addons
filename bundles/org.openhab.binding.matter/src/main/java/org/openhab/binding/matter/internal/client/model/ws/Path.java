@@ -17,7 +17,7 @@ package org.openhab.binding.matter.internal.client.model.ws;
  *
  */
 public class Path {
-    public Long nodeId;
+    public String nodeId;
     public Integer endpointId;
     public Integer clusterId;
     public Integer attributeId;

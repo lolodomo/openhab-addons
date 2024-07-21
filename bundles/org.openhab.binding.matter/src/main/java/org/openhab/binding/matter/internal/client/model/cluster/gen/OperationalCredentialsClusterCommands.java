@@ -15,9 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.util.Map;
+import java.util.List;
+
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OperationalCredentialsClusterTypes.*;
-
 /**
  * OperationalCredentials
  *
@@ -30,13 +32,11 @@ public class OperationalCredentialsClusterCommands {
     }
 
     public static ClusterCommand attestationResponse(String attestationElements, String attestationSignature) {
-        return new ClusterCommand("attestationResponse",
-                new AttestationResponseCommandOptions(attestationElements, attestationSignature));
+        return new ClusterCommand("attestationResponse", new AttestationResponseCommandOptions(attestationElements, attestationSignature));
     }
 
     public static ClusterCommand certificateChainRequest(CertificateChainTypeEnum certificateType) {
-        return new ClusterCommand("certificateChainRequest",
-                new CertificateChainRequestCommandOptions(certificateType));
+        return new ClusterCommand("certificateChainRequest", new CertificateChainRequestCommandOptions(certificateType));
     }
 
     public static ClusterCommand certificateChainResponse(String certificate) {
@@ -51,18 +51,15 @@ public class OperationalCredentialsClusterCommands {
         return new ClusterCommand("CSRResponse", new CSRResponseCommandOptions(NOCSRElements, attestationSignature));
     }
 
-    public static ClusterCommand addNOC(String NOCValue, String ICACValue, String IPKValue, Long caseAdminSubject,
-            Integer adminVendorId) {
-        return new ClusterCommand("addNOC",
-                new AddNOCCommandOptions(NOCValue, ICACValue, IPKValue, caseAdminSubject, adminVendorId));
+    public static ClusterCommand addNOC(String NOCValue, String ICACValue, String IPKValue, Long caseAdminSubject, Integer adminVendorId) {
+        return new ClusterCommand("addNOC", new AddNOCCommandOptions(NOCValue, ICACValue, IPKValue, caseAdminSubject, adminVendorId));
     }
 
     public static ClusterCommand updateNOC(String NOCValue, String ICACValue) {
         return new ClusterCommand("updateNOC", new UpdateNOCCommandOptions(NOCValue, ICACValue));
     }
 
-    public static ClusterCommand NOCResponse(NodeOperationalCertStatusEnum statusCode, Integer fabricIndex,
-            String debugText) {
+    public static ClusterCommand NOCResponse(NodeOperationalCertStatusEnum statusCode, Integer fabricIndex, String debugText) {
         return new ClusterCommand("NOCResponse", new NOCResponseCommandOptions(statusCode, fabricIndex, debugText));
     }
 
@@ -75,7 +72,6 @@ public class OperationalCredentialsClusterCommands {
     }
 
     public static ClusterCommand addTrustedRootCertificate(String rootCACertificate) {
-        return new ClusterCommand("addTrustedRootCertificate",
-                new AddTrustedRootCertificateCommandOptions(rootCACertificate));
+        return new ClusterCommand("addTrustedRootCertificate", new AddTrustedRootCertificateCommandOptions(rootCACertificate));
     }
 }

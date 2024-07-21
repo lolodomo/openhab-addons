@@ -13,7 +13,8 @@
 package org.openhab.binding.matter.internal;
 
 import static java.util.Map.entry;
-import static org.openhab.core.thing.DefaultSystemChannelTypeProvider.*;
+import static org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_CHANNEL_LOW_BATTERY;
+import static org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_COLOR_TEMPERATURE;
 
 import java.util.Map;
 
@@ -37,7 +38,6 @@ public class MatterBindingConstants {
     public static final ThingTypeUID THING_TYPE_CONTROLLER = new ThingTypeUID(BINDING_ID, "controller");
     public static final ThingTypeUID THING_TYPE_NODE = new ThingTypeUID(BINDING_ID, "node");
     public static final ThingTypeUID THING_TYPE_ENDPOINT = new ThingTypeUID(BINDING_ID, "endpoint");
-    public static final ThingTypeUID THING_TYPE_CLUSTER = new ThingTypeUID(BINDING_ID, "cluster");
 
     // List of all Channel ids
     public static final String CHANNEL_1 = "channel1";

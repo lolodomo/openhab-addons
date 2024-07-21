@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.SoftwareDiagnosticsClusterTypes.*;
@@ -31,18 +31,18 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "SoftwareDiagnostics";
     public static final int CLUSTER_ID = 0x0034;
 
-    public ThreadMetricsStruct[] threadMetrics; // 0 ThreadMetricsStruct reportable
-    public Long currentHeapFree; // 1 int64u reportable
-    public Long currentHeapUsed; // 2 int64u reportable
-    public Long currentHeapHighWatermark; // 3 int64u reportable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public ThreadMetricsStruct[] threadMetrics; // 0 ThreadMetricsStruct reportable 
+    public Long currentHeapFree; // 1 int64u reportable 
+    public Long currentHeapUsed; // 2 int64u reportable 
+    public Long currentHeapHighWatermark; // 3 int64u reportable 
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public SoftwareDiagnosticsCluster(long nodeId, int endpointId) {
+    public SoftwareDiagnosticsCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 74, "SoftwareDiagnostics");
     }
 

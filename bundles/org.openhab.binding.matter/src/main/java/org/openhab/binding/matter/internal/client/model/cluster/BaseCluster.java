@@ -26,14 +26,14 @@ import com.google.gson.Gson;
 public abstract class BaseCluster {
     private final Logger logger = LoggerFactory.getLogger(BaseCluster.class);
     protected static final Gson GSON = new Gson();
-    public long nodeId;
+    public String nodeId;
     public int endpointId;
     public int id;
     public String name;
     public static Map<Integer, String> ATTRIBUTE_MAPPING;
     public static Map<Integer, String> COMMAND_MAPPING;
 
-    public BaseCluster(long nodeId, int endpointId, int clusterId, String clusterName) {
+    public BaseCluster(String nodeId, int endpointId, int clusterId, String clusterName) {
         this.nodeId = nodeId;
         this.endpointId = endpointId;
         this.id = clusterId;

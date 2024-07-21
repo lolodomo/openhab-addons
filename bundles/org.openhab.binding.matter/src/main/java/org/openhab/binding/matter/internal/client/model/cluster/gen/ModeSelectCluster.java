@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ModeSelectClusterTypes.*;
@@ -31,20 +31,20 @@ public class ModeSelectCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ModeSelect";
     public static final int CLUSTER_ID = 0x0050;
 
-    public String description; // 0 char_string reportable
-    public Integer standardNamespace; // 1 enum16 reportable
-    public ModeOptionStruct[] supportedModes; // 2 ModeOptionStruct reportable
-    public Integer currentMode; // 3 int8u reportable
+    public String description; // 0 char_string reportable 
+    public Integer standardNamespace; // 1 enum16 reportable 
+    public ModeOptionStruct[] supportedModes; // 2 ModeOptionStruct reportable 
+    public Integer currentMode; // 3 int8u reportable 
     public Integer startUpMode; // 4 int8u reportable writable
     public Integer onMode; // 5 int8u reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public ModeSelectCluster(long nodeId, int endpointId) {
+    public ModeSelectCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 46, "ModeSelect");
     }
 

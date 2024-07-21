@@ -16,10 +16,10 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControlClusterTypes.*;
-
 /**
  * ColorControl
  *
@@ -27,117 +27,79 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControl
  */
 public class ColorControlClusterCommands {
 
-    public static ClusterCommand moveToHue(Integer hue, HueDirection direction, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveToHue",
-                new MoveToHueCommandOptions(hue, direction, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand moveToHue(Integer hue, HueDirection direction, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveToHue", new MoveToHueCommandOptions(hue, direction, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveHue(HueMoveMode moveMode, Integer rate, Map<String, Boolean> optionsMask,
-            Map<String, Boolean> optionsOverride) {
+    public static ClusterCommand moveHue(HueMoveMode moveMode, Integer rate, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
         return new ClusterCommand("moveHue", new MoveHueCommandOptions(moveMode, rate, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand stepHue(HueStepMode stepMode, Integer stepSize, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("stepHue",
-                new StepHueCommandOptions(stepMode, stepSize, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand stepHue(HueStepMode stepMode, Integer stepSize, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("stepHue", new StepHueCommandOptions(stepMode, stepSize, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveToSaturation(Integer saturation, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveToSaturation",
-                new MoveToSaturationCommandOptions(saturation, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand moveToSaturation(Integer saturation, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveToSaturation", new MoveToSaturationCommandOptions(saturation, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveSaturation(SaturationMoveMode moveMode, Integer rate,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveSaturation",
-                new MoveSaturationCommandOptions(moveMode, rate, optionsMask, optionsOverride));
+    public static ClusterCommand moveSaturation(SaturationMoveMode moveMode, Integer rate, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveSaturation", new MoveSaturationCommandOptions(moveMode, rate, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand stepSaturation(SaturationStepMode stepMode, Integer stepSize, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("stepSaturation",
-                new StepSaturationCommandOptions(stepMode, stepSize, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand stepSaturation(SaturationStepMode stepMode, Integer stepSize, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("stepSaturation", new StepSaturationCommandOptions(stepMode, stepSize, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveToHueAndSaturation(Integer hue, Integer saturation, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveToHueAndSaturation", new MoveToHueAndSaturationCommandOptions(hue, saturation,
-                transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand moveToHueAndSaturation(Integer hue, Integer saturation, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveToHueAndSaturation", new MoveToHueAndSaturationCommandOptions(hue, saturation, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveToColor(Integer colorX, Integer colorY, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveToColor",
-                new MoveToColorCommandOptions(colorX, colorY, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand moveToColor(Integer colorX, Integer colorY, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveToColor", new MoveToColorCommandOptions(colorX, colorY, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveColor(Integer rateX, Integer rateY, Map<String, Boolean> optionsMask,
-            Map<String, Boolean> optionsOverride) {
+    public static ClusterCommand moveColor(Integer rateX, Integer rateY, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
         return new ClusterCommand("moveColor", new MoveColorCommandOptions(rateX, rateY, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand stepColor(Integer stepX, Integer stepY, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("stepColor",
-                new StepColorCommandOptions(stepX, stepY, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand stepColor(Integer stepX, Integer stepY, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("stepColor", new StepColorCommandOptions(stepX, stepY, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveToColorTemperature(Integer colorTemperatureMireds, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveToColorTemperature", new MoveToColorTemperatureCommandOptions(
-                colorTemperatureMireds, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand moveToColorTemperature(Integer colorTemperatureMireds, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveToColorTemperature", new MoveToColorTemperatureCommandOptions(colorTemperatureMireds, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand enhancedMoveToHue(Integer enhancedHue, HueDirection direction, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("enhancedMoveToHue", new EnhancedMoveToHueCommandOptions(enhancedHue, direction,
-                transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand enhancedMoveToHue(Integer enhancedHue, HueDirection direction, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("enhancedMoveToHue", new EnhancedMoveToHueCommandOptions(enhancedHue, direction, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand enhancedMoveHue(HueMoveMode moveMode, Integer rate, Map<String, Boolean> optionsMask,
-            Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("enhancedMoveHue",
-                new EnhancedMoveHueCommandOptions(moveMode, rate, optionsMask, optionsOverride));
+    public static ClusterCommand enhancedMoveHue(HueMoveMode moveMode, Integer rate, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("enhancedMoveHue", new EnhancedMoveHueCommandOptions(moveMode, rate, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand enhancedStepHue(HueStepMode stepMode, Integer stepSize, Integer transitionTime,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("enhancedStepHue",
-                new EnhancedStepHueCommandOptions(stepMode, stepSize, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand enhancedStepHue(HueStepMode stepMode, Integer stepSize, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("enhancedStepHue", new EnhancedStepHueCommandOptions(stepMode, stepSize, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand enhancedMoveToHueAndSaturation(Integer enhancedHue, Integer saturation,
-            Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("enhancedMoveToHueAndSaturation", new EnhancedMoveToHueAndSaturationCommandOptions(
-                enhancedHue, saturation, transitionTime, optionsMask, optionsOverride));
+    public static ClusterCommand enhancedMoveToHueAndSaturation(Integer enhancedHue, Integer saturation, Integer transitionTime, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("enhancedMoveToHueAndSaturation", new EnhancedMoveToHueAndSaturationCommandOptions(enhancedHue, saturation, transitionTime, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand colorLoopSet(ColorLoopUpdateFlags updateFlags, ColorLoopAction action,
-            ColorLoopDirection direction, Integer time, Integer startHue, Map<String, Boolean> optionsMask,
-            Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("colorLoopSet", new ColorLoopSetCommandOptions(updateFlags, action, direction, time,
-                startHue, optionsMask, optionsOverride));
+    public static ClusterCommand colorLoopSet(ColorLoopUpdateFlags updateFlags, ColorLoopAction action, ColorLoopDirection direction, Integer time, Integer startHue, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("colorLoopSet", new ColorLoopSetCommandOptions(updateFlags, action, direction, time, startHue, optionsMask, optionsOverride));
     }
 
     public static ClusterCommand stopMoveStep(Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
         return new ClusterCommand("stopMoveStep", new StopMoveStepCommandOptions(optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand moveColorTemperature(HueMoveMode moveMode, Integer rate,
-            Integer colorTemperatureMinimumMireds, Integer colorTemperatureMaximumMireds,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("moveColorTemperature", new MoveColorTemperatureCommandOptions(moveMode, rate,
-                colorTemperatureMinimumMireds, colorTemperatureMaximumMireds, optionsMask, optionsOverride));
+    public static ClusterCommand moveColorTemperature(HueMoveMode moveMode, Integer rate, Integer colorTemperatureMinimumMireds, Integer colorTemperatureMaximumMireds, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("moveColorTemperature", new MoveColorTemperatureCommandOptions(moveMode, rate, colorTemperatureMinimumMireds, colorTemperatureMaximumMireds, optionsMask, optionsOverride));
     }
 
-    public static ClusterCommand stepColorTemperature(HueStepMode stepMode, Integer stepSize, Integer transitionTime,
-            Integer colorTemperatureMinimumMireds, Integer colorTemperatureMaximumMireds,
-            Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
-        return new ClusterCommand("stepColorTemperature",
-                new StepColorTemperatureCommandOptions(stepMode, stepSize, transitionTime,
-                        colorTemperatureMinimumMireds, colorTemperatureMaximumMireds, optionsMask, optionsOverride));
+    public static ClusterCommand stepColorTemperature(HueStepMode stepMode, Integer stepSize, Integer transitionTime, Integer colorTemperatureMinimumMireds, Integer colorTemperatureMaximumMireds, Map<String, Boolean> optionsMask, Map<String, Boolean> optionsOverride) {
+        return new ClusterCommand("stepColorTemperature", new StepColorTemperatureCommandOptions(stepMode, stepSize, transitionTime, colorTemperatureMinimumMireds, colorTemperatureMaximumMireds, optionsMask, optionsOverride));
     }
 }

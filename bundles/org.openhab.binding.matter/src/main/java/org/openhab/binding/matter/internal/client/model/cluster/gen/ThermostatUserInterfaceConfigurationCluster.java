@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ThermostatUserInterfaceConfigurationClusterTypes.*;
@@ -33,16 +33,15 @@ public class ThermostatUserInterfaceConfigurationCluster extends BaseCluster {
 
     public TemperatureDisplayModeEnum temperatureDisplayMode; // 0 TemperatureDisplayModeEnum reportable writable
     public KeypadLockoutEnum keypadLockout; // 1 KeypadLockoutEnum reportable writable
-    public ScheduleProgrammingVisibilityEnum scheduleProgrammingVisibility; // 2 ScheduleProgrammingVisibilityEnum
-                                                                            // reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public ScheduleProgrammingVisibilityEnum scheduleProgrammingVisibility; // 2 ScheduleProgrammingVisibilityEnum reportable writable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public ThermostatUserInterfaceConfigurationCluster(long nodeId, int endpointId) {
+    public ThermostatUserInterfaceConfigurationCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 76, "ThermostatUserInterfaceConfiguration");
     }
 

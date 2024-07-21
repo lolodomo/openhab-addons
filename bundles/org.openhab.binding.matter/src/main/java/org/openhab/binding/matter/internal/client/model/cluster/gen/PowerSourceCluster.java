@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.PowerSourceClusterTypes.*;
@@ -31,46 +31,46 @@ public class PowerSourceCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "PowerSource";
     public static final int CLUSTER_ID = 0x002F;
 
-    public PowerSourceStatusEnum status; // 0 PowerSourceStatusEnum reportable
-    public Integer order; // 1 int8u reportable
-    public String description; // 2 char_string reportable
-    public Integer wiredAssessedInputVoltage; // 3 int32u reportable
-    public Integer wiredAssessedInputFrequency; // 4 int16u reportable
-    public WiredCurrentTypeEnum wiredCurrentType; // 5 WiredCurrentTypeEnum reportable
-    public Integer wiredAssessedCurrent; // 6 int32u reportable
-    public Integer wiredNominalVoltage; // 7 int32u reportable
-    public Integer wiredMaximumCurrent; // 8 int32u reportable
-    public Boolean wiredPresent; // 9 boolean reportable
-    public WiredFaultEnum activeWiredFaults; // 10 WiredFaultEnum reportable
-    public Integer batVoltage; // 11 int32u reportable
-    public Integer batPercentRemaining; // 12 int8u reportable
-    public Integer batTimeRemaining; // 13 int32u reportable
-    public BatChargeLevelEnum batChargeLevel; // 14 BatChargeLevelEnum reportable
-    public Boolean batReplacementNeeded; // 15 boolean reportable
-    public BatReplaceabilityEnum batReplaceability; // 16 BatReplaceabilityEnum reportable
-    public Boolean batPresent; // 17 boolean reportable
-    public BatFaultEnum activeBatFaults; // 18 BatFaultEnum reportable
-    public String batReplacementDescription; // 19 char_string reportable
-    public BatCommonDesignationEnum batCommonDesignation; // 20 BatCommonDesignationEnum reportable
-    public String batANSIDesignation; // 21 char_string reportable
-    public String batIECDesignation; // 22 char_string reportable
-    public BatApprovedChemistryEnum batApprovedChemistry; // 23 BatApprovedChemistryEnum reportable
-    public Integer batCapacity; // 24 int32u reportable
-    public Integer batQuantity; // 25 int8u reportable
-    public BatChargeStateEnum batChargeState; // 26 BatChargeStateEnum reportable
-    public Integer batTimeToFullCharge; // 27 int32u reportable
-    public Boolean batFunctionalWhileCharging; // 28 boolean reportable
-    public Integer batChargingCurrent; // 29 int32u reportable
-    public BatChargeFaultEnum activeBatChargeFaults; // 30 BatChargeFaultEnum reportable
-    public List<Integer> endpointList; // 31 endpoint_no reportable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public PowerSourceStatusEnum status; // 0 PowerSourceStatusEnum reportable 
+    public Integer order; // 1 int8u reportable 
+    public String description; // 2 char_string reportable 
+    public Integer wiredAssessedInputVoltage; // 3 int32u reportable 
+    public Integer wiredAssessedInputFrequency; // 4 int16u reportable 
+    public WiredCurrentTypeEnum wiredCurrentType; // 5 WiredCurrentTypeEnum reportable 
+    public Integer wiredAssessedCurrent; // 6 int32u reportable 
+    public Integer wiredNominalVoltage; // 7 int32u reportable 
+    public Integer wiredMaximumCurrent; // 8 int32u reportable 
+    public Boolean wiredPresent; // 9 boolean reportable 
+    public WiredFaultEnum activeWiredFaults; // 10 WiredFaultEnum reportable 
+    public Integer batVoltage; // 11 int32u reportable 
+    public Integer batPercentRemaining; // 12 int8u reportable 
+    public Integer batTimeRemaining; // 13 int32u reportable 
+    public BatChargeLevelEnum batChargeLevel; // 14 BatChargeLevelEnum reportable 
+    public Boolean batReplacementNeeded; // 15 boolean reportable 
+    public BatReplaceabilityEnum batReplaceability; // 16 BatReplaceabilityEnum reportable 
+    public Boolean batPresent; // 17 boolean reportable 
+    public BatFaultEnum activeBatFaults; // 18 BatFaultEnum reportable 
+    public String batReplacementDescription; // 19 char_string reportable 
+    public BatCommonDesignationEnum batCommonDesignation; // 20 BatCommonDesignationEnum reportable 
+    public String batANSIDesignation; // 21 char_string reportable 
+    public String batIECDesignation; // 22 char_string reportable 
+    public BatApprovedChemistryEnum batApprovedChemistry; // 23 BatApprovedChemistryEnum reportable 
+    public Integer batCapacity; // 24 int32u reportable 
+    public Integer batQuantity; // 25 int8u reportable 
+    public BatChargeStateEnum batChargeState; // 26 BatChargeStateEnum reportable 
+    public Integer batTimeToFullCharge; // 27 int32u reportable 
+    public Boolean batFunctionalWhileCharging; // 28 boolean reportable 
+    public Integer batChargingCurrent; // 29 int32u reportable 
+    public BatChargeFaultEnum activeBatChargeFaults; // 30 BatChargeFaultEnum reportable 
+    public List<Integer> endpointList; // 31 endpoint_no reportable 
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public PowerSourceCluster(long nodeId, int endpointId) {
+    public PowerSourceCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 61, "PowerSource");
     }
 

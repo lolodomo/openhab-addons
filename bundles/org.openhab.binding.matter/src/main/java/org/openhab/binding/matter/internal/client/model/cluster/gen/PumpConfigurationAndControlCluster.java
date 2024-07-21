@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.PumpConfigurationAndControlClusterTypes.*;
@@ -31,37 +31,37 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "PumpConfigurationAndControl";
     public static final int CLUSTER_ID = 0x0200;
 
-    public Integer maxPressure; // 0 int16s reportable
-    public Integer maxSpeed; // 1 int16u reportable
-    public Integer maxFlow; // 2 int16u reportable
-    public Integer minConstPressure; // 3 int16s reportable
-    public Integer maxConstPressure; // 4 int16s reportable
-    public Integer minCompPressure; // 5 int16s reportable
-    public Integer maxCompPressure; // 6 int16s reportable
-    public Integer minConstSpeed; // 7 int16u reportable
-    public Integer maxConstSpeed; // 8 int16u reportable
-    public Integer minConstFlow; // 9 int16u reportable
-    public Integer maxConstFlow; // 10 int16u reportable
-    public Integer minConstTemp; // 11 int16s reportable
-    public Integer maxConstTemp; // 12 int16s reportable
-    public PumpStatusBitmap pumpStatus; // 16 PumpStatusBitmap reportable
-    public OperationModeEnum effectiveOperationMode; // 17 OperationModeEnum reportable
-    public ControlModeEnum effectiveControlMode; // 18 ControlModeEnum reportable
-    public Integer capacity; // 19 int16s reportable
-    public Integer speed; // 20 int16u reportable
+    public Integer maxPressure; // 0 int16s reportable 
+    public Integer maxSpeed; // 1 int16u reportable 
+    public Integer maxFlow; // 2 int16u reportable 
+    public Integer minConstPressure; // 3 int16s reportable 
+    public Integer maxConstPressure; // 4 int16s reportable 
+    public Integer minCompPressure; // 5 int16s reportable 
+    public Integer maxCompPressure; // 6 int16s reportable 
+    public Integer minConstSpeed; // 7 int16u reportable 
+    public Integer maxConstSpeed; // 8 int16u reportable 
+    public Integer minConstFlow; // 9 int16u reportable 
+    public Integer maxConstFlow; // 10 int16u reportable 
+    public Integer minConstTemp; // 11 int16s reportable 
+    public Integer maxConstTemp; // 12 int16s reportable 
+    public PumpStatusBitmap pumpStatus; // 16 PumpStatusBitmap reportable 
+    public OperationModeEnum effectiveOperationMode; // 17 OperationModeEnum reportable 
+    public ControlModeEnum effectiveControlMode; // 18 ControlModeEnum reportable 
+    public Integer capacity; // 19 int16s reportable 
+    public Integer speed; // 20 int16u reportable 
     public Integer lifetimeRunningHours; // 21 int24u reportable writable
-    public Integer power; // 22 int24u reportable
+    public Integer power; // 22 int24u reportable 
     public Integer lifetimeEnergyConsumed; // 23 int32u reportable writable
     public OperationModeEnum operationMode; // 32 OperationModeEnum reportable writable
     public ControlModeEnum controlMode; // 33 ControlModeEnum reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable
-    public List<Integer> eventList; // 65530 event_id reportable
-    public List<Integer> attributeList; // 65531 attrib_id reportable
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
-    public Integer clusterRevision; // 65533 int16u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable 
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
+    public List<Integer> eventList; // 65530 event_id reportable 
+    public List<Integer> attributeList; // 65531 attrib_id reportable 
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
+    public Integer clusterRevision; // 65533 int16u reportable 
 
-    public PumpConfigurationAndControlCluster(long nodeId, int endpointId) {
+    public PumpConfigurationAndControlCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 53, "PumpConfigurationAndControl");
     }
 
