@@ -108,20 +108,19 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         }
     }
 
-    @Override
-    public void dispose() {
-    }
-
+    // making this public
     @Override
     public void updateThing(Thing thing) {
         super.updateThing(thing);
     }
 
+    // making this public
     @Override
     public void updateState(String channelID, State state) {
         super.updateState(channelID, state);
     }
 
+    // making this public
     @Override
     public ThingBuilder editThing() {
         return super.editThing();
