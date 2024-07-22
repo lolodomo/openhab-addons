@@ -71,12 +71,12 @@ public class NodeDiscoveryService extends AbstractDiscoveryService implements Di
         super.deactivate();
     }
 
-    public void discoverChildNodeThing(ThingUID thingUID, ThingUID bridgeUID, String id) {
-        logger.trace("discoverChildNodeThing: {} {} {}", thingUID, bridgeUID, id);
-        DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel("Matter " + id)
-                .withProperty("id", id).withRepresentationProperty("id").withBridge(bridgeUID).build();
-        thingDiscovered(result);
-    }
+    // public void discoverChildNodeThing(ThingUID thingUID, ThingUID bridgeUID, String id) {
+    // logger.trace("discoverChildNodeThing: {} {} {}", thingUID, bridgeUID, id);
+    // DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel("Matter " + id)
+    // .withProperty("id", id).withRepresentationProperty("id").withBridge(bridgeUID).build();
+    // thingDiscovered(result);
+    // }
 
     public void discoverChildEndpointThing(ThingUID thingUID, ThingUID bridgeUID, String nodeId, Integer id) {
         logger.trace("discoverChildEndpointThing: {} {} {}", thingUID, bridgeUID, id);

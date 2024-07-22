@@ -93,7 +93,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         nodeId = parts[0];
         endpointId = Integer.parseInt(parts[1]);
         logger.debug("initialize endpoint {}", endpointId);
-        NodeHandler handler = nodeHandler();
+        ControllerHandler handler = controllerHandler();
         if (handler == null) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_UNINITIALIZED);
         } else if (handler.getThing().getStatus() != ThingStatus.ONLINE) {
@@ -210,12 +210,16 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         return nodeId;
     }
 
-    private @Nullable NodeHandler nodeHandler() {
+    public void setEndpointStatus(ThingStatus status, ThingStatusDetail detail) {
+        updateStatus(status, detail);
+    }
+
+    protected @Nullable ControllerHandler controllerHandler() {
         Bridge bridge = getBridge();
         if (bridge != null) {
             BridgeHandler handler = bridge.getHandler();
-            if (handler instanceof NodeHandler nodeHandler) {
-                return nodeHandler;
+            if (handler instanceof ControllerHandler controllerHandler) {
+                return controllerHandler;
             }
         }
         return null;
@@ -223,12 +227,9 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
 
     public @Nullable MatterWebsocketClient getClient() {
         if (cachedClient == null) {
-            NodeHandler n = nodeHandler();
-            if (n != null) {
-                ControllerHandler c = n.controllerHandler();
-                if (c != null) {
-                    cachedClient = c.getClient();
-                }
+            ControllerHandler c = controllerHandler();
+            if (c != null) {
+                cachedClient = c.getClient();
             }
         }
         return cachedClient;

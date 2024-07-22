@@ -14,10 +14,13 @@ package org.openhab.binding.matter.internal.handler;
 
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_COMMAND;
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_PAIR_CODE;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_NODE;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_ENDPOINT;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +30,7 @@ import org.openhab.binding.matter.internal.client.AttributeListener;
 import org.openhab.binding.matter.internal.client.ControllerStateListener;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.NodeStateListener;
+import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
@@ -56,8 +60,8 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         implements AttributeListener, NodeStateListener, ControllerStateListener {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
-    // private int nodeId; // the controller nodeId?
-    // private List<Node> nodes = Collections.synchronizedList(new LinkedList<Node>());
+    private Map<String, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
+
     private MatterWebsocketClient client;
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
@@ -84,10 +88,11 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
             case DISCONNECTED:
             case DECOMMISSIONED:
             case RECONNECTING:
-                NodeHandler handler = nodeHandler(message.nodeId);
-                if (handler != null) {
-                    handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
-                }
+                // NodeHandler handler = nodeHandler(message.nodeId);
+                // if (handler != null) {
+                // handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+                // }
+                updateEndpointStatuses(message.nodeId, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
                 break;
             case WAITINGFORDEVICEDISCOVERY:
                 break;
@@ -99,7 +104,8 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
 
     @Override
     public void onEvent(AttributeChangedMessage message) {
-        NodeHandler handler = nodeHandler(message.path.nodeId);
+        // NodeHandler handler = nodeHandler(message.path.nodeId);
+        EndpointHandler handler = endpointHandler(message.path.nodeId, message.path.endpointId);
         if (handler == null) {
             logger.debug("No handler found for node {}", message.path.nodeId);
             return;
@@ -124,6 +130,7 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     public void onReady() {
         updateStatus(ThingStatus.ONLINE);
         ready = true;
+        refresh();
     }
 
     @Override
@@ -245,9 +252,19 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     public void childHandlerInitialized(ThingHandler childHandler, Thing childThing) {
         super.childHandlerInitialized(childHandler, childThing);
         logger.debug("childHandlerInitialized {}", childHandler);
-        if (childHandler instanceof NodeHandler) {
-            String id = ((NodeHandler) childHandler).getNodeId();
-            updateNode(id);
+        if (childHandler instanceof EndpointHandler handler) {
+            String nodeId = handler.getNodeId();
+            int endpointId = handler.getEndpointId();
+            synchronized (nodeEndpoints) {
+                Map<Integer, Endpoint> endpoints = nodeEndpoints.get(nodeId);
+                logger.debug("childHandlerInitialized endpoints {}", endpoints);
+                if (endpoints != null) {
+                    Endpoint e = endpoints.get(endpointId);
+                    if (e != null) {
+                        handler.updateEndpoint(e);
+                    }
+                }
+            }
         }
     }
 
@@ -282,24 +299,35 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         reconnectFuture = scheduler.schedule(this::initialize, 30, TimeUnit.SECONDS);
     }
 
-    void updateNode(Node node) {
-        discoverChildNode(node);
-        NodeHandler handler = nodeHandler(node.id);
-        if (handler != null) {
-            handler.updateNode(node);
-        }
-    }
-
     void updateNode(String id) {
         logger.debug("updateNode {}", id);
         try {
-            Node n = client.getNode(id);
-            updateNode(n);
+            Node node = client.getNode(id);
+            synchronized (nodeEndpoints) {
+                Map<Integer, Endpoint> endpoints = new HashMap<>();
+                for (Endpoint e : node.endpoints.values()) {
+                    endpoints.put(e.number, e);
+                    discoverChildEndpoint(node, e);
+                    EndpointHandler handler = endpointHandler(id, e.number);
+                    if (handler != null) {
+                        handler.updateEndpoint(e);
+                    }
+                }
+                nodeEndpoints.put(id, endpoints);
+            }
         } catch (Exception e) {
             logger.debug("Could not update node {}", id, e);
-            NodeHandler handler = nodeHandler(id);
-            if (handler != null) {
-                handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+            updateEndpointStatuses(id, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+        }
+    }
+
+    private void updateEndpointStatuses(String nodeId, ThingStatus status, ThingStatusDetail detail) {
+        for (Thing thing : getThing().getThings()) {
+            ThingHandler handler = thing.getHandler();
+            if (handler instanceof EndpointHandler endpointHandler) {
+                if (nodeId.equals(endpointHandler.getNodeId())) {
+                    endpointHandler.setEndpointStatus(status, detail);
+                }
             }
         }
     }
@@ -311,25 +339,23 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         reconnect();
     }
 
-    private void discoverChildNode(Node node) {
+    private void discoverChildEndpoint(Node node, Endpoint endpoint) {
+        logger.debug("discoverChildEndpoint {}", node.id);
         NodeDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
-            ThingUID thingUID = new ThingUID(THING_TYPE_NODE, bridgeUID, node.id);
-            discoveryService.discoverChildNodeThing(thingUID, bridgeUID, node.id);
-
+            ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, String.valueOf(endpoint.number));
+            discoveryService.discoverChildEndpointThing(thingUID, bridgeUID, node.id, endpoint.number);
         }
     }
 
-    private @Nullable NodeHandler nodeHandler(String nodeId) {
+    private @Nullable EndpointHandler endpointHandler(String nodeId, int endpointId) {
         for (Thing thing : getThing().getThings()) {
-
             ThingHandler handler = thing.getHandler();
-            logger.debug("Checking Thing {} {}", thing.getLabel(), handler);
-            if (handler instanceof NodeHandler nodeHandler) {
-                logger.debug("Checking {} == {} ", nodeHandler.getNodeId(), nodeId);
-                if (nodeHandler.getNodeId().equals(nodeId)) {
-                    return nodeHandler;
+            if (handler instanceof EndpointHandler endpointHandler) {
+                logger.debug("endpointHandler checking {} == {}", endpointHandler.getEndpointId(), endpointId);
+                if (nodeId.equals(nodeId) && endpointHandler.getEndpointId() == endpointId) {
+                    return endpointHandler;
                 }
             }
         }
