@@ -362,7 +362,6 @@ public class ControllerHandler extends BaseBridgeHandler
         for (Thing thing : getThing().getThings()) {
             ThingHandler handler = thing.getHandler();
             if (handler instanceof EndpointHandler endpointHandler) {
-                logger.debug("endpointHandler checking {} == {}", endpointHandler.getEndpointId(), endpointId);
                 if (nodeId.equals(nodeId) && endpointHandler.getEndpointId() == endpointId) {
                     return endpointHandler;
                 }
