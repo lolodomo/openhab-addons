@@ -1,94 +1,126 @@
 # Matter Binding
 
-_Give some details about what this binding is meant for - a protocol, system, specific device._
+The Matter Binding for openHAB allows seamless integration with Matter-compatible devices. Matter is a unifying standard for smart home devices, enabling reliable, secure connectivity across various platforms. This binding facilitates the control and management of Matter devices within the openHAB environment.
 
-_If possible, provide some resources like pictures (only PNG is supported currently), a video, etc. to give an impression of what can be done with this binding._
-_You can place such resources into a `doc` folder next to this README.md._
-
-_Put each sentence in a separate line to improve readability of diffs._
+By leveraging the Matter Binding, users can connect and control their Matter devices.
 
 ## Supported Things
 
-_Please describe the different supported things / devices including their ThingTypeUID within this section._
-_Which different types are supported, which models were tested etc.?_
-_Note that it is planned to generate some part of this based on the XML files within ```src/main/resources/OH-INF/thing``` of your binding._
+The Matter Binding supports the following types of things:
 
-- `bridge`: Short description of the Bridge, if any
-- `sample`: Short description of the Thing with the ThingTypeUID `sample`
+- `controller`: The main controller that interfaces with Matter devices. It requires configuration parameters such as `port`, `host`, `portId`, and `pairCode`.
+- `endpoint`: Represents an individual endpoint within the Matter network. Configuration parameters include `nodeId` and `endpointId`.
 
 ## Discovery
 
-_Describe the available auto-discovery features here._
-_Mention for what it works and what needs to be kept in mind when using it._
+Matter controllers must be added manually.  Endpoint (devices) will be discovered when a `pairCode` is used to search for a device to add. 
 
 ## Binding Configuration
 
-_If your binding requires or supports general configuration settings, please create a folder ```cfg``` and place the configuration file ```<bindingId>.cfg``` inside it._
-_In this section, you should link to this file and provide some information about the options._
-_The file could e.g. look like:_
-
-```
-# Configuration for the Matter Binding
-#
-# Default secret key for the pairing of the Matter Thing.
-# It has to be between 10-40 (alphanumeric) characters.
-# This may be changed by the user for security reasons.
-secret=openHABSecret
-```
-
-_Note that it is planned to generate some part of this based on the information that is available within ```src/main/resources/OH-INF/binding``` of your binding._
-
-_If your binding does not offer any generic configurations, you can remove this section completely._
+This binding does not require any general configuration settings.
 
 ## Thing Configuration
 
-_Describe what is needed to manually configure a thing, either through the UI or via a thing-file._
-_This should be mainly about its mandatory and optional configuration parameters._
+### Controller Thing Configuration
 
-_Note that it is planned to generate some part of this based on the XML files within ```src/main/resources/OH-INF/thing``` of your binding._
+| Name      | Type   | Description                        | Default | Required | Advanced |
+|-----------|--------|------------------------------------|---------|----------|----------|
+| port      | number | The port number for the controller | N/A     | yes      | no       |
+| host      | text   | The host address of the controller | N/A     | yes      | no       |
+| portId    | number | The port ID for communication      | N/A     | yes      | no       |
+| pairCode  | text   | The pairing to search for a device (not implemented) | N/A     | yes      | no       |
 
-### `sample` Thing Configuration
+### Endpoint Thing Configuration
 
-| Name            | Type    | Description                           | Default | Required | Advanced |
-|-----------------|---------|---------------------------------------|---------|----------|----------|
-| hostname        | text    | Hostname or IP address of the device  | N/A     | yes      | no       |
-| password        | text    | Password to access the device         | N/A     | yes      | no       |
-| refreshInterval | integer | Interval the device is polled in sec. | 600     | no       | yes      |
+| Name       | Type   | Description                        | Default | Required | Advanced |
+|------------|--------|------------------------------------|---------|----------|----------|
+| nodeId     | text   | The node ID of the endpoint        | N/A     | yes      | no       |
+| endpointId | number | The endpoint ID within the node    | N/A     | yes      | no       |
 
 ## Channels
 
-_Here you should provide information about available channel types, what their meaning is and how they can be used._
+### Controller Channels
+The Matter Binding provides various channels for controlling and monitoring Matter devices. Here are some of the available channels:
 
-_Note that it is planned to generate some part of this based on the XML files within ```src/main/resources/OH-INF/thing``` of your binding._
+| Channel  | Type   | Read/Write | Description                   |
+|----------|--------|------------|-------------------------------|
+| pairCode  | String | RW         | 12 digit pairing code or short code and key (separated by a space)       |
 
-| Channel | Type   | Read/Write | Description                 |
-|---------|--------|------------|-----------------------------|
-| control | Switch | RW         | This is the control channel |
+### Endpoint Channels
+Endpoint channels are dynamically added based on the endpoint type.
+Possible channels include:
+
+## Endpoint Channels
+
+| Channel ID                   | Item Type                | Label                       | Description                                          | Category       | ReadOnly | Pattern       |
+|------------------------------|--------------------------|-----------------------------|------------------------------------------------------|----------------|----------|----------------|
+| battery_voltage              | Number:ElectricPotential | Battery Voltage             | The current battery voltage                          | Energy         | yes      | %.1f %unit%    |
+| battery_alarm                | String                   | Battery Alarm               | The battery alarm state                              | Energy         | yes      |                |
+| color_color                  | Color                    | Color                       | Control the color of a light                         | ColorLight     | no       |                |
+| door_state                   | Switch                   | Door Lock State             | Locks and unlocks the door                           | Door           | no       |                |
+| fancontrol                   | Number                   | Fan Mode                    | Set the fan mode                                     | HVAC           | no       |                |
+| electrical_activepower       | Number:Power             | Total Active Power          | The total power consumed by the device               | Energy         | yes      | %.1f %unit%    |
+| electrical_rmscurrent        | Number:ElectricCurrent   | Current                     | The current RMS current measurement                  | Energy         | yes      | %.1f %unit%    |
+| electrical_rmsvoltage        | Number:ElectricPotential | Voltage                     | The current RMS voltage measurement                  | Energy         | yes      | %.1f %unit%    |
+| binaryinput                  | Switch                   | Binary Input Sensor         | Indicates a binary input sensor state                |                | yes      |                |
+| ias_contactportal1           | Switch                   | Contact Sensor              | Contact sensor                                       | Door           | yes      |                |
+| ias_motionintrusion          | Switch                   | Motion Intrusion            | Motion intrusion sensor                              | Motion         | yes      |                |
+| ias_codetector               | Switch                   | Carbon Monoxide Detector    | Carbon Monoxide Alarm                                | Sensor         | yes      |                |
+| ias_fire                     | Switch                   | Fire Detector               | Fire Indication Alarm                                | SmokeDetector  | yes      |                |
+| ias_motionpresence           | Switch                   | Motion Presence             | Motion presence sensor                               | Motion         | yes      |                |
+| ias_standard_system          | Switch                   | System Alarm                |                                                      |                | yes      |                |
+| ias_water                    | Switch                   | Water Sensor                | Water Sensor Alarm                                   | Sensor         | yes      |                |
+| ias_movement                 | Switch                   | Movement Sensor             | Movement Sensor Alarm                                | Sensor         | yes      |                |
+| ias_vibration                | Switch                   | Vibration Sensor            | Vibration Sensor Alarm                               | Sensor         | yes      |                |
+| ias_tamper                   | Switch                   | Tamper                      | Indicates if a device is tampered with               | Alarm          | yes      |                |
+| measurement_illuminance      | Number                   | Illuminance                 | Indicates the current illuminance in lux             |                | yes      | %.0f           |
+| measurement_pressure         | Number:Pressure          | Atmospheric Pressure        | Indicates the current pressure                       | Pressure       | yes      | %.1f %unit%    |
+| measurement_relativehumidity | Number                   | Humidity                    | Indicates the current relative humidity              | Humidity       | yes      | %.1f           |
+| measurement_temperature      | Number:Temperature       | Temperature                 | Indicates the current temperature                    | Temperature    | yes      | %.1f %unit%    |
+| metering_instantdemand       | Number                   | Instantaneous Demand        | The instantaneous demand from the metering system    | Number         | no       |                |
+| metering_sumdelivered        | Number                   | Summation Delivered         | The total delivered from the metering system         | Number         | no       |                |
+| metering_sumreceived         | Number                   | Summation Received          | The total received from the metering system          | Number         | no       |                |
+| sensor_occupancy             | Switch                   | Occupancy                   | Indicates if an occupancy sensor is triggered        | Motion         | yes      |                |
+| switch_onoff                 | Switch                   | Switch                      | Switches the power on and off                        | Light          | no       |                |
+| switch_level                 | Dimmer                   | Dimmer                      | Sets the level of the light                          | Light          | no       |                |
+| thermostat_localtemp         | Number:Temperature       | Local Temperature           | Indicates the local temperature provided by the thermostat | HVAC       | yes      | %.1f %unit%    |
+| thermostat_outdoortemp       | Number:Temperature       | Outdoor Temperature         | Indicates the outdoor temperature provided by the thermostat | HVAC   | yes      | %.1f %unit%    |
+| thermostat_occupiedheating   | Number:Temperature       | Occupied Heating Setpoint   | Set the heating temperature when the room is occupied | HVAC          | no       | %.1f %unit%    |
+| thermostat_occupiedcooling   | Number:Temperature       | Occupied Cooling Setpoint   | Set the cooling temperature when the room is occupied | HVAC          | no       | %.1f %unit%    |
+| thermostat_unoccupiedheating | Number:Temperature       | Unoccupied Heating Setpoint | Set the heating temperature when the room is unoccupied | HVAC       | no       | %.1f %unit%    |
+| thermostat_unoccupiedcooling | Number:Temperature       | Unoccupied Cooling Setpoint | Set the cooling temperature when the room is unoccupied | HVAC       | no       | %.1f %unit%    |
+| thermostat_systemmode        | Number                   | System Mode                 | Set the system mode of the thermostat                | HVAC           | no       |                |
+| thermostat_runningmode       | Number                   | Running Mode                | The running mode of the thermostat                   | HVAC           | yes      |                |
+| thermostat_heatingdemand     | Number:Dimensionless     | Heating Demand              | The level of heating currently demanded by the thermostat | HVAC       | yes      | %.0f %%        |
+| thermostat_coolingdemand     | Number:Dimensionless     | Cooling Demand              | The level of cooling currently demanded by the thermostat | HVAC       | yes      | %.0f %%        |
+| warning_device               | String                   | Warning device              | Triggers warnings on a warning device                | Siren          | yes      |                |
+| windowcovering_lift          | Rollershutter            | Window Covering Lift        | Sets the window covering level                       | Blinds         | no       |                |
+
 
 ## Full Example
 
-_Provide a full usage example based on textual configuration files._
-_*.things, *.items examples are mandatory as textual configuration is well used by many users._
-_*.sitemap examples are optional._
-
 ### Thing Configuration
-
 ```java
-Example thing configuration goes here.
+Thing configuration example for the Matter controller:
+Thing matter:controller:myController [ port=1234, host="192.168.1.100", portId=1, pairCode="123-456" ]
+
+Thing configuration example for a Matter endpoint:
+Thing matter:endpoint:myEndpoint [ nodeId="node1", endpointId=1 ]
 ```
-### Item Configuration
 
+### Item Configuration
 ```java
-Example item configuration goes here.
+Dimmer MyEndpointDimmer "My Endpoint Dimmer" { channel="matter:endpoint:myController:myEndpoint:LevelControl_dimmer" }
 ```
 
 ### Sitemap Configuration
-
 ```perl
-Optional Sitemap configuration goes here.
-Remove this section, if not needed.
+Optional Sitemap configuration:
+sitemap home label="Home"
+{
+    Frame label="Matter Devices"
+    {
+        Dimmer item=MyEndpointDimmer
+    }
+}
 ```
-
-## Any custom content here!
-
-_Feel free to add additional sections for whatever you think should also be mentioned about your binding!_
