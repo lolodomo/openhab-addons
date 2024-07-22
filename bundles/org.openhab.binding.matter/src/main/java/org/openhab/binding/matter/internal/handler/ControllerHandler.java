@@ -17,10 +17,12 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL
 import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_ENDPOINT;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +45,9 @@ import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.BaseBridgeHandler;
 import org.openhab.core.thing.binding.ThingHandler;
+import org.openhab.core.thing.binding.ThingHandlerService;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
@@ -56,12 +60,12 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class ControllerHandler extends AbstractMatterBridgeHandler
+public class ControllerHandler extends BaseBridgeHandler
         implements AttributeListener, NodeStateListener, ControllerStateListener {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
     private Map<String, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
-
+    private @Nullable NodeDiscoveryService discoveryService;
     private MatterWebsocketClient client;
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
@@ -73,6 +77,11 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
         client.addAttributeListener(this);
         client.addNodeStateListener(this);
         client.addControllerStateListener(this);
+    }
+
+    @Override
+    public Collection<Class<? extends ThingHandlerService>> getServices() {
+        return Set.of(NodeDiscoveryService.class);
     }
 
     @Override
@@ -271,6 +280,10 @@ public class ControllerHandler extends AbstractMatterBridgeHandler
     @Override
     public void childHandlerDisposed(ThingHandler childHandler, Thing childThing) {
         // do nothing by default, can be overridden by subclasses
+    }
+
+    public void setDiscoveryService(@Nullable NodeDiscoveryService service) {
+        this.discoveryService = service;
     }
 
     public MatterWebsocketClient getClient() {
