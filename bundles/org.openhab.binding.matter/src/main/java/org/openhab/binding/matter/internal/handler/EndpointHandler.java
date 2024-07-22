@@ -14,10 +14,7 @@ package org.openhab.binding.matter.internal.handler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -57,7 +54,6 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
     private String nodeId = "";
     protected int endpointId;
-    private List<BaseCluster> clusters = Collections.synchronizedList(new LinkedList<BaseCluster>());
     private Map<String, ClusterConverter> channelIdMap = new HashMap<String, ClusterConverter>();
     private Map<Integer, ClusterConverter> clusterIdMap = new HashMap<Integer, ClusterConverter>();
     private @Nullable MatterWebsocketClient cachedClient;
@@ -201,9 +197,6 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             return;
         }
         c.onEvent(message);
-    }
-
-    public void refresh() {
     }
 
     public String getNodeId() {

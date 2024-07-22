@@ -37,6 +37,7 @@ import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
 import org.openhab.binding.matter.internal.config.ControllerConfiguration;
+import org.openhab.binding.matter.internal.discovery.NodeDiscoveryHandler;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
 import org.openhab.core.OpenHAB;
 import org.openhab.core.thing.Bridge;
@@ -61,7 +62,7 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 public class ControllerHandler extends BaseBridgeHandler
-        implements AttributeListener, NodeStateListener, ControllerStateListener {
+        implements AttributeListener, NodeStateListener, ControllerStateListener, NodeDiscoveryHandler {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
     private Map<String, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
@@ -97,10 +98,6 @@ public class ControllerHandler extends BaseBridgeHandler
             case DISCONNECTED:
             case DECOMMISSIONED:
             case RECONNECTING:
-                // NodeHandler handler = nodeHandler(message.nodeId);
-                // if (handler != null) {
-                // handler.setNodeStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
-                // }
                 updateEndpointStatuses(message.nodeId, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
                 break;
             case WAITINGFORDEVICEDISCOVERY:
@@ -113,7 +110,6 @@ public class ControllerHandler extends BaseBridgeHandler
 
     @Override
     public void onEvent(AttributeChangedMessage message) {
-        // NodeHandler handler = nodeHandler(message.path.nodeId);
         EndpointHandler handler = endpointHandler(message.path.nodeId, message.path.endpointId);
         if (handler == null) {
             logger.debug("No handler found for node {}", message.path.nodeId);
@@ -357,7 +353,7 @@ public class ControllerHandler extends BaseBridgeHandler
         NodeDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
-            ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, String.valueOf(endpoint.number));
+            ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, node.id + "_" + endpoint.number);
             discoveryService.discoverChildEndpointThing(thingUID, bridgeUID, node.id, endpoint.number);
         }
     }

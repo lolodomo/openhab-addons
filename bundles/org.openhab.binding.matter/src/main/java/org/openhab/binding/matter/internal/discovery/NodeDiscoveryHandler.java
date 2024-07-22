@@ -23,9 +23,4 @@ public interface NodeDiscoveryHandler {
      * @param service
      */
     void setDiscoveryService(NodeDiscoveryService service);
-
-    /**
-     * Initiates the discovery process
-     */
-    void startDiscovery();
 }

@@ -12,12 +12,12 @@
  */
 package org.openhab.binding.matter.internal.discovery;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ClusterThingTypes;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
-import org.openhab.core.config.discovery.DiscoveryService;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerService;
@@ -28,12 +28,9 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham
  *
  */
-public class NodeDiscoveryService extends AbstractDiscoveryService implements DiscoveryService, ThingHandlerService {
+@NonNullByDefault
+public class NodeDiscoveryService extends AbstractDiscoveryService implements ThingHandlerService {
     private final Logger logger = LoggerFactory.getLogger(NodeDiscoveryService.class);
-    //
-    // private static final Set<ThingTypeUID> SUPPORTED_DISCOVERY_THING_TYPES_UIDS = Set.of(THING_TYPE_NODE,
-    // THING_TYPE_ENDPOINT, THING_TYPE_LEVEL_CONTROL);
-
     private @Nullable ThingHandler thingHandler;
 
     public NodeDiscoveryService() throws IllegalArgumentException {
@@ -54,14 +51,6 @@ public class NodeDiscoveryService extends AbstractDiscoveryService implements Di
     }
 
     @Override
-    protected void startScan() {
-        ThingHandler handler = this.thingHandler;
-        if (handler != null) {
-            ((NodeDiscoveryHandler) handler).startDiscovery();
-        }
-    }
-
-    @Override
     public void activate() {
         super.activate(null);
     }
@@ -71,18 +60,15 @@ public class NodeDiscoveryService extends AbstractDiscoveryService implements Di
         super.deactivate();
     }
 
-    // public void discoverChildNodeThing(ThingUID thingUID, ThingUID bridgeUID, String id) {
-    // logger.trace("discoverChildNodeThing: {} {} {}", thingUID, bridgeUID, id);
-    // DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel("Matter " + id)
-    // .withProperty("id", id).withRepresentationProperty("id").withBridge(bridgeUID).build();
-    // thingDiscovered(result);
-    // }
-
     public void discoverChildEndpointThing(ThingUID thingUID, ThingUID bridgeUID, String nodeId, Integer id) {
         logger.trace("discoverChildEndpointThing: {} {} {}", thingUID, bridgeUID, id);
         String fullId = nodeId + ":" + id;
         DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel("Matter " + fullId)
                 .withProperty("id", fullId).withRepresentationProperty("id").withBridge(bridgeUID).build();
         thingDiscovered(result);
+    }
+
+    @Override
+    protected void startScan() {
     }
 }
