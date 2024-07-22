@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +25,11 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
@@ -65,6 +65,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Dan Cunningham
  *
  */
+@NonNullByDefault
 public class MatterWebsocketClient implements WebSocketListener, NodeExitListener {
 
     private final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
@@ -72,16 +73,13 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer()).create();
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool("matter-js.MatterWebsocketClient");
+    @Nullable
     private Session session;
     WebSocketClient client = new WebSocketClient();
+    @Nullable
     NodeRunner nodeRunner;
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<MatterClientListener> clientListeners = new CopyOnWriteArrayList<>();
-
-    // private final CopyOnWriteArrayList<AttributeListener> attributeListeners = new CopyOnWriteArrayList<>();
-    // private final CopyOnWriteArrayList<NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
-    // private final CopyOnWriteArrayList<ControllerStateListener> controllerStateListeners = new
-    // CopyOnWriteArrayList<>();
 
     public void connect(String host, int port, String storagePath) throws Exception {
         connectWebsocket(host, port, storagePath);
@@ -145,25 +143,32 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         clientListeners.remove(listener);
     }
 
-    protected CompletableFuture<JsonElement> sendMessage(String namespace, String functionName, Object args[]) {
+    protected CompletableFuture<JsonElement> sendMessage(String namespace, String functionName,
+            @Nullable Object args[]) {
+        Session session = this.session;
+        if (session == null) {
+            throw new RuntimeException("No valid session");
+        }
         String requestId = UUID.randomUUID().toString();
         CompletableFuture<JsonElement> responseFuture = new CompletableFuture<>();
         pendingRequests.put(requestId, responseFuture);
         Request message = new Request(requestId, namespace, functionName, args);
         String jsonMessage = gson.toJson(message);
         logger.debug("sendMessage: {}", jsonMessage);
-        Future<Void> future = session.getRemote().sendStringByFuture(jsonMessage);
-        try {
-            future.get(5, TimeUnit.SECONDS); // Wait for up to 5 seconds for the message to be sent
-            logger.debug("Message sent successfully {}", requestId);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            logger.debug("Failed to send message: {}", requestId, e);
-        }
+        session.getRemote().sendStringByFuture(jsonMessage);
+        // Future<Void> future = session.getRemote().sendStringByFuture(jsonMessage);
+        // Debug code
+        // try {
+        // future.get(5, TimeUnit.SECONDS); // Wait for up to 5 seconds for the message to be sent
+        // logger.debug("Message sent successfully {}", requestId);
+        // } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        // logger.debug("Failed to send message: {}", requestId, e);
+        // }
         return responseFuture;
     }
 
     @Override
-    public void onWebSocketConnect(Session session) {
+    public void onWebSocketConnect(@Nullable Session session) {
         this.session = session;
         for (MatterClientListener listener : clientListeners) {
             listener.onConnect();
@@ -171,7 +176,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     }
 
     @Override
-    public void onWebSocketText(String msg) {
+    public void onWebSocketText(@Nullable String msg) {
         logger.debug("onWebSocketText {}", msg);
         scheduler.submit(() -> {
             Message message = gson.fromJson(msg, Message.class);
@@ -245,20 +250,20 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     }
 
     @Override
-    public void onWebSocketClose(int statusCode, String reason) {
+    public void onWebSocketClose(int statusCode, @Nullable String reason) {
         logger.debug("onWebSocketClose {} {}", statusCode, reason);
         for (MatterClientListener listener : clientListeners) {
-            listener.onDisconnect(reason);
+            listener.onDisconnect(reason != null ? reason : "Code " + statusCode);
         }
     }
 
     @Override
-    public void onWebSocketError(Throwable cause) {
+    public void onWebSocketError(@Nullable Throwable cause) {
         logger.debug("onWebSocketError", cause);
     }
 
     @Override
-    public void onWebSocketBinary(byte[] payload, int offset, int len) {
+    public void onWebSocketBinary(byte @Nullable [] payload, int offset, int len) {
         logger.debug("onWebSocketBinary data, not supported");
     }
 
@@ -267,13 +272,14 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     }
 
     public List<String> getCommissionedNodeIds() throws Exception {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", null);
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", new Object[0]);
         JsonElement obj = future.get();
         List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
         }.getType());
-        return nodes;
+        return nodes != null ? nodes : Collections.emptyList();
     }
 
+    @Nullable
     public Node getNode(String id) throws Exception {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { id });
         JsonElement obj = future.get();
@@ -300,9 +306,9 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         future.get();
     }
 
-    public class NodeDeserializer implements JsonDeserializer<Node> {
+    class NodeDeserializer implements JsonDeserializer<Node> {
         @Override
-        public Node deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+        public @Nullable Node deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
             JsonObject jsonObjectNode = json.getAsJsonObject();
             Node node = new Node();
@@ -372,8 +378,9 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
             oldRunner.removeExitListener(this);
             oldRunner.stopNode();
         }
-        nodeRunner = new NodeRunner(nodePath);
-        nodeRunner.addExitListener(this);
+        NodeRunner newRunner = new NodeRunner(nodePath);
+        newRunner.addExitListener(this);
+        this.nodeRunner = newRunner;
         return nodeRunner.runNodeWithResource("/matter.js");
     }
 

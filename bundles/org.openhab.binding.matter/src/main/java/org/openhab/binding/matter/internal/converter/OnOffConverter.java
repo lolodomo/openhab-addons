@@ -12,10 +12,15 @@
  */
 package org.openhab.binding.matter.internal.converter;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_LABEL_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_ONOFF;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_DIMMER;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -33,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham
  *
  */
+@NonNullByDefault
 public class OnOffConverter extends ClusterConverter {
     private final Logger logger = LoggerFactory.getLogger(OnOffConverter.class);
 

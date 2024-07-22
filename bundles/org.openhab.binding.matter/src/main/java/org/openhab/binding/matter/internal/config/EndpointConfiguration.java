@@ -22,8 +22,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 @NonNullByDefault
 public class EndpointConfiguration {
 
-    /**
-     * Sample configuration parameters. Replace with your own.
-     */
-    public String id = "";
+    public String nodeId = "";
+
+    public int endpointId;
 }

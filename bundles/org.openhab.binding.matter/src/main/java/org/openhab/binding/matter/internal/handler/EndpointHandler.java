@@ -82,14 +82,8 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     @Override
     public void initialize() {
         EndpointConfiguration config = getConfigAs(EndpointConfiguration.class);
-        String[] parts = config.id.split(":");
-        if (parts.length != 2) {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-                    "Endpoints should have an ID in the format 'nodeId:endpointNum'");
-            return;
-        }
-        nodeId = parts[0];
-        endpointId = Integer.parseInt(parts[1]);
+        nodeId = config.nodeId;
+        endpointId = config.endpointId;
         logger.debug("initialize endpoint {}", endpointId);
         ControllerHandler handler = controllerHandler();
         if (handler == null) {

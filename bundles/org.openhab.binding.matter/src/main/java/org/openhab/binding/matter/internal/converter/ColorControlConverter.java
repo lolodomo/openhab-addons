@@ -27,6 +27,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -52,6 +54,7 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham
  *
  */
+@NonNullByDefault
 public class ColorControlConverter extends ClusterConverter {
     private final Logger logger = LoggerFactory.getLogger(ColorControlConverter.class);
     private PercentType lastLevel = new PercentType(0);
@@ -61,13 +64,13 @@ public class ColorControlConverter extends ClusterConverter {
     private int lastSaturation = -1;
     private boolean hueChanged = false;
     private boolean saturationChanged = false;
-    private ScheduledFuture<?> colorUpdateTimer = null;
+    private @Nullable ScheduledFuture<?> colorUpdateTimer = null;
     private int lastX = -1;
     private int lastY = -1;
     private boolean xChanged = false;
     private boolean yChanged = false;
     private HSBType lastHSB = new HSBType("0,0,100");
-    private Map<String, Boolean> optionsMask = new HashMap();
+    private Map<String, Boolean> optionsMask = new HashMap<String, Boolean>();
     private ScheduledExecutorService colorUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
 
     public ColorControlConverter(EndpointHandler handler) {

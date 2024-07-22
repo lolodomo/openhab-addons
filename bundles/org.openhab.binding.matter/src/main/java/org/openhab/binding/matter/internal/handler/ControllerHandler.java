@@ -35,7 +35,8 @@ import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
 import org.openhab.binding.matter.internal.config.ControllerConfiguration;
-import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
+import org.openhab.binding.matter.internal.discovery.MatterDiscoveryHandler;
+import org.openhab.binding.matter.internal.discovery.MatterDiscoveryService;
 import org.openhab.core.OpenHAB;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
@@ -58,11 +59,11 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class ControllerHandler extends BaseBridgeHandler implements MatterClientListener {
+public class ControllerHandler extends BaseBridgeHandler implements MatterClientListener, MatterDiscoveryHandler {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
     private Map<String, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
-    private @Nullable NodeDiscoveryService discoveryService;
+    private @Nullable MatterDiscoveryService discoveryService;
     private MatterWebsocketClient client;
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
@@ -75,7 +76,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     @Override
     public Collection<Class<? extends ThingHandlerService>> getServices() {
-        return Set.of(NodeDiscoveryService.class);
+        return Set.of(MatterDiscoveryService.class);
     }
 
     @Override
@@ -264,8 +265,15 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         // do nothing by default, can be overridden by subclasses
     }
 
-    public void setDiscoveryService(@Nullable NodeDiscoveryService service) {
+    @Override
+    public void setDiscoveryService(@Nullable MatterDiscoveryService service) {
+        logger.debug("setDiscoveryService");
         this.discoveryService = service;
+    }
+
+    @Override
+    public void startScan() {
+        refresh();
     }
 
     public MatterWebsocketClient getClient() {
@@ -296,6 +304,9 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         logger.debug("updateNode {}", id);
         try {
             Node node = client.getNode(id);
+            if (node == null) {
+                return;
+            }
             synchronized (nodeEndpoints) {
                 Map<Integer, Endpoint> endpoints = new HashMap<>();
                 for (Endpoint e : node.endpoints.values()) {
@@ -333,7 +344,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     private void discoverChildEndpoint(Node node, Endpoint endpoint) {
         logger.debug("discoverChildEndpoint {}", node.id);
-        NodeDiscoveryService discoveryService = this.discoveryService;
+        MatterDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
             ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, node.id + "_" + endpoint.number);

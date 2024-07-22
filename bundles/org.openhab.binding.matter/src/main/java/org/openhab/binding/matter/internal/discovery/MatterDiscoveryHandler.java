@@ -16,11 +16,13 @@ package org.openhab.binding.matter.internal.discovery;
  * @author Dan Cunningham
  *
  */
-public interface NodeDiscoveryHandler {
+public interface MatterDiscoveryHandler {
     /**
-     * Sets a {@link NodeDiscoveryService} to call when device information is received
+     * Sets a {@link MatterDiscoveryService} to call when device information is received
      *
      * @param service
      */
-    void setDiscoveryService(NodeDiscoveryService service);
+    void setDiscoveryService(MatterDiscoveryService service);
+
+    void startScan();
 }

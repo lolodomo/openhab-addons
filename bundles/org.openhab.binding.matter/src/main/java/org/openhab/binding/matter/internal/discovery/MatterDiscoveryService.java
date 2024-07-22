@@ -29,17 +29,18 @@ import org.slf4j.LoggerFactory;
  *
  */
 @NonNullByDefault
-public class NodeDiscoveryService extends AbstractDiscoveryService implements ThingHandlerService {
-    private final Logger logger = LoggerFactory.getLogger(NodeDiscoveryService.class);
+public class MatterDiscoveryService extends AbstractDiscoveryService implements ThingHandlerService {
+    private final Logger logger = LoggerFactory.getLogger(MatterDiscoveryService.class);
     private @Nullable ThingHandler thingHandler;
 
-    public NodeDiscoveryService() throws IllegalArgumentException {
+    public MatterDiscoveryService() throws IllegalArgumentException {
         super(ClusterThingTypes.SUPPORTED_DISCOVERY_THING_TYPES_UIDS, 5, false);
     }
 
     @Override
     public void setThingHandler(ThingHandler handler) {
-        if (handler instanceof NodeDiscoveryHandler childDiscoveryHandler) {
+        logger.debug("setThingHandler {}", handler);
+        if (handler instanceof MatterDiscoveryHandler childDiscoveryHandler) {
             childDiscoveryHandler.setDiscoveryService(this);
             this.thingHandler = handler;
         }
@@ -61,14 +62,21 @@ public class NodeDiscoveryService extends AbstractDiscoveryService implements Th
     }
 
     public void discoverChildEndpointThing(ThingUID thingUID, ThingUID bridgeUID, String nodeId, Integer id) {
-        logger.trace("discoverChildEndpointThing: {} {} {}", thingUID, bridgeUID, id);
-        String fullId = nodeId + ":" + id;
-        DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel("Matter " + fullId)
-                .withProperty("id", fullId).withRepresentationProperty("id").withBridge(bridgeUID).build();
+        logger.debug("discoverChildEndpointThing: {} {} {}", thingUID, bridgeUID, id);
+        String path = nodeId + ":" + id;
+        String label = "Matter Endpoint " + (nodeId.length() > 5 ? nodeId.substring(nodeId.length() - 5) : nodeId) + ":"
+                + id;
+        DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel(label).withProperty("nodeId", nodeId)
+                .withProperty("endpointId", id).withProperty("path", path).withRepresentationProperty("path")
+                .withBridge(bridgeUID).build();
         thingDiscovered(result);
     }
 
     @Override
     protected void startScan() {
+        ThingHandler handler = this.thingHandler;
+        if (handler != null && handler instanceof MatterDiscoveryHandler childDiscoveryHandler) {
+            childDiscoveryHandler.startScan();
+        }
     }
 }

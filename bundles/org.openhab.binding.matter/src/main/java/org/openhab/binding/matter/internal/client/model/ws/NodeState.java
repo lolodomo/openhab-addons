@@ -12,10 +12,13 @@
  */
 package org.openhab.binding.matter.internal.client.model.ws;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * @author Dan Cunningham
  *
  */
+@NonNullByDefault
 public enum NodeState {
     /** Node is connected and all data is up-to-date. */
     CONNECTED("Connected"),
@@ -47,7 +50,7 @@ public enum NodeState {
      */
     DECOMMISSIONED("Decommissioned");
 
-    private String state;
+    private String state = "";
 
     NodeState(String state) {
         this.state = state;

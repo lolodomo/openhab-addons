@@ -20,6 +20,7 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TY
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -42,9 +43,10 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham
  *
  */
+@NonNullByDefault
 public class LevelControlConverter extends ClusterConverter {
     private final Logger logger = LoggerFactory.getLogger(LevelControlConverter.class);
-    private LevelControlCluster levelControlCluster;
+    // private LevelControlCluster levelControlCluster;
     private PercentType lastLevel = new PercentType(0);
     private OnOffType lastOnOff = OnOffType.OFF;
 
