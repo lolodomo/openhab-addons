@@ -76,9 +76,12 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     WebSocketClient client = new WebSocketClient();
     NodeRunner nodeRunner;
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
-    private final CopyOnWriteArrayList<AttributeListener> attributeListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<ControllerStateListener> controllerStateListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<MatterClientListener> clientListeners = new CopyOnWriteArrayList<>();
+
+    // private final CopyOnWriteArrayList<AttributeListener> attributeListeners = new CopyOnWriteArrayList<>();
+    // private final CopyOnWriteArrayList<NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
+    // private final CopyOnWriteArrayList<ControllerStateListener> controllerStateListeners = new
+    // CopyOnWriteArrayList<>();
 
     public void connect(String host, int port, String storagePath) throws Exception {
         connectWebsocket(host, port, storagePath);
@@ -93,7 +96,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
             } catch (Exception e) {
                 disconnect();
                 logger.error("Could not connect", e);
-                for (ControllerStateListener listener : controllerStateListeners) {
+                for (MatterClientListener listener : clientListeners) {
                     String msg = e.getLocalizedMessage();
                     listener.onDisconnect(msg != null ? msg : "Exception connecting");
                 }
@@ -134,28 +137,12 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         }
     }
 
-    public void addAttributeListener(AttributeListener listener) {
-        attributeListeners.add(listener);
+    public void addListener(MatterClientListener listener) {
+        clientListeners.add(listener);
     }
 
-    public void removeAttributeListener(AttributeListener listener) {
-        attributeListeners.remove(listener);
-    }
-
-    public void addNodeStateListener(NodeStateListener listener) {
-        nodeStateListeners.add(listener);
-    }
-
-    public void removeNodeStateListener(NodeStateListener listener) {
-        nodeStateListeners.remove(listener);
-    }
-
-    public void addControllerStateListener(ControllerStateListener listener) {
-        controllerStateListeners.add(listener);
-    }
-
-    public void removeControllerStateListener(ControllerStateListener listener) {
-        controllerStateListeners.remove(listener);
+    public void removeListener(MatterClientListener listener) {
+        clientListeners.remove(listener);
     }
 
     protected CompletableFuture<JsonElement> sendMessage(String namespace, String functionName, Object args[]) {
@@ -178,7 +165,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     @Override
     public void onWebSocketConnect(Session session) {
         this.session = session;
-        for (ControllerStateListener listener : controllerStateListeners) {
+        for (MatterClientListener listener : clientListeners) {
             listener.onConnect();
         }
     }
@@ -222,7 +209,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                             logger.debug("invalid AttributeChangedMessage");
                             return;
                         }
-                        for (AttributeListener listener : attributeListeners) {
+                        for (MatterClientListener listener : clientListeners) {
                             try {
                                 listener.onEvent(changedMessage);
                             } catch (Exception e) {
@@ -237,7 +224,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                             logger.debug("invalid NodeStateMessage");
                             return;
                         }
-                        for (NodeStateListener listener : nodeStateListeners) {
+                        for (MatterClientListener listener : clientListeners) {
                             try {
                                 listener.onEvent(nodeStateMessage);
                             } catch (Exception e) {
@@ -246,7 +233,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                         }
                         break;
                     case "ready":
-                        for (ControllerStateListener listener : controllerStateListeners) {
+                        for (MatterClientListener listener : clientListeners) {
                             listener.onReady();
                         }
                         break;
@@ -260,7 +247,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         logger.debug("onWebSocketClose {} {}", statusCode, reason);
-        for (ControllerStateListener listener : controllerStateListeners) {
+        for (MatterClientListener listener : clientListeners) {
             listener.onDisconnect(reason);
         }
     }
@@ -393,7 +380,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     @Override
     public void onNodeExit(int exitCode) {
         disconnect();
-        for (ControllerStateListener listener : controllerStateListeners) {
+        for (MatterClientListener listener : clientListeners) {
             listener.onDisconnect("Exit code " + exitCode);
         }
     }

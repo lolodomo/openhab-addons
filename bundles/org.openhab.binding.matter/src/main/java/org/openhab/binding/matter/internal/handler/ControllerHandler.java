@@ -28,16 +28,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.matter.internal.client.AttributeListener;
-import org.openhab.binding.matter.internal.client.ControllerStateListener;
+import org.openhab.binding.matter.internal.client.MatterClientListener;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
-import org.openhab.binding.matter.internal.client.NodeStateListener;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
 import org.openhab.binding.matter.internal.config.ControllerConfiguration;
-import org.openhab.binding.matter.internal.discovery.NodeDiscoveryHandler;
 import org.openhab.binding.matter.internal.discovery.NodeDiscoveryService;
 import org.openhab.core.OpenHAB;
 import org.openhab.core.thing.Bridge;
@@ -61,8 +58,7 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class ControllerHandler extends BaseBridgeHandler
-        implements AttributeListener, NodeStateListener, ControllerStateListener, NodeDiscoveryHandler {
+public class ControllerHandler extends BaseBridgeHandler implements MatterClientListener {
 
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
     private Map<String, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
@@ -70,14 +66,11 @@ public class ControllerHandler extends BaseBridgeHandler
     private MatterWebsocketClient client;
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
-    private boolean ready = false;
 
     public ControllerHandler(Bridge bridge) {
         super(bridge);
         client = new MatterWebsocketClient();
-        client.addAttributeListener(this);
-        client.addNodeStateListener(this);
-        client.addControllerStateListener(this);
+        client.addListener(this);
     }
 
     @Override
@@ -89,11 +82,7 @@ public class ControllerHandler extends BaseBridgeHandler
     public void onEvent(NodeStateMessage message) {
         switch (message.state) {
             case CONNECTED:
-                if (ready) {
-                    scheduler.execute(() -> {
-                        updateNode(message.nodeId);
-                    });
-                }
+                updateNode(message.nodeId);
                 break;
             case DISCONNECTED:
             case DECOMMISSIONED:
@@ -134,7 +123,6 @@ public class ControllerHandler extends BaseBridgeHandler
     @Override
     public void onReady() {
         updateStatus(ThingStatus.ONLINE);
-        ready = true;
         refresh();
     }
 
@@ -146,10 +134,8 @@ public class ControllerHandler extends BaseBridgeHandler
         }
 
         if (command instanceof RefreshType) {
-            if (ready) {
-                refresh();
-                return;
-            }
+            refresh();
+            return;
         }
         if (CHANNEL_PAIR_CODE.equals(channelUID.getId())) {
             try {
@@ -293,8 +279,6 @@ public class ControllerHandler extends BaseBridgeHandler
             for (String id : nodeIds) {
                 updateNode(id);
             }
-            // wait until we have at least one update before becoming ready
-            ready = true;
         } catch (Exception e) {
             logger.debug("Error communicating with controller", e);
             setOffline(e.getLocalizedMessage());
@@ -343,7 +327,6 @@ public class ControllerHandler extends BaseBridgeHandler
 
     private void setOffline(@Nullable String message) {
         client.disconnect();
-        ready = false;
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, message);
         reconnect();
     }
