@@ -84,7 +84,9 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         EndpointConfiguration config = getConfigAs(EndpointConfiguration.class);
         String[] parts = config.id.split(":");
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Endpoints should have an ID in the format 'nodeID:endpointNum'");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
+                    "Endpoints should have an ID in the format 'nodeId:endpointNum'");
+            return;
         }
         nodeId = parts[0];
         endpointId = Integer.parseInt(parts[1]);
