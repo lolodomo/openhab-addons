@@ -40,7 +40,6 @@ public class MatterBindingConstants {
     public static final ThingTypeUID THING_TYPE_ENDPOINT = new ThingTypeUID(BINDING_ID, "endpoint");
 
     // List of all Channel ids
-    public static final String CHANNEL_1 = "channel1";
     public static final String CHANNEL_PAIR_CODE = "pair_code";
     public static final String CHANNEL_COMMAND = "command";
 
