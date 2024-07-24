@@ -17,11 +17,14 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL
 import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_ENDPOINT;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +41,8 @@ import org.openhab.binding.matter.internal.config.ControllerConfiguration;
 import org.openhab.binding.matter.internal.discovery.MatterDiscoveryHandler;
 import org.openhab.binding.matter.internal.discovery.MatterDiscoveryService;
 import org.openhab.core.OpenHAB;
+import org.openhab.core.config.core.Configuration;
+import org.openhab.core.config.core.validation.ConfigValidationException;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -147,60 +152,68 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         }
         if (CHANNEL_COMMAND.equals(channelUID.getId())) {
             try {
-                refresh();
+                String[] args = command.toString().split(" ");
+                if (args.length < 3) {
+                    logger.debug("Commands require at least 3 segments");
+                    return;
+                }
+
+                String result = client.genericCommand(args[0], args[1],
+                        (Object) Arrays.copyOfRange(args, 2, args.length));
+                logger.debug("Command {} ", command);
+                logger.debug("Result: {}", result);
             } catch (Exception e) {
                 logger.debug("Could not send command", e);
             }
         }
     }
 
-    // @Override
-    // public void handleConfigurationUpdate(Map<String, Object> configurationParameters)
-    // throws ConfigValidationException {
-    // logger.debug("handleConfigurationUpdate");
-    // validateConfigurationParameters(configurationParameters);
-    // Configuration configuration = editConfiguration();
-    // boolean reinitialize = false;
-    // String pairCode = null;
-    // for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
-    // Object value = configurationParameter.getValue();
+    public void handleConfigurationUpdate2(Map<String, Object> configurationParameters)
+            throws ConfigValidationException {
+        logger.debug("handleConfigurationUpdate");
+        validateConfigurationParameters(configurationParameters);
+        Configuration configuration = editConfiguration();
+        boolean reinitialize = false;
+        String pairCode = null;
+        for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
+            Object value = configurationParameter.getValue();
 
-    // logger.debug("{}: old: {} new: {}", configurationParameter.getKey(),
-    // configuration.get(configurationParameter.getKey()), configurationParameter.getValue());
-    // // Ignore any configuration parameters that have not changed
-    // if (Objects.equals(configurationParameter.getValue(), configuration.get(configurationParameter.getKey()))) {
-    // logger.debug("Controller Configuration update ignored {} to {} ({})", configurationParameter.getKey(),
-    // value, value == null ? "null" : value.getClass().getSimpleName());
-    // continue;
-    // }
-    // logger.debug("Controller Configuration update {} to {}", configurationParameter.getKey(), value);
-    // switch (configurationParameter.getKey()) {
-    // case "host":
-    // case "port":
-    // case "nodeId":
-    // reinitialize = true;
-    // break;
-    // case "pairCode":
-    // if (!value.toString().isBlank()) {
-    // pairCode = value.toString();
-    // value = "";
-    // }
-    // }
-    // configuration.put(configurationParameter.getKey(), value);
-    // }
-    // updateConfiguration(configuration);
-    // if (reinitialize) {
-    // dispose();
-    // updateStatus(ThingStatus.INITIALIZING);
-    // initialize();
-    // } else if (pairCode != null && ready) {
-    // try {
-    // client.pairNode(pairCode);
-    // } catch (Exception e) {
-    // logger.debug("Could not pair", e);
-    // }
-    // }
-    // }
+            logger.debug("{}: old: {} new: {}", configurationParameter.getKey(),
+                    configuration.get(configurationParameter.getKey()), configurationParameter.getValue());
+            // Ignore any configuration parameters that have not changed
+            if (Objects.equals(configurationParameter.getValue(), configuration.get(configurationParameter.getKey()))) {
+                logger.debug("Controller Configuration update ignored {} to {} ({})", configurationParameter.getKey(),
+                        value, value == null ? "null" : value.getClass().getSimpleName());
+                continue;
+            }
+            logger.debug("Controller Configuration update {} to {}", configurationParameter.getKey(), value);
+            switch (configurationParameter.getKey()) {
+                case "host":
+                case "port":
+                case "nodeId":
+                    reinitialize = true;
+                    break;
+                case "pairCode":
+                    if (!value.toString().isBlank()) {
+                        pairCode = value.toString();
+                        value = "";
+                    }
+            }
+            configuration.put(configurationParameter.getKey(), value);
+        }
+        updateConfiguration(configuration);
+        if (reinitialize) {
+            dispose();
+            updateStatus(ThingStatus.INITIALIZING);
+            initialize();
+        } else if (pairCode != null) {
+            try {
+                client.pairNode(pairCode);
+            } catch (Exception e) {
+                logger.debug("Could not pair", e);
+            }
+        }
+    }
 
     @Override
     public void initialize() {
@@ -344,11 +357,16 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     private void discoverChildEndpoint(Node node, Endpoint endpoint) {
         logger.debug("discoverChildEndpoint {}", node.id);
+        // endpoint 0 is the root info cluster, not an actual device
+        if (endpoint.number == 0) {
+            return;
+        }
+
         MatterDiscoveryService discoveryService = this.discoveryService;
         if (discoveryService != null) {
             ThingUID bridgeUID = getThing().getUID();
             ThingUID thingUID = new ThingUID(THING_TYPE_ENDPOINT, bridgeUID, node.id + "_" + endpoint.number);
-            discoveryService.discoverChildEndpointThing(thingUID, bridgeUID, node.id, endpoint.number);
+            discoveryService.discoverChildEndpointThing(thingUID, bridgeUID, node, endpoint.number);
         }
     }
 

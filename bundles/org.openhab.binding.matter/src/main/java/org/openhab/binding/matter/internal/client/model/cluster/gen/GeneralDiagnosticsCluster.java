@@ -15,11 +15,15 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralDiagnosticsClusterTypes.*;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralDiagnosticsClusterTypes.BootReasonEnum;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralDiagnosticsClusterTypes.HardwareFaultEnum;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralDiagnosticsClusterTypes.NetworkFaultEnum;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralDiagnosticsClusterTypes.NetworkInterface;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralDiagnosticsClusterTypes.RadioFaultEnum;
 
 /**
  * GeneralDiagnostics
@@ -31,21 +35,21 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "GeneralDiagnostics";
     public static final int CLUSTER_ID = 0x0033;
 
-    public NetworkInterface networkInterfaces; // 0 NetworkInterface reportable 
-    public Integer rebootCount; // 1 int16u reportable 
-    public Long upTime; // 2 int64u reportable 
-    public Integer totalOperationalHours; // 3 int32u reportable 
-    public BootReasonEnum bootReason; // 4 BootReasonEnum reportable 
-    public HardwareFaultEnum activeHardwareFaults; // 5 HardwareFaultEnum reportable 
-    public RadioFaultEnum activeRadioFaults; // 6 RadioFaultEnum reportable 
-    public NetworkFaultEnum activeNetworkFaults; // 7 NetworkFaultEnum reportable 
-    public Boolean testEventTriggersEnabled; // 8 boolean reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public NetworkInterface[] networkInterfaces; // 0 NetworkInterface reportable
+    public Integer rebootCount; // 1 int16u reportable
+    public Long upTime; // 2 int64u reportable
+    public Integer totalOperationalHours; // 3 int32u reportable
+    public BootReasonEnum bootReason; // 4 BootReasonEnum reportable
+    public HardwareFaultEnum[] activeHardwareFaults; // 5 HardwareFaultEnum reportable
+    public RadioFaultEnum[] activeRadioFaults; // 6 RadioFaultEnum reportable
+    public NetworkFaultEnum[] activeNetworkFaults; // 7 NetworkFaultEnum reportable
+    public Boolean testEventTriggersEnabled; // 8 boolean reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public GeneralDiagnosticsCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 23, "GeneralDiagnostics");

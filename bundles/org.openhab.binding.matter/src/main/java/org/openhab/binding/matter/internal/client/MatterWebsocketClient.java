@@ -58,6 +58,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -279,6 +280,13 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         return nodes != null ? nodes : Collections.emptyList();
     }
 
+    public String genericCommand(String namespace, String functionName, @Nullable Object... objects) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes",
+                objects == null ? new Object[0] : objects);
+        JsonElement obj = future.get();
+        return obj == null ? "" : obj.getAsString();
+    }
+
     @Nullable
     public Node getNode(String id) throws Exception {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { id });
@@ -326,7 +334,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                 for (Map.Entry<String, JsonElement> clusterEntry : clusterEntries) {
                     String clusterName = clusterEntry.getKey();
                     JsonElement clusterElement = clusterEntry.getValue();
-
+                    logger.trace("Cluster {}", clusterEntry);
                     try {
                         Class<?> clazz = Class
                                 .forName(BaseCluster.class.getPackageName() + ".gen." + clusterName + "Cluster");
@@ -347,7 +355,8 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                         }
                     } catch (ClassNotFoundException e) {
                         logger.debug("Cluster not found: {} ", clusterName);
-                    } catch (IllegalArgumentException | SecurityException | IllegalAccessException e) {
+                    } catch (JsonSyntaxException | IllegalArgumentException | SecurityException
+                            | IllegalAccessException e) {
                         logger.debug("Exception for cluster {}", clusterName, e);
                     }
                 }
@@ -370,6 +379,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         }
     }
 
+    // we should move this into a shared service, so we only have 1 running, and it can be reused.
     private int startNodeJs() throws IOException {
         NodeManager nodeManager = new NodeManager();
         String nodePath = nodeManager.getNodePath();
