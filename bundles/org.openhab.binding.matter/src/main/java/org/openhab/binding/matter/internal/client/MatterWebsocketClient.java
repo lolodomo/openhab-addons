@@ -307,6 +307,11 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         future.get();
     }
 
+    public void decommissionNode(String nodeId) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "decommission", new Object[] { nodeId });
+        future.get();
+    }
+
     public void clusterCommand(String nodeId, Integer endpointId, String clusterName, ClusterCommand command)
             throws Exception {
         Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };

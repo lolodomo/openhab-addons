@@ -185,6 +185,15 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     }
 
     @Override
+    public void handleRemoval() {
+        super.handleRemoval();
+        ControllerHandler bridge = controllerHandler();
+        if (bridge != null) {
+            bridge.endpointRemoved(nodeId, endpointId);
+        }
+    }
+
+    @Override
     public void onEvent(AttributeChangedMessage message) {
         ClusterConverter c = clusterIdMap.get(message.path.clusterId);
         if (c == null) {

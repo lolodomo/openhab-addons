@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +35,8 @@ import org.openhab.binding.matter.internal.client.MatterClientListener;
 import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
+import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
 import org.openhab.binding.matter.internal.config.ControllerConfiguration;
@@ -261,21 +263,11 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             String nodeId = handler.getNodeId();
             int endpointId = handler.getEndpointId();
             synchronized (nodeEndpoints) {
-                Map<Integer, Endpoint> endpoints = nodeEndpoints.get(nodeId);
+                var endpoints = nodeEndpoints.get(nodeId);
                 logger.debug("childHandlerInitialized endpoints {}", endpoints);
-                if (endpoints != null) {
-                    Endpoint e = endpoints.get(endpointId);
-                    if (e != null) {
-                        handler.updateEndpoint(e);
-                    }
-                }
+                Optional.ofNullable(endpoints).map(ep -> ep.get(endpointId)).ifPresent(handler::updateEndpoint);
             }
         }
-    }
-
-    @Override
-    public void childHandlerDisposed(ThingHandler childHandler, Thing childThing) {
-        // do nothing by default, can be overridden by subclasses
     }
 
     @Override
@@ -289,20 +281,50 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         refresh();
     }
 
-    public MatterWebsocketClient getClient() {
+    protected MatterWebsocketClient getClient() {
         return client;
     }
 
-    public void refresh() {
+    protected void refresh() {
         logger.debug("refresh");
         try {
-            List<String> nodeIds = client.getCommissionedNodeIds();
+            var nodeIds = client.getCommissionedNodeIds();
             for (String id : nodeIds) {
                 updateNode(id);
             }
         } catch (Exception e) {
             logger.debug("Error communicating with controller", e);
             setOffline(e.getLocalizedMessage());
+        }
+    }
+
+    protected void endpointRemoved(String nodeId, int endpointId) {
+        logger.debug("endpointRemoved endpoint {}:{}", nodeId, endpointId);
+
+        if (!getConfigAs(ControllerConfiguration.class).decommissionNodesOnDelete) {
+            return;
+        }
+        synchronized (nodeEndpoints) {
+            boolean lastEndpoint = true;
+            for (Thing thing : getThing().getThings()) {
+                ThingHandler handler = thing.getHandler();
+                if (handler instanceof EndpointHandler endpointHandler) {
+                    if (endpointHandler.endpointId == endpointId) {
+                        continue;
+                    }
+                    lastEndpoint = false;
+                    break;
+                }
+            }
+            if (lastEndpoint) {
+                try {
+                    logger.debug("Decommissioning node {}", nodeId);
+                    client.decommissionNode(nodeId);
+                    nodeEndpoints.remove(nodeId);
+                } catch (Exception e) {
+                    logger.debug("Could not decommission node {}", nodeId, e);
+                }
+            }
         }
     }
 
@@ -313,7 +335,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         reconnectFuture = scheduler.schedule(this::initialize, 30, TimeUnit.SECONDS);
     }
 
-    void updateNode(String id) {
+    private void updateNode(String id) {
         logger.debug("updateNode {}", id);
         try {
             Node node = client.getNode(id);
@@ -327,6 +349,8 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
                     discoverChildEndpoint(node, e);
                     EndpointHandler handler = endpointHandler(id, e.number);
                     if (handler != null) {
+                        Thing thing = handler.getThing();
+                        updateEndpointThingProperties(node, thing, e.number);
                         handler.updateEndpoint(e);
                     }
                 }
@@ -380,5 +404,20 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             }
         }
         return null;
+    }
+
+    private void updateEndpointThingProperties(Node node, Thing thing, int endpointNum) {
+        Endpoint root = node.endpoints.get(Integer.valueOf(0));
+        if (root != null) {
+            BaseCluster cluster = root.clusters.get(BasicInformationCluster.CLUSTER_NAME);
+            if (cluster != null && cluster instanceof BasicInformationCluster basicCluster) {
+                thing.setProperty(Thing.PROPERTY_SERIAL_NUMBER, basicCluster.serialNumber);
+                thing.setProperty(Thing.PROPERTY_FIRMWARE_VERSION, basicCluster.softwareVersionString);
+                thing.setProperty(Thing.PROPERTY_VENDOR, basicCluster.vendorName);
+                thing.setProperty(Thing.PROPERTY_MODEL_ID, basicCluster.productName);
+                thing.setProperty(Thing.PROPERTY_HARDWARE_VERSION, basicCluster.hardwareVersionString);
+                thing.setProperty("path", node.id + ":" + endpointNum);
+            }
+        }
     }
 }
