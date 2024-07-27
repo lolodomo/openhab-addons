@@ -12,12 +12,10 @@
  */
 package org.openhab.binding.matter.internal.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -157,23 +155,6 @@ public class NodeManager {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IOException("Interrupted while extracting tar file", e);
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            NodeManager nodeManager = new NodeManager();
-            String nodePath = nodeManager.getNodePath();
-            logger.debug("Node.js executable path: {}", nodePath);
-
-            // You can now use this path to run Node.js
-            ProcessBuilder pb = new ProcessBuilder(nodePath, "--version");
-            Process p = pb.start();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-                logger.debug("Node.js version: {}", reader.readLine());
-            }
-        } catch (IOException e) {
-            logger.error("Error", e);
         }
     }
 }
