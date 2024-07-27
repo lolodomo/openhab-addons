@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OccupancySensingClusterTypes.*;
@@ -31,9 +31,9 @@ public class OccupancySensingCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OccupancySensing";
     public static final int CLUSTER_ID = 0x0406;
 
-    public OccupancyBitmap occupancy; // 0 OccupancyBitmap reportable 
-    public OccupancySensorTypeEnum occupancySensorType; // 1 OccupancySensorTypeEnum reportable 
-    public OccupancySensorTypeBitmap occupancySensorTypeBitmap; // 2 OccupancySensorTypeBitmap reportable 
+    public OccupancyBitmap occupancy; // 0 OccupancyBitmap reportable
+    public OccupancySensorTypeEnum occupancySensorType; // 1 OccupancySensorTypeEnum reportable
+    public OccupancySensorTypeBitmap occupancySensorTypeBitmap; // 2 OccupancySensorTypeBitmap reportable
     public Integer PIROccupiedToUnoccupiedDelay; // 16 int16u reportable writable
     public Integer PIRUnoccupiedToOccupiedDelay; // 17 int16u reportable writable
     public Integer PIRUnoccupiedToOccupiedThreshold; // 18 int8u reportable writable
@@ -43,12 +43,12 @@ public class OccupancySensingCluster extends BaseCluster {
     public Integer physicalContactOccupiedToUnoccupiedDelay; // 48 int16u reportable writable
     public Integer physicalContactUnoccupiedToOccupiedDelay; // 49 int16u reportable writable
     public Integer physicalContactUnoccupiedToOccupiedThreshold; // 50 int8u reportable writable
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OccupancySensingCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 43, "OccupancySensing");

@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.TemperatureControlClusterTypes.*;
+
 /**
  * TemperatureControl
  *
@@ -28,6 +26,7 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.TemperatureC
 public class TemperatureControlClusterCommands {
 
     public static ClusterCommand setTemperature(Integer targetTemperature, Integer targetTemperatureLevel) {
-        return new ClusterCommand("setTemperature", new SetTemperatureCommandOptions(targetTemperature, targetTemperatureLevel));
+        return new ClusterCommand("setTemperature",
+                new SetTemperatureCommandOptions(targetTemperature, targetTemperatureLevel));
     }
 }

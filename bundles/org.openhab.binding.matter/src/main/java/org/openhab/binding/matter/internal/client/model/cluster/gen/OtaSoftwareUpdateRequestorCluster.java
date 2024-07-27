@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OtaSoftwareUpdateRequestorClusterTypes.*;
@@ -32,15 +32,15 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
     public static final int CLUSTER_ID = 0x002A;
 
     public ProviderLocation defaultOTAProviders; // 0 ProviderLocation reportable writable
-    public Boolean updatePossible; // 1 boolean reportable 
-    public UpdateStateEnum updateState; // 2 UpdateStateEnum reportable 
-    public Integer updateStateProgress; // 3 int8u reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public Boolean updatePossible; // 1 boolean reportable
+    public UpdateStateEnum updateState; // 2 UpdateStateEnum reportable
+    public Integer updateStateProgress; // 3 int8u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public OtaSoftwareUpdateRequestorCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 100, "OtaSoftwareUpdateRequestor");

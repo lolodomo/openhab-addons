@@ -15,11 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ScenesClusterTypes.*;
+
 /**
  * Scenes
  *
@@ -27,8 +27,10 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.ScenesCluste
  */
 public class ScenesClusterCommands {
 
-    public static ClusterCommand addScene(List<Integer> groupID, Integer sceneID, Integer transitionTime, String sceneName, ExtensionFieldSet extensionFieldSets) {
-        return new ClusterCommand("addScene", new AddSceneCommandOptions(groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
+    public static ClusterCommand addScene(List<Integer> groupID, Integer sceneID, Integer transitionTime,
+            String sceneName, ExtensionFieldSet extensionFieldSets) {
+        return new ClusterCommand("addScene",
+                new AddSceneCommandOptions(groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
     }
 
     public static ClusterCommand addSceneResponse(Integer status, List<Integer> groupID, Integer sceneID) {
@@ -39,8 +41,10 @@ public class ScenesClusterCommands {
         return new ClusterCommand("viewScene", new ViewSceneCommandOptions(groupID, sceneID));
     }
 
-    public static ClusterCommand viewSceneResponse(Integer status, List<Integer> groupID, Integer sceneID, Integer transitionTime, String sceneName, ExtensionFieldSet extensionFieldSets) {
-        return new ClusterCommand("viewSceneResponse", new ViewSceneResponseCommandOptions(status, groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
+    public static ClusterCommand viewSceneResponse(Integer status, List<Integer> groupID, Integer sceneID,
+            Integer transitionTime, String sceneName, ExtensionFieldSet extensionFieldSets) {
+        return new ClusterCommand("viewSceneResponse", new ViewSceneResponseCommandOptions(status, groupID, sceneID,
+                transitionTime, sceneName, extensionFieldSets));
     }
 
     public static ClusterCommand removeScene(List<Integer> groupID, Integer sceneID) {
@@ -48,7 +52,8 @@ public class ScenesClusterCommands {
     }
 
     public static ClusterCommand removeSceneResponse(Integer status, List<Integer> groupID, Integer sceneID) {
-        return new ClusterCommand("removeSceneResponse", new RemoveSceneResponseCommandOptions(status, groupID, sceneID));
+        return new ClusterCommand("removeSceneResponse",
+                new RemoveSceneResponseCommandOptions(status, groupID, sceneID));
     }
 
     public static ClusterCommand removeAllScenes(List<Integer> groupID) {
@@ -56,7 +61,8 @@ public class ScenesClusterCommands {
     }
 
     public static ClusterCommand removeAllScenesResponse(Integer status, List<Integer> groupID) {
-        return new ClusterCommand("removeAllScenesResponse", new RemoveAllScenesResponseCommandOptions(status, groupID));
+        return new ClusterCommand("removeAllScenesResponse",
+                new RemoveAllScenesResponseCommandOptions(status, groupID));
     }
 
     public static ClusterCommand storeScene(List<Integer> groupID, Integer sceneID) {
@@ -75,31 +81,42 @@ public class ScenesClusterCommands {
         return new ClusterCommand("getSceneMembership", new GetSceneMembershipCommandOptions(groupID));
     }
 
-    public static ClusterCommand getSceneMembershipResponse(Integer status, Integer capacity, List<Integer> groupID, Integer sceneList) {
-        return new ClusterCommand("getSceneMembershipResponse", new GetSceneMembershipResponseCommandOptions(status, capacity, groupID, sceneList));
+    public static ClusterCommand getSceneMembershipResponse(Integer status, Integer capacity, List<Integer> groupID,
+            Integer sceneList) {
+        return new ClusterCommand("getSceneMembershipResponse",
+                new GetSceneMembershipResponseCommandOptions(status, capacity, groupID, sceneList));
     }
 
-    public static ClusterCommand enhancedAddScene(List<Integer> groupID, Integer sceneID, Integer transitionTime, String sceneName, ExtensionFieldSet extensionFieldSets) {
-        return new ClusterCommand("enhancedAddScene", new EnhancedAddSceneCommandOptions(groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
+    public static ClusterCommand enhancedAddScene(List<Integer> groupID, Integer sceneID, Integer transitionTime,
+            String sceneName, ExtensionFieldSet extensionFieldSets) {
+        return new ClusterCommand("enhancedAddScene",
+                new EnhancedAddSceneCommandOptions(groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
     }
 
     public static ClusterCommand enhancedAddSceneResponse(Integer status, List<Integer> groupID, Integer sceneID) {
-        return new ClusterCommand("enhancedAddSceneResponse", new EnhancedAddSceneResponseCommandOptions(status, groupID, sceneID));
+        return new ClusterCommand("enhancedAddSceneResponse",
+                new EnhancedAddSceneResponseCommandOptions(status, groupID, sceneID));
     }
 
     public static ClusterCommand enhancedViewScene(List<Integer> groupID, Integer sceneID) {
         return new ClusterCommand("enhancedViewScene", new EnhancedViewSceneCommandOptions(groupID, sceneID));
     }
 
-    public static ClusterCommand enhancedViewSceneResponse(Integer status, List<Integer> groupID, Integer sceneID, Integer transitionTime, String sceneName, ExtensionFieldSet extensionFieldSets) {
-        return new ClusterCommand("enhancedViewSceneResponse", new EnhancedViewSceneResponseCommandOptions(status, groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
+    public static ClusterCommand enhancedViewSceneResponse(Integer status, List<Integer> groupID, Integer sceneID,
+            Integer transitionTime, String sceneName, ExtensionFieldSet extensionFieldSets) {
+        return new ClusterCommand("enhancedViewSceneResponse", new EnhancedViewSceneResponseCommandOptions(status,
+                groupID, sceneID, transitionTime, sceneName, extensionFieldSets));
     }
 
-    public static ClusterCommand copyScene(CopyModeBitmap mode, List<Integer> groupIdentifierFrom, Integer sceneIdentifierFrom, List<Integer> groupIdentifierTo, Integer sceneIdentifierTo) {
-        return new ClusterCommand("copyScene", new CopySceneCommandOptions(mode, groupIdentifierFrom, sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo));
+    public static ClusterCommand copyScene(CopyModeBitmap mode, List<Integer> groupIdentifierFrom,
+            Integer sceneIdentifierFrom, List<Integer> groupIdentifierTo, Integer sceneIdentifierTo) {
+        return new ClusterCommand("copyScene", new CopySceneCommandOptions(mode, groupIdentifierFrom,
+                sceneIdentifierFrom, groupIdentifierTo, sceneIdentifierTo));
     }
 
-    public static ClusterCommand copySceneResponse(Integer status, List<Integer> groupIdentifierFrom, Integer sceneIdentifierFrom) {
-        return new ClusterCommand("copySceneResponse", new CopySceneResponseCommandOptions(status, groupIdentifierFrom, sceneIdentifierFrom));
+    public static ClusterCommand copySceneResponse(Integer status, List<Integer> groupIdentifierFrom,
+            Integer sceneIdentifierFrom) {
+        return new ClusterCommand("copySceneResponse",
+                new CopySceneResponseCommandOptions(status, groupIdentifierFrom, sceneIdentifierFrom));
     }
 }

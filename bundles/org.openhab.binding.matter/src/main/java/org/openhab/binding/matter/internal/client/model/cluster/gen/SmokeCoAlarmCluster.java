@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.SmokeCoAlarmClusterTypes.*;
@@ -31,25 +31,25 @@ public class SmokeCoAlarmCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "SmokeCoAlarm";
     public static final int CLUSTER_ID = 0x005C;
 
-    public ExpressedStateEnum expressedState; // 0 ExpressedStateEnum reportable 
-    public AlarmStateEnum smokeState; // 1 AlarmStateEnum reportable 
-    public AlarmStateEnum COState; // 2 AlarmStateEnum reportable 
-    public AlarmStateEnum batteryAlert; // 3 AlarmStateEnum reportable 
-    public MuteStateEnum deviceMuted; // 4 MuteStateEnum reportable 
-    public Boolean testInProgress; // 5 boolean reportable 
-    public Boolean hardwareFaultAlert; // 6 boolean reportable 
-    public EndOfServiceEnum endOfServiceAlert; // 7 EndOfServiceEnum reportable 
-    public AlarmStateEnum interconnectSmokeAlarm; // 8 AlarmStateEnum reportable 
-    public AlarmStateEnum interconnectCOAlarm; // 9 AlarmStateEnum reportable 
-    public ContaminationStateEnum contaminationState; // 10 ContaminationStateEnum reportable 
+    public ExpressedStateEnum expressedState; // 0 ExpressedStateEnum reportable
+    public AlarmStateEnum smokeState; // 1 AlarmStateEnum reportable
+    public AlarmStateEnum COState; // 2 AlarmStateEnum reportable
+    public AlarmStateEnum batteryAlert; // 3 AlarmStateEnum reportable
+    public MuteStateEnum deviceMuted; // 4 MuteStateEnum reportable
+    public Boolean testInProgress; // 5 boolean reportable
+    public Boolean hardwareFaultAlert; // 6 boolean reportable
+    public EndOfServiceEnum endOfServiceAlert; // 7 EndOfServiceEnum reportable
+    public AlarmStateEnum interconnectSmokeAlarm; // 8 AlarmStateEnum reportable
+    public AlarmStateEnum interconnectCOAlarm; // 9 AlarmStateEnum reportable
+    public ContaminationStateEnum contaminationState; // 10 ContaminationStateEnum reportable
     public SensitivityEnum smokeSensitivityLevel; // 11 SensitivityEnum reportable writable
-    public Integer expiryDate; // 12 epoch_s reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public Integer expiryDate; // 12 epoch_s reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public SmokeCoAlarmCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 67, "SmokeCoAlarm");

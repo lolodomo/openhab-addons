@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.FaultInjectionClusterTypes.*;
+
 /**
  * FaultInjection
  *
@@ -27,8 +25,10 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.FaultInjecti
  */
 public class FaultInjectionClusterCommands {
 
-    public static ClusterCommand failAtFault(FaultType type, Integer id, Integer numCallsToSkip, Integer numCallsToFail, Boolean takeMutex) {
-        return new ClusterCommand("failAtFault", new FailAtFaultCommandOptions(type, id, numCallsToSkip, numCallsToFail, takeMutex));
+    public static ClusterCommand failAtFault(FaultType type, Integer id, Integer numCallsToSkip, Integer numCallsToFail,
+            Boolean takeMutex) {
+        return new ClusterCommand("failAtFault",
+                new FailAtFaultCommandOptions(type, id, numCallsToSkip, numCallsToFail, takeMutex));
     }
 
     public static ClusterCommand failRandomlyAtFault(FaultType type, Integer id, Integer percentage) {

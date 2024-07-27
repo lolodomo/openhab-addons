@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.GeneralCommissioningClusterTypes.*;
+
 /**
  * GeneralCommissioning
  *
@@ -35,12 +33,15 @@ public class GeneralCommissioningClusterCommands {
         return new ClusterCommand("armFailSafeResponse", new ArmFailSafeResponseCommandOptions(errorCode, debugText));
     }
 
-    public static ClusterCommand setRegulatoryConfig(RegulatoryLocationTypeEnum newRegulatoryConfig, String countryCode, Long breadcrumb) {
-        return new ClusterCommand("setRegulatoryConfig", new SetRegulatoryConfigCommandOptions(newRegulatoryConfig, countryCode, breadcrumb));
+    public static ClusterCommand setRegulatoryConfig(RegulatoryLocationTypeEnum newRegulatoryConfig, String countryCode,
+            Long breadcrumb) {
+        return new ClusterCommand("setRegulatoryConfig",
+                new SetRegulatoryConfigCommandOptions(newRegulatoryConfig, countryCode, breadcrumb));
     }
 
     public static ClusterCommand setRegulatoryConfigResponse(CommissioningErrorEnum errorCode, String debugText) {
-        return new ClusterCommand("setRegulatoryConfigResponse", new SetRegulatoryConfigResponseCommandOptions(errorCode, debugText));
+        return new ClusterCommand("setRegulatoryConfigResponse",
+                new SetRegulatoryConfigResponseCommandOptions(errorCode, debugText));
     }
 
     public static ClusterCommand commissioningComplete() {
@@ -48,6 +49,7 @@ public class GeneralCommissioningClusterCommands {
     }
 
     public static ClusterCommand commissioningCompleteResponse(CommissioningErrorEnum errorCode, String debugText) {
-        return new ClusterCommand("commissioningCompleteResponse", new CommissioningCompleteResponseCommandOptions(errorCode, debugText));
+        return new ClusterCommand("commissioningCompleteResponse",
+                new CommissioningCompleteResponseCommandOptions(errorCode, debugText));
     }
 }

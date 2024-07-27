@@ -69,18 +69,21 @@ import com.google.gson.reflect.TypeToken;
 @NonNullByDefault
 public class MatterWebsocketClient implements WebSocketListener, NodeExitListener {
 
-    private final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
 
-    Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer()).create();
+    private static final String MATTER_JS_PATH = "/matter-server/matter.js";
+
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool("matter-js.MatterWebsocketClient");
-    @Nullable
-    private Session session;
-    WebSocketClient client = new WebSocketClient();
-    @Nullable
-    NodeRunner nodeRunner;
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer()).create();
+    private final WebSocketClient client = new WebSocketClient();
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<MatterClientListener> clientListeners = new CopyOnWriteArrayList<>();
+
+    @Nullable
+    private Session session;
+    @Nullable
+    private NodeRunner nodeRunner;
 
     public void connect(String host, int port, String storagePath) throws Exception {
         connectWebsocket(host, port, storagePath);
@@ -396,7 +399,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         NodeRunner newRunner = new NodeRunner(nodePath);
         newRunner.addExitListener(this);
         this.nodeRunner = newRunner;
-        return nodeRunner.runNodeWithResource("/matter.js");
+        return nodeRunner.runNodeWithResource(MATTER_JS_PATH);
     }
 
     @Override

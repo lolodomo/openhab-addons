@@ -15,11 +15,11 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
 
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.GroupsClusterTypes.*;
+
 /**
  * Groups
  *
@@ -48,7 +48,8 @@ public class GroupsClusterCommands {
     }
 
     public static ClusterCommand getGroupMembershipResponse(Integer capacity, List<Integer> groupList) {
-        return new ClusterCommand("getGroupMembershipResponse", new GetGroupMembershipResponseCommandOptions(capacity, groupList));
+        return new ClusterCommand("getGroupMembershipResponse",
+                new GetGroupMembershipResponseCommandOptions(capacity, groupList));
     }
 
     public static ClusterCommand removeGroup(List<Integer> groupID) {

@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.AdministratorCommissioningClusterTypes.*;
@@ -31,15 +31,15 @@ public class AdministratorCommissioningCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "AdministratorCommissioning";
     public static final int CLUSTER_ID = 0x003C;
 
-    public CommissioningWindowStatusEnum windowStatus; // 0 CommissioningWindowStatusEnum reportable 
-    public Integer adminFabricIndex; // 1 fabric_idx reportable 
-    public Integer adminVendorId; // 2 vendor_id reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public CommissioningWindowStatusEnum windowStatus; // 0 CommissioningWindowStatusEnum reportable
+    public Integer adminFabricIndex; // 1 fabric_idx reportable
+    public Integer adminVendorId; // 2 vendor_id reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public AdministratorCommissioningCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 2, "AdministratorCommissioning");

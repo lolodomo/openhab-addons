@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ThreadNetworkDiagnosticsClusterTypes.*;
@@ -31,75 +31,75 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "ThreadNetworkDiagnostics";
     public static final int CLUSTER_ID = 0x0035;
 
-    public Integer channel; // 0 int16u reportable 
-    public RoutingRoleEnum routingRole; // 1 RoutingRoleEnum reportable 
-    public String networkName; // 2 char_string reportable 
-    public Integer panId; // 3 int16u reportable 
-    public Long extendedPanId; // 4 int64u reportable 
-    public String meshLocalPrefix; // 5 octet_string reportable 
-    public Long overrunCount; // 6 int64u reportable 
-    public NeighborTableStruct[] neighborTable; // 7 NeighborTableStruct reportable 
-    public RouteTableStruct[] routeTable; // 8 RouteTableStruct reportable 
-    public Integer partitionId; // 9 int32u reportable 
-    public Integer weighting; // 10 int16u reportable 
-    public Integer dataVersion; // 11 int16u reportable 
-    public Integer stableDataVersion; // 12 int16u reportable 
-    public Integer leaderRouterId; // 13 int8u reportable 
-    public Integer detachedRoleCount; // 14 int16u reportable 
-    public Integer childRoleCount; // 15 int16u reportable 
-    public Integer routerRoleCount; // 16 int16u reportable 
-    public Integer leaderRoleCount; // 17 int16u reportable 
-    public Integer attachAttemptCount; // 18 int16u reportable 
-    public Integer partitionIdChangeCount; // 19 int16u reportable 
-    public Integer betterPartitionAttachAttemptCount; // 20 int16u reportable 
-    public Integer parentChangeCount; // 21 int16u reportable 
-    public Integer txTotalCount; // 22 int32u reportable 
-    public Integer txUnicastCount; // 23 int32u reportable 
-    public Integer txBroadcastCount; // 24 int32u reportable 
-    public Integer txAckRequestedCount; // 25 int32u reportable 
-    public Integer txAckedCount; // 26 int32u reportable 
-    public Integer txNoAckRequestedCount; // 27 int32u reportable 
-    public Integer txDataCount; // 28 int32u reportable 
-    public Integer txDataPollCount; // 29 int32u reportable 
-    public Integer txBeaconCount; // 30 int32u reportable 
-    public Integer txBeaconRequestCount; // 31 int32u reportable 
-    public Integer txOtherCount; // 32 int32u reportable 
-    public Integer txRetryCount; // 33 int32u reportable 
-    public Integer txDirectMaxRetryExpiryCount; // 34 int32u reportable 
-    public Integer txIndirectMaxRetryExpiryCount; // 35 int32u reportable 
-    public Integer txErrCcaCount; // 36 int32u reportable 
-    public Integer txErrAbortCount; // 37 int32u reportable 
-    public Integer txErrBusyChannelCount; // 38 int32u reportable 
-    public Integer rxTotalCount; // 39 int32u reportable 
-    public Integer rxUnicastCount; // 40 int32u reportable 
-    public Integer rxBroadcastCount; // 41 int32u reportable 
-    public Integer rxDataCount; // 42 int32u reportable 
-    public Integer rxDataPollCount; // 43 int32u reportable 
-    public Integer rxBeaconCount; // 44 int32u reportable 
-    public Integer rxBeaconRequestCount; // 45 int32u reportable 
-    public Integer rxOtherCount; // 46 int32u reportable 
-    public Integer rxAddressFilteredCount; // 47 int32u reportable 
-    public Integer rxDestAddrFilteredCount; // 48 int32u reportable 
-    public Integer rxDuplicatedCount; // 49 int32u reportable 
-    public Integer rxErrNoFrameCount; // 50 int32u reportable 
-    public Integer rxErrUnknownNeighborCount; // 51 int32u reportable 
-    public Integer rxErrInvalidSrcAddrCount; // 52 int32u reportable 
-    public Integer rxErrSecCount; // 53 int32u reportable 
-    public Integer rxErrFcsCount; // 54 int32u reportable 
-    public Integer rxErrOtherCount; // 55 int32u reportable 
-    public Long activeTimestamp; // 56 int64u reportable 
-    public Long pendingTimestamp; // 57 int64u reportable 
-    public Integer delay; // 58 int32u reportable 
-    public SecurityPolicy securityPolicy; // 59 SecurityPolicy reportable 
-    public String channelPage0Mask; // 60 octet_string reportable 
-    public OperationalDatasetComponents operationalDatasetComponents; // 61 OperationalDatasetComponents reportable 
-    public NetworkFaultEnum activeNetworkFaultsList; // 62 NetworkFaultEnum reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public Integer channel; // 0 int16u reportable
+    public RoutingRoleEnum routingRole; // 1 RoutingRoleEnum reportable
+    public String networkName; // 2 char_string reportable
+    public Integer panId; // 3 int16u reportable
+    public Long extendedPanId; // 4 int64u reportable
+    public String meshLocalPrefix; // 5 octet_string reportable
+    public Long overrunCount; // 6 int64u reportable
+    public NeighborTableStruct[] neighborTable; // 7 NeighborTableStruct reportable
+    public RouteTableStruct[] routeTable; // 8 RouteTableStruct reportable
+    public Integer partitionId; // 9 int32u reportable
+    public Integer weighting; // 10 int16u reportable
+    public Integer dataVersion; // 11 int16u reportable
+    public Integer stableDataVersion; // 12 int16u reportable
+    public Integer leaderRouterId; // 13 int8u reportable
+    public Integer detachedRoleCount; // 14 int16u reportable
+    public Integer childRoleCount; // 15 int16u reportable
+    public Integer routerRoleCount; // 16 int16u reportable
+    public Integer leaderRoleCount; // 17 int16u reportable
+    public Integer attachAttemptCount; // 18 int16u reportable
+    public Integer partitionIdChangeCount; // 19 int16u reportable
+    public Integer betterPartitionAttachAttemptCount; // 20 int16u reportable
+    public Integer parentChangeCount; // 21 int16u reportable
+    public Integer txTotalCount; // 22 int32u reportable
+    public Integer txUnicastCount; // 23 int32u reportable
+    public Integer txBroadcastCount; // 24 int32u reportable
+    public Integer txAckRequestedCount; // 25 int32u reportable
+    public Integer txAckedCount; // 26 int32u reportable
+    public Integer txNoAckRequestedCount; // 27 int32u reportable
+    public Integer txDataCount; // 28 int32u reportable
+    public Integer txDataPollCount; // 29 int32u reportable
+    public Integer txBeaconCount; // 30 int32u reportable
+    public Integer txBeaconRequestCount; // 31 int32u reportable
+    public Integer txOtherCount; // 32 int32u reportable
+    public Integer txRetryCount; // 33 int32u reportable
+    public Integer txDirectMaxRetryExpiryCount; // 34 int32u reportable
+    public Integer txIndirectMaxRetryExpiryCount; // 35 int32u reportable
+    public Integer txErrCcaCount; // 36 int32u reportable
+    public Integer txErrAbortCount; // 37 int32u reportable
+    public Integer txErrBusyChannelCount; // 38 int32u reportable
+    public Integer rxTotalCount; // 39 int32u reportable
+    public Integer rxUnicastCount; // 40 int32u reportable
+    public Integer rxBroadcastCount; // 41 int32u reportable
+    public Integer rxDataCount; // 42 int32u reportable
+    public Integer rxDataPollCount; // 43 int32u reportable
+    public Integer rxBeaconCount; // 44 int32u reportable
+    public Integer rxBeaconRequestCount; // 45 int32u reportable
+    public Integer rxOtherCount; // 46 int32u reportable
+    public Integer rxAddressFilteredCount; // 47 int32u reportable
+    public Integer rxDestAddrFilteredCount; // 48 int32u reportable
+    public Integer rxDuplicatedCount; // 49 int32u reportable
+    public Integer rxErrNoFrameCount; // 50 int32u reportable
+    public Integer rxErrUnknownNeighborCount; // 51 int32u reportable
+    public Integer rxErrInvalidSrcAddrCount; // 52 int32u reportable
+    public Integer rxErrSecCount; // 53 int32u reportable
+    public Integer rxErrFcsCount; // 54 int32u reportable
+    public Integer rxErrOtherCount; // 55 int32u reportable
+    public Long activeTimestamp; // 56 int64u reportable
+    public Long pendingTimestamp; // 57 int64u reportable
+    public Integer delay; // 58 int32u reportable
+    public SecurityPolicy securityPolicy; // 59 SecurityPolicy reportable
+    public String channelPage0Mask; // 60 octet_string reportable
+    public OperationalDatasetComponents operationalDatasetComponents; // 61 OperationalDatasetComponents reportable
+    public NetworkFaultEnum activeNetworkFaultsList; // 62 NetworkFaultEnum reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public ThreadNetworkDiagnosticsCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 88, "ThreadNetworkDiagnostics");

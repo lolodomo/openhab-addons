@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ElectricalMeasurementClusterTypes.*;
+
 /**
  * ElectricalMeasurement
  *
@@ -27,19 +25,26 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.ElectricalMe
  */
 public class ElectricalMeasurementClusterCommands {
 
-    public static ClusterCommand getProfileInfoResponseCommand(Integer profileCount, Integer profileIntervalPeriod, Integer maxNumberOfIntervals, Integer listOfAttributes) {
-        return new ClusterCommand("getProfileInfoResponseCommand", new GetProfileInfoResponseCommandCommandOptions(profileCount, profileIntervalPeriod, maxNumberOfIntervals, listOfAttributes));
+    public static ClusterCommand getProfileInfoResponseCommand(Integer profileCount, Integer profileIntervalPeriod,
+            Integer maxNumberOfIntervals, Integer listOfAttributes) {
+        return new ClusterCommand("getProfileInfoResponseCommand", new GetProfileInfoResponseCommandCommandOptions(
+                profileCount, profileIntervalPeriod, maxNumberOfIntervals, listOfAttributes));
     }
 
     public static ClusterCommand getProfileInfoCommand() {
         return new ClusterCommand("getProfileInfoCommand", new GetProfileInfoCommandCommandOptions());
     }
 
-    public static ClusterCommand getMeasurementProfileResponseCommand(Integer startTime, Integer status, Integer profileIntervalPeriod, Integer numberOfIntervalsDelivered, Integer attributeId, Integer intervals) {
-        return new ClusterCommand("getMeasurementProfileResponseCommand", new GetMeasurementProfileResponseCommandCommandOptions(startTime, status, profileIntervalPeriod, numberOfIntervalsDelivered, attributeId, intervals));
+    public static ClusterCommand getMeasurementProfileResponseCommand(Integer startTime, Integer status,
+            Integer profileIntervalPeriod, Integer numberOfIntervalsDelivered, Integer attributeId, Integer intervals) {
+        return new ClusterCommand("getMeasurementProfileResponseCommand",
+                new GetMeasurementProfileResponseCommandCommandOptions(startTime, status, profileIntervalPeriod,
+                        numberOfIntervalsDelivered, attributeId, intervals));
     }
 
-    public static ClusterCommand getMeasurementProfileCommand(Integer attributeId, Integer startTime, Integer numberOfIntervals) {
-        return new ClusterCommand("getMeasurementProfileCommand", new GetMeasurementProfileCommandCommandOptions(attributeId, startTime, numberOfIntervals));
+    public static ClusterCommand getMeasurementProfileCommand(Integer attributeId, Integer startTime,
+            Integer numberOfIntervals) {
+        return new ClusterCommand("getMeasurementProfileCommand",
+                new GetMeasurementProfileCommandCommandOptions(attributeId, startTime, numberOfIntervals));
     }
 }

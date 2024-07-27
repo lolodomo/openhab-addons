@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.RvcOperationalStateClusterTypes.*;
+
 /**
  * RvcOperationalState
  *
@@ -44,6 +42,7 @@ public class RvcOperationalStateClusterCommands {
     }
 
     public static ClusterCommand operationalCommandResponse(ErrorStateStruct[] commandResponseState) {
-        return new ClusterCommand("operationalCommandResponse", new OperationalCommandResponseCommandOptions(commandResponseState));
+        return new ClusterCommand("operationalCommandResponse",
+                new OperationalCommandResponseCommandOptions(commandResponseState));
     }
 }

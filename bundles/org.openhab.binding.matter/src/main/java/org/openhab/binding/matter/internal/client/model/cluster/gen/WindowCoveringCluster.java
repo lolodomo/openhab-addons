@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.WindowCoveringClusterTypes.*;
@@ -31,34 +31,34 @@ public class WindowCoveringCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "WindowCovering";
     public static final int CLUSTER_ID = 0x0102;
 
-    public Type type; // 0 Type reportable 
-    public Integer physicalClosedLimitLift; // 1 int16u reportable 
-    public Integer physicalClosedLimitTilt; // 2 int16u reportable 
-    public Integer currentPositionLift; // 3 int16u reportable 
-    public Integer currentPositionTilt; // 4 int16u reportable 
-    public Integer numberOfActuationsLift; // 5 int16u reportable 
-    public Integer numberOfActuationsTilt; // 6 int16u reportable 
-    public ConfigStatus configStatus; // 7 ConfigStatus reportable 
-    public Integer currentPositionLiftPercentage; // 8 percent reportable 
-    public Integer currentPositionTiltPercentage; // 9 percent reportable 
-    public OperationalStatus operationalStatus; // 10 OperationalStatus reportable 
-    public Integer targetPositionLiftPercent100ths; // 11 percent100ths reportable 
-    public Integer targetPositionTiltPercent100ths; // 12 percent100ths reportable 
-    public EndProductType endProductType; // 13 EndProductType reportable 
-    public Integer currentPositionLiftPercent100ths; // 14 percent100ths reportable 
-    public Integer currentPositionTiltPercent100ths; // 15 percent100ths reportable 
-    public Integer installedOpenLimitLift; // 16 int16u reportable 
-    public Integer installedClosedLimitLift; // 17 int16u reportable 
-    public Integer installedOpenLimitTilt; // 18 int16u reportable 
-    public Integer installedClosedLimitTilt; // 19 int16u reportable 
+    public Type type; // 0 Type reportable
+    public Integer physicalClosedLimitLift; // 1 int16u reportable
+    public Integer physicalClosedLimitTilt; // 2 int16u reportable
+    public Integer currentPositionLift; // 3 int16u reportable
+    public Integer currentPositionTilt; // 4 int16u reportable
+    public Integer numberOfActuationsLift; // 5 int16u reportable
+    public Integer numberOfActuationsTilt; // 6 int16u reportable
+    public ConfigStatus configStatus; // 7 ConfigStatus reportable
+    public Integer currentPositionLiftPercentage; // 8 percent reportable
+    public Integer currentPositionTiltPercentage; // 9 percent reportable
+    public OperationalStatus operationalStatus; // 10 OperationalStatus reportable
+    public Integer targetPositionLiftPercent100ths; // 11 percent100ths reportable
+    public Integer targetPositionTiltPercent100ths; // 12 percent100ths reportable
+    public EndProductType endProductType; // 13 EndProductType reportable
+    public Integer currentPositionLiftPercent100ths; // 14 percent100ths reportable
+    public Integer currentPositionTiltPercent100ths; // 15 percent100ths reportable
+    public Integer installedOpenLimitLift; // 16 int16u reportable
+    public Integer installedClosedLimitLift; // 17 int16u reportable
+    public Integer installedOpenLimitTilt; // 18 int16u reportable
+    public Integer installedClosedLimitTilt; // 19 int16u reportable
     public Mode mode; // 23 Mode reportable writable
-    public SafetyStatus safetyStatus; // 26 SafetyStatus reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public SafetyStatus safetyStatus; // 26 SafetyStatus reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public WindowCoveringCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 87, "WindowCovering");

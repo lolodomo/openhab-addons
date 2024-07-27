@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.UnitTestingClusterTypes.*;
+
 /**
  * UnitTesting
  *
@@ -48,15 +46,18 @@ public class UnitTestingClusterCommands {
     }
 
     public static ClusterCommand testSimpleArgumentResponse(Boolean returnValue) {
-        return new ClusterCommand("testSimpleArgumentResponse", new TestSimpleArgumentResponseCommandOptions(returnValue));
+        return new ClusterCommand("testSimpleArgumentResponse",
+                new TestSimpleArgumentResponseCommandOptions(returnValue));
     }
 
     public static ClusterCommand testUnknownCommand() {
         return new ClusterCommand("testUnknownCommand", new TestUnknownCommandCommandOptions());
     }
 
-    public static ClusterCommand testStructArrayArgumentResponse(NestedStructList arg1, SimpleStruct[] arg2, SimpleEnum arg3, Boolean arg4, SimpleEnum arg5, Boolean arg6) {
-        return new ClusterCommand("testStructArrayArgumentResponse", new TestStructArrayArgumentResponseCommandOptions(arg1, arg2, arg3, arg4, arg5, arg6));
+    public static ClusterCommand testStructArrayArgumentResponse(NestedStructList arg1, SimpleStruct[] arg2,
+            SimpleEnum arg3, Boolean arg4, SimpleEnum arg5, Boolean arg6) {
+        return new ClusterCommand("testStructArrayArgumentResponse",
+                new TestStructArrayArgumentResponseCommandOptions(arg1, arg2, arg3, arg4, arg5, arg6));
     }
 
     public static ClusterCommand testAddArguments(Integer arg1, Integer arg2) {
@@ -75,24 +76,48 @@ public class UnitTestingClusterCommands {
         return new ClusterCommand("testEnumsResponse", new TestEnumsResponseCommandOptions(arg1, arg2));
     }
 
-    public static ClusterCommand testStructArrayArgumentRequest(NestedStructList arg1, SimpleStruct[] arg2, SimpleEnum arg3, Boolean arg4, SimpleEnum arg5, Boolean arg6) {
-        return new ClusterCommand("testStructArrayArgumentRequest", new TestStructArrayArgumentRequestCommandOptions(arg1, arg2, arg3, arg4, arg5, arg6));
+    public static ClusterCommand testStructArrayArgumentRequest(NestedStructList arg1, SimpleStruct[] arg2,
+            SimpleEnum arg3, Boolean arg4, SimpleEnum arg5, Boolean arg6) {
+        return new ClusterCommand("testStructArrayArgumentRequest",
+                new TestStructArrayArgumentRequestCommandOptions(arg1, arg2, arg3, arg4, arg5, arg6));
     }
 
-    public static ClusterCommand testNullableOptionalResponse(Boolean wasPresent, Boolean wasNull, Integer value, Integer originalValue) {
-        return new ClusterCommand("testNullableOptionalResponse", new TestNullableOptionalResponseCommandOptions(wasPresent, wasNull, value, originalValue));
+    public static ClusterCommand testNullableOptionalResponse(Boolean wasPresent, Boolean wasNull, Integer value,
+            Integer originalValue) {
+        return new ClusterCommand("testNullableOptionalResponse",
+                new TestNullableOptionalResponseCommandOptions(wasPresent, wasNull, value, originalValue));
     }
 
     public static ClusterCommand testStructArgumentRequest(SimpleStruct[] arg1) {
         return new ClusterCommand("testStructArgumentRequest", new TestStructArgumentRequestCommandOptions(arg1));
     }
 
-    public static ClusterCommand testComplexNullableOptionalResponse(Boolean nullableIntWasNull, Integer nullableIntValue, Boolean optionalIntWasPresent, Integer optionalIntValue, Boolean nullableOptionalIntWasPresent, Boolean nullableOptionalIntWasNull, Integer nullableOptionalIntValue, Boolean nullableStringWasNull, String nullableStringValue, Boolean optionalStringWasPresent, String optionalStringValue, Boolean nullableOptionalStringWasPresent, Boolean nullableOptionalStringWasNull, String nullableOptionalStringValue, Boolean nullableStructWasNull, SimpleStruct[] nullableStructValue, Boolean optionalStructWasPresent, SimpleStruct[] optionalStructValue, Boolean nullableOptionalStructWasPresent, Boolean nullableOptionalStructWasNull, SimpleStruct[] nullableOptionalStructValue, Boolean nullableListWasNull, SimpleEnum nullableListValue, Boolean optionalListWasPresent, SimpleEnum optionalListValue, Boolean nullableOptionalListWasPresent, Boolean nullableOptionalListWasNull, SimpleEnum nullableOptionalListValue) {
-        return new ClusterCommand("testComplexNullableOptionalResponse", new TestComplexNullableOptionalResponseCommandOptions(nullableIntWasNull, nullableIntValue, optionalIntWasPresent, optionalIntValue, nullableOptionalIntWasPresent, nullableOptionalIntWasNull, nullableOptionalIntValue, nullableStringWasNull, nullableStringValue, optionalStringWasPresent, optionalStringValue, nullableOptionalStringWasPresent, nullableOptionalStringWasNull, nullableOptionalStringValue, nullableStructWasNull, nullableStructValue, optionalStructWasPresent, optionalStructValue, nullableOptionalStructWasPresent, nullableOptionalStructWasNull, nullableOptionalStructValue, nullableListWasNull, nullableListValue, optionalListWasPresent, optionalListValue, nullableOptionalListWasPresent, nullableOptionalListWasNull, nullableOptionalListValue));
+    public static ClusterCommand testComplexNullableOptionalResponse(Boolean nullableIntWasNull,
+            Integer nullableIntValue, Boolean optionalIntWasPresent, Integer optionalIntValue,
+            Boolean nullableOptionalIntWasPresent, Boolean nullableOptionalIntWasNull, Integer nullableOptionalIntValue,
+            Boolean nullableStringWasNull, String nullableStringValue, Boolean optionalStringWasPresent,
+            String optionalStringValue, Boolean nullableOptionalStringWasPresent, Boolean nullableOptionalStringWasNull,
+            String nullableOptionalStringValue, Boolean nullableStructWasNull, SimpleStruct[] nullableStructValue,
+            Boolean optionalStructWasPresent, SimpleStruct[] optionalStructValue,
+            Boolean nullableOptionalStructWasPresent, Boolean nullableOptionalStructWasNull,
+            SimpleStruct[] nullableOptionalStructValue, Boolean nullableListWasNull, SimpleEnum nullableListValue,
+            Boolean optionalListWasPresent, SimpleEnum optionalListValue, Boolean nullableOptionalListWasPresent,
+            Boolean nullableOptionalListWasNull, SimpleEnum nullableOptionalListValue) {
+        return new ClusterCommand("testComplexNullableOptionalResponse",
+                new TestComplexNullableOptionalResponseCommandOptions(nullableIntWasNull, nullableIntValue,
+                        optionalIntWasPresent, optionalIntValue, nullableOptionalIntWasPresent,
+                        nullableOptionalIntWasNull, nullableOptionalIntValue, nullableStringWasNull,
+                        nullableStringValue, optionalStringWasPresent, optionalStringValue,
+                        nullableOptionalStringWasPresent, nullableOptionalStringWasNull, nullableOptionalStringValue,
+                        nullableStructWasNull, nullableStructValue, optionalStructWasPresent, optionalStructValue,
+                        nullableOptionalStructWasPresent, nullableOptionalStructWasNull, nullableOptionalStructValue,
+                        nullableListWasNull, nullableListValue, optionalListWasPresent, optionalListValue,
+                        nullableOptionalListWasPresent, nullableOptionalListWasNull, nullableOptionalListValue));
     }
 
     public static ClusterCommand testNestedStructArgumentRequest(NestedStruct[] arg1) {
-        return new ClusterCommand("testNestedStructArgumentRequest", new TestNestedStructArgumentRequestCommandOptions(arg1));
+        return new ClusterCommand("testNestedStructArgumentRequest",
+                new TestNestedStructArgumentRequestCommandOptions(arg1));
     }
 
     public static ClusterCommand booleanResponse(Boolean value) {
@@ -100,7 +125,8 @@ public class UnitTestingClusterCommands {
     }
 
     public static ClusterCommand testListStructArgumentRequest(SimpleStruct[] arg1) {
-        return new ClusterCommand("testListStructArgumentRequest", new TestListStructArgumentRequestCommandOptions(arg1));
+        return new ClusterCommand("testListStructArgumentRequest",
+                new TestListStructArgumentRequestCommandOptions(arg1));
     }
 
     public static ClusterCommand simpleStructResponse(SimpleStruct[] arg1) {
@@ -116,15 +142,18 @@ public class UnitTestingClusterCommands {
     }
 
     public static ClusterCommand testNestedStructListArgumentRequest(NestedStructList arg1) {
-        return new ClusterCommand("testNestedStructListArgumentRequest", new TestNestedStructListArgumentRequestCommandOptions(arg1));
+        return new ClusterCommand("testNestedStructListArgumentRequest",
+                new TestNestedStructListArgumentRequestCommandOptions(arg1));
     }
 
     public static ClusterCommand testEmitTestFabricScopedEventResponse(Long value) {
-        return new ClusterCommand("testEmitTestFabricScopedEventResponse", new TestEmitTestFabricScopedEventResponseCommandOptions(value));
+        return new ClusterCommand("testEmitTestFabricScopedEventResponse",
+                new TestEmitTestFabricScopedEventResponseCommandOptions(value));
     }
 
     public static ClusterCommand testListNestedStructListArgumentRequest(NestedStructList arg1) {
-        return new ClusterCommand("testListNestedStructListArgumentRequest", new TestListNestedStructListArgumentRequestCommandOptions(arg1));
+        return new ClusterCommand("testListNestedStructListArgumentRequest",
+                new TestListNestedStructListArgumentRequestCommandOptions(arg1));
     }
 
     public static ClusterCommand testListInt8UReverseRequest(Integer arg1) {
@@ -139,8 +168,14 @@ public class UnitTestingClusterCommands {
         return new ClusterCommand("testNullableOptionalRequest", new TestNullableOptionalRequestCommandOptions(arg1));
     }
 
-    public static ClusterCommand testComplexNullableOptionalRequest(Integer nullableInt, Integer optionalInt, Integer nullableOptionalInt, String nullableString, String optionalString, String nullableOptionalString, SimpleStruct[] nullableStruct, SimpleStruct[] optionalStruct, SimpleStruct[] nullableOptionalStruct, SimpleEnum nullableList, SimpleEnum optionalList, SimpleEnum nullableOptionalList) {
-        return new ClusterCommand("testComplexNullableOptionalRequest", new TestComplexNullableOptionalRequestCommandOptions(nullableInt, optionalInt, nullableOptionalInt, nullableString, optionalString, nullableOptionalString, nullableStruct, optionalStruct, nullableOptionalStruct, nullableList, optionalList, nullableOptionalList));
+    public static ClusterCommand testComplexNullableOptionalRequest(Integer nullableInt, Integer optionalInt,
+            Integer nullableOptionalInt, String nullableString, String optionalString, String nullableOptionalString,
+            SimpleStruct[] nullableStruct, SimpleStruct[] optionalStruct, SimpleStruct[] nullableOptionalStruct,
+            SimpleEnum nullableList, SimpleEnum optionalList, SimpleEnum nullableOptionalList) {
+        return new ClusterCommand("testComplexNullableOptionalRequest",
+                new TestComplexNullableOptionalRequestCommandOptions(nullableInt, optionalInt, nullableOptionalInt,
+                        nullableString, optionalString, nullableOptionalString, nullableStruct, optionalStruct,
+                        nullableOptionalStruct, nullableList, optionalList, nullableOptionalList));
     }
 
     public static ClusterCommand simpleStructEchoRequest(SimpleStruct[] arg1) {
@@ -152,14 +187,17 @@ public class UnitTestingClusterCommands {
     }
 
     public static ClusterCommand testSimpleOptionalArgumentRequest(Boolean arg1) {
-        return new ClusterCommand("testSimpleOptionalArgumentRequest", new TestSimpleOptionalArgumentRequestCommandOptions(arg1));
+        return new ClusterCommand("testSimpleOptionalArgumentRequest",
+                new TestSimpleOptionalArgumentRequestCommandOptions(arg1));
     }
 
     public static ClusterCommand testEmitTestEventRequest(Integer arg1, SimpleEnum arg2, Boolean arg3) {
-        return new ClusterCommand("testEmitTestEventRequest", new TestEmitTestEventRequestCommandOptions(arg1, arg2, arg3));
+        return new ClusterCommand("testEmitTestEventRequest",
+                new TestEmitTestEventRequestCommandOptions(arg1, arg2, arg3));
     }
 
     public static ClusterCommand testEmitTestFabricScopedEventRequest(Integer arg1) {
-        return new ClusterCommand("testEmitTestFabricScopedEventRequest", new TestEmitTestFabricScopedEventRequestCommandOptions(arg1));
+        return new ClusterCommand("testEmitTestFabricScopedEventRequest",
+                new TestEmitTestFabricScopedEventRequestCommandOptions(arg1));
     }
 }

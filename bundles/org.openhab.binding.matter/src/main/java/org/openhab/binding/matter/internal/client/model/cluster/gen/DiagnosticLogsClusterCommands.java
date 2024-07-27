@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DiagnosticLogsClusterTypes.*;
+
 /**
  * DiagnosticLogs
  *
@@ -27,11 +25,15 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.DiagnosticLo
  */
 public class DiagnosticLogsClusterCommands {
 
-    public static ClusterCommand retrieveLogsRequest(IntentEnum intent, TransferProtocolEnum requestedProtocol, String transferFileDesignator) {
-        return new ClusterCommand("retrieveLogsRequest", new RetrieveLogsRequestCommandOptions(intent, requestedProtocol, transferFileDesignator));
+    public static ClusterCommand retrieveLogsRequest(IntentEnum intent, TransferProtocolEnum requestedProtocol,
+            String transferFileDesignator) {
+        return new ClusterCommand("retrieveLogsRequest",
+                new RetrieveLogsRequestCommandOptions(intent, requestedProtocol, transferFileDesignator));
     }
 
-    public static ClusterCommand retrieveLogsResponse(StatusEnum status, String logContent, Long UTCTimeStamp, Long timeSinceBoot) {
-        return new ClusterCommand("retrieveLogsResponse", new RetrieveLogsResponseCommandOptions(status, logContent, UTCTimeStamp, timeSinceBoot));
+    public static ClusterCommand retrieveLogsResponse(StatusEnum status, String logContent, Long UTCTimeStamp,
+            Long timeSinceBoot) {
+        return new ClusterCommand("retrieveLogsResponse",
+                new RetrieveLogsResponseCommandOptions(status, logContent, UTCTimeStamp, timeSinceBoot));
     }
 }

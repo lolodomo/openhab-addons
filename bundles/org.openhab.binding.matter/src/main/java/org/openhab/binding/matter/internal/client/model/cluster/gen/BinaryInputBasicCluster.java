@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BinaryInputBasicClusterTypes.*;
@@ -35,17 +35,17 @@ public class BinaryInputBasicCluster extends BaseCluster {
     public String description; // 28 char_string reportable writable
     public String inactiveText; // 46 char_string reportable writable
     public Boolean outOfService; // 81 boolean reportable writable
-    public Integer polarity; // 84 enum8 reportable 
+    public Integer polarity; // 84 enum8 reportable
     public Boolean presentValue; // 85 boolean reportable writable
     public Integer reliability; // 103 enum8 reportable writable
-    public Map<String, Boolean> statusFlags; // 111 bitmap8 reportable 
-    public Integer applicationType; // 256 int32u reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public Map<String, Boolean> statusFlags; // 111 bitmap8 reportable
+    public Integer applicationType; // 256 int32u reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public BinaryInputBasicCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 27, "BinaryInputBasic");

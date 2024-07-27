@@ -15,11 +15,9 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
-import java.util.List;
-
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.GroupKeyManagementClusterTypes.*;
+
 /**
  * GroupKeyManagement
  *
@@ -48,6 +46,7 @@ public class GroupKeyManagementClusterCommands {
     }
 
     public static ClusterCommand keySetReadAllIndicesResponse(Integer groupKeySetIDs) {
-        return new ClusterCommand("keySetReadAllIndicesResponse", new KeySetReadAllIndicesResponseCommandOptions(groupKeySetIDs));
+        return new ClusterCommand("keySetReadAllIndicesResponse",
+                new KeySetReadAllIndicesResponseCommandOptions(groupKeySetIDs));
     }
 }

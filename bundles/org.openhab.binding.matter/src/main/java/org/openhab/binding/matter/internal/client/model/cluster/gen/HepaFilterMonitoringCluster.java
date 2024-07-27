@@ -15,8 +15,8 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.HepaFilterMonitoringClusterTypes.*;
@@ -31,18 +31,18 @@ public class HepaFilterMonitoringCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "HepaFilterMonitoring";
     public static final int CLUSTER_ID = 0x0071;
 
-    public Integer condition; // 0 percent reportable 
-    public DegradationDirectionEnum degradationDirection; // 1 DegradationDirectionEnum reportable 
-    public ChangeIndicationEnum changeIndication; // 2 ChangeIndicationEnum reportable 
-    public Boolean inPlaceIndicator; // 3 boolean reportable 
+    public Integer condition; // 0 percent reportable
+    public DegradationDirectionEnum degradationDirection; // 1 DegradationDirectionEnum reportable
+    public ChangeIndicationEnum changeIndication; // 2 ChangeIndicationEnum reportable
+    public Boolean inPlaceIndicator; // 3 boolean reportable
     public Integer lastChangedTime; // 4 epoch_s reportable writable
-    public ReplacementProductStruct[] replacementProductList; // 5 ReplacementProductStruct reportable 
-    public List<Integer> generatedCommandList; // 65528 command_id reportable 
-    public List<Integer> acceptedCommandList; // 65529 command_id reportable 
-    public List<Integer> eventList; // 65530 event_id reportable 
-    public List<Integer> attributeList; // 65531 attrib_id reportable 
-    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable 
-    public Integer clusterRevision; // 65533 int16u reportable 
+    public ReplacementProductStruct[] replacementProductList; // 5 ReplacementProductStruct reportable
+    public List<Integer> generatedCommandList; // 65528 command_id reportable
+    public List<Integer> acceptedCommandList; // 65529 command_id reportable
+    public List<Integer> eventList; // 65530 event_id reportable
+    public List<Integer> attributeList; // 65531 attrib_id reportable
+    public Map<String, Boolean> featureMap; // 65532 bitmap32 reportable
+    public Integer clusterRevision; // 65533 int16u reportable
 
     public HepaFilterMonitoringCluster(String nodeId, int endpointId) {
         super(nodeId, endpointId, 68, "HepaFilterMonitoring");

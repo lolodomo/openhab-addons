@@ -25,7 +25,8 @@
 			</parameter>
 			<parameter name="decommissionNodesOnDelete" type="boolean" required="true">
 				<label>Decommission Nodes On Delete</label>
-				<description>Decommission (unpair) Matter nodes from the Matter network when the last endpoint thing of a node is deleted/removed from openHAB.</description>
+				<description>Decommission (unpair) Matter nodes from the Matter network when the last endpoint thing of a node is
+					deleted/removed from openHAB.</description>
 				<default>true</default>
 			</parameter>
 			<parameter name="host" type="text" required="false">
@@ -53,7 +54,7 @@
 		</properties>
 
 		<representation-property>path</representation-property>
-		
+
 		<config-description>
 			<parameter name="nodeId" type="text" required="true">
 				<label>Node Id</label>
