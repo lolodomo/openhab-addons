@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2022-2023 Project CHIP Authors
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { NodeId } from "@project-chip/matter.js/datatype";
 import { MatterError } from "@project-chip/matter.js/common";
 import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/matter.js/device";
@@ -21,6 +15,7 @@ export class Nodes {
     constructor(private theNode: MatterNode, private nodeListener: Partial<CommissioningControllerNodeOptions>) {
     }
 
+    
     async listNodes(connectedOnly = false) {
         console.log("listNodes");
         if (this.theNode.commissioningController === undefined) {
@@ -33,13 +28,8 @@ export class Nodes {
         return nodeIds;
     }
 
-    async getNodes() {
-        const nodes = await this.theNode.getNodes(this.nodeListener);
-        const data: any = {};
-        for (const node of nodes) {
-            data[node.nodeId.toString()] = await this.serializePairedNode(node);
-        };
-        return data;
+    async connectAll() {
+        this.theNode.connect(this.nodeListener);
     }
 
     async getNode(nodeId: string | number) {

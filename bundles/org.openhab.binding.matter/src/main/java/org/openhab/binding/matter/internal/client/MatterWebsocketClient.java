@@ -38,6 +38,7 @@ import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
+import org.openhab.binding.matter.internal.client.model.ws.ActiveSessionInformation;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.client.model.ws.Event;
 import org.openhab.binding.matter.internal.client.model.ws.Message;
@@ -275,8 +276,25 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         return session != null && session.isOpen();
     }
 
-    public List<String> getCommissionedNodeIds() throws Exception {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", new Object[0]);
+    /**
+     * Get all nodes that are currently connected
+     * 
+     * @return
+     * @throws Exception
+     */
+    public List<String> getConnectedNodeIds() throws Exception {
+        return getCommissionedNodeIds(true);
+    }
+
+    /**
+     * Get all nodes the are commissioned / paired to this controller
+     * 
+     * @param onlyConnected filter to nodes that are currently connected
+     * @return
+     * @throws Exception
+     */
+    public List<String> getCommissionedNodeIds(boolean onlyConnected) throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", new Object[] { onlyConnected });
         JsonElement obj = future.get();
         List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
         }.getType());
@@ -296,6 +314,20 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         JsonElement obj = future.get();
         Node node = gson.fromJson(obj, Node.class);
         return node;
+    }
+
+    // @Nullable
+    // public Map<String, Node> getNodes() throws Exception {
+    // CompletableFuture<JsonElement> future = sendMessage("nodes", "getNodes", new Object[0]);
+    // JsonElement obj = future.get();
+    // Map<String, Node> nodes = gson.fromJson(obj, new TypeToken<Map<String, Node>>() {
+    // }.getType());
+    // return nodes;
+    // }
+
+    public void connectAllNodes() throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "connectAll", new Object[0]);
+        future.get();
     }
 
     public void pairNode(String code) throws Exception {
@@ -320,6 +352,13 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };
         CompletableFuture<JsonElement> future = sendMessage("clusters", "command", clusterArgs);
         future.get();
+    }
+
+    public ActiveSessionInformation[] getSessionInformation() throws Exception {
+        CompletableFuture<JsonElement> future = sendMessage("controller", "sessionInformation", new Object[0]);
+        JsonElement obj = future.get();
+        ActiveSessionInformation[] sessions = gson.fromJson(obj, ActiveSessionInformation[].class);
+        return sessions == null ? new ActiveSessionInformation[0] : sessions;
     }
 
     class NodeDeserializer implements JsonDeserializer<Node> {

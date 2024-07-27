@@ -1,9 +1,3 @@
-/**
- * @license
- * Copyright 2022-2023 Project CHIP Authors
- * SPDX-License-Identifier: Apache-2.0
- */
-
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
 
@@ -28,7 +22,7 @@ export class MatterNode {
         private storageLocation: string,
         private readonly nodeNum: number,
         private readonly netInterface?: string
-    ) {}
+    ) { }
 
     get Store() {
         if (!this.storageContext) {
@@ -36,7 +30,7 @@ export class MatterNode {
         }
         return this.storageContext;
     }
-    
+
     async close() {
         await this.matterController?.close();
     }
@@ -48,7 +42,7 @@ export class MatterNode {
         await this.storageManager.initialize();
         this.storageContext = this.storageManager.createContext("Node");
 
-   
+
         if (this.storageManager === undefined) {
             throw new Error("StorageManager not initialized"); // Should never happen
         }
@@ -90,15 +84,18 @@ export class MatterNode {
         if (this.commissioningController === undefined) {
             throw new Error("CommissioningController not initialized");
         }
-       return await this.commissioningController.connectNode(NodeId(BigInt(nodeId)), connectOptions);
-       //return await this.commissioningController.getConnectedNode(NodeId(BigInt(nodeId)));
+        const node = await this.commissioningController.getConnectedNode(NodeId(BigInt(nodeId)))
+        if (node === undefined) {
+            throw new Error(`Node ${nodeId} not connected`);
+        }
+        return node;
     }
 
-    async getNodes(connectOptions?: CommissioningControllerNodeOptions) {
+    async connect(connectOptions?: CommissioningControllerNodeOptions) {
         if (this.commissioningController === undefined) {
             throw new Error("CommissioningController not initialized");
         }
-        return await this.commissioningController.connect(connectOptions);
+        this.commissioningController.connect(connectOptions);
     }
 
     async iterateNodeDevices(

@@ -37,7 +37,12 @@ export class Controller {
         this.clusters = new Clusters(theNode);
     }
 
+    sessionInformation() {
+        return this.theNode.commissioningController?.getActiveSessionInformation() || {}
+    }
+
     async close() {
         await this.theNode.close();
     }
+
 }

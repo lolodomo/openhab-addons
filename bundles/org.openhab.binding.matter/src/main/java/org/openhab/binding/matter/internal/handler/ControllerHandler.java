@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -74,6 +75,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     private MatterWebsocketClient client;
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
+    private final ReentrantLock refreshLock = new ReentrantLock();
 
     public ControllerHandler(Bridge bridge) {
         super(bridge);
@@ -90,7 +92,9 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     public void onEvent(NodeStateMessage message) {
         switch (message.state) {
             case CONNECTED:
-                updateNode(message.nodeId);
+                if (!refreshLock.isLocked()) {
+                    updateNode(message.nodeId);
+                }
                 break;
             case DISCONNECTED:
             case DECOMMISSIONED:
@@ -130,8 +134,13 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     @Override
     public void onReady() {
-        updateStatus(ThingStatus.ONLINE);
-        refresh();
+        try {
+            client.connectAllNodes();
+            updateStatus(ThingStatus.ONLINE);
+        } catch (Exception e) {
+            logger.debug("Could not connect to nodes", e);
+            setOffline(e.getMessage());
+        }
     }
 
     @Override
@@ -153,6 +162,11 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             }
         }
         if (CHANNEL_COMMAND.equals(channelUID.getId())) {
+            if ("REFRESH".equals(command.toString())) {
+                refresh();
+                return;
+            }
+
             try {
                 String[] args = command.toString().split(" ");
                 if (args.length < 3) {
@@ -287,14 +301,22 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     protected void refresh() {
         logger.debug("refresh");
+        if (refreshLock.isLocked()) {
+            return;
+        }
+        refreshLock.lock();
         try {
-            var nodeIds = client.getCommissionedNodeIds();
-            for (String id : nodeIds) {
-                updateNode(id);
+            try {
+                var nodeIds = client.getConnectedNodeIds();
+                for (String id : nodeIds) {
+                    updateNode(id);
+                }
+            } catch (Exception e) {
+                logger.debug("Error communicating with controller", e);
+                setOffline(e.getLocalizedMessage());
             }
-        } catch (Exception e) {
-            logger.debug("Error communicating with controller", e);
-            setOffline(e.getLocalizedMessage());
+        } finally {
+            refreshLock.unlock();
         }
     }
 
@@ -336,29 +358,32 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     }
 
     private void updateNode(String id) {
-        logger.debug("updateNode {}", id);
         try {
             Node node = client.getNode(id);
             if (node == null) {
                 return;
             }
-            synchronized (nodeEndpoints) {
-                Map<Integer, Endpoint> endpoints = new HashMap<>();
-                for (Endpoint e : node.endpoints.values()) {
-                    endpoints.put(e.number, e);
-                    discoverChildEndpoint(node, e);
-                    EndpointHandler handler = endpointHandler(id, e.number);
-                    if (handler != null) {
-                        Thing thing = handler.getThing();
-                        updateEndpointThingProperties(node, thing, e.number);
-                        handler.updateEndpoint(e);
-                    }
-                }
-                nodeEndpoints.put(id, endpoints);
-            }
+            updateNode(node);
         } catch (Exception e) {
             logger.debug("Could not update node {}", id, e);
             updateEndpointStatuses(id, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+        }
+    }
+
+    private void updateNode(Node node) {
+        synchronized (nodeEndpoints) {
+            Map<Integer, Endpoint> endpoints = new HashMap<>();
+            for (Endpoint e : node.endpoints.values()) {
+                endpoints.put(e.number, e);
+                discoverChildEndpoint(node, e);
+                EndpointHandler handler = endpointHandler(node.id, e.number);
+                if (handler != null) {
+                    Thing thing = handler.getThing();
+                    updateEndpointThingProperties(node, thing, e.number);
+                    handler.updateEndpoint(e);
+                }
+            }
+            nodeEndpoints.put(node.id, endpoints);
         }
     }
 
