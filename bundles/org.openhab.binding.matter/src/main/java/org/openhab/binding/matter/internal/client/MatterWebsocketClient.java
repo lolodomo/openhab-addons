@@ -223,7 +223,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                             try {
                                 listener.onEvent(changedMessage);
                             } catch (Exception e) {
-                                logger.debug("Error notifing listener", e);
+                                logger.debug("Error notifying listener", e);
                             }
                         }
                         break;
@@ -282,7 +282,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
      * @return
      * @throws Exception
      */
-    public List<String> getConnectedNodeIds() throws Exception {
+    public CompletableFuture<List<String>> getConnectedNodeIds() {
         return getCommissionedNodeIds(true);
     }
 
@@ -293,27 +293,32 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
      * @return
      * @throws Exception
      */
-    public List<String> getCommissionedNodeIds(boolean onlyConnected) throws Exception {
+    public CompletableFuture<List<String>> getCommissionedNodeIds(boolean onlyConnected) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", new Object[] { onlyConnected });
-        JsonElement obj = future.get();
-        List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
-        }.getType());
-        return nodes != null ? nodes : Collections.emptyList();
+
+        return future.thenApply(obj -> {
+            List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
+            }.getType());
+            return nodes != null ? nodes : Collections.emptyList();
+        });
     }
 
-    public String genericCommand(String namespace, String functionName, @Nullable Object... objects) throws Exception {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes",
+    public CompletableFuture<String> genericCommand(String namespace, String functionName,
+            @Nullable Object... objects) {
+        CompletableFuture<JsonElement> future = sendMessage(namespace, functionName,
                 objects == null ? new Object[0] : objects);
-        JsonElement obj = future.get();
-        return obj == null ? "" : obj.getAsString();
+        return future.thenApply(obj -> obj == null ? "" : obj.toString());
     }
 
-    @Nullable
-    public Node getNode(String id) throws Exception {
+    public CompletableFuture<Node> getNode(String id) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { id });
-        JsonElement obj = future.get();
-        Node node = gson.fromJson(obj, Node.class);
-        return node;
+        return future.thenApply(obj -> {
+            Node node = gson.fromJson(obj, Node.class);
+            if (node == null) {
+                throw new IllegalStateException("Could not deserialize node");
+            }
+            return node;
+        });
     }
 
     // @Nullable
@@ -325,12 +330,14 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
     // return nodes;
     // }
 
-    public void connectAllNodes() throws Exception {
+    public CompletableFuture<Void> connectAllNodes() {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "connectAll", new Object[0]);
-        future.get();
+        return future.thenAccept(obj -> {
+            // Do nothing, just to complete the future
+        });
     }
 
-    public void pairNode(String code) throws Exception {
+    public CompletableFuture<Void> pairNode(String code) {
         String formattedCode = code.replaceAll("-", "");
         String[] parts = formattedCode.split(" ");
         CompletableFuture<JsonElement> future = null;
@@ -339,26 +346,33 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         } else {
             future = sendMessage("nodes", "pair", new Object[] { formattedCode });
         }
-        future.get();
+        return future.thenAccept(obj -> {
+            // Do nothing, just to complete the future
+        });
     }
 
-    public void decommissionNode(String nodeId) throws Exception {
+    public CompletableFuture<Void> decommissionNode(String nodeId) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "decommission", new Object[] { nodeId });
-        future.get();
+        return future.thenAccept(obj -> {
+            // Do nothing, just to complete the future
+        });
     }
 
-    public void clusterCommand(String nodeId, Integer endpointId, String clusterName, ClusterCommand command)
-            throws Exception {
+    public CompletableFuture<Void> clusterCommand(String nodeId, Integer endpointId, String clusterName,
+            ClusterCommand command) {
         Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };
         CompletableFuture<JsonElement> future = sendMessage("clusters", "command", clusterArgs);
-        future.get();
+        return future.thenAccept(obj -> {
+            // Do nothing, just to complete the future
+        });
     }
 
-    public ActiveSessionInformation[] getSessionInformation() throws Exception {
+    public CompletableFuture<ActiveSessionInformation[]> getSessionInformation() {
         CompletableFuture<JsonElement> future = sendMessage("controller", "sessionInformation", new Object[0]);
-        JsonElement obj = future.get();
-        ActiveSessionInformation[] sessions = gson.fromJson(obj, ActiveSessionInformation[].class);
-        return sessions == null ? new ActiveSessionInformation[0] : sessions;
+        return future.thenApply(obj -> {
+            ActiveSessionInformation[] sessions = gson.fromJson(obj, ActiveSessionInformation[].class);
+            return sessions == null ? new ActiveSessionInformation[0] : sessions;
+        });
     }
 
     class NodeDeserializer implements JsonDeserializer<Node> {

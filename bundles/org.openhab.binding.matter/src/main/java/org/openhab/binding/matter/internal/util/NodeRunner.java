@@ -155,8 +155,8 @@ public class NodeRunner {
             nodeProcess.destroy();
             try {
                 // Wait for the process to terminate
-                if (!nodeProcess.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)) {
-                    // Force terminate if it doesn't exit within 5 seconds
+                if (!nodeProcess.waitFor(3, java.util.concurrent.TimeUnit.SECONDS)) {
+                    // Force terminate if it doesn't exit within 3 seconds
                     nodeProcess.destroyForcibly();
                 }
             } catch (InterruptedException e) {

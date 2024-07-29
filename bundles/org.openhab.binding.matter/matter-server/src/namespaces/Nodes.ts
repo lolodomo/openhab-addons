@@ -15,7 +15,6 @@ export class Nodes {
     constructor(private theNode: MatterNode, private nodeListener: Partial<CommissioningControllerNodeOptions>) {
     }
 
-    
     async listNodes(connectedOnly = false) {
         console.log("listNodes");
         if (this.theNode.commissioningController === undefined) {
@@ -107,9 +106,6 @@ export class Nodes {
     // }
 
     async pair(pairingCode: string | undefined, shortDiscriminator: number | undefined, setupPinCode: number | undefined) {
-        //these should be optionally passed in as arguments at some point !
-        //let shortDiscriminator: number | undefined;
-        //let setupPinCode: number | undefined;
         let discriminator: number | undefined;
         let nodeIdStr: string | undefined;
         let ipPort: number | undefined;

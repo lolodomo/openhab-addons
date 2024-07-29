@@ -92,9 +92,10 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     public void onEvent(NodeStateMessage message) {
         switch (message.state) {
             case CONNECTED:
-                if (!refreshLock.isLocked()) {
-                    updateNode(message.nodeId);
-                }
+                // scheduler.execute(() -> {
+                // updateNode(message.nodeId);
+                // });
+                updateNode(message.nodeId);
                 break;
             case DISCONNECTED:
             case DECOMMISSIONED:
@@ -145,13 +146,9 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
+        logger.debug("handleCommand {} {}", channelUID, command);
         if (!client.isConnected()) {
             logger.debug("not connected");
-            return;
-        }
-
-        if (command instanceof RefreshType) {
-            refresh();
             return;
         }
         if (CHANNEL_PAIR_CODE.equals(channelUID.getId())) {
@@ -162,25 +159,24 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             }
         }
         if (CHANNEL_COMMAND.equals(channelUID.getId())) {
-            if ("REFRESH".equals(command.toString())) {
-                refresh();
+            if (command instanceof RefreshType || "REFRESH".equals(command.toString())) {
+                // refresh();
                 return;
             }
 
-            try {
-                String[] args = command.toString().split(" ");
-                if (args.length < 3) {
-                    logger.debug("Commands require at least 3 segments");
-                    return;
-                }
-
-                String result = client.genericCommand(args[0], args[1],
-                        (Object) Arrays.copyOfRange(args, 2, args.length));
+            String[] args = command.toString().split(" ");
+            if (args.length < 2) {
+                logger.debug("Commands require at least 2 segments");
+                return;
+            }
+            Object[] params = args.length > 2 ? (Object[]) Arrays.copyOfRange(args, 2, args.length) : new String[0];
+            client.genericCommand(args[0], args[1], params).thenAccept(result -> {
                 logger.debug("Command {} ", command);
                 logger.debug("Result: {}", result);
-            } catch (Exception e) {
+            }).exceptionally(e -> {
                 logger.debug("Could not send command", e);
-            }
+                return null;
+            });
         }
     }
 
@@ -276,6 +272,8 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         if (childHandler instanceof EndpointHandler handler) {
             String nodeId = handler.getNodeId();
             int endpointId = handler.getEndpointId();
+            // TODO we need to check with the matter network if this node is connected or not. If it is, then update the
+            // endpoint, if not we need to connect to it.
             synchronized (nodeEndpoints) {
                 var endpoints = nodeEndpoints.get(nodeId);
                 logger.debug("childHandlerInitialized endpoints {}", endpoints);
@@ -292,32 +290,28 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     @Override
     public void startScan() {
-        refresh();
+        // refresh();
     }
 
     protected MatterWebsocketClient getClient() {
         return client;
     }
 
-    protected void refresh() {
+    private void refresh() {
         logger.debug("refresh");
         if (refreshLock.isLocked()) {
             return;
         }
         refreshLock.lock();
-        try {
-            try {
-                var nodeIds = client.getConnectedNodeIds();
-                for (String id : nodeIds) {
-                    updateNode(id);
-                }
-            } catch (Exception e) {
-                logger.debug("Error communicating with controller", e);
-                setOffline(e.getLocalizedMessage());
+        client.getConnectedNodeIds().thenAccept(nodeIds -> {
+            for (String id : nodeIds) {
+                updateNode(id);
             }
-        } finally {
-            refreshLock.unlock();
-        }
+        }).exceptionally(e -> {
+            logger.debug("Error communicating with controller", e);
+            setOffline(e.getLocalizedMessage());
+            return null;
+        }).whenComplete((nodeIds, e) -> refreshLock.unlock());
     }
 
     protected void endpointRemoved(String nodeId, int endpointId) {
@@ -358,16 +352,15 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     }
 
     private void updateNode(String id) {
-        try {
-            Node node = client.getNode(id);
-            if (node == null) {
-                return;
-            }
+        logger.debug("updateNode BEGIN {}", id);
+        client.getNode(id).thenAccept(node -> {
             updateNode(node);
-        } catch (Exception e) {
+            logger.debug("updateNode END {}", id);
+        }).exceptionally(e -> {
             logger.debug("Could not update node {}", id, e);
             updateEndpointStatuses(id, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
-        }
+            return null;
+        });
     }
 
     private void updateNode(Node node) {
@@ -423,7 +416,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         for (Thing thing : getThing().getThings()) {
             ThingHandler handler = thing.getHandler();
             if (handler instanceof EndpointHandler endpointHandler) {
-                if (nodeId.equals(nodeId) && endpointHandler.getEndpointId() == endpointId) {
+                if (nodeId.equals(endpointHandler.getNodeId()) && endpointHandler.getEndpointId() == endpointId) {
                     return endpointHandler;
                 }
             }

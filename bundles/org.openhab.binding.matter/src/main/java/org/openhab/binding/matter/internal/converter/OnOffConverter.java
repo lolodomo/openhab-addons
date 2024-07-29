@@ -59,14 +59,10 @@ public class OnOffConverter extends ClusterConverter {
         }
 
         if (command instanceof OnOffType) {
-            try {
-                ClusterCommand onOffCommand = command == OnOffType.ON ? OnOffClusterCommands.on()
-                        : OnOffClusterCommands.off();
-                client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME,
-                        onOffCommand);
-            } catch (Exception e) {
-                logger.debug("Could not send command", e);
-            }
+            ClusterCommand onOffCommand = command == OnOffType.ON ? OnOffClusterCommands.on()
+                    : OnOffClusterCommands.off();
+            client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME,
+                    onOffCommand);
         }
     }
 

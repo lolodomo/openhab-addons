@@ -88,34 +88,30 @@ public class ColorControlConverter extends ClusterConverter {
         if (client == null) {
             return;
         }
-        try {
-            if (command instanceof HSBType) {
-                HSBType color = (HSBType) command;
-                PercentType brightness = color.getBrightness();
+        if (command instanceof HSBType) {
+            HSBType color = (HSBType) command;
+            PercentType brightness = color.getBrightness();
 
-                sendLevel(client, brightness);
+            sendLevel(client, brightness);
 
-                if (supportsHue) {
-                    changeColorHueSaturation(client, color);
-                } else {
-                    changeColorXY(client, color);
-                }
-            } else if (command instanceof PercentType) {
-                sendLevel(client, (PercentType) command);
-            } else if (command instanceof OnOffType) {
-                sendOnOff(client, ((OnOffType) command) == OnOffType.ON);
+            if (supportsHue) {
+                changeColorHueSaturation(client, color);
+            } else {
+                changeColorXY(client, color);
             }
-        } catch (Exception e) {
-            logger.debug("Could not handle command {}", command, e);
+        } else if (command instanceof PercentType) {
+            sendLevel(client, (PercentType) command);
+        } else if (command instanceof OnOffType) {
+            sendOnOff(client, ((OnOffType) command) == OnOffType.ON);
         }
     }
 
-    private void sendOnOff(MatterWebsocketClient client, boolean on) throws Exception {
+    private void sendOnOff(MatterWebsocketClient client, boolean on) {
         ClusterCommand onOffCommand = on ? OnOffClusterCommands.on() : OnOffClusterCommands.off();
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME, onOffCommand);
     }
 
-    private void sendLevel(MatterWebsocketClient client, PercentType level) throws Exception {
+    private void sendLevel(MatterWebsocketClient client, PercentType level) {
         ClusterCommand levelCommand = LevelControlClusterCommands.moveToLevel(percentToLevel(level), 0,
                 new OptionsBitmap(false, true), new OptionsBitmap(false, true));
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), LevelControlCluster.CLUSTER_NAME,
@@ -271,14 +267,14 @@ public class ColorControlConverter extends ClusterConverter {
         yChanged = false;
     }
 
-    private void changeColorHueSaturation(MatterWebsocketClient client, HSBType color) throws Exception {
+    private void changeColorHueSaturation(MatterWebsocketClient client, HSBType color) {
         int hue = (int) (color.getHue().floatValue() * 254.0f / 360.0f + 0.5f);
         int saturation = percentToLevel(color.getSaturation());
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), ColorControlCluster.CLUSTER_NAME,
                 ColorControlClusterCommands.moveToHueAndSaturation(hue, saturation, 0, optionsMask, optionsMask));
     }
 
-    private void changeColorXY(MatterWebsocketClient client, HSBType color) throws Exception {
+    private void changeColorXY(MatterWebsocketClient client, HSBType color) {
         PercentType xy[] = color.toXY();
         int x = (int) (xy[0].floatValue() / 100.0f * 65536.0f + 0.5f); // up to 65279
         int y = (int) (xy[1].floatValue() / 100.0f * 65536.0f + 0.5f); // up to 65279

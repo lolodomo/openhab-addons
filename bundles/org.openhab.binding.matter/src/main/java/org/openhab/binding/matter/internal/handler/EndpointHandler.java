@@ -128,6 +128,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     public void updateEndpoint(Endpoint endpoint) {
         logger.debug("updateEndpoint {} {}", endpoint.number, nodeId);
         if (getThing().getStatus() != ThingStatus.ONLINE) {
+            logger.debug("Setting Online {} {}", endpoint.number, nodeId);
             updateStatus(ThingStatus.ONLINE);
         }
         Map<String, BaseCluster> clusters = endpoint.clusters;
@@ -142,6 +143,11 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
             updateProperty("label", label);
         }
+        // // hack to support a single handler when Level and OnOff
+        // if (endpoint.clusters.containsKey(OnOffCluster.CLUSTER_NAME)
+        // && endpoint.clusters.containsKey(LevelControlCluster.CLUSTER_NAME)) {
+        // endpoint.clusters.remove(OnOffCluster.CLUSTER_NAME);
+        // }
         endpoint.clusters.forEach((clusterName, cluster) -> {
             logger.debug("checking cluster {} for handler", clusterName);
             Integer id = cluster.id;
@@ -208,6 +214,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     }
 
     public void setEndpointStatus(ThingStatus status, ThingStatusDetail detail) {
+        logger.debug("setEndpointStatus {} {} {} {}", status, detail, endpointId, nodeId);
         updateStatus(status, detail);
     }
 

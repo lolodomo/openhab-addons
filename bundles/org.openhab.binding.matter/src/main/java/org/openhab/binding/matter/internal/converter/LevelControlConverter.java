@@ -67,31 +67,23 @@ public class LevelControlConverter extends ClusterConverter {
         }
         if (command instanceof PercentType) {
             float level = ((DecimalType) command).floatValue();
-            try {
-                sendOnOff(client, level > 0);
-                if (level > 0) {
-                    sendLevel(client, (PercentType) command);
-                }
-            } catch (Exception e) {
-                logger.debug("Could not send command", e);
+            sendOnOff(client, level > 0);
+            if (level > 0) {
+                sendLevel(client, (PercentType) command);
             }
         }
 
         if (command instanceof OnOffType) {
-            try {
-                sendOnOff(client, command == OnOffType.ON);
-            } catch (Exception e) {
-                logger.debug("Could not send command", e);
-            }
+            sendOnOff(client, command == OnOffType.ON);
         }
     }
 
-    private void sendOnOff(MatterWebsocketClient client, boolean on) throws Exception {
+    private void sendOnOff(MatterWebsocketClient client, boolean on) {
         ClusterCommand onOffCommand = on ? OnOffClusterCommands.on() : OnOffClusterCommands.off();
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME, onOffCommand);
     }
 
-    private void sendLevel(MatterWebsocketClient client, PercentType level) throws Exception {
+    private void sendLevel(MatterWebsocketClient client, PercentType level) {
         ClusterCommand levelCommand = LevelControlClusterCommands.moveToLevel(percentToLevel(level), 0,
                 new OptionsBitmap(false, true), new OptionsBitmap(false, true));
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), LevelControlCluster.CLUSTER_NAME,
