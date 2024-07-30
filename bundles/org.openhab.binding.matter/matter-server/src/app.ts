@@ -198,7 +198,7 @@ async function handleRequest(ws: WebSocketSession, request: Request): Promise<vo
         }
     } catch (error) {
         if (error instanceof Error) {
-            logger.error(`Error executing function ${functionName}: ${error} ${error.stack}`);
+            logger.error(`Error executing function ${functionName}: ${error.message} ${error.stack}`);
             ws.sendResponse(MessageType.ResultError, id, undefined, error.message);
         }
     }

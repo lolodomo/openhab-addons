@@ -89,7 +89,7 @@ public class OnOffConverter extends ClusterConverter {
                         OnOffType.from(Boolean.valueOf(message.value)));
                 break;
             default:
-                logger.debug("Unknow attribute {}", message.path.attributeName);
+                logger.debug("Unknown attribute {}", message.path.attributeName);
         }
     }
 }

@@ -25,6 +25,7 @@ import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
 import org.openhab.binding.matter.internal.converter.ClusterConverter;
@@ -143,13 +144,12 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
             updateProperty("label", label);
         }
-        // // hack to support a single handler when Level and OnOff
-        // if (endpoint.clusters.containsKey(OnOffCluster.CLUSTER_NAME)
-        // && endpoint.clusters.containsKey(LevelControlCluster.CLUSTER_NAME)) {
-        // endpoint.clusters.remove(OnOffCluster.CLUSTER_NAME);
-        // }
-        endpoint.clusters.forEach((clusterName, cluster) -> {
+        clusters.forEach((clusterName, cluster) -> {
             logger.debug("checking cluster {} for handler", clusterName);
+            // hack, if the cluster contains both clusters, only use the LevelControl version
+            if (hasLevelControl && OnOffCluster.CLUSTER_NAME.equals(clusterName)) {
+                return;
+            }
             Integer id = cluster.id;
             // hack to support a single handler when Level and OnOff
             // if (hasLevelControl && OnOffCluster.CLUSTER_NAME.equals(clusterName)) {
@@ -213,9 +213,9 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         return nodeId;
     }
 
-    public void setEndpointStatus(ThingStatus status, ThingStatusDetail detail) {
-        logger.debug("setEndpointStatus {} {} {} {}", status, detail, endpointId, nodeId);
-        updateStatus(status, detail);
+    public void setEndpointStatus(ThingStatus status, ThingStatusDetail detail, String description) {
+        logger.debug("setEndpointStatus {} {} {} {} {}", status, detail, description, endpointId, nodeId);
+        updateStatus(status, detail, description);
     }
 
     protected @Nullable ControllerHandler controllerHandler() {

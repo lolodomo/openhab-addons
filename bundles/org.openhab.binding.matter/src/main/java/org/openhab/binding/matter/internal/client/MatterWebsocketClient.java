@@ -161,14 +161,6 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         String jsonMessage = gson.toJson(message);
         logger.debug("sendMessage: {}", jsonMessage);
         session.getRemote().sendStringByFuture(jsonMessage);
-        // Future<Void> future = session.getRemote().sendStringByFuture(jsonMessage);
-        // Debug code
-        // try {
-        // future.get(5, TimeUnit.SECONDS); // Wait for up to 5 seconds for the message to be sent
-        // logger.debug("Message sent successfully {}", requestId);
-        // } catch (InterruptedException | ExecutionException | TimeoutException e) {
-        // logger.debug("Failed to send message: {}", requestId, e);
-        // }
         return responseFuture;
     }
 
@@ -295,7 +287,6 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
      */
     public CompletableFuture<List<String>> getCommissionedNodeIds(boolean onlyConnected) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", new Object[] { onlyConnected });
-
         return future.thenApply(obj -> {
             List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
             }.getType());
@@ -318,22 +309,6 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                 throw new IllegalStateException("Could not deserialize node");
             }
             return node;
-        });
-    }
-
-    // @Nullable
-    // public Map<String, Node> getNodes() throws Exception {
-    // CompletableFuture<JsonElement> future = sendMessage("nodes", "getNodes", new Object[0]);
-    // JsonElement obj = future.get();
-    // Map<String, Node> nodes = gson.fromJson(obj, new TypeToken<Map<String, Node>>() {
-    // }.getType());
-    // return nodes;
-    // }
-
-    public CompletableFuture<Void> connectAllNodes() {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "connectAll", new Object[0]);
-        return future.thenAccept(obj -> {
-            // Do nothing, just to complete the future
         });
     }
 

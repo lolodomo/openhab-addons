@@ -27,9 +27,9 @@ export class Nodes {
         return nodeIds;
     }
 
-    async connectAll() {
-        this.theNode.connect(this.nodeListener);
-    }
+    // async connectAll() {
+    //     return this.theNode.connect(this.nodeListener);
+    // }
 
     async getNode(nodeId: string | number) {
         const node = await this.theNode.getNode(nodeId, this.nodeListener);

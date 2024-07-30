@@ -84,18 +84,11 @@ export class MatterNode {
         if (this.commissioningController === undefined) {
             throw new Error("CommissioningController not initialized");
         }
-        const node = await this.commissioningController.getConnectedNode(NodeId(BigInt(nodeId)))
+        const node = await this.commissioningController.connectNode(NodeId(BigInt(nodeId)), connectOptions)
         if (node === undefined) {
             throw new Error(`Node ${nodeId} not connected`);
         }
         return node;
-    }
-
-    async connect(connectOptions?: CommissioningControllerNodeOptions) {
-        if (this.commissioningController === undefined) {
-            throw new Error("CommissioningController not initialized");
-        }
-        this.commissioningController.connect(connectOptions);
     }
 
     async iterateNodeDevices(
