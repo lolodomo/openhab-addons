@@ -25,7 +25,6 @@ import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
 import org.openhab.binding.matter.internal.converter.ClusterConverter;
@@ -146,15 +145,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         }
         clusters.forEach((clusterName, cluster) -> {
             logger.debug("checking cluster {} for handler", clusterName);
-            // hack, if the cluster contains both clusters, only use the LevelControl version
-            if (hasLevelControl && OnOffCluster.CLUSTER_NAME.equals(clusterName)) {
-                return;
-            }
             Integer id = cluster.id;
-            // hack to support a single handler when Level and OnOff
-            // if (hasLevelControl && OnOffCluster.CLUSTER_NAME.equals(clusterName)) {
-            // id = LevelControlCluster.CLUSTER_ID;
-            // }
             ClusterConverter clusterConverter = clusterIdMap.get(id);
             if (clusterConverter == null) {
                 // lookup handler

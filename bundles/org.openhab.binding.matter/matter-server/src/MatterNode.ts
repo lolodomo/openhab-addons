@@ -90,23 +90,21 @@ export class MatterNode {
         }
         return node;
     }
-
-    async iterateNodeDevices(
-        nodes: PairedNode[],
-        callback: (device: EndpointInterface, node: PairedNode) => Promise<void>,
-        endpointId?: number,
-    ) {
-        for (const node of nodes) {
-            let devices = node.getDevices();
-            //an endpoint id was specified, only works with a single device
-            if (endpointId !== undefined && devices.length == 1) {
-                const endpoint = this.findEndpoint(devices[0], endpointId);
-                devices = endpoint !== undefined ? [endpoint] : [];
-            }
-            for (const device of devices) {
-                await callback(device, node);
+    /**
+     * Finds the given endpoint, included nested endpoints
+     * @param node 
+     * @param endpointId 
+     * @returns 
+     */
+    getEndpoint(node: PairedNode, endpointId: number) {
+        const endpoints = node.getDevices();
+        for (const e of endpoints) {
+            const endpoint = this.findEndpoint(e, endpointId);
+            if (e != undefined) {
+                return e;
             }
         }
+        return undefined;
     }
 
     /**

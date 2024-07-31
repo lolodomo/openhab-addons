@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -87,7 +86,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     private @Nullable ScheduledFuture<?> reconnectFuture;
     private boolean running = true;
     private boolean ready = false;
-    private final ReentrantLock refreshLock = new ReentrantLock();
+    private boolean updating = false;
     private @Nullable ScheduledFuture<?> checkFuture;
 
     public ControllerHandler(Bridge bridge) {
@@ -234,8 +233,8 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     @Override
     public void childHandlerInitialized(ThingHandler childHandler, Thing childThing) {
         super.childHandlerInitialized(childHandler, childThing);
-        logger.debug("childHandlerInitialized {}", childHandler);
-        if (!ready || refreshLock.isLocked()) {
+        logger.debug("childHandlerInitialized ready {} updating {} {}", ready, updating, childHandler);
+        if (!ready || updating) {
             return;
         }
         if (childHandler instanceof EndpointHandler handler) {
@@ -268,7 +267,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         logger.debug("Node onEvent: node {} is {}", message.nodeId, message.state);
         switch (message.state) {
             case CONNECTED:
-                if (!refreshLock.isLocked()) {
+                if (!updating) {
                     updateNode(message.nodeId);
                 }
                 break;
@@ -314,8 +313,9 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     @Override
     public void onReady() {
         ready = true;
-        refreshLock.lock();
         updateStatus(ThingStatus.ONLINE);
+        logger.debug("onReady obtaining lock");
+        updating = true;
         client.getCommissionedNodeIds(false).thenAccept(nodeIds -> {
             for (String id : nodeIds) {
                 updateNode(id);
@@ -324,7 +324,10 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             logger.debug("Error communicating with controller", e);
             setOffline(e.getLocalizedMessage());
             return null;
-        }).whenComplete((nodeIds, e) -> refreshLock.unlock());
+        }).whenComplete((nodeIds, e) -> {
+            logger.debug("onReady releasing lock");
+            updating = false;
+        });
     }
 
     protected MatterWebsocketClient getClient() {
@@ -333,10 +336,11 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
 
     private void refresh() {
         logger.debug("refresh");
-        if (!ready || refreshLock.isLocked()) {
+        if (!ready || updating) {
             return;
         }
-        refreshLock.lock();
+        logger.debug("refresh obtaining lock");
+        updating = true;
         client.getConnectedNodeIds().thenAccept(nodeIds -> {
             for (String id : nodeIds) {
                 updateNode(id);
@@ -345,7 +349,10 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             logger.debug("Error communicating with controller", e);
             setOffline(e.getLocalizedMessage());
             return null;
-        }).whenComplete((nodeIds, e) -> refreshLock.unlock());
+        }).whenComplete((nodeIds, e) -> {
+            logger.debug("refresh releasing lock");
+            updating = false;
+        });
     }
 
     protected void endpointRemoved(String nodeId, int endpointId) {
