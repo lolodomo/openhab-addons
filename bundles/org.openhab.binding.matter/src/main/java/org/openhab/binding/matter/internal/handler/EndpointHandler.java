@@ -24,6 +24,7 @@ import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.BridgedDeviceBasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
@@ -135,13 +136,19 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         boolean hasLevelControl = clusters.containsKey(LevelControlCluster.CLUSTER_NAME);
 
         Object basicInfoObject = clusters.get(BasicInformationCluster.CLUSTER_NAME);
-        if (basicInfoObject == null) {
-            basicInfoObject = clusters.get("BridgedDeviceBasicInformation");
-        }
         if (basicInfoObject != null) {
             BasicInformationCluster basicInfo = (BasicInformationCluster) basicInfoObject;
             String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
             updateProperty("label", label);
+
+        } else {
+            basicInfoObject = clusters.get(BridgedDeviceBasicInformationCluster.CLUSTER_NAME);
+            if (basicInfoObject != null) {
+                BridgedDeviceBasicInformationCluster basicInfo = (BridgedDeviceBasicInformationCluster) basicInfoObject;
+                String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
+                updateProperty("label", label);
+
+            }
         }
         clusters.forEach((clusterName, cluster) -> {
             logger.debug("checking cluster {} for handler", clusterName);

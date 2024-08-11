@@ -1,0 +1,25 @@
+{
+    "name": "code-gen",
+    "version": "0.1.0",
+    "description": "",
+    "scripts": {
+        "clean": "tsc --clean",
+        "build": "tsc --build",
+        "build-clean": "tsc --build --clean",
+        "start": "ts-node src/app.ts"
+    },
+    "devDependencies": {
+        "ts-loader": "^9.4.4",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@project-chip/matter-node.js": "v0.10.0-alpha.0-20240720-471dea8c",
+        "handlebars": "^4.7.8"
+    },
+    "files": [
+        "dist/**/*",
+        "src/**/*",
+        "README.md"
+    ]
+}

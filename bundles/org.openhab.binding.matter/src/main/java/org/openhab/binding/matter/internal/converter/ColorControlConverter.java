@@ -19,9 +19,7 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_ONOFF;
 import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_COLOR;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -33,12 +31,10 @@ import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControlCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControlClusterCommands;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControlCluster.Options;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlClusterCommands;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlClusterTypes.OptionsBitmap;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster.OptionsBitmap;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffClusterCommands;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.handler.EndpointHandler;
 import org.openhab.core.library.types.DecimalType;
@@ -70,7 +66,7 @@ public class ColorControlConverter extends ClusterConverter {
     private boolean xChanged = false;
     private boolean yChanged = false;
     private HSBType lastHSB = new HSBType("0,0,100");
-    private Map<String, Boolean> optionsMask = new HashMap<String, Boolean>();
+    private Options optionsMask = new Options(true);
     private ScheduledExecutorService colorUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
 
     public ColorControlConverter(EndpointHandler handler) {
@@ -107,12 +103,12 @@ public class ColorControlConverter extends ClusterConverter {
     }
 
     private void sendOnOff(MatterWebsocketClient client, boolean on) {
-        ClusterCommand onOffCommand = on ? OnOffClusterCommands.on() : OnOffClusterCommands.off();
+        ClusterCommand onOffCommand = on ? OnOffCluster.on() : OnOffCluster.off();
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME, onOffCommand);
     }
 
     private void sendLevel(MatterWebsocketClient client, PercentType level) {
-        ClusterCommand levelCommand = LevelControlClusterCommands.moveToLevel(percentToLevel(level), 0,
+        ClusterCommand levelCommand = LevelControlCluster.moveToLevel(percentToLevel(level), 0,
                 new OptionsBitmap(false, true), new OptionsBitmap(false, true));
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), LevelControlCluster.CLUSTER_NAME,
                 levelCommand);
@@ -122,22 +118,23 @@ public class ColorControlConverter extends ClusterConverter {
     public void updateCluster(BaseCluster cluster) {
         if (cluster instanceof ColorControlCluster) {
             ColorControlCluster colorCluster = (ColorControlCluster) cluster;
-            colorCluster.featureMap.forEach((name, enabled) -> {
-                switch (name) {
-                    case "hueSaturation":
-                        supportsHue = enabled;
-                        break;
-                    case "enhancedHue":
-                        break;
-                    case "colorLoop":
-                        break;
-                    case "xy":
-                        break;
-                    case "colorTemperature":
-                        break;
-                }
-            });
-            optionsMask = colorCluster.options;
+            // colorCluster.featureMap.forEach((name, enabled) -> {
+            // switch (name) {
+            // case "hueSaturation":
+            // supportsHue = enabled;
+            // break;
+            // case "enhancedHue":
+            // break;
+            // case "colorLoop":
+            // break;
+            // case "xy":
+            // break;
+            // case "colorTemperature":
+            // break;
+            // }
+            // });
+            supportsHue = colorCluster.featureMap.hS;
+            // optionsMask = colorCluster.options;
             lastX = colorCluster.currentX;
             lastY = colorCluster.currentY;
             lastHue = colorCluster.currentHue;
@@ -271,7 +268,7 @@ public class ColorControlConverter extends ClusterConverter {
         int hue = (int) (color.getHue().floatValue() * 254.0f / 360.0f + 0.5f);
         int saturation = percentToLevel(color.getSaturation());
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), ColorControlCluster.CLUSTER_NAME,
-                ColorControlClusterCommands.moveToHueAndSaturation(hue, saturation, 0, optionsMask, optionsMask));
+                ColorControlCluster.moveToHueAndSaturation(hue, saturation, 0, optionsMask, optionsMask));
     }
 
     private void changeColorXY(MatterWebsocketClient client, HSBType color) {
@@ -279,6 +276,6 @@ public class ColorControlConverter extends ClusterConverter {
         int x = (int) (xy[0].floatValue() / 100.0f * 65536.0f + 0.5f); // up to 65279
         int y = (int) (xy[1].floatValue() / 100.0f * 65536.0f + 0.5f); // up to 65279
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), ColorControlCluster.CLUSTER_NAME,
-                ColorControlClusterCommands.moveToColor(x, y, 0, optionsMask, optionsMask));
+                ColorControlCluster.moveToColor(x, y, 0, optionsMask, optionsMask));
     }
 }

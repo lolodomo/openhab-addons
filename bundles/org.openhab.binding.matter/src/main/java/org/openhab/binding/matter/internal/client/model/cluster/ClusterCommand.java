@@ -12,29 +12,30 @@
  */
 package org.openhab.binding.matter.internal.client.model.cluster;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * @author Dan Cunningham
  *
  */
 public class ClusterCommand {
     public String commandName;
-    public Object args;
+    public Map<String, Object> args;
 
     /**
      * @param commandName
      * @param options
      */
-    public ClusterCommand(String commandName, Object args) {
+    public ClusterCommand(String commandName, Map<String, Object> args) {
         super();
         this.commandName = commandName;
         this.args = args;
     }
 
-    /**
-     * @param commandName
-     * @param options
-     */
     public ClusterCommand(String commandName) {
-        this(commandName, null);
+        super();
+        this.commandName = commandName;
+        this.args = Collections.emptyMap();
     }
 }

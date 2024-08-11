@@ -25,7 +25,6 @@ import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffClusterCommands;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.handler.EndpointHandler;
 import org.openhab.core.library.types.OnOffType;
@@ -59,8 +58,7 @@ public class OnOffConverter extends ClusterConverter {
         }
 
         if (command instanceof OnOffType) {
-            ClusterCommand onOffCommand = command == OnOffType.ON ? OnOffClusterCommands.on()
-                    : OnOffClusterCommands.off();
+            ClusterCommand onOffCommand = command == OnOffType.ON ? OnOffCluster.on() : OnOffCluster.off();
             client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME,
                     onOffCommand);
         }

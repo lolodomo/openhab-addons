@@ -25,10 +25,8 @@ import org.openhab.binding.matter.internal.client.MatterWebsocketClient;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlClusterCommands;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlClusterTypes.OptionsBitmap;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster.OptionsBitmap;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffClusterCommands;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.handler.EndpointHandler;
 import org.openhab.core.library.types.DecimalType;
@@ -79,12 +77,12 @@ public class LevelControlConverter extends ClusterConverter {
     }
 
     private void sendOnOff(MatterWebsocketClient client, boolean on) {
-        ClusterCommand onOffCommand = on ? OnOffClusterCommands.on() : OnOffClusterCommands.off();
+        ClusterCommand onOffCommand = on ? OnOffCluster.on() : OnOffCluster.off();
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME, onOffCommand);
     }
 
     private void sendLevel(MatterWebsocketClient client, PercentType level) {
-        ClusterCommand levelCommand = LevelControlClusterCommands.moveToLevel(percentToLevel(level), 0,
+        ClusterCommand levelCommand = LevelControlCluster.moveToLevel(percentToLevel(level), 0,
                 new OptionsBitmap(false, true), new OptionsBitmap(false, true));
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), LevelControlCluster.CLUSTER_NAME,
                 levelCommand);

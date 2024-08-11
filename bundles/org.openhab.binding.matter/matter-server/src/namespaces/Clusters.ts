@@ -28,6 +28,10 @@ export class Clusters {
             throw new Error(`Endpoint ${endpointId} not found`);
         }
         const cluster = (MatterClusters as any)[`${clusterName}Cluster`];
+        logger.debug(`Clients for device ${device.name} : ${device.number}`)
+        device.getAllClusterClients().forEach(cc => { 
+            logger.debug(cc.name)
+        })
         const clusterClient: any = device.getClusterClient(cluster);
         if (clusterClient === undefined) {
             throw new Error(`Cluster ${clusterName} not found`);
