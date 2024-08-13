@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -53,7 +54,7 @@ public class RefrigeratorAndTemperatureControlledCabinetModeCluster extends Base
     }
 
 
-    public RefrigeratorAndTemperatureControlledCabinetModeCluster(String nodeId, int endpointId) {
+    public RefrigeratorAndTemperatureControlledCabinetModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 82, "RefrigeratorAndTemperatureControlledCabinetMode");
     }
 

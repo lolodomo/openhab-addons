@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -38,7 +39,7 @@ public class AccountLoginCluster extends BaseCluster {
 
 
 
-    public AccountLoginCluster(String nodeId, int endpointId) {
+    public AccountLoginCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1294, "AccountLogin");
     }
 
@@ -70,7 +71,7 @@ The Temporary Account Identifier for a Commissionee may be populated with the Ro
 The Setup PIN for a Commissionee may be populated with the Manual Pairing Code encoded as a string of decimal numbers (11 characters) or the Passcode portion of the Manual Pairing Code encoded as a string of decimal numbers (8 characters) .
 The server shall implement rate limiting to prevent brute force attacks. No more than 10 unique requests in a 10 minute period shall be allowed; a command response status of FAILURE should sent for additional commands received within the 10 minute period. Because access to this command is limited to nodes with Admin-level access, and the user is involved when obtaining the SetupPIN, there are in place multiple obstacles to successfully mounting a brute force attack. A Content App that supports this command shall ensure that the Temporary Account Identifier used by its clients is not valid for more than 10 minutes.
     */
-    public static ClusterCommand login(String tempAccountIdentifier, String setupPin, Long node) {
+    public static ClusterCommand login(String tempAccountIdentifier, String setupPin, BigInteger node) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("tempAccountIdentifier", tempAccountIdentifier);
         map.put("setupPin", setupPin);
@@ -81,7 +82,7 @@ The server shall implement rate limiting to prevent brute force attacks. No more
     /**
     * The purpose of this command is to instruct the Content App to clear the current user account. This command SHOULD be used by clients of a Content App to indicate the end of a user session.
     */
-    public static ClusterCommand logout(Long node) {
+    public static ClusterCommand logout(BigInteger node) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("node", node);
 

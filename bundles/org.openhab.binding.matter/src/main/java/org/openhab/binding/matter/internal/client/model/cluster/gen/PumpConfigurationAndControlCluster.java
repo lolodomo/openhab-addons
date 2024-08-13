@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -303,7 +304,7 @@ In the case a device does not support a specific control mode, the write interac
         }
     }
 
-    public PumpConfigurationAndControlCluster(String nodeId, int endpointId) {
+    public PumpConfigurationAndControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 512, "PumpConfigurationAndControl");
     }
 

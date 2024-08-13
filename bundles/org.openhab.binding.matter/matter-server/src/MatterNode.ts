@@ -84,6 +84,7 @@ export class MatterNode {
         if (this.commissioningController === undefined) {
             throw new Error("CommissioningController not initialized");
         }
+        logger.debug(`converting ${nodeId} to ${BigInt(nodeId)}`)
         const node = await this.commissioningController.connectNode(NodeId(BigInt(nodeId)), connectOptions)
         if (node === undefined) {
             throw new Error(`Node ${nodeId} not connected`);

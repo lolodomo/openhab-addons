@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -100,7 +101,7 @@ For CASE authentication, the Subject ID is a distinguished name within the Opera
   • a CASE Authenticated Tag, which identifies the required source node indirectly (by tag)
 For Group authentication, the Group ID identifies the required group, as defined in the Group Key Management Cluster.
         */
-        public List<Long> subjects; // list
+        public List<BigInteger> subjects; // list
         /**
         * The targets field shall specify a list of AccessControlTargetStruct, which define the clusters on this Node to which this Access Control Entry grants access.
 Device types may impose additional constraints on the minimum number of targets per Access Control Entry.
@@ -112,7 +113,7 @@ An empty targets list indicates a wildcard: that is, this entry shall grant acce
         */
         public List<AccessControlTargetStruct> targets; // list
         public Integer fabricIndex; // FabricIndex
-        public AccessControlEntryStruct(AccessControlEntryPrivilegeEnum privilege, AccessControlEntryAuthModeEnum authMode, List<Long> subjects, List<AccessControlTargetStruct> targets, Integer fabricIndex) {
+        public AccessControlEntryStruct(AccessControlEntryPrivilegeEnum privilege, AccessControlEntryAuthModeEnum authMode, List<BigInteger> subjects, List<AccessControlTargetStruct> targets, Integer fabricIndex) {
             this.privilege = privilege;
             this.authMode = authMode;
             this.subjects = subjects;
@@ -177,7 +178,7 @@ This value implicitly grants View privileges
     }
 
 
-    public AccessControlCluster(String nodeId, int endpointId) {
+    public AccessControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 31, "AccessControl");
     }
 

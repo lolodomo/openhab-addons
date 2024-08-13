@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -40,7 +41,7 @@ On start/restart of the server, such as when a device is power-cycled, this attr
 Some commands related to commissioning also have a side-effect of updating or resetting this attribute and this is specified in their respective functional descriptions.
 The format of the value within this attribute is unspecified and its value is not otherwise used by the functioning of any cluster, other than being set as a side-effect of commands where this behavior is described.
     */
-    public Long breadcrumb; // 0 uint64 RW VA
+    public BigInteger breadcrumb; // 0 uint64 RW VA
     /**
     * This attribute shall describe critical parameters needed at the beginning of commissioning flow. See BasicCommissioningInfo for more information.
     */
@@ -114,7 +115,7 @@ The value of this field shall be greater than or equal to the FailSafeExpiryLeng
     }
 
 
-    public GeneralCommissioningCluster(String nodeId, int endpointId) {
+    public GeneralCommissioningCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 48, "GeneralCommissioning");
     }
 
@@ -159,7 +160,7 @@ If the fail-safe timer expires before the CommissioningComplete command is succe
   10. Optionally: if no factory-reset resulted from the previous steps, it is recommended that the
 Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.
     */
-    public static ClusterCommand armFailSafe(Integer expiryLengthSeconds, Long breadcrumb) {
+    public static ClusterCommand armFailSafe(Integer expiryLengthSeconds, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("expiryLengthSeconds", expiryLengthSeconds);
         map.put("breadcrumb", breadcrumb);
@@ -176,7 +177,7 @@ If the LocationCapability attribute is set to Indoor/Outdoor, then the Regulator
 On successful execution of the command, the ErrorCode field of the SetRegulatoryConfigResponse shall be set to OK.
 The Breadcrumb field shall be used to atomically set the Breadcrumb attribute on success of this command, when SetRegulatoryConfigResponse has the ErrorCode field set to OK. If the command fails, the Breadcrumb attribute shall be left unchanged.
     */
-    public static ClusterCommand setRegulatoryConfig(RegulatoryLocationTypeEnum newRegulatoryConfig, String countryCode, Long breadcrumb) {
+    public static ClusterCommand setRegulatoryConfig(RegulatoryLocationTypeEnum newRegulatoryConfig, String countryCode, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("newRegulatoryConfig", newRegulatoryConfig);
         map.put("countryCode", countryCode);

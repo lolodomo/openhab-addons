@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -149,7 +150,7 @@ XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octet
     */
      public class ThreadInterfaceScanResultStruct {
         public Integer panId; // uint16
-        public Long extendedPanId; // uint64
+        public BigInteger extendedPanId; // uint64
         public String networkName; // string
         public Integer channel; // uint16
         public Integer version; // uint8
@@ -159,7 +160,7 @@ XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octet
         public String extendedAddress; // hwadr
         public Integer rssi; // int8
         public Integer lqi; // uint8
-        public ThreadInterfaceScanResultStruct(Integer panId, Long extendedPanId, String networkName, Integer channel, Integer version, String extendedAddress, Integer rssi, Integer lqi) {
+        public ThreadInterfaceScanResultStruct(Integer panId, BigInteger extendedPanId, String networkName, Integer channel, Integer version, String extendedAddress, Integer rssi, Integer lqi) {
             this.panId = panId;
             this.extendedPanId = extendedPanId;
             this.networkName = networkName;
@@ -269,7 +270,7 @@ The valid combinations of capabilities are restricted and dependent on Thread ve
         }
     }
 
-    public NetworkCommissioningCluster(String nodeId, int endpointId) {
+    public NetworkCommissioningCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 49, "NetworkCommissioning");
     }
 
@@ -289,7 +290,7 @@ For Wi-Fi-supporting servers the server shall always scan on all bands supported
 associated with the cluster instance on which the command was invoked.
 If the command was invoked over the same link whose configuration is managed by a given server cluster instance, there may be an impact on other communication from the invoking client, as well as other clients, while the network interface is processing the scan. Clients SHOULD NOT use this command unless actively in the process of re-configuring network connectivity.
     */
-    public static ClusterCommand scanNetworks(String ssid, Long breadcrumb) {
+    public static ClusterCommand scanNetworks(String ssid, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("ssid", ssid);
         map.put("breadcrumb", breadcrumb);
@@ -303,7 +304,7 @@ The Credentials associated with the network are not readable after execution of 
 If this command contains a ClientIdentifier, and the Networks list does not contain an entry with a matching ClientIdentifier, then this command shall fail with a status of NOT_FOUND.
 See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUpdateThreadNetwork” for behavior of addition/update.
     */
-    public static ClusterCommand addOrUpdateWiFiNetwork(String ssid, String credentials, Long breadcrumb) {
+    public static ClusterCommand addOrUpdateWiFiNetwork(String ssid, String credentials, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("ssid", ssid);
         map.put("credentials", credentials);
@@ -318,7 +319,7 @@ See Section 11.9.7.5, “Common processing of AddOrUpdateWiFiNetwork and AddOrUp
 The XPAN ID in the OperationalDataset serves as the NetworkID for the network configuration to be added or updated.
 If the Networks attribute does not contain an entry with the same NetworkID as the one provided in the OperationalDataset, the operation shall be considered an addition, otherwise, it shall be considered an update.
     */
-    public static ClusterCommand addOrUpdateThreadNetwork(String operationalDataset, Long breadcrumb) {
+    public static ClusterCommand addOrUpdateThreadNetwork(String operationalDataset, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("operationalDataset", operationalDataset);
         map.put("breadcrumb", breadcrumb);
@@ -332,7 +333,7 @@ If this command is received without an armed fail-safe context (see Section 11.1
 If the Networks attribute does not contain a matching entry, the command shall immediately respond with NetworkConfigResponse having NetworkingStatus status field set to NetworkIdNotFound.
 On success, the NetworkConfigResponse command shall have its NetworkIndex field set to the 0- based index of the entry in the Networks attribute that was just removed, and a NetworkingStatus status field set to Success.
     */
-    public static ClusterCommand removeNetwork(String networkId, Long breadcrumb) {
+    public static ClusterCommand removeNetwork(String networkId, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("networkId", networkId);
         map.put("breadcrumb", breadcrumb);
@@ -358,7 +359,7 @@ When non-concurrent commissioning is being used by a Commissioner or Administrat
 Note as well that the CommissioningTimeout duration provided in a prior OpenCommissioningWindow or OpenBasicCommissioningWindow command may impact the total time available to proceed with error recovery after a connection failure.
 The LastNetworkingStatus, LastNetworkID and LastConnectErrorValue attributes may assist the client in determining the reason for a failure after reconnecting over a Commissioning channel, especially in non-concurrent commissioning situations.
     */
-    public static ClusterCommand connectNetwork(String networkId, Long breadcrumb) {
+    public static ClusterCommand connectNetwork(String networkId, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("networkId", networkId);
         map.put("breadcrumb", breadcrumb);
@@ -368,7 +369,7 @@ The LastNetworkingStatus, LastNetworkID and LastConnectErrorValue attributes may
     /**
     * This command shall set the specific order of the network configuration selected by its NetworkID in the Networks attribute to match the position given by NetworkIndex.
     */
-    public static ClusterCommand reorderNetwork(String networkId, Integer networkIndex, Long breadcrumb) {
+    public static ClusterCommand reorderNetwork(String networkId, Integer networkIndex, BigInteger breadcrumb) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("networkId", networkId);
         map.put("networkIndex", networkIndex);

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -87,7 +88,7 @@ A server which has determined the time in UTC shall use the timestamp fields to 
 If the EnergyMeasurementStruct represents cumulative energy, then this shall represent the cumulative energy recorded at either the value of the EndTimestamp field or the value of the EndSystime field, or both.
 If the EnergyMeasurementStruct represents periodic energy, then this shall represent the energy recorded during the period specified by either the StartTimestamp and EndTimestamp fields, the period specified by the StartSystime and EndSystime fields, or both.
         */
-        public Long energy; // energy-mWh
+        public BigInteger energy; // energy-mWh
         /**
         * This field shall indicate the timestamp in UTC of the beginning of the period during which the value of the Energy field was measured.
 If this EnergyMeasurementStruct represents cumulative energy, this field shall be omitted.
@@ -107,14 +108,14 @@ If this EnergyMeasurementStruct represents cumulative energy, this field shall b
 Otherwise, if the server had not yet determined the time in UTC at the start of the measurement period, or does not have the capability of determining the time in UTC, this field shall be indicated.
 Otherwise, if the server had determined the time in UTC at or before the beginning of the measurement period, this field may be omitted; if it is indicated, its value shall be the seconds since boot at the UTC time indicated in StartTimestamp.
         */
-        public Long startSystime; // systime-ms
+        public BigInteger startSystime; // systime-ms
         /**
         * This field shall indicate the seconds since boot at the end of the period during which the value of the Energy field was measured.
 If the server had not yet determined the time in UTC by the end of the measurement period, or does not have the capability of determining the time in UTC, this field shall be indicated.
 Otherwise, if the server had determined the time in UTC by the end of the measurement period, this field may be omitted; if it is indicated, its value shall be the seconds since boot at the UTC time indicated in EndTimestamp.
         */
-        public Long endSystime; // systime-ms
-        public EnergyMeasurementStruct(Long energy, Integer startTimestamp, Integer endTimestamp, Long startSystime, Long endSystime) {
+        public BigInteger endSystime; // systime-ms
+        public EnergyMeasurementStruct(BigInteger energy, Integer startTimestamp, Integer endTimestamp, BigInteger startSystime, BigInteger endSystime) {
             this.energy = energy;
             this.startTimestamp = startTimestamp;
             this.endTimestamp = endTimestamp;
@@ -146,14 +147,14 @@ If the timestamp in UTC when the value of the Energy field on the CumulativeEner
 If the server had not yet determined the time in UTC when the value of the Energy field on the CumulativeEnergyImported attribute was most recently zero, or does not have the capability of determining the time in UTC, this field shall be indicated.
 Otherwise, if the server had determined the time in UTC when the value of the Energy field on the CumulativeEnergyImported attribute was most recently zero, this field may be omitted; if it is indicated, its value shall be the seconds since boot at the UTC time indicated in ImportedResetTimestamp.
         */
-        public Long importedResetSystime; // systime-ms
+        public BigInteger importedResetSystime; // systime-ms
         /**
         * This field shall indicate the seconds since boot when the value of the Energy field on the CumulativeEnergyExported attribute was most recently zero.
 If the server had not yet determined the time in UTC when the value of the Energy field on the CumulativeEnergyExported attribute was most recently zero, or does not have the capability of determining the time in UTC, this field shall be indicated.
 Otherwise, if the server had determined the time in UTC when the value of the Energy field on the CumulativeEnergyExported attribute was most recently zero, this field may be omitted; if it is indicated, its value shall be the seconds since boot at the UTC time indicated in ImportedResetTimestamp.
         */
-        public Long exportedResetSystime; // systime-ms
-        public CumulativeEnergyResetStruct(Integer importedResetTimestamp, Integer exportedResetTimestamp, Long importedResetSystime, Long exportedResetSystime) {
+        public BigInteger exportedResetSystime; // systime-ms
+        public CumulativeEnergyResetStruct(Integer importedResetTimestamp, Integer exportedResetTimestamp, BigInteger importedResetSystime, BigInteger exportedResetSystime) {
             this.importedResetTimestamp = importedResetTimestamp;
             this.exportedResetTimestamp = exportedResetTimestamp;
             this.importedResetSystime = importedResetSystime;
@@ -189,7 +190,7 @@ Otherwise, if the server had determined the time in UTC when the value of the En
         }
     }
 
-    public ElectricalEnergyMeasurementCluster(String nodeId, int endpointId) {
+    public ElectricalEnergyMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 145, "ElectricalEnergyMeasurement");
     }
 

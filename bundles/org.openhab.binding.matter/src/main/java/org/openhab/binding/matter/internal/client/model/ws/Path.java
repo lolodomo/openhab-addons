@@ -12,12 +12,14 @@
  */
 package org.openhab.binding.matter.internal.client.model.ws;
 
+import java.math.BigInteger;
+
 /**
  * @author Dan Cunningham
  *
  */
 public class Path {
-    public String nodeId;
+    public BigInteger nodeId;
     public Integer endpointId;
     public Integer clusterId;
     public Integer attributeId;

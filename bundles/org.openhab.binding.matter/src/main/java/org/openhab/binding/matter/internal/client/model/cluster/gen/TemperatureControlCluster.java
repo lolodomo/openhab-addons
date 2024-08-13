@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -86,7 +87,7 @@ Each item in this list shall represent a unique temperature level. Each entry in
         }
     }
 
-    public TemperatureControlCluster(String nodeId, int endpointId) {
+    public TemperatureControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 86, "TemperatureControl");
     }
 

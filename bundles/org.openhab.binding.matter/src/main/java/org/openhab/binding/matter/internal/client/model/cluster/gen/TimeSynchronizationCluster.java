@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -39,7 +40,7 @@ public class TimeSynchronizationCluster extends BaseCluster {
     * If the node has achieved time synchronization, this shall indicate the current time as a UTC epoch-us (Epoch Time in Microseconds).
 If the node has not achieved time synchronization, this shall be null. This attribute may be set when a SetUTCTime is received.
     */
-    public Long utcTime; // 0 epoch-us R V
+    public BigInteger utcTime; // 0 epoch-us R V
     /**
     * The granularity of the error that the node is willing to guarantee on the time synchronization. It is of type GranularityEnum.
 This value shall be set to NoTimeGranularity if UTCTime is null and shall NOT be set to NoTimeGranularity if UTCTime is non-null.
@@ -84,7 +85,7 @@ If a time zone does not use DST, this shall be indicated by a single entry with 
     * The computed current local time of the node as a epoch-us (Epoch Time in Microseconds). The value of LocalTime shall be the sum of the UTCTime, the offset of the currently valid TimeZoneStruct from the TimeZone attribute (converted to microseconds), and the offset of the currently valid DSTOffsetStruct from the DSTOffset attribute (converted to microseconds), if such an entry exists.
 If the node has not achieved time synchronization, this shall be null. If the node has an empty DSTOffset, this shall be null.
     */
-    public Long localTime; // 7 epoch-us R V
+    public BigInteger localTime; // 7 epoch-us R V
     /**
     * Indicates whether the node has access to a time zone database. Nodes with a time zone database may update their own DSTOffset attribute to add new entries and may push DSTOffset updates to other Nodes in the same time zone as required.
     */
@@ -114,12 +115,12 @@ If the node has not achieved time synchronization, this shall be null. If the no
         /**
         * Node ID of the trusted time source node on the Fabric associated with the entry.
         */
-        public Long nodeId; // node-id
+        public BigInteger nodeId; // node-id
         /**
         * Endpoint on the trusted time source node that contains the Time Synchronization cluster server.
         */
         public Integer endpoint; // endpoint-no
-        public TrustedTimeSourceStruct(Integer fabricIndex, Long nodeId, Integer endpoint) {
+        public TrustedTimeSourceStruct(Integer fabricIndex, BigInteger nodeId, Integer endpoint) {
             this.fabricIndex = fabricIndex;
             this.nodeId = nodeId;
             this.endpoint = endpoint;
@@ -129,12 +130,12 @@ If the node has not achieved time synchronization, this shall be null. If the no
         /**
         * Node ID of the trusted time source node on the Fabric of the issuer.
         */
-        public Long nodeId; // node-id
+        public BigInteger nodeId; // node-id
         /**
         * Endpoint on the trusted time source node that contains the Time Synchronization cluster server. This is provided to avoid having to do discovery of the location of that endpoint by walking over all endpoints and checking their Descriptor Cluster.
         */
         public Integer endpoint; // endpoint-no
-        public FabricScopedTrustedTimeSourceStruct(Long nodeId, Integer endpoint) {
+        public FabricScopedTrustedTimeSourceStruct(BigInteger nodeId, Integer endpoint) {
             this.nodeId = nodeId;
             this.endpoint = endpoint;
         }
@@ -147,12 +148,12 @@ If the node has not achieved time synchronization, this shall be null. If the no
         /**
         * The UTC time when the offset shall be applied.
         */
-        public Long validAt; // epoch-us
+        public BigInteger validAt; // epoch-us
         /**
         * The time zone name SHOULD provide a human-readable time zone name and it SHOULD use the country/city format specified by the IANA Time Zone Database. The Name field may be used for display. If the node supports a TimeZoneDatabase it may use the Name field to set its own DST offsets if it has database information for the supplied time zone Name and the given Offset matches.
         */
         public String name; // string
-        public TimeZoneStruct(Integer offset, Long validAt, String name) {
+        public TimeZoneStruct(Integer offset, BigInteger validAt, String name) {
             this.offset = offset;
             this.validAt = validAt;
             this.name = name;
@@ -166,12 +167,12 @@ If the node has not achieved time synchronization, this shall be null. If the no
         /**
         * The UTC time when the offset shall be applied.
         */
-        public Long validStarting; // epoch-us
+        public BigInteger validStarting; // epoch-us
         /**
         * The UTC time when the offset shall stop being applied. Providing a null value here indicates a permanent DST change. If this value is non-null the value shall be larger than the ValidStarting time.
         */
-        public Long validUntil; // epoch-us
-        public DSTOffsetStruct(Integer offset, Long validStarting, Long validUntil) {
+        public BigInteger validUntil; // epoch-us
+        public DSTOffsetStruct(Integer offset, BigInteger validStarting, BigInteger validUntil) {
             this.offset = offset;
             this.validStarting = validStarting;
             this.validUntil = validUntil;
@@ -268,7 +269,7 @@ If the node has not achieved time synchronization, this shall be null. If the no
         }
     }
 
-    public TimeSynchronizationCluster(String nodeId, int endpointId) {
+    public TimeSynchronizationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 56, "TimeSynchronization");
     }
 
@@ -280,7 +281,7 @@ Upon receipt of this command, the node may update its UTCTime attribute to match
 If the time is updated, the node shall also update its Granularity attribute based on the granularity specified in the command and the expected clock drift of the node. This SHOULD normally be one level lower than the stated command Granularity. It shall also update its TimeSource attribute to Admin. It shall also update its Last Known Good UTC Time as defined in Section 3.5.6.1, “Last Known Good UTC Time”.
 If the node updates its UTCTime attribute, it shall accept the command with a status code of SUCCESS. If it opts to not update its time, it shall fail the command with a cluster specific Status Code of TimeNotAccepted.
     */
-    public static ClusterCommand setUtcTime(Long utcTime, GranularityEnum granularity, TimeSourceEnum timeSource) {
+    public static ClusterCommand setUtcTime(BigInteger utcTime, GranularityEnum granularity, TimeSourceEnum timeSource) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("utcTime", utcTime);
         map.put("granularity", granularity);

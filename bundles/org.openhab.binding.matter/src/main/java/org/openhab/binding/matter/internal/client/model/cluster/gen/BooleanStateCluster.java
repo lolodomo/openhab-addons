@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -44,7 +45,7 @@ For example, in a Contact Sensor device type, FALSE&#x3D;open or no contact, TRU
 
 
 
-    public BooleanStateCluster(String nodeId, int endpointId) {
+    public BooleanStateCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 69, "BooleanState");
     }
 

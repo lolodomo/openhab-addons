@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -413,7 +414,7 @@ The UpdateStartHue sub-field is 1 bit in length and specifies whether the device
         }
     }
 
-    public ColorControlCluster(String nodeId, int endpointId) {
+    public ColorControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 768, "ColorControl");
     }
 

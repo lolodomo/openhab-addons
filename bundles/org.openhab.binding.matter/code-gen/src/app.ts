@@ -113,7 +113,7 @@ function matterNativeTypeToJavaNativeType(field: AnyElement) {
         case "uint48":
         case "uint56":
         case "uint64":
-            return "Long";
+            return "BigInteger";
         case "int8":
         case "int16":
         case "int24":
@@ -123,7 +123,7 @@ function matterNativeTypeToJavaNativeType(field: AnyElement) {
         case "int48":
         case "int56":
         case "int64":
-            return "Long";
+            return "BigInteger";
         case "single":
             return "Float";
         case "double":
@@ -312,7 +312,6 @@ const clusters = Matter.children.filter(c => c.tag == 'cluster').filter(c => !sk
         });
         return newCommand
     });
-    //todo print out all the cluster data types and see why command Option is not mapping to OptionBitmap
     return {
         ...cluster,
         attributes: attributes,

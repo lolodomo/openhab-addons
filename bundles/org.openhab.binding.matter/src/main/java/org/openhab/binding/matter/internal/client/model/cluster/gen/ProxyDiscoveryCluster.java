@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -38,7 +39,7 @@ public class ProxyDiscoveryCluster extends BaseCluster {
 
 
 
-    public ProxyDiscoveryCluster(String nodeId, int endpointId) {
+    public ProxyDiscoveryCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 67, "ProxyDiscovery");
     }
 
@@ -47,7 +48,7 @@ public class ProxyDiscoveryCluster extends BaseCluster {
     /**
     * This command is used during proxy discovery, as specified in Section 9.15.7, “Proxy Discovery &amp; Assignment Flow”.
     */
-    public static ClusterCommand proxyDiscoverRequest(Long sourceNodeId, Integer numAttributePaths, Integer numEventPaths) {
+    public static ClusterCommand proxyDiscoverRequest(BigInteger sourceNodeId, Integer numAttributePaths, Integer numEventPaths) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("sourceNodeId", sourceNodeId);
         map.put("numAttributePaths", numAttributePaths);

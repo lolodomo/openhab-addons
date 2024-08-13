@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -40,7 +41,7 @@ public class ScenesManagementCluster extends BaseCluster {
 The null value indicates that the server has not been configured, or that the identifier of the node that last configured the Scenes Management cluster is not known.
 The Node ID is scoped to the accessing fabric.
     */
-    public Long lastConfiguredBy; // 0 node-id R V
+    public BigInteger lastConfiguredBy; // 0 node-id R V
     /**
     * Indicates the number of entries in the Scene Table on this endpoint. This is the total across all fabrics; note that a single fabric cannot use all those entries (see Handling of fabric- scoping). The minimum size of this table, (i.e., the minimum number of scenes to support across all fabrics per endpoint) shall be 16, unless a device type in which this cluster is used, defines a larger value in the device type definition.
     */
@@ -120,9 +121,9 @@ Examples of processing are:
         public Integer valueSigned16; // int16
         public Integer valueUnsigned32; // uint32
         public Integer valueSigned32; // int32
-        public Long valueUnsigned64; // uint64
-        public Long valueSigned64; // int64
-        public AttributeValuePairStruct(Integer attributeId, Integer valueUnsigned8, Integer valueSigned8, Integer valueUnsigned16, Integer valueSigned16, Integer valueUnsigned32, Integer valueSigned32, Long valueUnsigned64, Long valueSigned64) {
+        public BigInteger valueUnsigned64; // uint64
+        public BigInteger valueSigned64; // int64
+        public AttributeValuePairStruct(Integer attributeId, Integer valueUnsigned8, Integer valueSigned8, Integer valueUnsigned16, Integer valueSigned16, Integer valueUnsigned32, Integer valueSigned32, BigInteger valueUnsigned64, BigInteger valueSigned64) {
             this.attributeId = attributeId;
             this.valueUnsigned8 = valueUnsigned8;
             this.valueSigned8 = valueSigned8;
@@ -206,7 +207,7 @@ If scene names are not supported, any commands that write a scene name shall sim
         }
     }
 
-    public ScenesManagementCluster(String nodeId, int endpointId) {
+    public ScenesManagementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 98, "ScenesManagement");
     }
 

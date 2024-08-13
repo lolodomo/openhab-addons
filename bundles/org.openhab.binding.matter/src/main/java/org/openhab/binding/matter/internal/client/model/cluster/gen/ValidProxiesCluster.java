@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -43,8 +44,8 @@ public class ValidProxiesCluster extends BaseCluster {
     * Encapsulates the Node ID of a Valid Proxy.
     */
      public class ValidProxyStruct {
-        public Long nodeId; // node-id
-        public ValidProxyStruct(Long nodeId) {
+        public BigInteger nodeId; // node-id
+        public ValidProxyStruct(BigInteger nodeId) {
             this.nodeId = nodeId;
         }
      }
@@ -52,7 +53,7 @@ public class ValidProxiesCluster extends BaseCluster {
 
 
 
-    public ValidProxiesCluster(String nodeId, int endpointId) {
+    public ValidProxiesCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 68, "ValidProxies");
     }
 

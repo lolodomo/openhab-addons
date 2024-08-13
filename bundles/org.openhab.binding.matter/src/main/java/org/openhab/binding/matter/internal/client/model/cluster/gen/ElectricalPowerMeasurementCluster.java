@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -61,7 +62,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the voltage cannot be measured, a value of null shall be returned.
     */
-    public Long voltage; // 4 voltage-mV R V
+    public BigInteger voltage; // 4 voltage-mV R V
     /**
     * This shall indicate the most recent ActiveCurrent reading in milliamps (mA).
 A positive value represents current flowing into the server, while a negative value represents current flowing out of the server.
@@ -70,7 +71,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the current cannot be measured, a value of null shall be returned.
     */
-    public Long activeCurrent; // 5 amperage-mA R V
+    public BigInteger activeCurrent; // 5 amperage-mA R V
     /**
     * This shall indicate the most recent ReactiveCurrent reading in milliamps (mA).
 A positive value represents current flowing into the server, while a negative value represents current flowing out of the server.
@@ -79,7 +80,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the current cannot be measured, a value of null shall be returned.
     */
-    public Long reactiveCurrent; // 6 amperage-mA R V
+    public BigInteger reactiveCurrent; // 6 amperage-mA R V
     /**
     * This shall indicate the most recent ApparentCurrent (square root sum of the squares of active and reactive currents) reading in milliamps (mA).
 The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit publication of deltas considered not meaningful.
@@ -87,7 +88,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the active or reactive currents cannot be measured, a value of null shall be returned.
     */
-    public Long apparentCurrent; // 7 amperage-mA R V
+    public BigInteger apparentCurrent; // 7 amperage-mA R V
     /**
     * This shall indicate the most recent ActivePower reading in milliwatts (mW). If the power cannot be measured, a value of null shall be returned.
 A positive value represents power imported, while a negative value represents power exported.
@@ -96,7 +97,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the Polyphase Power feature is set, this value represents the combined active power imported or exported.
     */
-    public Long activePower; // 8 power-mW R V
+    public BigInteger activePower; // 8 power-mW R V
     /**
     * This shall indicate the most recent ReactivePower reading in millivolt-amps reactive (mVAR). A positive value represents power imported, while a negative value represents power exported.
 The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit publication of deltas considered not meaningful.
@@ -105,7 +106,7 @@ The server may delay marking this attribute ready for report for longer periods 
 If the reactive power cannot be measured, a value of null shall be returned.
 If the Polyphase Power feature is supported, this value represents the combined reactive power imported or exported.
     */
-    public Long reactivePower; // 9 power-mW R V
+    public BigInteger reactivePower; // 9 power-mW R V
     /**
     * This shall indicate the most recent ApparentPower reading in millivolt-amps (mVA).
 A positive value represents power imported, while a negative value represents power exported.
@@ -114,7 +115,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the apparent power cannot be measured, a value of null shall be returned.
     */
-    public Long apparentPower; // 10 power-mW R V
+    public BigInteger apparentPower; // 10 power-mW R V
     /**
     * This shall indicate the most recent RMSVoltage reading in millivolts (mV).
 The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit publication of deltas considered not meaningful.
@@ -122,7 +123,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the RMS voltage cannot be measured, a value of null shall be returned.
     */
-    public Long rmsVoltage; // 11 voltage-mV R V
+    public BigInteger rmsVoltage; // 11 voltage-mV R V
     /**
     * This shall indicate the most recent RMSCurrent reading in milliamps (mA).
 A positive value represents current flowing into the server, while a negative value represents current flowing out of the server.
@@ -131,7 +132,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the RMS current cannot be measured, a value of null shall be returned.
     */
-    public Long rmsCurrent; // 12 amperage-mA R V
+    public BigInteger rmsCurrent; // 12 amperage-mA R V
     /**
     * This shall indicate the most recent RMSPower reading in milliwatts (mW).
 A positive value represents power imported, while a negative value represents power exported.
@@ -140,7 +141,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the RMS power cannot be measured, a value of null shall be returned.
     */
-    public Long rmsPower; // 13 power-mW R V
+    public BigInteger rmsPower; // 13 power-mW R V
     /**
     * This shall indicate the most recent Frequency reading in millihertz (mHz).
 The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit publication of deltas considered not meaningful.
@@ -148,7 +149,7 @@ The server shall NOT mark this attribute ready for report if the last time this 
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
 If the frequency cannot be measured, a value of null shall be returned.
     */
-    public Long frequency; // 14 int64 R V
+    public BigInteger frequency; // 14 int64 R V
     /**
     * This shall indicate a list of HarmonicMeasurementStruct values, with each HarmonicMeasurementStruct representing the harmonic current reading for the harmonic order specified by Order.
 The reporting interval of this attribute shall be manufacturer dependent. The server may choose to omit publication of deltas considered not meaningful.
@@ -170,7 +171,7 @@ The reporting interval of this attribute shall be manufacturer dependent. The se
 The server shall NOT mark this attribute ready for report if the last time this was done was more recently than 1 second ago.
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
     */
-    public Long powerFactor; // 17 int64 R V
+    public BigInteger powerFactor; // 17 int64 R V
     /**
     * This shall indicate the most recent NeutralCurrent reading in milliamps (mA). Typically this is a derived value, taking the magnitude of the vector sum of phase currents.
 If the neutral current cannot be measured or derived, a value of null shall be returned.
@@ -179,7 +180,7 @@ The reporting interval of this attribute shall be manufacturer dependent. The se
 The server shall NOT mark this attribute ready for report if the last time this was done was more recently than 1 second ago.
 The server may delay marking this attribute ready for report for longer periods if needed, however the server shall NOT delay marking this attribute as ready for report for longer than 60 seconds.
     */
-    public Long neutralCurrent; // 18 amperage-mA R V
+    public BigInteger neutralCurrent; // 18 amperage-mA R V
     //Structs
     /**
     * This struct shall indicate the maximum and minimum values of a given measurement type during a measurement period, along with the observation times of these values.
@@ -194,11 +195,11 @@ A server which has determined the time in UTC shall use the timestamp fields to 
         /**
         * This field shall be the smallest measured value for the associated measurement over either the period between StartTimestamp and EndTimestamp, or the period between StartSystime and EndSystime, or both.
         */
-        public Long min; // int64
+        public BigInteger min; // int64
         /**
         * This field shall be the largest measured value for the associated measurement over the period between either StartTimestamp and EndTimestamp or the period between StartSystime and EndSystime, or both.
         */
-        public Long max; // int64
+        public BigInteger max; // int64
         /**
         * This field shall be the timestamp in UTC of the beginning of the measurement period.
 If the server had not yet determined the time in UTC at or before the beginning of the measurement period, or does not have the capability of determining the time in UTC, this field shall be omitted.
@@ -222,23 +223,23 @@ This field shall be greater than or equal to the value of the StartTimestamp fie
         * This field shall be the time since boot of the beginning of the measurement period.
 If the server had determined the time in UTC at or before the start of the measurement period, this field may be omitted along with the EndSystime, MinSystime, and MaxSystime fields.
         */
-        public Long startSystime; // systime-ms
+        public BigInteger startSystime; // systime-ms
         /**
         * This field shall be the time since boot of the end of the measurement period.
 If the server had determined the time in UTC at the end of the measurement period, this field may be omitted along with the StartSystime field, MinSystime, and MaxSystime fields.
         */
-        public Long endSystime; // systime-ms
+        public BigInteger endSystime; // systime-ms
         /**
         * This field shall be the measurement time since boot of the value in the Min field was measured. This field shall be greater than or equal to the value of the StartSystime field.
 This field shall be less than or equal to the value of the EndSystime field.
         */
-        public Long minSystime; // systime-ms
+        public BigInteger minSystime; // systime-ms
         /**
         * This field shall be the measurement time since boot of the value in the Max field. This field shall be greater than or equal to the value of the StartSystime field.
 This field shall be less than or equal to the value of the EndSystime field.
         */
-        public Long maxSystime; // systime-ms
-        public MeasurementRangeStruct(MeasurementTypeEnum measurementType, Long min, Long max, Integer startTimestamp, Integer endTimestamp, Integer minTimestamp, Integer maxTimestamp, Long startSystime, Long endSystime, Long minSystime, Long maxSystime) {
+        public BigInteger maxSystime; // systime-ms
+        public MeasurementRangeStruct(MeasurementTypeEnum measurementType, BigInteger min, BigInteger max, Integer startTimestamp, Integer endTimestamp, Integer minTimestamp, Integer maxTimestamp, BigInteger startSystime, BigInteger endSystime, BigInteger minSystime, BigInteger maxSystime) {
             this.measurementType = measurementType;
             this.min = min;
             this.max = max;
@@ -264,8 +265,8 @@ For the Harmonic Phases attribute, this value is the most recent phase of the gi
 in millidegrees (mDeg). A positive value indicates that the measured phase is leading, and a negative value indicates that the measured phase is lagging.
 If this measurement is not currently available, a value of null shall be returned.
         */
-        public Long measurement; // int64
-        public HarmonicMeasurementStruct(Integer order, Long measurement) {
+        public BigInteger measurement; // int64
+        public HarmonicMeasurementStruct(Integer order, BigInteger measurement) {
             this.order = order;
             this.measurement = measurement;
         }
@@ -316,7 +317,7 @@ If this measurement is not currently available, a value of null shall be returne
         }
     }
 
-    public ElectricalPowerMeasurementCluster(String nodeId, int endpointId) {
+    public ElectricalPowerMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 144, "ElectricalPowerMeasurement");
     }
 

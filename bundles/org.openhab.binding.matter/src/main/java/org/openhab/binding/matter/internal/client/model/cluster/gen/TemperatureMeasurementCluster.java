@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -56,7 +57,7 @@ The null value indicates that the value is not available.
 
 
 
-    public TemperatureMeasurementCluster(String nodeId, int endpointId) {
+    public TemperatureMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1026, "TemperatureMeasurement");
     }
 

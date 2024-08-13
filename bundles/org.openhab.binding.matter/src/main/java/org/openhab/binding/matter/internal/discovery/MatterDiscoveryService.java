@@ -77,9 +77,10 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
                 productName = basicCluster.productName;
             }
         }
-        String shortId = (node.id.length() > 5 ? node.id.substring(node.id.length() - 5) : node.id) + "-" + endpointId;
+        String idSting = node.id.toString();
+        String shortId = (idSting.length() > 5 ? idSting.substring(idSting.length() - 5) : idSting) + "-" + endpointId;
         String label = "Matter Device " + shortId + " " + (vendorName + " " + productName).trim();
-        String path = node.id + ":" + endpointId;
+        String path = idSting + ":" + endpointId;
         DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel(label)
                 .withProperty("nodeId", node.id).withProperty("endpointId", endpointId).withProperty("path", path)
                 .withRepresentationProperty("path").withBridge(bridgeUID).build();

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -93,7 +94,7 @@ Value. The true value is located in the range
         }
     }
 
-    public PressureMeasurementCluster(String nodeId, int endpointId) {
+    public PressureMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1027, "PressureMeasurement");
     }
 

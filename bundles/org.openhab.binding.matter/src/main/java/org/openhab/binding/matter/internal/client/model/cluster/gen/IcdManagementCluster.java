@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -84,7 +85,7 @@ When CustomInstruction is set by the UserActiveModeTriggerHint attribute, indica
         /**
         * This field shall indicate the NodeID of the Node to which Check-In messages will be sent when the MonitoredSubject is not subscribed.
         */
-        public Long checkInNodeId; // node-id
+        public BigInteger checkInNodeId; // node-id
         /**
         * This field shall indicate the monitored Subject ID. This field shall be used to determine if a particular client has an active subscription for the given entry. The MonitoredSubject, when it is a NodeID, may be the same as the CheckInNodeID. The MonitoredSubject gives the registering client the flexibility of having a different CheckInNodeID from the MonitoredSubject. A subscription shall count as an active subscription for this entry if:
   • It is on the associated fabric of this entry, and
@@ -92,10 +93,10 @@ When CustomInstruction is set by the UserActiveModeTriggerHint attribute, indica
 For example, if the MonitoredSubject is Node ID 0x1111_2222_3333_AAAA, and one of the subscribers to the server on the entry’s associated fabric bears that Node ID, then the entry matches.
 Another example is if the MonitoredSubject has the value 0xFFFF_FFFD_AA12_0002, and one of the subscribers to the server on the entry’s associated fabric bears the CASE Authenticated TAG value 0xAA12 and the version 0x0002 or higher within its NOC, then the entry matches.
         */
-        public Long monitoredSubject; // subject-id
+        public BigInteger monitoredSubject; // subject-id
         public String key; // 
         public Integer fabricIndex; // FabricIndex
-        public MonitoringRegistrationStruct(Long checkInNodeId, Long monitoredSubject, String key, Integer fabricIndex) {
+        public MonitoringRegistrationStruct(BigInteger checkInNodeId, BigInteger monitoredSubject, String key, Integer fabricIndex) {
             this.checkInNodeId = checkInNodeId;
             this.monitoredSubject = monitoredSubject;
             this.key = key;
@@ -179,7 +180,7 @@ NOTE In this version of the specification, the support for the feature is provis
         }
     }
 
-    public IcdManagementCluster(String nodeId, int endpointId) {
+    public IcdManagementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 70, "IcdManagement");
     }
 
@@ -188,7 +189,7 @@ NOTE In this version of the specification, the support for the feature is provis
     /**
     * This command allows a client to register itself with the ICD to be notified when the device is available for communication.
     */
-    public static ClusterCommand registerClient(Long checkInNodeId, Long monitoredSubject, String key, String verificationKey) {
+    public static ClusterCommand registerClient(BigInteger checkInNodeId, BigInteger monitoredSubject, String key, String verificationKey) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("checkInNodeId", checkInNodeId);
         map.put("monitoredSubject", monitoredSubject);
@@ -200,7 +201,7 @@ NOTE In this version of the specification, the support for the feature is provis
     /**
     * This command allows a client to unregister itself with the ICD. Example: a client that is leaving the network (e.g. running on a phone which is leaving the home) can (and should) remove its subscriptions and send this UnregisterClient command before leaving to prevent the burden on the ICD of an absent client.
     */
-    public static ClusterCommand unregisterClient(Long checkInNodeId, String verificationKey) {
+    public static ClusterCommand unregisterClient(BigInteger checkInNodeId, String verificationKey) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("checkInNodeId", checkInNodeId);
         map.put("verificationKey", verificationKey);

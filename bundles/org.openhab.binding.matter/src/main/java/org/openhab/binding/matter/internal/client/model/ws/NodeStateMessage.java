@@ -12,11 +12,13 @@
  */
 package org.openhab.binding.matter.internal.client.model.ws;
 
+import java.math.BigInteger;
+
 /**
  * @author Dan Cunningham
  *
  */
 public class NodeStateMessage {
-    public String nodeId;
+    public BigInteger nodeId;
     public NodeState state;
 }

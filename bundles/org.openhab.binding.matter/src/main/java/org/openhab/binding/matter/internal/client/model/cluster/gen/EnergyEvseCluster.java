@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -69,11 +70,11 @@ This attribute shall be persisted, for example a temporary power failure should 
     /**
     * Indicates the capacity that the circuit that the EVSE is connected to can provide. It is intended to allow implementation of a self-managed network of EVSEs. It is assumed that the device will allow the setting of such values by an installer.
     */
-    public Long circuitCapacity; // 5 amperage-mA R V
+    public BigInteger circuitCapacity; // 5 amperage-mA R V
     /**
     * Indicates the minimum current that can be delivered by the EVSE to the EV. The attribute can be set using the EnableCharging command.
     */
-    public Long minimumChargeCurrent; // 6 amperage-mA R V
+    public BigInteger minimumChargeCurrent; // 6 amperage-mA R V
     /**
     * Indicates the maximum current that can be delivered by the EVSE to the EV.
 This shall represent the actual maximum current offered to the EV at any time. Note that the EV can draw less current than this value. For example, the EV may be limiting its power draw based on the operating conditions of the battery, such as temperature and state of charge.
@@ -84,7 +85,7 @@ This attribute value shall be the minimum of:
   • MaximumChargeCurrent field in the EnableCharging command
   • UserMaximumChargeCurrent attribute
     */
-    public Long maximumChargeCurrent; // 7 amperage-mA R V
+    public BigInteger maximumChargeCurrent; // 7 amperage-mA R V
     /**
     * Indicates the maximum current that can be received by the EVSE from the EV. This attribute can be set using the EnableDischarging command.
 This attribute value shall be the minimum of:
@@ -92,7 +93,7 @@ This attribute value shall be the minimum of:
   • CableAssemblyCurrentLimit (detected by the EVSE when the cable is plugged in)
   • MaximumDischargeCurrent field in the EnableDischarging command
     */
-    public Long maximumDischargeCurrent; // 8 amperage-mA R V
+    public BigInteger maximumDischargeCurrent; // 8 amperage-mA R V
     /**
     * Indicates a maximum current that can set by the consumer (e.g. via an app) as a preference to further reduce the charging rate. This may be desirable if the home owner has a solar PV or battery storage system which may only be able to deliver a limited amount of power. The consumer can manually control how much they allow the EV to take.
 This attribute value shall be limited by the EVSE to be in the range of:
@@ -100,7 +101,7 @@ MinimumChargeCurrent &lt;&#x3D; UserMaximumChargeCurrent &lt;&#x3D; MaximumCharg
 where MinimumChargeCurrent and MaximumChargeCurrent are the values received in the EnableCharging command.
 Its default value SHOULD be initialized to the same as the CircuitCapacity attribute. This value shall be persisted across reboots to ensure it does not cause charging issues during temporary power failures.
     */
-    public Long userMaximumChargeCurrent; // 9 amperage-mA RW VM
+    public BigInteger userMaximumChargeCurrent; // 9 amperage-mA RW VM
     /**
     * Indicates the size of a random window over which the EVSE will randomize the start of a charging session. This value is in seconds.
 This is a feature that is mandated in some markets (such as UK) where the EVSE should by default randomize its start time within the randomization window. By default in the UK this should be 600s.
@@ -121,7 +122,7 @@ If this is null it indicates that there is no scheduled charging, or that the ve
     * Indicates the amount of energy that the EVSE is going to attempt to add to the vehicle in the next charging target.
 If this is null it indicates that there is no scheduled charging, or that the EVSE is using the TargetSoC method to charge the vehicle.
     */
-    public Long nextChargeRequiredEnergy; // 37 energy-mWh R V
+    public BigInteger nextChargeRequiredEnergy; // 37 energy-mWh R V
     /**
     * Indicates the target SoC the EVSE is going to attempt to reach when the vehicle is next charged.
 If this is null it indicates that there is no scheduled charging, or that the EVSE cannot obtain the current State of Charge from the vehicle.
@@ -150,7 +151,7 @@ AddedRange (Miles) &#x3D; AddedEnergy (Wh) x ApproxEVEfficiency (km/kWh x 1000) 
     /**
     * Indicates the capacity of the EV battery in mWh. This value is always positive.
     */
-    public Long batteryCapacity; // 49 energy-mWh R V
+    public BigInteger batteryCapacity; // 49 energy-mWh R V
     /**
     * Indicates the vehicle ID read by the EVSE via ISO-15118 using the PNC feature, if the EVSE supports this capability.
 The field may be based on the e-Mobility Account Identifier (EMAID). A null value shall indicate that this is unknown.
@@ -158,8 +159,8 @@ The field may be based on the e-Mobility Account Identifier (EMAID). A null valu
     public String vehicleId; // 50 string R V
     public Integer sessionId; // 64 uint32 R V
     public Integer sessionDuration; // 65 elapsed-s R V
-    public Long sessionEnergyCharged; // 66 energy-mWh R V
-    public Long sessionEnergyDischarged; // 67 energy-mWh R V
+    public BigInteger sessionEnergyCharged; // 66 energy-mWh R V
+    public BigInteger sessionEnergyDischarged; // 67 energy-mWh R V
     //Structs
     /**
     * This represents a single user specified charging target for an EV.
@@ -195,8 +196,8 @@ The maximum value (500kWh) is much larger than most EV batteries on the market t
 NOTE
 If the EVSE can obtain the Battery Capacity of the vehicle, it SHOULD not limit this AddedEnergy value to the Battery Capacity of the vehicle, since the EV may also require energy for heating and cooling of the battery during charging, or for heating or cooling the cabin.
         */
-        public Long addedEnergy; // energy-mWh
-        public ChargingTargetStruct(Integer targetTimeMinutesPastMidnight, Integer targetSoC, Long addedEnergy) {
+        public BigInteger addedEnergy; // energy-mWh
+        public ChargingTargetStruct(Integer targetTimeMinutesPastMidnight, Integer targetSoC, BigInteger addedEnergy) {
             this.targetTimeMinutesPastMidnight = targetTimeMinutesPastMidnight;
             this.targetSoC = targetSoC;
             this.addedEnergy = addedEnergy;
@@ -339,7 +340,7 @@ An RFID event can be generated when a user taps an RFID card onto the RFID reade
         }
     }
 
-    public EnergyEvseCluster(String nodeId, int endpointId) {
+    public EnergyEvseCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 153, "EnergyEvse");
     }
 
@@ -356,7 +357,7 @@ An RFID event can be generated when a user taps an RFID card onto the RFID reade
     /**
     * Allows a client to enable the EVSE to charge an EV.
     */
-    public static ClusterCommand enableCharging(Integer chargingEnabledUntil, Long minimumChargeCurrent, Long maximumChargeCurrent) {
+    public static ClusterCommand enableCharging(Integer chargingEnabledUntil, BigInteger minimumChargeCurrent, BigInteger maximumChargeCurrent) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("chargingEnabledUntil", chargingEnabledUntil);
         map.put("minimumChargeCurrent", minimumChargeCurrent);
@@ -367,7 +368,7 @@ An RFID event can be generated when a user taps an RFID card onto the RFID reade
     /**
     * Allows a client to enable the EVSE to discharge an EV.
     */
-    public static ClusterCommand enableDischarging(Integer dischargingEnabledUntil, Long maximumDischargeCurrent) {
+    public static ClusterCommand enableDischarging(Integer dischargingEnabledUntil, BigInteger maximumDischargeCurrent) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("dischargingEnabledUntil", dischargingEnabledUntil);
         map.put("maximumDischargeCurrent", maximumDischargeCurrent);

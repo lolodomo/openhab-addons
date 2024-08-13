@@ -13,6 +13,8 @@
  */
 package org.openhab.binding.matter.internal.client.model.ws;
 
+import java.math.BigInteger;
+
 /**
  * @author Dan Cunningham
  *
@@ -20,7 +22,7 @@ package org.openhab.binding.matter.internal.client.model.ws;
 public class ExposedFabricInformation {
     public Integer fabricIndex;
     public String fabricId;
-    public String nodeId;
+    public BigInteger nodeId;
     public String rootNodeId;
     public byte[] operationalId;
     public byte[] rootPublicKey;

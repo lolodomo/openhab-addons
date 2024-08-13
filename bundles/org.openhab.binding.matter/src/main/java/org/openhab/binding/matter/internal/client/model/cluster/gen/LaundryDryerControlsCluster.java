@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -65,7 +66,7 @@ It is up to the device manufacturer to determine the mapping between the enum va
     }
 
 
-    public LaundryDryerControlsCluster(String nodeId, int endpointId) {
+    public LaundryDryerControlsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 74, "LaundryDryerControls");
     }
 

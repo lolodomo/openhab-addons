@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -179,7 +180,7 @@ Visible expression is typically a LED light pattern. Audible expression is a hor
         }
     }
 
-    public SmokeCoAlarmCluster(String nodeId, int endpointId) {
+    public SmokeCoAlarmCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 92, "SmokeCoAlarm");
     }
 

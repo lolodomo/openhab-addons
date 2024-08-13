@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -77,7 +78,7 @@ When not 0xFF, the CurrentTarget shall be an Identifier value contained within o
     }
 
 
-    public TargetNavigatorCluster(String nodeId, int endpointId) {
+    public TargetNavigatorCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1285, "TargetNavigator");
     }
 

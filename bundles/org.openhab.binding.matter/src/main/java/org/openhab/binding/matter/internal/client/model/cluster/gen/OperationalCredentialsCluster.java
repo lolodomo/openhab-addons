@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -108,17 +109,17 @@ The intent is to provide some measure of user transparency about which entities 
         /**
         * This field shall contain the FabricID allocated to the fabric referenced by FabricIndex. This field shall match the value found in the matter-fabric-id field from the operational certificate providing the operational identity under this Fabric.
         */
-        public Long fabricId; // fabric-id
+        public BigInteger fabricId; // fabric-id
         /**
         * This field shall contain the NodeID in use within the fabric referenced by FabricIndex. This field shall match the value found in the matter-node-id field from the operational certificate providing this operational identity.
         */
-        public Long nodeId; // node-id
+        public BigInteger nodeId; // node-id
         /**
         * This field shall contain a commissioner-set label for the fabric referenced by FabricIndex. This label is set by the UpdateFabricLabel command.
         */
         public String label; // string
         public Integer fabricIndex; // FabricIndex
-        public FabricDescriptorStruct(String rootPublicKey, Integer vendorId, Long fabricId, Long nodeId, String label, Integer fabricIndex) {
+        public FabricDescriptorStruct(String rootPublicKey, Integer vendorId, BigInteger fabricId, BigInteger nodeId, String label, Integer fabricIndex) {
             this.rootPublicKey = rootPublicKey;
             this.vendorId = vendorId;
             this.fabricId = fabricId;
@@ -166,7 +167,7 @@ The intent is to provide some measure of user transparency about which entities 
     }
 
 
-    public OperationalCredentialsCluster(String nodeId, int endpointId) {
+    public OperationalCredentialsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 62, "OperationalCredentials");
     }
 
@@ -212,7 +213,7 @@ The new value shall immediately be reflected in the NOCs list attribute.
 A Commissioner or Administrator shall issue this command after issuing the CSRRequest command and receiving its response.
 A Commissioner or Administrator SHOULD issue this command after performing the Attestation Procedure.
     */
-    public static ClusterCommand addNoc(String nocValue, String icacValue, String ipkValue, Long caseAdminSubject, Integer adminVendorId) {
+    public static ClusterCommand addNoc(String nocValue, String icacValue, String ipkValue, BigInteger caseAdminSubject, Integer adminVendorId) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("nocValue", nocValue);
         map.put("icacValue", icacValue);

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -46,24 +47,24 @@ public class EthernetNetworkDiagnosticsCluster extends BaseCluster {
     /**
     * The PacketRxCount attribute shall indicate the number of packets that have been received on the ethernet network interface. The PacketRxCount attribute shall be reset to 0 upon a reboot of the Node.
     */
-    public Long packetRxCount; // 2 uint64 R V
+    public BigInteger packetRxCount; // 2 uint64 R V
     /**
     * The PacketTxCount attribute shall indicate the number of packets that have been successfully transferred on the ethernet network interface. The PacketTxCount attribute shall be reset to 0 upon a reboot of the Node.
     */
-    public Long packetTxCount; // 3 uint64 R V
+    public BigInteger packetTxCount; // 3 uint64 R V
     /**
     * The TxErrCount attribute shall indicate the number of failed packet transmissions that have occurred on the ethernet network interface. The TxErrCount attribute shall be reset to 0 upon a
 reboot of the Node.
     */
-    public Long txErrCount; // 4 uint64 R V
+    public BigInteger txErrCount; // 4 uint64 R V
     /**
     * The CollisionCount attribute shall indicate the number of collisions that have occurred while attempting to transmit a packet on the ethernet network interface. The CollisionCount attribute shall be reset to 0 upon a reboot of the Node.
     */
-    public Long collisionCount; // 5 uint64 R V
+    public BigInteger collisionCount; // 5 uint64 R V
     /**
     * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due to lack of buffer memory to retain all packets on the ethernet network interface. The OverrunCount attribute shall be reset to 0 upon a reboot of the Node.
     */
-    public Long overrunCount; // 6 uint64 R V
+    public BigInteger overrunCount; // 6 uint64 R V
     /**
     * The CarrierDetect attribute shall indicate the value of the Carrier Detect control signal present on the ethernet network interface. A value of null shall indicate that the interface is not currently configured or operational.
     */
@@ -71,7 +72,7 @@ reboot of the Node.
     /**
     * The TimeSinceReset attribute shall indicate the duration of time, in minutes, that it has been since the ethernet network interface has reset for any reason.
     */
-    public Long timeSinceReset; // 8 uint64 R V
+    public BigInteger timeSinceReset; // 8 uint64 R V
 
 
     //Enums
@@ -110,7 +111,7 @@ reboot of the Node.
         }
     }
 
-    public EthernetNetworkDiagnosticsCluster(String nodeId, int endpointId) {
+    public EthernetNetworkDiagnosticsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 55, "EthernetNetworkDiagnostics");
     }
 

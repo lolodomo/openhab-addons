@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -46,7 +47,7 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
     /**
     * The UpTime attribute shall indicate a best-effort assessment of the length of time, in seconds, since the Node’s last reboot. This attribute SHOULD be incremented to account for the periods of time that a Node is in a low-power or sleep state. This attribute shall only be reset upon a device reboot. This attribute shall be based on the same System Time source as those used to fulfill any usage of the system-us and system-ms data types within the server.
     */
-    public Long upTime; // 2 uint64 R V
+    public BigInteger upTime; // 2 uint64 R V
     /**
     * The TotalOperationalHours attribute shall indicate a best-effort attempt at tracking the length of time, in hours, that the Node has been operational. The TotalOperationalHours attribute SHOULD be incremented to account for the periods of time that a Node is in a low-power or sleep state. The TotalOperationalHours attribute shall only be reset upon a factory reset of the Node.
     */
@@ -209,7 +210,7 @@ This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic 
         }
     }
 
-    public GeneralDiagnosticsCluster(String nodeId, int endpointId) {
+    public GeneralDiagnosticsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 51, "GeneralDiagnostics");
     }
 
@@ -219,7 +220,7 @@ This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic 
     * This command shall be supported to provide a means for certification tests to trigger some test- plan-specific events, necessary to assist in automation of device interactions for some certification test cases. This command shall NOT cause any changes to the state of the device that persist after the last fabric is removed.
 The fields for the TestEventTrigger command are as follows:
     */
-    public static ClusterCommand testEventTrigger(String enableKey, Long eventTrigger) {
+    public static ClusterCommand testEventTrigger(String enableKey, BigInteger eventTrigger) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("enableKey", enableKey);
         map.put("eventTrigger", eventTrigger);

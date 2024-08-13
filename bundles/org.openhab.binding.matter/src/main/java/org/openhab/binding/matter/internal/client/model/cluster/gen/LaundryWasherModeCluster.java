@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -58,7 +59,7 @@ public class LaundryWasherModeCluster extends BaseCluster {
     }
 
 
-    public LaundryWasherModeCluster(String nodeId, int endpointId) {
+    public LaundryWasherModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 81, "LaundryWasherMode");
     }
 

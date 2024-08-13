@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -98,7 +99,7 @@ public class AudioOutputCluster extends BaseCluster {
         }
     }
 
-    public AudioOutputCluster(String nodeId, int endpointId) {
+    public AudioOutputCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1291, "AudioOutput");
     }
 

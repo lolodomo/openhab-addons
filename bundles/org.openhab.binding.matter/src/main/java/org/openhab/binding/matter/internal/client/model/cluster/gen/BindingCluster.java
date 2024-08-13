@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -43,7 +44,7 @@ public class BindingCluster extends BaseCluster {
         /**
         * This field is the remote target node ID. If the Endpoint field is present, this field shall be present.
         */
-        public Long node; // node-id
+        public BigInteger node; // node-id
         /**
         * This field is the target group ID that represents remote endpoints. If the Endpoint field is present, this field shall NOT be present.
         */
@@ -57,7 +58,7 @@ public class BindingCluster extends BaseCluster {
         */
         public Integer cluster; // cluster-id
         public Integer fabricIndex; // FabricIndex
-        public TargetStruct(Long node, Integer group, Integer endpoint, Integer cluster, Integer fabricIndex) {
+        public TargetStruct(BigInteger node, Integer group, Integer endpoint, Integer cluster, Integer fabricIndex) {
             this.node = node;
             this.group = group;
             this.endpoint = endpoint;
@@ -69,7 +70,7 @@ public class BindingCluster extends BaseCluster {
 
 
 
-    public BindingCluster(String nodeId, int endpointId) {
+    public BindingCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 30, "Binding");
     }
 

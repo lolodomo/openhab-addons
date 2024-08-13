@@ -15,6 +15,7 @@ package org.openhab.binding.matter.internal.client;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,6 +60,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
@@ -76,7 +80,8 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
 
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool("matter-js.MatterWebsocketClient");
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer()).create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer())
+            .registerTypeAdapter(BigInteger.class, new BigIntegerSerializer()).create();
     private final WebSocketClient client = new WebSocketClient();
     private final ConcurrentHashMap<String, CompletableFuture<JsonElement>> pendingRequests = new ConcurrentHashMap<>();
     private final CopyOnWriteArrayList<MatterClientListener> clientListeners = new CopyOnWriteArrayList<>();
@@ -274,7 +279,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
      * @return
      * @throws Exception
      */
-    public CompletableFuture<List<String>> getConnectedNodeIds() {
+    public CompletableFuture<List<BigInteger>> getConnectedNodeIds() {
         return getCommissionedNodeIds(true);
     }
 
@@ -285,10 +290,10 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
      * @return
      * @throws Exception
      */
-    public CompletableFuture<List<String>> getCommissionedNodeIds(boolean onlyConnected) {
+    public CompletableFuture<List<BigInteger>> getCommissionedNodeIds(boolean onlyConnected) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "listNodes", new Object[] { onlyConnected });
         return future.thenApply(obj -> {
-            List<String> nodes = gson.fromJson(obj, new TypeToken<List<String>>() {
+            List<BigInteger> nodes = gson.fromJson(obj, new TypeToken<List<BigInteger>>() {
             }.getType());
             return nodes != null ? nodes : Collections.emptyList();
         });
@@ -301,7 +306,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         return future.thenApply(obj -> obj == null ? "" : obj.toString());
     }
 
-    public CompletableFuture<Node> getNode(String id) {
+    public CompletableFuture<Node> getNode(BigInteger id) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "getNode", new Object[] { id });
         return future.thenApply(obj -> {
             Node node = gson.fromJson(obj, Node.class);
@@ -326,14 +331,14 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         });
     }
 
-    public CompletableFuture<Void> decommissionNode(String nodeId) {
+    public CompletableFuture<Void> decommissionNode(BigInteger nodeId) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "decommission", new Object[] { nodeId });
         return future.thenAccept(obj -> {
             // Do nothing, just to complete the future
         });
     }
 
-    public CompletableFuture<Void> clusterCommand(String nodeId, Integer endpointId, String clusterName,
+    public CompletableFuture<Void> clusterCommand(BigInteger nodeId, Integer endpointId, String clusterName,
             ClusterCommand command) {
         Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };
         CompletableFuture<JsonElement> future = sendMessage("clusters", "command", clusterArgs);
@@ -356,7 +361,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                 throws JsonParseException {
             JsonObject jsonObjectNode = json.getAsJsonObject();
             Node node = new Node();
-            node.id = jsonObjectNode.get("id").getAsString();
+            node.id = jsonObjectNode.get("id").getAsBigInteger();
             node.endpoints = new HashMap<>();
             JsonObject endpointsJson = jsonObjectNode.get("endpoints").getAsJsonObject();
             Set<Map.Entry<String, JsonElement>> endpointEntries = endpointsJson.entrySet();
@@ -435,6 +440,16 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         disconnect();
         for (MatterClientListener listener : clientListeners) {
             listener.onDisconnect("Exit code " + exitCode);
+        }
+    }
+
+    /**
+     * Biginteger types have to be represented as strings in JSON
+     */
+    class BigIntegerSerializer implements JsonSerializer<BigInteger> {
+        @Override
+        public JsonElement serialize(BigInteger src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString());
         }
     }
 }

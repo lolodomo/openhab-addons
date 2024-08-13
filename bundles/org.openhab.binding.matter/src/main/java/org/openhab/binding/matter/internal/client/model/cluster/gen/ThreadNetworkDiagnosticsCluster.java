@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -54,7 +55,7 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
     /**
     * The ExtendedPanId attribute shall indicate the unique 64-bit identifier of the Node on the Thread network. A value of null shall indicate that the Thread interface is not currently configured or operational.
     */
-    public Long extendedPanId; // 4 uint64 R V
+    public BigInteger extendedPanId; // 4 uint64 R V
     /**
     * The MeshLocalPrefix attribute shall indicate the mesh-local IPv6 prefix for the Thread network that the Node has been configured to join to. A value of null shall indicate that the Thread interface is not currently configured or operational.
     */
@@ -62,7 +63,7 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
     /**
     * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due to lack of buffer memory to retain all packets on the ethernet network interface. The OverrunCount attribute shall be reset to 0 upon a reboot of the Node.
     */
-    public Long overrunCount; // 6 uint64 R V
+    public BigInteger overrunCount; // 6 uint64 R V
     /**
     * The NeighborTable attribute shall indicate the current list of Nodes that comprise the neighbor table on the Node.
     */
@@ -263,11 +264,11 @@ data the Node currently uses. Null if not attached to a Thread network.
     /**
     * Null when there is no dataset configured.
     */
-    public Long activeTimestamp; // 56 uint64 R V
+    public BigInteger activeTimestamp; // 56 uint64 R V
     /**
     * Null when there is no dataset configured.
     */
-    public Long pendingTimestamp; // 57 uint64 R V
+    public BigInteger pendingTimestamp; // 57 uint64 R V
     /**
     * Null when there is no dataset configured.
     */
@@ -290,7 +291,7 @@ data the Node currently uses. Null if not attached to a Thread network.
         /**
         * This field shall specify the IEEE 802.15.4 extended address for the neighboring Node.
         */
-        public Long extAddress; // uint64
+        public BigInteger extAddress; // uint64
         /**
         * This field shall specify the duration of time, in seconds, since a frame has been received from the neighboring Node.
         */
@@ -343,7 +344,7 @@ data the Node currently uses. Null if not attached to a Thread network.
         * This field shall specify if the neighboring Node is a direct child of the Node reporting the NeighborTable attribute.
         */
         public Boolean isChild; // bool
-        public NeighborTableStruct(Long extAddress, Integer age, Integer rloc16, Integer linkFrameCounter, Integer mleFrameCounter, Integer lqi, Integer averageRssi, Integer lastRssi, Integer frameErrorRate, Integer messageErrorRate, Boolean rxOnWhenIdle, Boolean fullThreadDevice, Boolean fullNetworkData, Boolean isChild) {
+        public NeighborTableStruct(BigInteger extAddress, Integer age, Integer rloc16, Integer linkFrameCounter, Integer mleFrameCounter, Integer lqi, Integer averageRssi, Integer lastRssi, Integer frameErrorRate, Integer messageErrorRate, Boolean rxOnWhenIdle, Boolean fullThreadDevice, Boolean fullNetworkData, Boolean isChild) {
             this.extAddress = extAddress;
             this.age = age;
             this.rloc16 = rloc16;
@@ -364,7 +365,7 @@ data the Node currently uses. Null if not attached to a Thread network.
         /**
         * This field shall specify the IEEE 802.15.4 extended address for the Node for which this route table entry corresponds.
         */
-        public Long extAddress; // uint64
+        public BigInteger extAddress; // uint64
         /**
         * This field shall specify the RLOC16 for the Node for which this route table entry corresponds.
         */
@@ -402,7 +403,7 @@ data the Node currently uses. Null if not attached to a Thread network.
 corresponds.
         */
         public Boolean linkEstablished; // bool
-        public RouteTableStruct(Long extAddress, Integer rloc16, Integer routerId, Integer nextHop, Integer pathCost, Integer lqiIn, Integer lqiOut, Integer age, Boolean allocated, Boolean linkEstablished) {
+        public RouteTableStruct(BigInteger extAddress, Integer rloc16, Integer routerId, Integer nextHop, Integer pathCost, Integer lqiIn, Integer lqiOut, Integer age, Boolean allocated, Boolean linkEstablished) {
             this.extAddress = extAddress;
             this.rloc16 = rloc16;
             this.routerId = routerId;
@@ -560,7 +561,7 @@ corresponds.
         }
     }
 
-    public ThreadNetworkDiagnosticsCluster(String nodeId, int endpointId) {
+    public ThreadNetworkDiagnosticsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 53, "ThreadNetworkDiagnostics");
     }
 

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -118,7 +119,7 @@ If the value of LowPowerModeSensitivities changes after an update, the device sh
         }
     }
 
-    public EnergyPreferenceCluster(String nodeId, int endpointId) {
+    public EnergyPreferenceCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 155, "EnergyPreference");
     }
 

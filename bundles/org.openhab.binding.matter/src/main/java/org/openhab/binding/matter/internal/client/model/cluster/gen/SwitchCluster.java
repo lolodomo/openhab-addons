@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -81,7 +82,7 @@ public class SwitchCluster extends BaseCluster {
         }
     }
 
-    public SwitchCluster(String nodeId, int endpointId) {
+    public SwitchCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 59, "Switch");
     }
 

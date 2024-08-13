@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -48,7 +49,7 @@ a CONSTRAINT_ERROR error.
 
 
 
-    public LocalizationConfigurationCluster(String nodeId, int endpointId) {
+    public LocalizationConfigurationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 43, "LocalizationConfiguration");
     }
 

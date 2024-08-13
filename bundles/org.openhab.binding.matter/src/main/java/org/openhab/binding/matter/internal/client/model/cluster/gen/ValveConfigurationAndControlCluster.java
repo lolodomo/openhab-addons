@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -54,7 +55,7 @@ Null:
 When the value of this attribute is earlier or equal to the current UTC time, the valve shall automatically transition to its closed position. The behavior of transitioning to the closed position, shall match the behavior described in the Close command.
 If this attribute is not null and the Time Synchronization cluster receives a SetUTCTime command, modifying the current UTC time of the device, the value of this attribute shall be adjusted to match the new UTC time plus the value of the RemainingDuration attribute.
     */
-    public Long autoCloseTime; // 2 epoch-us R V
+    public BigInteger autoCloseTime; // 2 epoch-us R V
     /**
     * Indicates the remaining duration, in seconds, until the valve closes. Null:
   • When OpenDuration is null, or
@@ -163,7 +164,7 @@ This feature shall NOT be supported unless the device supports the Time Synchron
         }
     }
 
-    public ValveConfigurationAndControlCluster(String nodeId, int endpointId) {
+    public ValveConfigurationAndControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 129, "ValveConfigurationAndControl");
     }
 

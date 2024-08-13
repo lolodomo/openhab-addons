@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -87,7 +88,7 @@ This field shall contain one of the values defined in IdentifyTypeEnum. The valu
     }
 
 
-    public IdentifyCluster(String nodeId, int endpointId) {
+    public IdentifyCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 3, "Identify");
     }
 

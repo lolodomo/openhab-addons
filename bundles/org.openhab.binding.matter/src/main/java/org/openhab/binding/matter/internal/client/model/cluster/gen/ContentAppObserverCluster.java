@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -49,7 +50,7 @@ public class ContentAppObserverCluster extends BaseCluster {
     }
 
 
-    public ContentAppObserverCluster(String nodeId, int endpointId) {
+    public ContentAppObserverCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1296, "ContentAppObserver");
     }
 

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -84,7 +85,7 @@ NOT be supported, as there is no way to authenticate the involved participants.
     }
 
 
-    public OtaSoftwareUpdateProviderCluster(String nodeId, int endpointId) {
+    public OtaSoftwareUpdateProviderCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 41, "OtaSoftwareUpdateProvider");
     }
 

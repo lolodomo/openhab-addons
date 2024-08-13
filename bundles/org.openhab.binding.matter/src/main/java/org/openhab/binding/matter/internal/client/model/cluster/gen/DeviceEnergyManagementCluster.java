@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -60,7 +61,7 @@ The ESA may have a local user interface to allow a service technician to put the
     * Indicates the minimum electrical power that the ESA can consume when switched on. This does not include when in power save or standby modes.
 Note that for Generator ESAs that can charge an internal battery (such as a battery storage inverter), the AbsMinPower will be a negative number representing the maximum power that the ESA can charge its internal battery.
     */
-    public Long absMinPower; // 3 power-mW R V
+    public BigInteger absMinPower; // 3 power-mW R V
     /**
     * Indicates the maximum electrical power that the ESA can consume when switched on.
 The value of the AbsMaxPower attribute shall be limited
@@ -68,7 +69,7 @@ AbsMaxPower &gt;&#x3D; AbsMinPower
 Note that for Generator ESAs that can discharge a battery to loads in the home (such as a battery storage inverter), the AbsMaxPower will be a positive number representing the maximum power at which the ESA can discharge its internal battery.
 For example, a battery storage inverter that can charge its battery at a maximum power of 2000W and can discharge the battery at a maximum power of 3000W, would have a AbsMinPower: -2000, AbsMaxPower: 3000W.
     */
-    public Long absMaxPower; // 4 power-mW R V
+    public BigInteger absMaxPower; // 4 power-mW R V
     /**
     * Indicates how the ESA can be adjusted at the current time. This attribute SHOULD be updated regularly by ESAs.
 For example, a battery storage inverter may need to regulate its internal temperature, or the charging rate of the battery may be limited due to cold temperatures, or a change in the state of charge of the battery may mean that the maximum charging or discharging rate is limited.
@@ -126,7 +127,7 @@ This is an optional field. It shall be included if CostType is Financial.
 Note that this is a signed value. Negative values indicate power flows away from loads (e.g. charging a battery inverter).
 MinPower shall be less than MaxPower.
         */
-        public Long minPower; // power-mW
+        public BigInteger minPower; // power-mW
         /**
         * This field shall indicate the maximum power that the ESA can have its power adjusted to.
 Note that this is a signed value. Negative values indicate power flows away from loads (e.g. charging a battery inverter).
@@ -135,7 +136,7 @@ For example, if the charging current of an EVSE can be adjusted within the range
 For example, if a battery storage inverter can discharge between 0 to 3000W towards a load, then its MinPower would be 0W and its MaxPower would be 3000W.
 In another example, if a battery storage inverter can charge its internal battery, between 0W and 2000W. Here power is flowing away from the home loads, so the power values need to be negative. As such the MinPower becomes -2000W and MaxPower becomes 0W.
         */
-        public Long maxPower; // power-mW
+        public BigInteger maxPower; // power-mW
         /**
         * This field shall indicate the minimum duration, in seconds, that a controller may invoke an ESA power adjustment. Manufacturers may use this to as an anti-cycling capability to avoid controllers from rapidly making power adjustments.
 Note that MinDuration shall be less than MaxDuration.
@@ -146,7 +147,7 @@ Note that MinDuration shall be less than MaxDuration.
 Note that MinDuration shall be less than MaxDuration.
         */
         public Integer maxDuration; // elapsed-s
-        public PowerAdjustStruct(Long minPower, Long maxPower, Integer minDuration, Integer maxDuration) {
+        public PowerAdjustStruct(BigInteger minPower, BigInteger maxPower, Integer minDuration, Integer maxDuration) {
             this.minPower = minPower;
             this.maxPower = maxPower;
             this.minDuration = minDuration;
@@ -263,22 +264,22 @@ By providing this information a smart EMS may be able to learn the observed powe
         /**
         * This field shall indicate the expected power that the appliance will use during this slot. It may be considered the average value over the slot, and some variation from this would be expected (for example, as it is ramping up).
         */
-        public Long nominalPower; // power-mW
+        public BigInteger nominalPower; // power-mW
         /**
         * This field shall indicate the lowest power that the appliance expects to use during this slot. (e.g. during a ramp up it may be 0W).
 Some appliances (e.g. battery inverters which can charge and discharge) may have a negative power.
         */
-        public Long minPower; // power-mW
+        public BigInteger minPower; // power-mW
         /**
         * This field shall indicate the maximum power that the appliance expects to use during this slot. (e.g. during a ramp up it may be 0W). This field ignores the effects of short-lived inrush currents.
 Some appliances (e.g. battery inverters which can charge and discharge) may have a negative power.
         */
-        public Long maxPower; // power-mW
+        public BigInteger maxPower; // power-mW
         /**
         * This field shall indicate the expected energy that the appliance expects to use or produce during this slot.
 Some appliances (e.g. battery inverters which can charge and discharge) may have a negative energy.
         */
-        public Long nominalEnergy; // energy-mWh
+        public BigInteger nominalEnergy; // energy-mWh
         /**
         * This field shall indicate the current estimated cost for operating.
 For example, if the device has access to an Energy pricing server it may be able to use the tariff to estimate the cost of energy for this slot in the power forecast.
@@ -292,12 +293,12 @@ If the ESA cannot calculate its cost for any reason (such as losing its connecti
         * This field shall indicate the minimum power that the appliance can be requested to use.
 For example, some EVSEs cannot be switched on to charge below 6A which may equate to ~1.3kW in EU markets. If the slot indicates a NominalPower of 0W (indicating it is expecting to be off), this allows an ESA to indicate it could be switched on to charge, but this would be the minimum power limit it can be set to.
         */
-        public Long minPowerAdjustment; // power-mW
+        public BigInteger minPowerAdjustment; // power-mW
         /**
         * This field shall indicate the maximum power that the appliance can be requested to use.
 For example, an EVSE may be limited by its electrical supply to 32A which would be ~7.6kW in EU markets. If the slot indicates a NominalPower of 0W (indicating it is expecting to be off), this allows an ESA to indicate it could be switched on to charge, but this would be the maximum power limit it can be set to.
         */
-        public Long maxPowerAdjustment; // power-mW
+        public BigInteger maxPowerAdjustment; // power-mW
         /**
         * This field shall indicate the minimum time, in seconds, that the slot can be requested to shortened to.
 For example, if the slot indicates a NominalPower of 0W (indicating it is expecting to be off), this would allow an ESA to specify the minimum time it could be switched on for. This is to help protect the appliance from being damaged by short cycling times.
@@ -309,7 +310,7 @@ For example, a heat pump compressor may have a minimum cycle time of order a few
 For example, if the slot indicates a NominalPower of 0W (indicating it is expecting to be off), this allows an ESA to specify the maximum time it could be switched on for. This may allow a battery or water heater to indicate the maximum duration that it can charge for before becoming full. In the case of a battery inverter which can be discharged, it may equally indicate the maximum time the battery could be discharged for (at the MaxPowerAdjustment power level).
         */
         public Integer maxDurationAdjustment; // elapsed-s
-        public SlotStruct(Integer minDuration, Integer maxDuration, Integer defaultDuration, Integer elapsedSlotTime, Integer remainingSlotTime, Boolean slotIsPauseable, Integer minPauseDuration, Integer maxPauseDuration, Integer manufacturerEsaState, Long nominalPower, Long minPower, Long maxPower, Long nominalEnergy, List<CostStruct> costs, Long minPowerAdjustment, Long maxPowerAdjustment, Integer minDurationAdjustment, Integer maxDurationAdjustment) {
+        public SlotStruct(Integer minDuration, Integer maxDuration, Integer defaultDuration, Integer elapsedSlotTime, Integer remainingSlotTime, Boolean slotIsPauseable, Integer minPauseDuration, Integer maxPauseDuration, Integer manufacturerEsaState, BigInteger nominalPower, BigInteger minPower, BigInteger maxPower, BigInteger nominalEnergy, List<CostStruct> costs, BigInteger minPowerAdjustment, BigInteger maxPowerAdjustment, Integer minDurationAdjustment, Integer maxDurationAdjustment) {
             this.minDuration = minDuration;
             this.maxDuration = maxDuration;
             this.defaultDuration = defaultDuration;
@@ -338,12 +339,12 @@ For example, if the slot indicates a NominalPower of 0W (indicating it is expect
         /**
         * This field shall indicate the new requested power that the ESA shall operate at. It MUST be between the MinPowerAdjustment and MaxPowerAdjustment for the slot as advertised by the ESA.
         */
-        public Long nominalPower; // power-mW
+        public BigInteger nominalPower; // power-mW
         /**
         * This field shall indicate the new requested duration, in seconds, that the ESA shall extend or shorten the slot duration to. It MUST be between the MinDurationAdjustment and MaxDurationAdjustment for the slot as advertised by the ESA.
         */
         public Integer duration; // elapsed-s
-        public SlotAdjustmentStruct(Integer slotIndex, Long nominalPower, Integer duration) {
+        public SlotAdjustmentStruct(Integer slotIndex, BigInteger nominalPower, Integer duration) {
             this.slotIndex = slotIndex;
             this.nominalPower = nominalPower;
             this.duration = duration;
@@ -366,19 +367,19 @@ This value is in UTC and MUST be in the future.
         * This field shall indicate the nominal power that client wishes the ESA to operate at during the constrained period. It MUST be between the AbsMinPower and AbsMaxPower attributes as advertised by the ESA if it supports PFR.
 This is a signed value and can be used to indicate charging or discharging. If the ESA does NOT support PFR this value shall be ignored by the ESA.
         */
-        public Long nominalPower; // power-mW
+        public BigInteger nominalPower; // power-mW
         /**
         * This field shall indicate the maximum energy that can be transferred to or from the ESA during the constraint period.
 This is a signed value and can be used to indicate charging or discharging. If the ESA does NOT support PFR this value may be ignored by the ESA.
         */
-        public Long maximumEnergy; // energy-mWh
+        public BigInteger maximumEnergy; // energy-mWh
         /**
         * This field shall indicate the turn up or turn down nature that the grid wants as the outcome by the ESA during the constraint period.
 This is expressed as a signed value between -100 to +100. A value of 0 would indicate no bias to using more or less energy. A negative value indicates a request to use less energy. A positive value indicates a request to use more energy.
 Note that the mapping between values and operation is manufacturer specific.
         */
         public Integer loadControl; // int8
-        public ConstraintsStruct(Integer startTime, Integer duration, Long nominalPower, Long maximumEnergy, Integer loadControl) {
+        public ConstraintsStruct(Integer startTime, Integer duration, BigInteger nominalPower, BigInteger maximumEnergy, Integer loadControl) {
             this.startTime = startTime;
             this.duration = duration;
             this.nominalPower = nominalPower;
@@ -564,7 +565,7 @@ It does this by sending a RequestConstraintBasedForecast to the EVSE and asks it
         }
     }
 
-    public DeviceEnergyManagementCluster(String nodeId, int endpointId) {
+    public DeviceEnergyManagementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 152, "DeviceEnergyManagement");
     }
 
@@ -573,7 +574,7 @@ It does this by sending a RequestConstraintBasedForecast to the EVSE and asks it
     /**
     * Allows a client to request an adjustment in the power consumption of an ESA for a specified duration.
     */
-    public static ClusterCommand powerAdjustRequest(Long power, Integer duration, AdjustmentCauseEnum cause) {
+    public static ClusterCommand powerAdjustRequest(BigInteger power, Integer duration, AdjustmentCauseEnum cause) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("power", power);
         map.put("duration", duration);

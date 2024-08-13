@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.matter.internal.client.model.cluster;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -22,14 +23,14 @@ import com.google.gson.Gson;
  */
 public abstract class BaseCluster {
     protected static final Gson GSON = new Gson();
-    public String nodeId;
+    public BigInteger nodeId;
     public int endpointId;
     public int id;
     public String name;
     public static Map<Integer, String> ATTRIBUTE_MAPPING;
     public static Map<Integer, String> COMMAND_MAPPING;
 
-    public BaseCluster(String nodeId, int endpointId, int clusterId, String clusterName) {
+    public BaseCluster(BigInteger nodeId, int endpointId, int clusterId, String clusterName) {
         this.nodeId = nodeId;
         this.endpointId = endpointId;
         this.id = clusterId;

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -152,7 +153,7 @@ The set of ErrorStateID field values defined in each of the generic or derived O
     }
 
 
-    public OperationalStateCluster(String nodeId, int endpointId) {
+    public OperationalStateCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 96, "OperationalState");
     }
 

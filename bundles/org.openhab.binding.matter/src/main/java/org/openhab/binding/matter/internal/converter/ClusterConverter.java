@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.matter.internal.converter;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +48,7 @@ public abstract class ClusterConverter implements AttributeListener {
 
     private final Logger logger = LoggerFactory.getLogger(ClusterConverter.class);
     private static final Map<Integer, Class<? extends ClusterConverter>> converterMapping = new HashMap();
-    protected String nodeId;
+    protected BigInteger nodeId;
     protected int endpointId;
     // protected @Nullable BaseCluster cluster;
     protected EndpointHandler handler;

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -89,7 +90,7 @@ This attribute is designed to prevent local tampering with or disabling of sched
     }
 
 
-    public ThermostatUserInterfaceConfigurationCluster(String nodeId, int endpointId) {
+    public ThermostatUserInterfaceConfigurationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 516, "ThermostatUserInterfaceConfiguration");
     }
 

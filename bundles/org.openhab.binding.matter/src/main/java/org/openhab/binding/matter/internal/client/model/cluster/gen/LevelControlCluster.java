@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -163,7 +164,7 @@ All other values are application specific gradations from the minimum to the max
         }
     }
 
-    public LevelControlCluster(String nodeId, int endpointId) {
+    public LevelControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 8, "LevelControl");
     }
 

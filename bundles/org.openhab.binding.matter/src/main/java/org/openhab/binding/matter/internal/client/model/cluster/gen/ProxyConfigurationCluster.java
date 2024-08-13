@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -47,8 +48,8 @@ public class ProxyConfigurationCluster extends BaseCluster {
         /**
         * When ProxyAllNodes is false, this list contains the set of Node IDs of sources that this proxy shall specifically proxy.
         */
-        public List<Long> sourceList; // list
-        public ConfigurationStruct(Boolean proxyAllNodes, List<Long> sourceList) {
+        public List<BigInteger> sourceList; // list
+        public ConfigurationStruct(Boolean proxyAllNodes, List<BigInteger> sourceList) {
             this.proxyAllNodes = proxyAllNodes;
             this.sourceList = sourceList;
         }
@@ -57,7 +58,7 @@ public class ProxyConfigurationCluster extends BaseCluster {
 
 
 
-    public ProxyConfigurationCluster(String nodeId, int endpointId) {
+    public ProxyConfigurationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 66, "ProxyConfiguration");
     }
 

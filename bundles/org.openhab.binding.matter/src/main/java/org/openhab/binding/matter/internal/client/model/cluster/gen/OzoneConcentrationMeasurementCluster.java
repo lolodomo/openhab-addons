@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -37,7 +38,7 @@ public class OzoneConcentrationMeasurementCluster extends BaseCluster {
 
 
 
-    public OzoneConcentrationMeasurementCluster(String nodeId, int endpointId) {
+    public OzoneConcentrationMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1045, "OzoneConcentrationMeasurement");
     }
 

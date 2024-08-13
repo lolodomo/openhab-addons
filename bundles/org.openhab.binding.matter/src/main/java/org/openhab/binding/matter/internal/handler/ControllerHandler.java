@@ -17,6 +17,7 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL
 import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_ENDPOINT;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -73,13 +74,13 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     private final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
     // The endpoints / devices associated with a node. Typically a node has 1 device endpoint, but may have more (Hue
     // bridge, complicated devices, etc..)
-    private Map<String, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
+    private Map<BigInteger, Map<Integer, Endpoint>> nodeEndpoints = Collections.synchronizedMap(new HashMap<>());
     // Last time the node sent an update to us
-    private Map<String, LocalDateTime> nodesLastUpdate = new ConcurrentHashMap<>();
+    private Map<BigInteger, LocalDateTime> nodesLastUpdate = new ConcurrentHashMap<>();
     // Set of nodes we are waiting to connect to
-    private Set<String> outstandingNodeRequests = Collections.synchronizedSet(new HashSet<>());
+    private Set<BigInteger> outstandingNodeRequests = Collections.synchronizedSet(new HashSet<>());
     // Set of nodes we need to try reconnecting to
-    private Set<String> disconnectedNodes = Collections.synchronizedSet(new HashSet<>());
+    private Set<BigInteger> disconnectedNodes = Collections.synchronizedSet(new HashSet<>());
 
     private @Nullable MatterDiscoveryService discoveryService;
     private MatterWebsocketClient client;
@@ -238,7 +239,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             return;
         }
         if (childHandler instanceof EndpointHandler handler) {
-            String nodeId = handler.getNodeId();
+            BigInteger nodeId = handler.getNodeId();
             updateNode(nodeId);
             // // TODO we need to check with the matter network if this node is connected or not. If it is, then update
             // the
@@ -317,7 +318,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         logger.debug("onReady obtaining lock");
         updating = true;
         client.getCommissionedNodeIds(false).thenAccept(nodeIds -> {
-            for (String id : nodeIds) {
+            for (BigInteger id : nodeIds) {
                 updateNode(id);
             }
         }).exceptionally(e -> {
@@ -342,7 +343,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         logger.debug("refresh obtaining lock");
         updating = true;
         client.getConnectedNodeIds().thenAccept(nodeIds -> {
-            for (String id : nodeIds) {
+            for (BigInteger id : nodeIds) {
                 updateNode(id);
             }
         }).exceptionally(e -> {
@@ -355,7 +356,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         });
     }
 
-    protected void endpointRemoved(String nodeId, int endpointId) {
+    protected void endpointRemoved(BigInteger nodeId, int endpointId) {
         logger.debug("endpointRemoved endpoint {}:{}", nodeId, endpointId);
 
         // check if we remove deleted endpoint things from the actual matter network
@@ -395,7 +396,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         this.reconnectFuture = scheduler.schedule(this::initialize, 30, TimeUnit.SECONDS);
     }
 
-    private synchronized void updateNode(String id) {
+    private synchronized void updateNode(BigInteger id) {
         logger.debug("updateNode BEGIN {}", id);
         // If we are already waiting to get this node, return;
         if (outstandingNodeRequests.contains(id)) {
@@ -434,7 +435,8 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         }
     }
 
-    private void updateEndpointStatuses(String nodeId, ThingStatus status, ThingStatusDetail detail, String details) {
+    private void updateEndpointStatuses(BigInteger nodeId, ThingStatus status, ThingStatusDetail detail,
+            String details) {
         for (Thing thing : getThing().getThings()) {
             ThingHandler handler = thing.getHandler();
             if (handler instanceof EndpointHandler endpointHandler) {
@@ -466,7 +468,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         }
     }
 
-    private @Nullable EndpointHandler endpointHandler(String nodeId, int endpointId) {
+    private @Nullable EndpointHandler endpointHandler(BigInteger nodeId, int endpointId) {
         for (Thing thing : getThing().getThings()) {
             ThingHandler handler = thing.getHandler();
             if (handler instanceof EndpointHandler endpointHandler) {
@@ -493,7 +495,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         }
     }
 
-    private void modifyNodesLastUpdate(String nodeId) {
+    private void modifyNodesLastUpdate(BigInteger nodeId) {
         nodesLastUpdate.put(nodeId, LocalDateTime.now());
     }
 

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -98,7 +99,7 @@ If UseActiveLocale, any unit implied through the ActiveLocale attribute is used 
         }
     }
 
-    public TimeFormatLocalizationCluster(String nodeId, int endpointId) {
+    public TimeFormatLocalizationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 44, "TimeFormatLocalization");
     }
 

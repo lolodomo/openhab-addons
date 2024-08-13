@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -136,7 +137,7 @@ If this attribute has the value of null, then this alarm shall NOT be generated.
         }
     }
 
-    public BallastConfigurationCluster(String nodeId, int endpointId) {
+    public BallastConfigurationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 769, "BallastConfiguration");
     }
 

@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -637,7 +638,7 @@ Systems which support cooling or heating, requiring external intervention to cha
         }
     }
 
-    public ThermostatCluster(String nodeId, int endpointId) {
+    public ThermostatCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 513, "Thermostat");
     }
 

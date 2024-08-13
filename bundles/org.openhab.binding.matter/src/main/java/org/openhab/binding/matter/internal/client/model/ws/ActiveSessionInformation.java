@@ -12,13 +12,15 @@
  */
 package org.openhab.binding.matter.internal.client.model.ws;
 
+import java.math.BigInteger;
+
 /**
  * @author Dan Cunningham
  *
  */
 public class ActiveSessionInformation {
     public String name;
-    public String nodeId;
+    public BigInteger nodeId;
     public String peerNodeId;
     public ExposedFabricInformation fabric;
     public boolean isPeerActive;

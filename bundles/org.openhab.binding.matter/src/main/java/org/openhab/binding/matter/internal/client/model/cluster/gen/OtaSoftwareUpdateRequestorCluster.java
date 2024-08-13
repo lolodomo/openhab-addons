@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -64,14 +65,14 @@ This field may be updated infrequently. Some care SHOULD be taken by Nodes to av
         /**
         * This field shall contain the Node ID of the OTA Provider to contact within the Fabric identified by the FabricIndex.
         */
-        public Long providerNodeId; // node-id
+        public BigInteger providerNodeId; // node-id
         /**
         * This field shall contain the endpoint number which has the OTA Provider device type and OTA
 Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to do discovery of the location of that endpoint by walking over all endpoints and checking their Descriptor Cluster.
         */
         public Integer endpoint; // endpoint-no
         public Integer fabricIndex; // FabricIndex
-        public ProviderLocation(Long providerNodeId, Integer endpoint, Integer fabricIndex) {
+        public ProviderLocation(BigInteger providerNodeId, Integer endpoint, Integer fabricIndex) {
             this.providerNodeId = providerNodeId;
             this.endpoint = endpoint;
             this.fabricIndex = fabricIndex;
@@ -123,7 +124,7 @@ Software Update Provider cluster server on the ProviderNodeID. This is provided 
     }
 
 
-    public OtaSoftwareUpdateRequestorCluster(String nodeId, int endpointId) {
+    public OtaSoftwareUpdateRequestorCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 42, "OtaSoftwareUpdateRequestor");
     }
 
@@ -134,7 +135,7 @@ Software Update Provider cluster server on the ProviderNodeID. This is provided 
 This command shall be scoped to the accessing fabric.
 If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
     */
-    public static ClusterCommand announceOtaProvider(Long providerNodeId, Integer vendorId, AnnouncementReasonEnum announcementReason, String metadataForNode, Integer endpoint, Integer fabricIndex) {
+    public static ClusterCommand announceOtaProvider(BigInteger providerNodeId, Integer vendorId, AnnouncementReasonEnum announcementReason, String metadataForNode, Integer endpoint, Integer fabricIndex) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("providerNodeId", providerNodeId);
         map.put("vendorId", vendorId);

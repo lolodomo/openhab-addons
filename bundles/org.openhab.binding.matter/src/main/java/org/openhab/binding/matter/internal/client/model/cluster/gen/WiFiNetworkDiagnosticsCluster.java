@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -83,11 +84,11 @@ total number of expected beacons that could have been received during the interv
     /**
     * The CurrentMaxRate attribute shall indicate the current maximum PHY rate of transfer of data in bits-per-second.
     */
-    public Long currentMaxRate; // 11 uint64 R V
+    public BigInteger currentMaxRate; // 11 uint64 R V
     /**
     * The OverrunCount attribute shall indicate the number of packets dropped either at ingress or egress, due to lack of buffer memory to retain all packets on the network interface. The OverrunCount attribute shall be reset to 0 upon a reboot of the Node.
     */
-    public Long overrunCount; // 12 uint64 R V
+    public BigInteger overrunCount; // 12 uint64 R V
 
 
     //Enums
@@ -159,7 +160,7 @@ total number of expected beacons that could have been received during the interv
         }
     }
 
-    public WiFiNetworkDiagnosticsCluster(String nodeId, int endpointId) {
+    public WiFiNetworkDiagnosticsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 54, "WiFiNetworkDiagnostics");
     }
 

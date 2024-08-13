@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -77,7 +78,7 @@ While in the Charging or Docked states, the device shall NOT attempt to resume u
     }
 
 
-    public RvcOperationalStateCluster(String nodeId, int endpointId) {
+    public RvcOperationalStateCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 97, "RvcOperationalState");
     }
 

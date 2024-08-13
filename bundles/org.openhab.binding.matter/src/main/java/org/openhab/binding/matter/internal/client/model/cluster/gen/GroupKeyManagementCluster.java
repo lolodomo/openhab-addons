@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -87,7 +88,7 @@ When CacheAndSync is not supported in the FeatureMap of this cluster, any action
         /**
         * This field, if not null, shall define when EpochKey0 becomes valid as specified by Section 4.16.3, “Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.
         */
-        public Long epochStartTime0; // epoch-us
+        public BigInteger epochStartTime0; // epoch-us
         /**
         * This field, if not null, shall be the root credential used in the derivation of an operational group
 key for epoch slot 1 of the given group key set. If EpochKey1 is not null, EpochStartTime1 shall NOT be null.
@@ -96,7 +97,7 @@ key for epoch slot 1 of the given group key set. If EpochKey1 is not null, Epoch
         /**
         * This field, if not null, shall define when EpochKey1 becomes valid as specified by Section 4.16.3, “Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.
         */
-        public Long epochStartTime1; // epoch-us
+        public BigInteger epochStartTime1; // epoch-us
         /**
         * This field, if not null, shall be the root credential used in the derivation of an operational group key for epoch slot 2 of the given group key set. If EpochKey2 is not null, EpochStartTime2 shall NOT be null.
         */
@@ -104,7 +105,7 @@ key for epoch slot 1 of the given group key set. If EpochKey1 is not null, Epoch
         /**
         * This field, if not null, shall define when EpochKey2 becomes valid as specified by Section 4.16.3, “Epoch Keys”. Units are absolute UTC time in microseconds encoded using the epoch-us representation.
         */
-        public Long epochStartTime2; // epoch-us
+        public BigInteger epochStartTime2; // epoch-us
         /**
         * This field specifies how the IPv6 Multicast Address shall be formed for groups using this operational group key set.
 The PerGroupID method maximizes filtering of multicast messages, so that receiving nodes receive only multicast messages for groups to which they are subscribed.
@@ -113,7 +114,7 @@ NOTE
 Support for GroupKeyMulticastPolicy is provisional. Correct default behavior is that implied by value PerGroupID.
         */
         public GroupKeyMulticastPolicyEnum groupKeyMulticastPolicy; // GroupKeyMulticastPolicyEnum
-        public GroupKeySetStruct(Integer groupKeySetId, GroupKeySecurityPolicyEnum groupKeySecurityPolicy, String epochKey0, Long epochStartTime0, String epochKey1, Long epochStartTime1, String epochKey2, Long epochStartTime2, GroupKeyMulticastPolicyEnum groupKeyMulticastPolicy) {
+        public GroupKeySetStruct(Integer groupKeySetId, GroupKeySecurityPolicyEnum groupKeySecurityPolicy, String epochKey0, BigInteger epochStartTime0, String epochKey1, BigInteger epochStartTime1, String epochKey2, BigInteger epochStartTime2, GroupKeyMulticastPolicyEnum groupKeyMulticastPolicy) {
             this.groupKeySetId = groupKeySetId;
             this.groupKeySecurityPolicy = groupKeySecurityPolicy;
             this.epochKey0 = epochKey0;
@@ -181,7 +182,7 @@ Support for GroupKeyMulticastPolicy is provisional. Correct default behavior is 
         }
     }
 
-    public GroupKeyManagementCluster(String nodeId, int endpointId) {
+    public GroupKeyManagementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 63, "GroupKeyManagement");
     }
 

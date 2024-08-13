@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -43,12 +44,12 @@ During fast-forward, rewind, and other seek operations; this attribute shall be 
     /**
     * Indicates the start time of the media, in case the media has a fixed start time (for example, live stream or television broadcast), or null when start time does not apply to the current media (for example, video-on-demand). This time is a UTC time. The client needs to handle conversion to local time, as required, taking in account time zone and possible local DST offset.
     */
-    public Long startTime; // 1 epoch-us R V
+    public BigInteger startTime; // 1 epoch-us R V
     /**
     * Indicates the duration, in milliseconds, of the current media being played back
 or null when duration is not applicable (for example, in live streaming content with no known duration). This attribute shall never be 0.
     */
-    public Long duration; // 2 uint64 R V
+    public BigInteger duration; // 2 uint64 R V
     /**
     * Indicates the position of playback (Position field) at the time (UpdateAt field) specified in the attribute. The client may use the SampledPosition attribute to compute the current position within the media stream based on the PlaybackSpeed, PlaybackPositionStruct.UpdatedAt and PlaybackPositionStruct.Position fields. To enable this, the SampledPosition attribute shall be updated whenever a change in either the playback speed or the playback position is triggered outside the normal playback of the media. The events which may cause this to happen include:
   • Starting or resumption of playback
@@ -75,11 +76,11 @@ Following examples illustrate the PlaybackSpeed attribute values in various cond
     /**
     * Indicates the furthest forward valid position to which a client may seek forward, in milliseconds from the start of the media. When the media has an associated StartTime, a value of null shall indicate that a seek forward is valid only until the current time within the media, using a position computed from the difference between the current time offset and StartTime, in milliseconds from start of the media, truncating fractional milliseconds towards 0. A value of Nas when StartTime is not specified shall indicate that seeking forward is not allowed.
     */
-    public Long seekRangeEnd; // 5 uint64 R V
+    public BigInteger seekRangeEnd; // 5 uint64 R V
     /**
     * Indicates the earliest valid position to which a client may seek back, in milliseconds from start of the media. A value of Nas shall indicate that seeking backwards is not allowed.
     */
-    public Long seekRangeStart; // 6 uint64 R V
+    public BigInteger seekRangeStart; // 6 uint64 R V
     /**
     * ActiveTrack refers to the Audio track currently set and being used for the streaming media. A value of null shall indicate that no Audio Track corresponding to the current media is currently being played.
     */
@@ -104,13 +105,13 @@ Following examples illustrate the PlaybackSpeed attribute values in various cond
         /**
         * This field shall indicate the time when the position was last updated.
         */
-        public Long updatedAt; // epoch-us
+        public BigInteger updatedAt; // epoch-us
         /**
         * This field shall indicate the associated discrete position within the media stream, in milliseconds from the beginning of the stream, being associated with the time indicated by the UpdatedAt field. The Position shall not be greater than the duration of the media if duration is specified. The Position shall not be greater than the time difference between current time and start time of the media when start time is specified.
 A value of null shall indicate that playback position is not applicable for the current state of the media playback (For example : Live media with no known duration and where seek is not supported).
         */
-        public Long position; // uint64
-        public PlaybackPositionStruct(Long updatedAt, Long position) {
+        public BigInteger position; // uint64
+        public PlaybackPositionStruct(BigInteger updatedAt, BigInteger position) {
             this.updatedAt = updatedAt;
             this.position = position;
         }
@@ -242,7 +243,7 @@ A cluster implementing AA shall implement AS.
         }
     }
 
-    public MediaPlaybackCluster(String nodeId, int endpointId) {
+    public MediaPlaybackCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1286, "MediaPlayback");
     }
 
@@ -320,7 +321,7 @@ Different &quot;fast-forward&quot; speeds may be reflected on the media playback
     /**
     * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
     */
-    public static ClusterCommand skipForward(Long deltaPositionMilliseconds) {
+    public static ClusterCommand skipForward(BigInteger deltaPositionMilliseconds) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("deltaPositionMilliseconds", deltaPositionMilliseconds);
 
@@ -329,7 +330,7 @@ Different &quot;fast-forward&quot; speeds may be reflected on the media playback
     /**
     * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
     */
-    public static ClusterCommand skipBackward(Long deltaPositionMilliseconds) {
+    public static ClusterCommand skipBackward(BigInteger deltaPositionMilliseconds) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("deltaPositionMilliseconds", deltaPositionMilliseconds);
 
@@ -338,7 +339,7 @@ Different &quot;fast-forward&quot; speeds may be reflected on the media playback
     /**
     * Upon receipt, this shall change the playback position in the media to the given position.
     */
-    public static ClusterCommand seek(Long position) {
+    public static ClusterCommand seek(BigInteger position) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("position", position);
 

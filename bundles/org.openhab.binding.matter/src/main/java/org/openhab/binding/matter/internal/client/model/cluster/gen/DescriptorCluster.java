@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -94,7 +95,7 @@ A client may use the Label field of each SemanticTagStruct, if present in each s
         }
     }
 
-    public DescriptorCluster(String nodeId, int endpointId) {
+    public DescriptorCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 29, "Descriptor");
     }
 

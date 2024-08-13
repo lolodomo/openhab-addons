@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -104,7 +105,7 @@ Supporting this attribute can assist clients in suggesting cooking settings for 
         }
     }
 
-    public MicrowaveOvenControlCluster(String nodeId, int endpointId) {
+    public MicrowaveOvenControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 95, "MicrowaveOvenControl");
     }
 

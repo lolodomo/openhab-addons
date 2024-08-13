@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -142,7 +143,7 @@ This feature is useful for devices which can be turned off via the Off command r
         }
     }
 
-    public OnOffCluster(String nodeId, int endpointId) {
+    public OnOffCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 6, "OnOff");
     }
 

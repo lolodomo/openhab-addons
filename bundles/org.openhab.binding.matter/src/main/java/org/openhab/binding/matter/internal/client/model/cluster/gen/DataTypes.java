@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -27,15 +28,15 @@ import java.util.List;
  
     //Structs
      public class MeasurementAccuracyRangeStruct {
-        public Long rangeMin; // int64
-        public Long rangeMax; // int64
+        public BigInteger rangeMin; // int64
+        public BigInteger rangeMax; // int64
         public Integer percentMax; // percent100ths
         public Integer percentMin; // percent100ths
         public Integer percentTypical; // percent100ths
-        public Long fixedMax; // uint64
-        public Long fixedMin; // uint64
-        public Long fixedTypical; // uint64
-        public MeasurementAccuracyRangeStruct(Long rangeMin, Long rangeMax, Integer percentMax, Integer percentMin, Integer percentTypical, Long fixedMax, Long fixedMin, Long fixedTypical) {
+        public BigInteger fixedMax; // uint64
+        public BigInteger fixedMin; // uint64
+        public BigInteger fixedTypical; // uint64
+        public MeasurementAccuracyRangeStruct(BigInteger rangeMin, BigInteger rangeMax, Integer percentMax, Integer percentMin, Integer percentTypical, BigInteger fixedMax, BigInteger fixedMin, BigInteger fixedTypical) {
             this.rangeMin = rangeMin;
             this.rangeMax = rangeMax;
             this.percentMax = percentMax;
@@ -49,10 +50,10 @@ import java.util.List;
      public class MeasurementAccuracyStruct {
         public MeasurementTypeEnum measurementType; // MeasurementTypeEnum
         public Boolean measured; // bool
-        public Long minMeasuredValue; // int64
-        public Long maxMeasuredValue; // int64
+        public BigInteger minMeasuredValue; // int64
+        public BigInteger maxMeasuredValue; // int64
         public List<MeasurementAccuracyRangeStruct> accuracyRanges; // list
-        public MeasurementAccuracyStruct(MeasurementTypeEnum measurementType, Boolean measured, Long minMeasuredValue, Long maxMeasuredValue, List<MeasurementAccuracyRangeStruct> accuracyRanges) {
+        public MeasurementAccuracyStruct(MeasurementTypeEnum measurementType, Boolean measured, BigInteger minMeasuredValue, BigInteger maxMeasuredValue, List<MeasurementAccuracyRangeStruct> accuracyRanges) {
             this.measurementType = measurementType;
             this.measured = measured;
             this.minMeasuredValue = minMeasuredValue;

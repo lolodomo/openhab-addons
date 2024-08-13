@@ -14,6 +14,7 @@ package org.openhab.binding.matter.internal.handler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ import org.slf4j.LoggerFactory;
 public class EndpointHandler extends BaseThingHandler implements AttributeListener {
 
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
-    private String nodeId = "";
+    private BigInteger nodeId = BigInteger.valueOf(0);
     protected int endpointId;
     private Map<String, ClusterConverter> channelIdMap = new HashMap<String, ClusterConverter>();
     private Map<Integer, ClusterConverter> clusterIdMap = new HashMap<Integer, ClusterConverter>();
@@ -83,7 +84,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     @Override
     public void initialize() {
         EndpointConfiguration config = getConfigAs(EndpointConfiguration.class);
-        nodeId = config.nodeId;
+        nodeId = new BigInteger(config.nodeId);
         endpointId = config.endpointId;
         logger.debug("initialize endpoint {}", endpointId);
         ControllerHandler handler = controllerHandler();
@@ -207,7 +208,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         c.onEvent(message);
     }
 
-    public String getNodeId() {
+    public BigInteger getNodeId() {
         return nodeId;
     }
 

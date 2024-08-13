@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -69,7 +70,7 @@ This list shall NOT be fabric-scoped; it shall contain MessageIDs for all Messag
         /**
         * This field shall indicate the amount of time, in milliseconds, after the StartTime during which the message is available to be presented. A null value shall indicate &quot;until changed&quot;.
         */
-        public Long duration; // uint64
+        public BigInteger duration; // uint64
         /**
         * This field shall indicate a string containing the message to be presented.
         */
@@ -81,7 +82,7 @@ If the ResponseRequired bit is not set on the message, this list shall be ignore
         */
         public List<MessageResponseOptionStruct> responses; // list
         public Integer fabricIndex; // FabricIndex
-        public MessageStruct(String messageId, MessagePriorityEnum priority, MessageControlBitmap messageControl, Integer startTime, Long duration, String messageText, List<MessageResponseOptionStruct> responses, Integer fabricIndex) {
+        public MessageStruct(String messageId, MessagePriorityEnum priority, MessageControlBitmap messageControl, Integer startTime, BigInteger duration, String messageText, List<MessageResponseOptionStruct> responses, Integer fabricIndex) {
             this.messageId = messageId;
             this.priority = priority;
             this.messageControl = messageControl;
@@ -202,7 +203,7 @@ If the ResponseRequired bit is not set on the message, this list shall be ignore
         }
     }
 
-    public MessagesCluster(String nodeId, int endpointId) {
+    public MessagesCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 151, "Messages");
     }
 
@@ -216,7 +217,7 @@ NOTE
 It is currently not specified where the friendly name label can be found on the node, meaning that clients SHOULD NOT rely on a certain method they happen to observe in a particular server instance, since other instances could employ a different method.
 The device SHOULD make it possible for the user to view which nodes have access to this cluster and to individually remove privileges for each node.
     */
-    public static ClusterCommand presentMessagesRequest(String messageId, MessagePriorityEnum priority, MessageControlBitmap messageControl, Integer startTime, Long duration, String messageText, List<MessageResponseOptionStruct> responses) {
+    public static ClusterCommand presentMessagesRequest(String messageId, MessagePriorityEnum priority, MessageControlBitmap messageControl, Integer startTime, BigInteger duration, String messageText, List<MessageResponseOptionStruct> responses) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("messageId", messageId);
         map.put("priority", priority);

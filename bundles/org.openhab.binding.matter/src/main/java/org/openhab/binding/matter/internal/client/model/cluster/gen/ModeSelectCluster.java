@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -140,7 +141,7 @@ null value indicates no standard namespace, and therefore, no standard semantic 
         }
     }
 
-    public ModeSelectCluster(String nodeId, int endpointId) {
+    public ModeSelectCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 80, "ModeSelect");
     }
 

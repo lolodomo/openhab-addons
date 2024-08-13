@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -59,7 +60,7 @@ MeasuredValue is updated continuously as new measurements are made.
 
 
 
-    public RelativeHumidityMeasurementCluster(String nodeId, int endpointId) {
+    public RelativeHumidityMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1029, "RelativeHumidityMeasurement");
     }
 

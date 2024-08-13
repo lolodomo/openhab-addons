@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -59,7 +60,7 @@ public class GroupsCluster extends BaseCluster {
         }
     }
 
-    public GroupsCluster(String nodeId, int endpointId) {
+    public GroupsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 4, "Groups");
     }
 

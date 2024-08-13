@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -49,7 +50,7 @@ Some companies may consider MAC Address to be protected data subject to PII hand
 
 
 
-    public WakeOnLanCluster(String nodeId, int endpointId) {
+    public WakeOnLanCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1283, "WakeOnLan");
     }
 

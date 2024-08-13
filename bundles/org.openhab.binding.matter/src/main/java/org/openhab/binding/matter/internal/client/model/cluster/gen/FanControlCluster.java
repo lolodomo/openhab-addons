@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -201,7 +202,7 @@ See Speed Rules for more details.
         }
     }
 
-    public FanControlCluster(String nodeId, int endpointId) {
+    public FanControlCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 514, "FanControl");
     }
 

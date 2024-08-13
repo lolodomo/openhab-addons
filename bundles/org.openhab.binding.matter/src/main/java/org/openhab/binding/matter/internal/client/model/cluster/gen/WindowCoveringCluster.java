@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -362,7 +363,7 @@ As a general rule, absolute positioning (in centimeters or tenth of a degrees) S
         }
     }
 
-    public WindowCoveringCluster(String nodeId, int endpointId) {
+    public WindowCoveringCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 258, "WindowCovering");
     }
 

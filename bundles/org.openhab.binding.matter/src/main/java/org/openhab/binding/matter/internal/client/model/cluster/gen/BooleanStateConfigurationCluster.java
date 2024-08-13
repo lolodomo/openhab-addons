@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -128,7 +129,7 @@ A suppressed alarm is still considered active and will remain so unless it is ac
         }
     }
 
-    public BooleanStateConfigurationCluster(String nodeId, int endpointId) {
+    public BooleanStateConfigurationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 128, "BooleanStateConfiguration");
     }
 

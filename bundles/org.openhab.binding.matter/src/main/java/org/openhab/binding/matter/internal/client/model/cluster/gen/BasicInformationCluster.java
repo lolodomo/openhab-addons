@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -241,7 +242,7 @@ This value shall NOT be smaller than the required minimum indicated in Section 8
     }
 
 
-    public BasicInformationCluster(String nodeId, int endpointId) {
+    public BasicInformationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 40, "BasicInformation");
     }
 

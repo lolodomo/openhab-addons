@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -43,7 +44,7 @@ The order of power sources on a Node is defined by the Order attribute of its as
 
 
 
-    public PowerSourceConfigurationCluster(String nodeId, int endpointId) {
+    public PowerSourceConfigurationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 46, "PowerSourceConfiguration");
     }
 

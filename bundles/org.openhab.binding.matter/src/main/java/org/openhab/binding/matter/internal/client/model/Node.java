@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.matter.internal.client.model;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 /**
@@ -19,6 +20,6 @@ import java.util.Map;
  *
  */
 public class Node {
-    public String id;
+    public BigInteger id;
     public Map<Integer, Endpoint> endpoints;
 }

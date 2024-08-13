@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -42,21 +43,21 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
     /**
     * The CurrentHeapFree attribute shall indicate the current amount of heap memory, in bytes, that are free for allocation. The effective amount may be smaller due to heap fragmentation or other reasons.
     */
-    public Long currentHeapFree; // 1 uint64 R V
+    public BigInteger currentHeapFree; // 1 uint64 R V
     /**
     * The CurrentHeapUsed attribute shall indicate the current amount of heap memory, in bytes, that is being used.
     */
-    public Long currentHeapUsed; // 2 uint64 R V
+    public BigInteger currentHeapUsed; // 2 uint64 R V
     /**
     * The CurrentHeapHighWatermark attribute shall indicate the maximum amount of heap memory, in bytes, that has been used by the Node. This value shall only be reset upon a Node reboot or upon receiving of the ResetWatermarks command.
     */
-    public Long currentHeapHighWatermark; // 3 uint64 R V
+    public BigInteger currentHeapHighWatermark; // 3 uint64 R V
     //Structs
      public class ThreadMetricsStruct {
         /**
         * The Id field shall be a server-assigned per-thread unique ID that is constant for the duration of the thread. Efforts SHOULD be made to avoid reusing ID values when possible.
         */
-        public Long id; // uint64
+        public BigInteger id; // uint64
         /**
         * The Name field shall be set to a vendor defined name or prefix of the software thread that is static for the duration of the thread.
         */
@@ -73,7 +74,7 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
         * The StackSize field shall indicate the amount of stack memory, in bytes, that has been allocated for use by the respective thread.
         */
         public Integer stackSize; // uint32
-        public ThreadMetricsStruct(Long id, String name, Integer stackFreeCurrent, Integer stackFreeMinimum, Integer stackSize) {
+        public ThreadMetricsStruct(BigInteger id, String name, Integer stackFreeCurrent, Integer stackFreeMinimum, Integer stackSize) {
             this.id = id;
             this.name = name;
             this.stackFreeCurrent = stackFreeCurrent;
@@ -95,7 +96,7 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
         }
     }
 
-    public SoftwareDiagnosticsCluster(String nodeId, int endpointId) {
+    public SoftwareDiagnosticsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 52, "SoftwareDiagnostics");
     }
 

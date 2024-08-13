@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -50,7 +51,7 @@ public class RefrigeratorAlarmCluster extends BaseCluster {
         }
     }
 
-    public RefrigeratorAlarmCluster(String nodeId, int endpointId) {
+    public RefrigeratorAlarmCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 87, "RefrigeratorAlarm");
     }
 

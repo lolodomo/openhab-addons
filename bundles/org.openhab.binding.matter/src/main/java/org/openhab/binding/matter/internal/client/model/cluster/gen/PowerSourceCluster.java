@@ -15,6 +15,7 @@
 
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -430,7 +431,7 @@ A node has a mains power source with Order as 0 (zero), but some application end
         }
     }
 
-    public PowerSourceCluster(String nodeId, int endpointId) {
+    public PowerSourceCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 47, "PowerSource");
     }
 
