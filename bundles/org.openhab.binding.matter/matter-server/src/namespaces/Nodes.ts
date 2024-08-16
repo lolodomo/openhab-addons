@@ -154,7 +154,7 @@ export class Nodes {
         options.commissioning = {
             nodeId: nodeId !== undefined ? NodeId(nodeId) : undefined,
             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
-            regulatoryCountryCode: "XX",
+            regulatoryCountryCode: "XX"
         };
 
         console.log(Logger.toJSON(options));

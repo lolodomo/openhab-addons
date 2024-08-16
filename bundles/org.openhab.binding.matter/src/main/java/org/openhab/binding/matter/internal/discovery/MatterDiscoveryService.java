@@ -82,7 +82,7 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
         String label = "Matter Device " + shortId + " " + (vendorName + " " + productName).trim();
         String path = idSting + ":" + endpointId;
         DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel(label)
-                .withProperty("nodeId", node.id).withProperty("endpointId", endpointId).withProperty("path", path)
+                .withProperty("nodeId", node.id.toString()).withProperty("endpointId", endpointId).withProperty("path", path)
                 .withRepresentationProperty("path").withBridge(bridgeUID).build();
         thingDiscovered(result);
     }
