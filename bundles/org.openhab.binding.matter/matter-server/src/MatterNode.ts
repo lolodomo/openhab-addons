@@ -91,6 +91,7 @@ export class MatterNode {
         }
         return node;
     }
+
     /**
      * Finds the given endpoint, included nested endpoints
      * @param node 

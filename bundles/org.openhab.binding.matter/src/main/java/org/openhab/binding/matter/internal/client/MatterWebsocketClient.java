@@ -322,17 +322,17 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         String[] parts = formattedCode.split(" ");
         CompletableFuture<JsonElement> future = null;
         if (parts.length == 2) {
-            future = sendMessage("nodes", "pair", new Object[] { "", parts[0], parts[1] });
+            future = sendMessage("nodes", "pairNode", new Object[] { "", parts[0], parts[1] });
         } else {
-            future = sendMessage("nodes", "pair", new Object[] { formattedCode });
+            future = sendMessage("nodes", "pairNode", new Object[] { formattedCode });
         }
         return future.thenAccept(obj -> {
             // Do nothing, just to complete the future
         });
     }
 
-    public CompletableFuture<Void> decommissionNode(BigInteger nodeId) {
-        CompletableFuture<JsonElement> future = sendMessage("nodes", "decommission", new Object[] { nodeId });
+    public CompletableFuture<Void> removeNode(BigInteger nodeId) {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "removeNode", new Object[] { nodeId });
         return future.thenAccept(obj -> {
             // Do nothing, just to complete the future
         });

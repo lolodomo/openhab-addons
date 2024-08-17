@@ -196,7 +196,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
                 + ".json";
         logger.debug("matter config: {}", storagePath);
         final ControllerConfiguration config = getConfigAs(ControllerConfiguration.class);
-        checkFuture = scheduler.scheduleAtFixedRate(this::checkNodes, 0, 5, TimeUnit.MINUTES);
+        // checkFuture = scheduler.scheduleAtFixedRate(this::checkNodes, 0, 5, TimeUnit.MINUTES);
         scheduler.execute(() -> {
             try {
                 if (!config.host.isBlank() && config.port > 0) {
@@ -241,14 +241,6 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         if (childHandler instanceof EndpointHandler handler) {
             BigInteger nodeId = handler.getNodeId();
             updateNode(nodeId);
-            // // TODO we need to check with the matter network if this node is connected or not. If it is, then update
-            // the
-            // // endpoint, if not we need to connect to it.
-            // synchronized (nodeEndpoints) {
-            // var endpoints = nodeEndpoints.get(nodeId);
-            // logger.debug("childHandlerInitialized endpoints {}", endpoints);
-            // Optional.ofNullable(endpoints).map(ep -> ep.get(endpointId)).ifPresent(handler::updateEndpoint);
-            // }
         }
     }
 
@@ -379,8 +371,9 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             if (lastEndpoint) {
                 try {
                     logger.debug("Decommissioning node {}", nodeId);
-                    client.decommissionNode(nodeId);
+                    client.removeNode(nodeId);
                     nodeEndpoints.remove(nodeId);
+                    disconnectedNodes.remove(nodeId);
                 } catch (Exception e) {
                     logger.debug("Could not decommission node {}", nodeId, e);
                 }
@@ -499,6 +492,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         nodesLastUpdate.put(nodeId, LocalDateTime.now());
     }
 
+    // disabled for now, not sure if this is needed
     private void checkNodes() {
         LocalDateTime checkTime = LocalDateTime.now().minusMinutes(60);
         nodesLastUpdate.forEach((nodeId, lastUpdate) -> {
@@ -506,6 +500,23 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
                 updateNode(nodeId);
             }
         });
-        disconnectedNodes.forEach(nodeId -> updateNode(nodeId));
+        if (disconnectedNodes.size() > 0) {
+            client.getCommissionedNodeIds(false).thenAccept(nodeIds -> {
+                // check to make sure a disconnected node is actually known by the controller.
+                // if its not, then we can never connect to it again.
+                Set<BigInteger> disconnectedNodesCopy = Set.copyOf(disconnectedNodes);
+                disconnectedNodesCopy.forEach(nodeId -> {
+                    if (nodeIds.contains(nodeId)) {
+                        updateNode(nodeId);
+                    } else {
+                        disconnectedNodes.remove(nodeId);
+                    }
+                });
+            }).exceptionally(e -> {
+                logger.debug("Error communicating with controller", e);
+                return null;
+            });
+
+        }
     }
 }

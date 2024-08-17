@@ -75,37 +75,7 @@ export class Nodes {
         return data;
     }
 
-    // async subscribeAllNodes(maxSubscriptionInterval = 300, minSubscriptionInterval = 0) {
-    //     this.subscribeNode("all", maxSubscriptionInterval, minSubscriptionInterval);
-    // }
-
-    // async subscribeNode(nodeIdStr: string | number, maxSubscriptionInterval = 300, minSubscriptionInterval = 0) {
-    //     if (this.theNode.commissioningController === undefined) {
-    //         throw new Error("CommissioningController not initialized");
-    //     }
-    //     let nodeIds = this.theNode.commissioningController.getCommissionedNodes();
-    //     if (nodeIdStr !== "all") {
-    //         const cmdNodeId = NodeId(BigInt(nodeIdStr));
-    //         nodeIds = nodeIds.filter(nodeId => nodeId === cmdNodeId);
-    //         if (!nodeIds.length) {
-    //             throw new Error(`Node ${nodeIdStr} not commissioned`);
-    //         }
-    //     }
-
-    //     //const autoSubscribe = minSubscriptionInterval !== undefined;
-    //     const autoSubscribe = true;
-    //     for (const nodeIdToProcess of nodeIds) {
-    //         logger.debug("Subscribing to node", nodeIdToProcess)
-    //         const node = await this.theNode.commissioningController.connectNode(nodeIdToProcess, {
-    //             autoSubscribe,
-    //             subscribeMinIntervalFloorSeconds: minSubscriptionInterval,
-    //             subscribeMaxIntervalCeilingSeconds: maxSubscriptionInterval,
-    //             ... this.nodeListener,
-    //         });
-    //     }
-    // }
-
-    async pair(pairingCode: string | undefined, shortDiscriminator: number | undefined, setupPinCode: number | undefined) {
+    async pairNode(pairingCode: string | undefined, shortDiscriminator: number | undefined, setupPinCode: number | undefined) {
         let discriminator: number | undefined;
         let nodeIdStr: string | undefined;
         let ipPort: number | undefined;
@@ -214,7 +184,7 @@ export class Nodes {
         return node.nodeId;
     }
 
-    async disconnect(nodeIdStr: string) {
+    async disconnectNode(nodeIdStr: string) {
         if (this.theNode.commissioningController === undefined) {
             console.log("Controller not initialized, nothing to disconnect.");
             return;
@@ -239,6 +209,10 @@ export class Nodes {
         }
     }
 
+    async removeNode(nodeId: number | string) {
+        await this.theNode.commissioningController?.removeNode(NodeId(BigInt(nodeId)), true);
+    }
+
     async basicCommissioningWindow(nodeId: number | string, timeout = 900) {
 
         const node = await this.theNode.getNode(nodeId);
@@ -260,11 +234,6 @@ export class Nodes {
             `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
         );
         console.log(`Manual pairing code: ${manualPairingCode}`);
-    }
-
-    async decommission(nodeId: number | string) {
-        const node = await this.theNode.getNode(nodeId);
-        await node.decommission();
     }
 
     async logNode(nodeId: number | string) {
