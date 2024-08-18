@@ -14,6 +14,7 @@ export class Controller {
     constructor(private ws: WebSocketSession, private theNode: MatterNode) {
         //set up listeners to send events back to the client
         this.nodes = new Nodes(theNode, {
+            autoSubscribe: true,
             attributeChangedCallback: (peerNodeId, data) => {
                 logger.debug(`attributeChangedCallback ${peerNodeId} ${Logger.toJSON(data)}`);
                 data.path.nodeId = peerNodeId;
@@ -33,7 +34,6 @@ export class Controller {
                 ws.sendEvent("nodeStateInformation", data)
             }
         });
-        //this.nodes.subscribeAllNodes();
         this.clusters = new Clusters(theNode);
     }
 
