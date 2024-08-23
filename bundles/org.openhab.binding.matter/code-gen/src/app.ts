@@ -144,7 +144,7 @@ function matterNativeTypeToJavaNativeType(field: AnyElement) {
         case "map16":
         case "map32":
         case "map64":
-            //these are complex types and do not map to a Java native type
+        //these are complex types and do not map to a Java native type
         default:
             return undefined;
     }
@@ -380,6 +380,8 @@ const clusterSource = fs.readFileSync('src/templates/cluster-class.hbs', 'utf8')
 const clusterTemplate = handlebars.compile(clusterSource);
 const dataTypeSource = fs.readFileSync('src/templates/data-types-class.hbs', 'utf8');
 const dataTypeTemplate = handlebars.compile(dataTypeSource);
+const deviceTypeSource = fs.readFileSync('src/templates/device-types-class.hbs', 'utf8');
+const deviceTypeTemplate = handlebars.compile(deviceTypeSource);
 const thingTypeSource = fs.readFileSync('src/templates/cluster-thing-types-class.hbs', 'utf8');
 const thingTypeTemplate = handlebars.compile(thingTypeSource);
 
@@ -406,6 +408,9 @@ fs.mkdir('out', { recursive: true }, (err) => {
 const dataTypeClass = dataTypeTemplate(datatypes);
 fs.writeFileSync(`out/DataTypes.java`, dataTypeClass);
 
+const deviceTypeClass = deviceTypeTemplate({ deviceTypes: Matter.children.filter(c => c.tag == 'deviceType' && c.id !== undefined) });
+fs.writeFileSync(`out/DeviceTypes.java`, deviceTypeClass);
+
 const thingTypesClass = thingTypeTemplate({ clusters: clusters });
 fs.writeFileSync(`out/ClusterThingTypes.java`, thingTypesClass);
 
@@ -416,5 +421,3 @@ clusters.forEach(cluster => {
     const javaCode = clusterTemplate(cluster);
     fs.writeFileSync(`out/${cluster.name}Cluster.java`, javaCode);
 });
-
-

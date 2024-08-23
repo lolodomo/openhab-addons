@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.matter.internal.discovery;
 
+import java.util.stream.Collectors;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
@@ -19,6 +21,7 @@ import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ClusterThingTypes;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.DescriptorCluster;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
@@ -77,14 +80,22 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
                 productName = basicCluster.productName;
             }
         }
-        String idSting = node.id.toString();
-        String shortId = (idSting.length() > 5 ? idSting.substring(idSting.length() - 5) : idSting) + "-" + endpointId;
-        String label = "Matter Device " + shortId + " " + (vendorName + " " + productName).trim();
-        String path = idSting + ":" + endpointId;
-        DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel(label)
-                .withProperty("nodeId", node.id.toString()).withProperty("endpointId", endpointId).withProperty("path", path)
-                .withRepresentationProperty("path").withBridge(bridgeUID).build();
-        thingDiscovered(result);
+        Endpoint device = node.endpoints.get(endpointId);
+        if (device != null) {
+            DescriptorCluster cluster = (DescriptorCluster) device.clusters.get(DescriptorCluster.CLUSTER_NAME);
+            String deviceTypeIds = cluster.deviceTypeList.stream().map(d -> d.deviceType.toString())
+                    .collect(Collectors.joining(","));
+            String idSting = node.id.toString();
+            String shortId = (idSting.length() > 5 ? idSting.substring(idSting.length() - 5) : idSting) + "-"
+                    + endpointId;
+            String label = "Matter Device " + shortId + " " + (vendorName + " " + productName).trim();
+            String path = idSting + ":" + endpointId;
+            DiscoveryResult result = DiscoveryResultBuilder.create(thingUID).withLabel(label)
+                    .withProperty("nodeId", node.id.toString()).withProperty("endpointId", endpointId)
+                    .withProperty("path", path).withProperty("deviceTypes", deviceTypeIds)
+                    .withRepresentationProperty("path").withBridge(bridgeUID).build();
+            thingDiscovered(result);
+        }
     }
 
     @Override

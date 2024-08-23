@@ -14,6 +14,7 @@ package org.openhab.binding.matter.internal.client;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.net.URI;
@@ -381,17 +382,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                                 .forName(BaseCluster.class.getPackageName() + ".gen." + clusterName + "Cluster");
                         if (BaseCluster.class.isAssignableFrom(clazz)) {
                             BaseCluster cluster = context.deserialize(clusterElement, clazz);
-                            for (Map.Entry<String, JsonElement> entry : clusterElement.getAsJsonObject().entrySet()) {
-                                Field field;
-                                try {
-                                    field = getField(clazz, entry.getKey());
-                                } catch (NoSuchFieldException e) {
-                                    logger.debug("Skipping field {}", entry.getKey());
-                                    continue;
-                                }
-                                field.setAccessible(true);
-                                field.set(cluster, gson.fromJson(entry.getValue(), field.getType()));
-                            }
+                            deserializeFields(cluster, clusterElement, clazz, context);
                             endpoint.clusters.put(clusterName, cluster);
                         }
                     } catch (ClassNotFoundException e) {
@@ -404,6 +395,34 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                 node.endpoints.put(endpoint.number, endpoint);
             }
             return node;
+        }
+
+        private void deserializeFields(Object instance, JsonElement jsonElement, Class<?> clazz,
+                JsonDeserializationContext context) throws IllegalAccessException {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+                String fieldName = entry.getKey();
+                JsonElement element = entry.getValue();
+
+                try {
+                    Field field = getField(clazz, fieldName);
+                    field.setAccessible(true);
+
+                    if (List.class.isAssignableFrom(field.getType())) {
+                        // Handle lists generically
+                        Type fieldType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+                        List<?> list = context.deserialize(element,
+                                TypeToken.getParameterized(List.class, fieldType).getType());
+                        field.set(instance, list);
+                    } else {
+                        // Handle normal fields
+                        Object fieldValue = context.deserialize(element, field.getType());
+                        field.set(instance, fieldValue);
+                    }
+                } catch (NoSuchFieldException e) {
+                    logger.debug("Skipping field {}", fieldName);
+                }
+            }
         }
 
         private Field getField(Class<?> clazz, String fieldName) throws NoSuchFieldException {

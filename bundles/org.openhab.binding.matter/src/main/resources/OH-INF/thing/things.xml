@@ -51,6 +51,7 @@
 
 		<properties>
 			<property name="path"></property>
+			<property name="deviceTypes"></property>
 		</properties>
 
 		<representation-property>path</representation-property>

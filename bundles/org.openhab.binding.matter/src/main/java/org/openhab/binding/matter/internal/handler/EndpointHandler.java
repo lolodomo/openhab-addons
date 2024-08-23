@@ -15,8 +15,12 @@ package org.openhab.binding.matter.internal.handler;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -56,6 +60,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
     private BigInteger nodeId = BigInteger.valueOf(0);
     protected int endpointId;
+    private List<Integer> deviceTypes = Collections.emptyList();
     private Map<String, ClusterConverter> channelIdMap = new HashMap<String, ClusterConverter>();
     private Map<Integer, ClusterConverter> clusterIdMap = new HashMap<Integer, ClusterConverter>();
     private @Nullable MatterWebsocketClient cachedClient;
@@ -86,6 +91,10 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         EndpointConfiguration config = getConfigAs(EndpointConfiguration.class);
         nodeId = new BigInteger(config.nodeId);
         endpointId = config.endpointId;
+        String deviceTypesProp = getThing().getProperties().get("deviceTypes");
+        if (deviceTypesProp != null) {
+            deviceTypes = Arrays.stream(deviceTypesProp.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        }
         logger.debug("initialize endpoint {}", endpointId);
         ControllerHandler handler = controllerHandler();
         if (handler == null) {
@@ -124,6 +133,10 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
 
     public int getEndpointId() {
         return endpointId;
+    }
+
+    public List<Integer> getDeviceTypes() {
+        return deviceTypes;
     }
 
     @SuppressWarnings({ "null", "unused" })
