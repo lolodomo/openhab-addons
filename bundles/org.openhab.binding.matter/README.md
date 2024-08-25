@@ -23,12 +23,15 @@ This binding does not require any general configuration settings.
 
 ### Controller Thing Configuration
 
-| Name      | Type   | Description                        | Default | Required | Advanced |
-|-----------|--------|------------------------------------|---------|----------|----------|
-| port      | number | The port number for the controller | N/A     | yes      | no       |
-| host      | text   | The host address of the controller | N/A     | yes      | no       |
-| portId    | number | The port ID for communication      | N/A     | yes      | no       |
-| pairCode  | text   | The pairing to search for a device (not implemented) | N/A     | yes      | no       |
+| Name                      | Type    | Description                                                                                                                       | Default | Required | Advanced |
+|---------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------|---------|----------|----------|
+| nodeId                    | number  | The matter node ID for this controller                                                                                            | 0       | yes      | no       |
+| decommissionNodesOnDelete | boolean | Decommission (unpair) Matter nodes from the Matter network when the last endpoint thing of a node is deleted/removed from openHAB | true    | yes      | no       |
+| pairCode                  | text    | The 12 digit pairing code or short code and key to add a new IP matter device                                                     | N/A     | no       | no       |
+| port                      | number  | The port number for the controller                                                                                                | N/A     | no       | yes      |
+| host                      | text    | The host address of the controller                                                                                                | N/A     | no       | yes      |
+
+Note: pairCode is only available in 4.3 builds 
 
 ### Endpoint Thing Configuration
 
@@ -102,7 +105,7 @@ Possible channels include:
 ### Thing Configuration
 ```java
 Thing configuration example for the Matter controller:
-Thing matter:controller:myController [ port=1234, host="192.168.1.100", portId=1, pairCode="123-456" ]
+Thing matter:controller:myController [ port=1234, host="192.168.1.100", portId=1 ]
 
 Thing configuration example for a Matter endpoint:
 Thing matter:endpoint:myEndpoint [ nodeId="node1", endpointId=1 ]

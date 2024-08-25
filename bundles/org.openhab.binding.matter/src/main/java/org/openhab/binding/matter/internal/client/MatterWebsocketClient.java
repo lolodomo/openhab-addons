@@ -420,7 +420,7 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                         field.set(instance, fieldValue);
                     }
                 } catch (NoSuchFieldException e) {
-                    logger.debug("Skipping field {}", fieldName);
+                    logger.trace("Skipping field {}", fieldName);
                 }
             }
         }

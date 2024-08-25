@@ -6,8 +6,10 @@ import { Clusters } from "./namespaces/Clusters";
 import { WebSocketSession } from "./app";
 const logger = Logger.get("Controller");
 
+/**
+ * This class exists to expose the "nodes" and "clusters" namespaces to websocket clients
+ */
 export class Controller {
-    //this class mainly exists to expose the Nodes and Clusters namespaces
     public nodes: Nodes;
     public clusters: Clusters;
 

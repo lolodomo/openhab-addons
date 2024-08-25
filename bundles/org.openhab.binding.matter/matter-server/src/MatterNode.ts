@@ -10,6 +10,9 @@ import { StorageBackendJsonFile } from "@project-chip/matter-node.js/storage";
 
 const logger = Logger.get("Node");
 
+/**
+ * This class contains all the core Matter functionality uses by "Cluster", "Nodes", etc... 
+ */
 export class MatterNode {
     private storage?: StorageBackendJsonFile;
     private storageManager?: StorageManager;

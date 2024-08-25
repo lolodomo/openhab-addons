@@ -137,7 +137,8 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         }
     }
 
-    public void handleConfigurationUpdate2(Map<String, Object> configurationParameters)
+    @Override
+    public void handleConfigurationUpdate(Map<String, Object> configurationParameters)
             throws ConfigValidationException {
         logger.debug("handleConfigurationUpdate");
         validateConfigurationParameters(configurationParameters);

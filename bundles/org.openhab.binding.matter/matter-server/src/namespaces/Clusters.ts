@@ -5,6 +5,9 @@ import { ClusterModel, CommandModel, MatterModel } from "@project-chip/matter.js
 
 const logger = Logger.get("Clusters");
 
+/**
+ * This class is used for websocket clients interacting with Matter Clusters to send commands like OnOff, LevelControl, etc... 
+ */
 export class Clusters {
     constructor(private theNode: MatterNode) {
     }

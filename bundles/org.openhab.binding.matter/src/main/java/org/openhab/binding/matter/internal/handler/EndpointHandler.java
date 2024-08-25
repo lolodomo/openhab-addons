@@ -165,14 +165,14 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             }
         }
         clusters.forEach((clusterName, cluster) -> {
-            logger.debug("checking cluster {} for handler", clusterName);
+            logger.trace("checking cluster {} for handler", clusterName);
             Integer id = cluster.id;
             ClusterConverter clusterConverter = clusterIdMap.get(id);
             if (clusterConverter == null) {
                 // lookup handler
                 // c = new handler
                 Class<? extends ClusterConverter> clazz = ClusterConverter.getConverterClass(id);
-                logger.debug("Creating handler {}", clazz);
+                logger.trace("Creating handler {}", clazz);
                 if (clazz != null) {
                     try {
                         Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class };
@@ -184,7 +184,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
                         }
                         // now we need to create channels and add those to the channel map
                         converter.createChannels(cluster).forEach(channel -> {
-                            logger.debug("Added channel {}", channel.getId());
+                            logger.trace("Added channel {}", channel.getId());
                             channelIdMap.put(channel.getId(), converter);
                         });
                         clusterConverter = converter;
@@ -195,7 +195,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
                 }
             }
             if (clusterConverter == null) {
-                logger.debug("No handler found for cluster {}", clusterName);
+                logger.trace("No handler found for cluster {}", clusterName);
                 return;
             }
             clusterConverter.updateCluster(cluster);

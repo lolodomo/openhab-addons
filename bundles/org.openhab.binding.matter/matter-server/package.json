@@ -24,10 +24,10 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "^0.10.0-alpha.0-20240816-7e794c67",
-        "@project-chip/matter.js": "^0.10.0-alpha.0-20240816-7e794c67",
+        "@project-chip/matter-node.js": "v0.10.0-alpha.0-20240825-d5b4ec2c",
+        "@project-chip/matter.js": "v0.10.0-alpha.0-20240825-d5b4ec2c",
         "uuid": "^9.0.1",
-        "ws": "^8.14.2",
+        "ws": "^8.18.0",
         "yargs": "^17.7.2"
     },
     "files": [
