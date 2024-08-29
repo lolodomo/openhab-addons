@@ -218,6 +218,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     @Override
     public void dispose() {
         logger.debug("dispose");
+        ready = false;
         running = false;
         ScheduledFuture<?> reconnectFuture = this.reconnectFuture;
         if (reconnectFuture != null) {
@@ -246,6 +247,18 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     }
 
     @Override
+    public void childHandlerDisposed(ThingHandler childHandler, Thing childThing) {
+        super.childHandlerDisposed(childHandler, childThing);
+        logger.debug("childHandlerDisposed {}", childHandler);
+        if (!ready) {
+            return;
+        }
+        if (childHandler instanceof EndpointHandler handler) {
+            endpointRemoved(handler.getNodeId(), handler.getEndpointId(), false);
+        }
+    }
+
+    @Override
     public void setDiscoveryService(@Nullable MatterDiscoveryService service) {
         logger.debug("setDiscoveryService");
         this.discoveryService = service;
@@ -270,7 +283,10 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             case RECONNECTING:
                 updateEndpointStatuses(message.nodeId, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
                         "Node " + message.state.name());
-                disconnectedNodes.add(message.nodeId);
+                // only add an endpoint to our disconnect list if we care about it
+                if (nodeEndpoints.containsKey(message.nodeId)) {
+                    disconnectedNodes.add(message.nodeId);
+                }
                 break;
             case WAITINGFORDEVICEDISCOVERY:
                 break;
@@ -350,32 +366,36 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         });
     }
 
-    protected void endpointRemoved(BigInteger nodeId, int endpointId) {
+    protected void endpointRemoved(BigInteger nodeId, int endpointId, boolean removeIfLast) {
         logger.debug("endpointRemoved endpoint {}:{}", nodeId, endpointId);
 
-        // check if we remove deleted endpoint things from the actual matter network
-        if (!getConfigAs(ControllerConfiguration.class).decommissionNodesOnDelete) {
-            return;
-        }
         // only remove the node from the network if all endpoints things on the node are deleted
         synchronized (nodeEndpoints) {
             boolean lastEndpoint = true;
             for (Thing thing : getThing().getThings()) {
                 ThingHandler handler = thing.getHandler();
                 if (handler instanceof EndpointHandler endpointHandler) {
-                    if (endpointHandler.endpointId == endpointId) {
-                        continue;
+                    if (endpointHandler.getNodeId().equals(nodeId)) {
+                        // if this handler has another endpoint on the node, then its not last
+                        if (endpointHandler.endpointId != endpointId) {
+                            lastEndpoint = false;
+                            break;
+                        }
                     }
-                    lastEndpoint = false;
-                    break;
                 }
             }
             if (lastEndpoint) {
                 try {
                     logger.debug("Decommissioning node {}", nodeId);
-                    client.removeNode(nodeId);
                     nodeEndpoints.remove(nodeId);
                     disconnectedNodes.remove(nodeId);
+                    // check if we remove deleted endpoint things from the actual matter network
+                    if (removeIfLast && getConfigAs(ControllerConfiguration.class).decommissionNodesOnDelete) {
+                        logger.debug("Decommissioning node {}", nodeId);
+                        client.removeNode(nodeId);
+                    } else {
+                        client.disconnectNode(nodeId);
+                    }
                 } catch (Exception e) {
                     logger.debug("Could not decommission node {}", nodeId, e);
                 }

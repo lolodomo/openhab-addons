@@ -184,18 +184,18 @@ export class Nodes {
         return node.nodeId;
     }
 
-    async disconnectNode(nodeIdStr: string) {
+    async disconnectNode(nodeId: number | string) {
         if (this.theNode.commissioningController === undefined) {
             console.log("Controller not initialized, nothing to disconnect.");
             return;
         }
 
         let nodeIds = this.theNode.commissioningController.getCommissionedNodes();
-        if (nodeIdStr !== "all") {
-            const cmdNodeId = NodeId(BigInt(nodeIdStr));
+        if (nodeId !== "all") {
+            const cmdNodeId = NodeId(BigInt(nodeId));
             nodeIds = nodeIds.filter(nodeId => nodeId === cmdNodeId);
             if (!nodeIds.length) {
-                throw new Error(`Node ${nodeIdStr} not commissioned`);
+                throw new Error(`Node ${nodeId} not commissioned`);
             }
         }
 

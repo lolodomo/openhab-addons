@@ -205,7 +205,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         super.handleRemoval();
         ControllerHandler bridge = controllerHandler();
         if (bridge != null) {
-            bridge.endpointRemoved(nodeId, endpointId);
+            bridge.endpointRemoved(nodeId, endpointId, true);
         }
     }
 

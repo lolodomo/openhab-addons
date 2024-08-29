@@ -340,6 +340,13 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
         });
     }
 
+    public CompletableFuture<Void> disconnectNode(BigInteger nodeId) {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "disconnectNode", new Object[] { nodeId });
+        return future.thenAccept(obj -> {
+            // Do nothing, just to complete the future
+        });
+    }
+
     public CompletableFuture<Void> clusterCommand(BigInteger nodeId, Integer endpointId, String clusterName,
             ClusterCommand command) {
         Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, command.commandName, command.args };
