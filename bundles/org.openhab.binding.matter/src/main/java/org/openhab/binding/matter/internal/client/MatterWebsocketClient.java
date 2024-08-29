@@ -45,6 +45,7 @@ import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessa
 import org.openhab.binding.matter.internal.client.model.ws.Event;
 import org.openhab.binding.matter.internal.client.model.ws.Message;
 import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
+import org.openhab.binding.matter.internal.client.model.ws.Path;
 import org.openhab.binding.matter.internal.client.model.ws.Request;
 import org.openhab.binding.matter.internal.client.model.ws.Response;
 import org.openhab.binding.matter.internal.util.NodeManager;
@@ -436,6 +437,37 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
                     return getField(superClass, fieldName);
                 }
             }
+        }
+    }
+
+    class AttributeChangedMessageDeserializer implements JsonDeserializer<AttributeChangedMessage> {
+
+        @Override
+        public @Nullable AttributeChangedMessage deserialize(JsonElement json, Type typeOfT,
+                JsonDeserializationContext context) throws JsonParseException {
+            JsonObject jsonObject = json.getAsJsonObject();
+
+            Path path = context.deserialize(jsonObject.get("path"), Path.class);
+            Long version = jsonObject.get("version").getAsLong();
+
+            JsonElement valueElement = jsonObject.get("value");
+            Object value = null;
+            if (valueElement.isJsonPrimitive()) {
+                JsonPrimitive primitive = valueElement.getAsJsonPrimitive();
+                if (primitive.isNumber()) {
+                    value = primitive.getAsNumber();
+                } else if (primitive.isString()) {
+                    value = primitive.getAsString();
+                } else if (primitive.isBoolean()) {
+                    value = primitive.getAsBoolean();
+                }
+            } else if (valueElement.isJsonArray()) {
+                value = context.deserialize(valueElement.getAsJsonArray(), List.class);
+            } else {
+                value = valueElement.toString();
+            }
+
+            return new AttributeChangedMessage(path, version, value);
         }
     }
 

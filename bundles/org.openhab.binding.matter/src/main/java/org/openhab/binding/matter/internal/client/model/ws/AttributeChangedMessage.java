@@ -19,5 +19,19 @@ package org.openhab.binding.matter.internal.client.model.ws;
 public class AttributeChangedMessage {
     public Path path;
     public Long version;
-    public String value;
+    public Object value;
+
+    public AttributeChangedMessage() {
+    }
+
+    /**
+     * @param path
+     * @param version
+     * @param value
+     */
+    public AttributeChangedMessage(Path path, Long version, Object value) {
+        this.path = path;
+        this.version = version;
+        this.value = value;
+    }
 }

@@ -83,8 +83,7 @@ public class OnOffConverter extends ClusterConverter {
         logger.debug("OnEvent: {}", message.path.attributeName);
         switch (message.path.attributeName) {
             case "onOff":
-                handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF,
-                        OnOffType.from(Boolean.valueOf(message.value)));
+                handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from((Boolean) message.value));
                 break;
             default:
                 logger.debug("Unknown attribute {}", message.path.attributeName);

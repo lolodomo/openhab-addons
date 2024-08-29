@@ -169,8 +169,6 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             Integer id = cluster.id;
             ClusterConverter clusterConverter = clusterIdMap.get(id);
             if (clusterConverter == null) {
-                // lookup handler
-                // c = new handler
                 Class<? extends ClusterConverter> clazz = ClusterConverter.getConverterClass(id);
                 logger.trace("Creating handler {}", clazz);
                 if (clazz != null) {

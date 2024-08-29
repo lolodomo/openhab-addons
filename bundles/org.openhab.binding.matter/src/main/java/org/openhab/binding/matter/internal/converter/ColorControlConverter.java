@@ -170,21 +170,22 @@ public class ColorControlConverter extends ClusterConverter {
     @Override
     public void onEvent(AttributeChangedMessage message) {
         logger.debug("OnEvent: {}", message.path.attributeName);
+        Integer numberValue = message.value instanceof Number ? ((Number) message.value).intValue() : 0;
         switch (message.path.attributeName) {
             case "currentX":
-                lastX = Integer.parseInt(message.value);
+                lastX = numberValue;
                 xChanged = true;
                 break;
             case "currentY":
-                lastY = Integer.parseInt(message.value);
+                lastY = numberValue;
                 yChanged = true;
                 break;
             case "currentHue":
-                lastHue = Integer.parseInt(message.value);
+                lastHue = numberValue;
                 hueChanged = true;
                 break;
             case "currentSaturation":
-                lastSaturation = Integer.parseInt(message.value);
+                lastSaturation = numberValue;
                 saturationChanged = true;
                 break;
             case "colorTemperatureMireds":
@@ -192,20 +193,20 @@ public class ColorControlConverter extends ClusterConverter {
             case "enhancedCurrentHue":
                 break;
             case "onOff":
-                lastOnOff = OnOffType.from(Boolean.valueOf(message.value));
+                lastOnOff = OnOffType.from((Boolean) message.value);
                 handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, lastOnOff);
                 handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL,
                         lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
                 break;
             case "currentLevel":
                 logger.debug("currentLevel {}", message.value);
-                lastLevel = levelToPercent(Integer.parseInt(message.value));
+                lastLevel = levelToPercent(numberValue);
                 handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
                 handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
                 updateBrightness(lastLevel);
                 break;
             default:
-                logger.debug("Unknow attribute {}", message.path.attributeName);
+                logger.debug("Unknown attribute {}", message.path.attributeName);
         }
         if (supportsHue && (hueChanged || saturationChanged)) {
             if (colorUpdateTimer != null) {

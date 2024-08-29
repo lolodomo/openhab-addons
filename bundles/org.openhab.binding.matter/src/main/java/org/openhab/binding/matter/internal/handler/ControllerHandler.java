@@ -197,7 +197,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
                 + ".json";
         logger.debug("matter config: {}", storagePath);
         final ControllerConfiguration config = getConfigAs(ControllerConfiguration.class);
-        // checkFuture = scheduler.scheduleAtFixedRate(this::checkNodes, 0, 5, TimeUnit.MINUTES);
+        checkFuture = scheduler.scheduleAtFixedRate(this::checkNodes, 0, 1, TimeUnit.MINUTES);
         scheduler.execute(() -> {
             try {
                 if (!config.host.isBlank() && config.port > 0) {
@@ -270,6 +270,7 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             case RECONNECTING:
                 updateEndpointStatuses(message.nodeId, ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
                         "Node " + message.state.name());
+                disconnectedNodes.add(message.nodeId);
                 break;
             case WAITINGFORDEVICEDISCOVERY:
                 break;
@@ -493,14 +494,13 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         nodesLastUpdate.put(nodeId, LocalDateTime.now());
     }
 
-    // disabled for now, not sure if this is needed
     private void checkNodes() {
-        LocalDateTime checkTime = LocalDateTime.now().minusMinutes(60);
-        nodesLastUpdate.forEach((nodeId, lastUpdate) -> {
-            if (lastUpdate.isBefore(checkTime)) {
-                updateNode(nodeId);
-            }
-        });
+        // LocalDateTime checkTime = LocalDateTime.now().minusMinutes(5);
+        // nodesLastUpdate.forEach((nodeId, lastUpdate) -> {
+        // if (lastUpdate.isBefore(checkTime)) {
+        // updateNode(nodeId);
+        // }
+        // });
         if (disconnectedNodes.size() > 0) {
             client.getCommissionedNodeIds(false).thenAccept(nodeIds -> {
                 // check to make sure a disconnected node is actually known by the controller.

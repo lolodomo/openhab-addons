@@ -115,14 +115,14 @@ public class LevelControlConverter extends ClusterConverter {
         logger.debug("OnEvent: {}", message.path.attributeName);
         switch (message.path.attributeName) {
             case "onOff":
-                lastOnOff = OnOffType.from(Boolean.valueOf(message.value));
+                lastOnOff = OnOffType.from((Boolean) message.value);
                 handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, lastOnOff);
                 handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL,
                         lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
                 break;
             case "currentLevel":
                 logger.debug("currentLevel {}", message.value);
-                lastLevel = levelToPercent(Integer.parseInt(message.value));
+                lastLevel = levelToPercent(((Number) message.value).intValue());
                 handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
                 handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
                 break;
