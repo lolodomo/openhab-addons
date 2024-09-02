@@ -41,29 +41,33 @@ public class NodeRunner {
 
     private final String nodePath;
     private Process nodeProcess;
-    private final List<NodeExitListener> exitListeners = new ArrayList<>();
+    private boolean ready;
+    private int port;
+    private final List<NodeProcessListener> processListeners = new ArrayList<>();
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public NodeRunner(String nodePath) {
         this.nodePath = nodePath;
     }
 
-    public interface NodeExitListener {
+    public interface NodeProcessListener {
         void onNodeExit(int exitCode);
+
+        void onNodeReady(int port);
     }
 
-    public void addExitListener(NodeExitListener listener) {
-        exitListeners.add(listener);
+    public void addProcessListener(NodeProcessListener listener) {
+        processListeners.add(listener);
     }
 
-    public void removeExitListener(NodeExitListener listener) {
-        exitListeners.remove(listener);
+    public void removeProcessListener(NodeProcessListener listener) {
+        processListeners.remove(listener);
     }
 
     public int runNodeWithResource(String resourcePath, String... additionalArgs) throws IOException {
         Path scriptPath = extractResourceToTempFile(resourcePath);
 
-        int port = findAvailablePort();
+        port = findAvailablePort();
         List<String> command = new ArrayList<>();
         command.add(nodePath);
         command.add(scriptPath.toString());
@@ -113,6 +117,10 @@ public class NodeRunner {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (!ready) {
+                    ready = true;
+                    notifyReadyListeners();
+                }
                 Matcher matcher = LOG_PATTERN.matcher(line);
                 if (matcher.matches()) {
                     String logLevel = matcher.group(1);
@@ -120,7 +128,7 @@ public class NodeRunner {
                     String message = matcher.group(3);
                     logMessage(logLevel, component + ": " + message);
                 } else {
-                    logger.debug("{}", line);
+                    logMessage("DEBUG", "none: " + line);
                 }
             }
         } catch (IOException e) {
@@ -144,8 +152,14 @@ public class NodeRunner {
     }
 
     private void notifyExitListeners(int exitCode) {
-        for (NodeExitListener listener : exitListeners) {
+        for (NodeProcessListener listener : processListeners) {
             listener.onNodeExit(exitCode);
+        }
+    }
+
+    private void notifyReadyListeners() {
+        for (NodeProcessListener listener : processListeners) {
+            listener.onNodeReady(port);
         }
     }
 

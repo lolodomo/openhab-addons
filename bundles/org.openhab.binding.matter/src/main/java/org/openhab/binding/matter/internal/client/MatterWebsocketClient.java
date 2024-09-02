@@ -28,7 +28,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -50,7 +49,7 @@ import org.openhab.binding.matter.internal.client.model.ws.Request;
 import org.openhab.binding.matter.internal.client.model.ws.Response;
 import org.openhab.binding.matter.internal.util.NodeManager;
 import org.openhab.binding.matter.internal.util.NodeRunner;
-import org.openhab.binding.matter.internal.util.NodeRunner.NodeExitListener;
+import org.openhab.binding.matter.internal.util.NodeRunner.NodeProcessListener;
 import org.openhab.core.common.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +73,7 @@ import com.google.gson.reflect.TypeToken;
  *
  */
 @NonNullByDefault
-public class MatterWebsocketClient implements WebSocketListener, NodeExitListener {
+public class MatterWebsocketClient implements WebSocketListener {
 
     private static final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
 
@@ -99,19 +98,34 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
 
     public void connect(String storagePath) throws Exception {
         disconnect();
-        final int port = startNodeJs();
-        scheduler.schedule(() -> {
-            try {
-                connectWebsocket("localhost", port, storagePath);
-            } catch (Exception e) {
+        NodeManager nodeManager = new NodeManager();
+        String nodePath = nodeManager.getNodePath();
+        NodeRunner nodeRunner = new NodeRunner(nodePath);
+        nodeRunner.addProcessListener(new NodeProcessListener() {
+            @Override
+            public void onNodeExit(int exitCode) {
                 disconnect();
-                logger.error("Could not connect", e);
                 for (MatterClientListener listener : clientListeners) {
-                    String msg = e.getLocalizedMessage();
-                    listener.onDisconnect(msg != null ? msg : "Exception connecting");
+                    listener.onDisconnect("Exit code " + exitCode);
                 }
             }
-        }, 5, TimeUnit.SECONDS);
+
+            @Override
+            public void onNodeReady(int port) {
+                try {
+                    connectWebsocket("localhost", port, storagePath);
+                } catch (Exception e) {
+                    disconnect();
+                    logger.error("Could not connect", e);
+                    for (MatterClientListener listener : clientListeners) {
+                        String msg = e.getLocalizedMessage();
+                        listener.onDisconnect(msg != null ? msg : "Exception connecting");
+                    }
+                }
+            }
+        });
+        nodeRunner.runNodeWithResource(MATTER_JS_PATH);
+        this.nodeRunner = nodeRunner;
     }
 
     private void connectWebsocket(String host, int port, String storagePath) throws Exception {
@@ -475,29 +489,6 @@ public class MatterWebsocketClient implements WebSocketListener, NodeExitListene
             }
 
             return new AttributeChangedMessage(path, version, value);
-        }
-    }
-
-    // we should move this into a shared service, so we only have 1 running, and it can be reused.
-    private int startNodeJs() throws IOException {
-        NodeManager nodeManager = new NodeManager();
-        String nodePath = nodeManager.getNodePath();
-        NodeRunner oldRunner = this.nodeRunner;
-        if (oldRunner != null) {
-            oldRunner.removeExitListener(this);
-            oldRunner.stopNode();
-        }
-        NodeRunner newRunner = new NodeRunner(nodePath);
-        newRunner.addExitListener(this);
-        this.nodeRunner = newRunner;
-        return nodeRunner.runNodeWithResource(MATTER_JS_PATH);
-    }
-
-    @Override
-    public void onNodeExit(int exitCode) {
-        disconnect();
-        for (MatterClientListener listener : clientListeners) {
-            listener.onDisconnect("Exit code " + exitCode);
         }
     }
 
