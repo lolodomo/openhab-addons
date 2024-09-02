@@ -25,9 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.openhab.core.common.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +48,7 @@ public class NodeRunner {
     private int port;
     private final List<NodeProcessListener> processListeners = new ArrayList<>();
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private final ScheduledExecutorService scheduler = ThreadPoolManager.getScheduledPool("matter.NodeRunner");
 
     public NodeRunner(String nodePath) {
         this.nodePath = nodePath;
@@ -119,7 +123,9 @@ public class NodeRunner {
             while ((line = reader.readLine()) != null) {
                 if (!ready) {
                     ready = true;
-                    notifyReadyListeners();
+                    scheduler.schedule(() -> {
+                        notifyReadyListeners();
+                    }, 1, TimeUnit.SECONDS);
                 }
                 Matcher matcher = LOG_PATTERN.matcher(line);
                 if (matcher.matches()) {

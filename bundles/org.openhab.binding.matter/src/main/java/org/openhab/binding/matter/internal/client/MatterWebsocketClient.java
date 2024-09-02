@@ -80,7 +80,7 @@ public class MatterWebsocketClient implements WebSocketListener {
     private static final String MATTER_JS_PATH = "/matter-server/matter.js";
 
     private final ScheduledExecutorService scheduler = ThreadPoolManager
-            .getScheduledPool("matter-js.MatterWebsocketClient");
+            .getScheduledPool("matter.MatterWebsocketClient");
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer())
             .registerTypeAdapter(BigInteger.class, new BigIntegerSerializer()).create();
     private final WebSocketClient client = new WebSocketClient();
