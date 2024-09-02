@@ -31,7 +31,7 @@ This binding does not require any general configuration settings.
 | port                      | number  | The port number for the controller                                                                                                | N/A     | no       | yes      |
 | host                      | text    | The host address of the controller                                                                                                | N/A     | no       | yes      |
 
-Note: pairCode is only available in 4.3 builds 
+Note: pairCode configuration field is only available in 4.3 builds and only usable through the Main UI or API 
 
 ### Endpoint Thing Configuration
 
