@@ -8,7 +8,7 @@ import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageContext, StorageManager } from "@project-chip/matter-node.js/storage";
 import { StorageBackendJsonFile } from "@project-chip/matter-node.js/storage";
 
-const logger = Logger.get("Node");
+const logger = Logger.get("MatterNode");
 
 /**
  * This class contains all the core Matter functionality uses by "Cluster", "Nodes", etc... 
@@ -105,8 +105,8 @@ export class MatterNode {
         const endpoints = node.getDevices();
         for (const e of endpoints) {
             const endpoint = this.findEndpoint(e, endpointId);
-            if (e != undefined) {
-                return e;
+            if (endpoint != undefined) {
+                return endpoint;
             }
         }
         return undefined;
