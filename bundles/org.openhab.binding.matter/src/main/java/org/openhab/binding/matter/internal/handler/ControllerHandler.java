@@ -228,8 +228,10 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         if (checkFuture != null) {
             checkFuture.cancel(true);
         }
+        nodeEndpoints.clear();
         outstandingNodeRequests.clear();
         disconnectedNodes.clear();
+        nodesLastUpdate.clear();
         client.disconnect();
     }
 
@@ -389,6 +391,8 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
                     logger.debug("Decommissioning node {}", nodeId);
                     nodeEndpoints.remove(nodeId);
                     disconnectedNodes.remove(nodeId);
+                    outstandingNodeRequests.remove(nodeId);
+                    nodesLastUpdate.remove(nodeId);
                     // check if we remove deleted endpoint things from the actual matter network
                     if (removeIfLast && getConfigAs(ControllerConfiguration.class).decommissionNodesOnDelete) {
                         logger.debug("Decommissioning node {}", nodeId);
