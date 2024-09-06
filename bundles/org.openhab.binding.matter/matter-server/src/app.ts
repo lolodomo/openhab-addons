@@ -1,11 +1,12 @@
 import WebSocket, { Server } from 'ws';
 import { Level, Logger } from "@project-chip/matter-node.js/log";
 import { IncomingMessage } from 'http';
+import { ClientController } from './client/ClientController';
 import { Controller } from './Controller';
-import { MatterNode } from "./MatterNode";
+import { MatterNode } from "./client/MatterNode";
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-
+import {Request, Response, Message, MessageType } from './MessageTypes';
 const argv: any = yargs(hideBin(process.argv)).argv
 
 const logger = Logger.get("matter");
@@ -52,43 +53,6 @@ process.on("SIGINT", () => {
         });
 });
 
-
-/**
- * controller close
- * commission pair ["12345678"]
- * nodes listNodes []
- */
-
-interface Request {
-    id: string;
-    namespace: string;
-    function: string;
-    args?: any[];
-}
-
-interface Response {
-    type: string;
-    id: string;
-    result?: any;
-    error?: string;
-}
-
-interface Event {
-    type: string;
-    data?: any;
-}
-
-interface Message {
-    type: string;
-    message: any;
-}
-
-enum MessageType {
-    Result = "result",
-    ResultError = "resultError",
-    ResultSuccess = "resultSuccess",
-}
-
 export interface WebSocketSession extends WebSocket {
     controller?: Controller;
     sendResponse(type: string, id: string, result?: any, error?: string): void;
@@ -133,7 +97,7 @@ wss.on('connection', async (ws: WebSocketSession, req: IncomingMessage) => {
     ws.on('message', (message: string) => {
         try {
             const request: Request = JSON.parse(message);
-            handleRequest(ws, request);
+            ws.controller?.handleRequest(request);
         } catch (error) {
             if (error instanceof Error) {
                 ws.sendResponse(MessageType.ResultError, '', undefined, error.message);
@@ -178,59 +142,11 @@ wss.on('connection', async (ws: WebSocketSession, req: IncomingMessage) => {
     ws.sendEvent('ready', 'Controller initialized');
 });
 
-async function handleRequest(ws: WebSocketSession, request: Request): Promise<void> {
-    const { id, namespace, function: functionName, args } = request;
-    logger.debug(`Received request: ${Logger.toJSON(request)}`);
-    try {
-        if (!ws.controller) {
-            throw new Error('Controller not initialized');
-        }
-        const result = executeCommand(ws.controller, namespace, functionName, args || []);
-        if (result instanceof Promise) {
-            result.then((asyncResult) => {
-                ws.sendResponse(MessageType.ResultSuccess, id, asyncResult);
-            }).catch((error) => {
-                logger.error(`Error executing function ${functionName}: ${error} ${error.stack}`);
-                ws.sendResponse(MessageType.ResultError, id, undefined, error.message);
-            });
-        } else {
-            ws.sendResponse(MessageType.ResultSuccess, id, result);
-        }
-    } catch (error) {
-        if (error instanceof Error) {
-            logger.error(`Error executing function ${functionName}: ${error.message} ${error.stack}`);
-            ws.sendResponse(MessageType.ResultError, id, undefined, error.message);
-        }
-    }
-}
-
-function executeCommand(controller: Controller, namespace: string, functionName: string, args: any[]): any | Promise<any> {
-    const controllerAny: any = controller;
-    let baseObject: any;
-
-    logger.debug(`Executing function ${namespace}.${functionName}(${Logger.toJSON(args)})`);
-    switch (namespace) {
-        case 'controller':
-            baseObject = controller;
-            break;
-        default:
-            if (typeof controllerAny[namespace] !== 'object') {
-                throw new Error(`Namespace ${namespace} not found`);
-            }
-            baseObject = controllerAny[namespace];
-    }
-
-    if (typeof baseObject[functionName] !== 'function') {
-        throw new Error(`Function ${functionName} not found`);
-    }
-    return baseObject[functionName](...args);
-}
-
 async function initController(ws: WebSocketSession, storagePath: string, nodeNum: number, factoryReset = false) {
     const theNode = new MatterNode(storagePath, nodeNum);
     await theNode.initialize();
     logger.info(`Started Node #${nodeNum}`);
-    let controller = new Controller(ws, theNode);
+    let controller = new ClientController(ws, theNode);
     return controller;
 }
 

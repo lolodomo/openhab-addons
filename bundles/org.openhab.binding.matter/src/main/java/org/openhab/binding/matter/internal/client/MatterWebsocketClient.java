@@ -371,7 +371,7 @@ public class MatterWebsocketClient implements WebSocketListener {
     }
 
     public CompletableFuture<ActiveSessionInformation[]> getSessionInformation() {
-        CompletableFuture<JsonElement> future = sendMessage("controller", "sessionInformation", new Object[0]);
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "sessionInformation", new Object[0]);
         return future.thenApply(obj -> {
             ActiveSessionInformation[] sessions = gson.fromJson(obj, ActiveSessionInformation[].class);
             return sessions == null ? new ActiveSessionInformation[0] : sessions;

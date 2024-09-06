@@ -27,10 +27,6 @@ export class Nodes {
         return nodeIds;
     }
 
-    // async connectAll() {
-    //     return this.theNode.connect(this.nodeListener);
-    // }
-
     async getNode(nodeId: string | number) {
         const node = await this.theNode.getNode(nodeId, this.nodeListener);
         const data = await this.serializePairedNode(node);
@@ -213,6 +209,10 @@ export class Nodes {
         await this.theNode.commissioningController?.removeNode(NodeId(BigInt(nodeId)), true);
     }
 
+    sessionInformation() {
+        return this.theNode.commissioningController?.getActiveSessionInformation() || {}
+    }
+    
     async basicCommissioningWindow(nodeId: number | string, timeout = 900) {
 
         const node = await this.theNode.getNode(nodeId);
