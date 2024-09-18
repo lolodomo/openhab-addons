@@ -69,6 +69,8 @@ public class NodeManager {
             this.arch = "x64";
         } else if (arch.contains("aarch64") || arch.contains("arm64")) {
             this.arch = "arm64";
+        } else if (arch.contains("arm")) {
+            this.arch = "armv7l";
         } else {
             throw new UnsupportedOperationException("Unsupported architecture");
         }
