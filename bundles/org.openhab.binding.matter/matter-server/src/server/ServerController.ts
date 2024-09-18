@@ -1,6 +1,6 @@
-import { Controller } from "./Controller";
-import { Request } from "./MessageTypes";
-import { WebSocketSession } from "./app";
+import { Controller } from "../Controller";
+import { Request } from "../MessageTypes";
+import { WebSocketSession } from "../app";
 
 export class ServerController extends Controller {
 

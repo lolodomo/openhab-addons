@@ -33,6 +33,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
+import org.eclipse.jetty.websocket.api.WebSocketPolicy;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
@@ -76,9 +77,8 @@ import com.google.gson.reflect.TypeToken;
 public class MatterWebsocketClient implements WebSocketListener {
 
     private static final Logger logger = LoggerFactory.getLogger(MatterWebsocketClient.class);
-
     private static final String MATTER_JS_PATH = "/matter-server/matter.js";
-
+    private static final int BUFFER_SIZE = 1048576 * 2; // 2 Mb
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool("matter.MatterWebsocketClient");
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Node.class, new NodeDeserializer())
@@ -187,9 +187,15 @@ public class MatterWebsocketClient implements WebSocketListener {
 
     @Override
     public void onWebSocketConnect(@Nullable Session session) {
-        this.session = session;
-        for (MatterClientListener listener : clientListeners) {
-            listener.onConnect();
+        if (session != null) {
+            final WebSocketPolicy currentPolicy = session.getPolicy();
+            currentPolicy.setInputBufferSize(BUFFER_SIZE);
+            currentPolicy.setMaxTextMessageSize(BUFFER_SIZE);
+            currentPolicy.setMaxBinaryMessageSize(BUFFER_SIZE);
+            this.session = session;
+            for (MatterClientListener listener : clientListeners) {
+                listener.onConnect();
+            }
         }
     }
 
