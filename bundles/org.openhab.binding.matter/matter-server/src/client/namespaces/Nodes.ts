@@ -234,6 +234,7 @@ export class Nodes {
             `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
         );
         console.log(`Manual pairing code: ${manualPairingCode}`);
+        return data;
     }
 
     async logNode(nodeId: number | string) {
