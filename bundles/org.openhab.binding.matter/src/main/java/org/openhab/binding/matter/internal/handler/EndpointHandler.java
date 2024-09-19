@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -147,7 +148,9 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             updateStatus(ThingStatus.ONLINE);
         }
         Map<String, BaseCluster> clusters = endpoint.clusters;
-        boolean hasLevelControl = clusters.containsKey(LevelControlCluster.CLUSTER_NAME);
+        final boolean isSwitchType = Optional.ofNullable(getThing().getProperties().get("deviceTypes"))
+                .map(deviceTypes -> deviceTypes.split(",")).stream().flatMap(Arrays::stream)
+                .anyMatch(s -> s.equals("256"));
 
         Object basicInfoObject = clusters.get(BasicInformationCluster.CLUSTER_NAME);
         if (basicInfoObject != null) {
@@ -166,6 +169,11 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         }
         clusters.forEach((clusterName, cluster) -> {
             logger.trace("checking cluster {} for handler", clusterName);
+            // TODO this is a hack to ignore the dimmer cluster that switches advertise as a convienence, need to
+            // revisit this.
+            if (cluster.id == LevelControlCluster.CLUSTER_ID && isSwitchType) {
+                return;
+            }
             Integer id = cluster.id;
             ClusterConverter clusterConverter = clusterIdMap.get(id);
             if (clusterConverter == null) {

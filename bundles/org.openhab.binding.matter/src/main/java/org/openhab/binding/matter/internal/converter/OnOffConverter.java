@@ -12,11 +12,10 @@
  */
 package org.openhab.binding.matter.internal.converter;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_LABEL_SWITCH_LEVEL;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_LEVEL;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_LABEL_SWITCH_ONOFF;
 import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_ONOFF;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_SWITCH_LEVEL;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_DIMMER;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_SWITCH_ONOFF;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_SWITCH;
 
 import java.util.List;
 
@@ -74,8 +73,8 @@ public class OnOffConverter extends ClusterConverter {
 
     @Override
     public List<ChannelUID> createChannels(BaseCluster cluster) {
-        return List.of(createChannel(cluster, CHANNEL_NAME_SWITCH_LEVEL, CHANNEL_SWITCH_LEVEL,
-                CHANNEL_LABEL_SWITCH_LEVEL, ITEM_TYPE_DIMMER));
+        return List.of(createChannel(cluster, CHANNEL_NAME_SWITCH_ONOFF, CHANNEL_SWITCH_ONOFF,
+                CHANNEL_LABEL_SWITCH_ONOFF, ITEM_TYPE_SWITCH));
     }
 
     @Override
