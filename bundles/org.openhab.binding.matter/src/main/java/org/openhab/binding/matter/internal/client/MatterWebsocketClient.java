@@ -38,6 +38,7 @@ import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
+import org.openhab.binding.matter.internal.client.model.PairingCodes;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.ws.ActiveSessionInformation;
@@ -360,12 +361,24 @@ public class MatterWebsocketClient implements WebSocketListener {
         });
     }
 
+    public CompletableFuture<PairingCodes> enhancedCommissioningWindow(BigInteger id) {
+        CompletableFuture<JsonElement> future = sendMessage("nodes", "enhancedCommissioningWindow",
+                new Object[] { id });
+        return future.thenApply(obj -> {
+            PairingCodes codes = gson.fromJson(obj, PairingCodes.class);
+            if (codes == null) {
+                throw new IllegalStateException("Could not deserialize pairing codes");
+            }
+            return codes;
+        });
+    }
+
     public CompletableFuture<Void> disconnectNode(BigInteger nodeId) {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "disconnectNode", new Object[] { nodeId });
         return future.thenAccept(obj -> {
             // Do nothing, just to complete the future
         });
-    }
+    } // enhancedCommissioningWindow
 
     public CompletableFuture<Void> clusterCommand(BigInteger nodeId, Integer endpointId, String clusterName,
             ClusterCommand command) {

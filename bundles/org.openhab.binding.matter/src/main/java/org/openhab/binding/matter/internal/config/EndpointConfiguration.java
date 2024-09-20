@@ -25,4 +25,6 @@ public class EndpointConfiguration {
     public String nodeId = "";
 
     public int endpointId;
+
+    public Boolean commissionMode = false;
 }

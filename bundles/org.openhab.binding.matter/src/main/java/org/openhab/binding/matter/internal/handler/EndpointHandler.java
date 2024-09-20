@@ -14,15 +14,18 @@ package org.openhab.binding.matter.internal.handler;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.bouncycastle.util.Objects;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.AttributeListener;
@@ -35,6 +38,8 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControl
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
 import org.openhab.binding.matter.internal.converter.ClusterConverter;
+import org.openhab.core.config.core.Configuration;
+import org.openhab.core.config.core.validation.ConfigValidationException;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -104,6 +109,57 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
         } else {
             updateStatus(ThingStatus.UNKNOWN);
+        }
+    }
+
+    @Override
+    public void handleConfigurationUpdate(Map<String, Object> configurationParameters)
+            throws ConfigValidationException {
+        logger.debug("handleConfigurationUpdate");
+        validateConfigurationParameters(configurationParameters);
+        Configuration configuration = editConfiguration();
+        boolean reinitialize = false;
+        boolean commission = false;
+        for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
+            Object value = configurationParameter.getValue();
+            logger.debug("{}: old: {} {} new: {} {}", configurationParameter.getKey(),
+                    configuration.get(configurationParameter.getKey()),
+                    configuration.get(configurationParameter.getKey()).getClass().getName(),
+                    configurationParameter.getValue(), configurationParameter.getValue().getClass().getName());
+            // Ignore any configuration parameters that have not changed
+            if (areEqual(configurationParameter.getValue(), configuration.get(configurationParameter.getKey()))) {
+                logger.debug("Endpoint Configuration update ignored {} to {} ({})", configurationParameter.getKey(),
+                        value, value == null ? "null" : value.getClass().getSimpleName());
+                continue;
+            }
+            logger.debug("Endpoint Configuration update {} to {}", configurationParameter.getKey(), value);
+            switch (configurationParameter.getKey()) {
+                case "nodeId":
+                case "endpointId":
+                    reinitialize = true;
+                    break;
+                case "commissionMode":
+                    if (value instanceof Boolean mode) {
+                        commission = mode;
+                        value = false;
+                    }
+            }
+            configuration.put(configurationParameter.getKey(), value);
+        }
+        updateConfiguration(configuration);
+        if (reinitialize) {
+            dispose();
+            initialize();
+        } else if (commission) {
+            MatterWebsocketClient client = getClient();
+            if (client != null) {
+                client.enhancedCommissioningWindow(nodeId).thenAccept(pairingCodes -> {
+                    getThing().setProperty("externalPairCode", pairingCodes.manualPairingCode);
+                }).exceptionally(e -> {
+                    logger.debug("Error communicating with controller", e);
+                    return null;
+                });
+            }
         }
     }
 
@@ -255,5 +311,22 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             }
         }
         return cachedClient;
+    }
+
+    public static boolean areEqual(Object obj1, Object obj2) {
+        if (obj1 == null || obj2 == null) {
+            return Objects.areEqual(obj1, obj2); // Return true if both are null, false if one is null
+        }
+
+        if (obj1 instanceof BigDecimal && obj2 instanceof BigDecimal) {
+            return ((BigDecimal) obj1).compareTo((BigDecimal) obj2) == 0;
+        }
+
+        if (obj1 instanceof Number && obj2 instanceof Number) {
+            return BigDecimal.valueOf(((Number) obj1).doubleValue())
+                    .compareTo(BigDecimal.valueOf(((Number) obj2).doubleValue())) == 0;
+        }
+
+        return obj1.equals(obj2); // Fallback to the default equals method
     }
 }

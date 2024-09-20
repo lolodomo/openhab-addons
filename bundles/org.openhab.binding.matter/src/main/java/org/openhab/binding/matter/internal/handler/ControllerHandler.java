@@ -174,7 +174,6 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
         updateConfiguration(configuration);
         if (reinitialize) {
             dispose();
-            updateStatus(ThingStatus.INITIALIZING);
             initialize();
         } else if (pairCode != null) {
             try {
