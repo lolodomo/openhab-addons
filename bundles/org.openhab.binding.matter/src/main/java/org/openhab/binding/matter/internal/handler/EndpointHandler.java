@@ -22,10 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.bouncycastle.util.Objects;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.matter.internal.client.AttributeListener;
@@ -34,6 +33,7 @@ import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BridgedDeviceBasicInformationCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.DeviceTypes;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
@@ -204,9 +204,19 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             updateStatus(ThingStatus.ONLINE);
         }
         Map<String, BaseCluster> clusters = endpoint.clusters;
-        final boolean isSwitchType = Optional.ofNullable(getThing().getProperties().get("deviceTypes"))
-                .map(deviceTypes -> deviceTypes.split(",")).stream().flatMap(Arrays::stream)
-                .anyMatch(s -> s.equals("256"));
+
+        String deviceTypesString = getThing().getProperties().get("deviceTypes");
+        boolean isSwitchTypeInternal = false;
+        if (deviceTypesString != null) {
+            String[] deviceTypesArray = deviceTypesString.split(",");
+            boolean hasOnOffLight = Arrays.stream(deviceTypesArray)
+                    .anyMatch(s -> s.equals(DeviceTypes.OnOffLight.toString()));
+            boolean hasDimmableLight = Arrays.stream(deviceTypesArray)
+                    .anyMatch(s -> s.equals(DeviceTypes.DimmableLight.toString()));
+            isSwitchTypeInternal = hasOnOffLight && !hasDimmableLight;
+        }
+
+        final boolean isSwitchType = isSwitchTypeInternal;
 
         Object basicInfoObject = clusters.get(BasicInformationCluster.CLUSTER_NAME);
         if (basicInfoObject != null) {
@@ -266,11 +276,11 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
 
     @Override
     public void handleRemoval() {
-        super.handleRemoval();
         ControllerHandler bridge = controllerHandler();
         if (bridge != null) {
             bridge.endpointRemoved(nodeId, endpointId, true);
         }
+        updateStatus(ThingStatus.REMOVED);
     }
 
     @Override
@@ -315,7 +325,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
 
     public static boolean areEqual(Object obj1, Object obj2) {
         if (obj1 == null || obj2 == null) {
-            return Objects.areEqual(obj1, obj2); // Return true if both are null, false if one is null
+            return Objects.equals(obj1, obj2); // Return true if both are null, false if one is null
         }
 
         if (obj1 instanceof BigDecimal && obj2 instanceof BigDecimal) {
