@@ -26,5 +26,5 @@ public class ControllerConfiguration {
     public String host = "";
     public int port = 0;
     public String pairCode = "";
-    public boolean decommissionNodesOnDelete = true;
+    public boolean decommissionNodesOnDelete = false;
 }

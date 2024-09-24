@@ -7,11 +7,10 @@ import { logEndpoint } from "@project-chip/matter.js/device";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { ColorDimmerSwitchDevice } from "@project-chip/matter.js/devices/ColorDimmerSwitchDevice";
 import { ThermostatDevice } from "@project-chip/matter.js/devices/ThermostatDevice"
-import { Endpoint, EndpointServer } from "@project-chip/matter.js/endpoint";
-import { MutableEndpoint } from "@project-chip/matter.js/endpoint/type";
+import { Endpoint, EndpointServer, MutableEndpoint } from "@project-chip/matter.js/endpoint";
+// import { MutableEndpoint } from "@project-chip/matter.js/node/"
 import { AggregatorEndpoint } from "@project-chip/matter.js/endpoints/AggregatorEndpoint";
 import { ServerNode } from "@project-chip/matter.js/node";
-import { EndpointType } from "@project-chip/matter.js/endpoint/type";
 
 class DeviceNode {
     private server!: ServerNode;

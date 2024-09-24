@@ -27,7 +27,7 @@
 				<label>Decommission Nodes On Delete</label>
 				<description>Decommission (unpair) Matter nodes from the Matter network when the last endpoint thing of a node is
 					deleted/removed from openHAB.</description>
-				<default>true</default>
+				<default>false</default>
 			</parameter>
 			<parameter name="host" type="text" required="false">
 				<label>Matter Service Host</label>

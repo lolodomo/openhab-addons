@@ -1,5 +1,5 @@
 import WebSocket, { Server } from 'ws';
-import { Level, Logger } from "@project-chip/matter-node.js/log";
+import { Level, Logger } from "@project-chip/matter.js/log";
 import { IncomingMessage } from 'http';
 import { ClientController } from './client/ClientController';
 import { Controller } from './Controller';

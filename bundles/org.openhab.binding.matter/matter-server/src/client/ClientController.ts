@@ -1,10 +1,10 @@
-import { CommissioningControllerNodeOptions, NodeStateInformation } from "@project-chip/matter.js/device";
-import { Logger } from "@project-chip/matter-node.js/log";
+import { NodeStateInformation } from "@project-chip/matter.js/device";
+import { Logger } from"@project-chip/matter.js/log";
 import { MatterNode } from "./MatterNode";
 import { Nodes } from "./namespaces/Nodes";
 import { Clusters } from "./namespaces/Clusters";
 import { WebSocketSession } from "../app";
-import { Request, Response, Message, MessageType } from '../MessageTypes';
+import { Request, MessageType } from '../MessageTypes';
 import { Controller } from "../Controller";
 
 const logger = Logger.get("Controller");
@@ -57,7 +57,7 @@ export class ClientController extends Controller {
                 result.then((asyncResult) => {
                     this.ws.sendResponse(MessageType.ResultSuccess, id, asyncResult);
                 }).catch((error) => {
-                    logger.error(`Error executing function ${functionName}: ${error} ${error.stack}`);
+                    this.printError(error, functionName);
                     this.ws.sendResponse(MessageType.ResultError, id, undefined, error.message);
                 });
             } else {
@@ -65,8 +65,11 @@ export class ClientController extends Controller {
             }
         } catch (error) {
             if (error instanceof Error) {
-                logger.error(`Error executing function ${functionName}: ${error.message} ${error.stack}`);
+                this.printError(error, functionName);
                 this.ws.sendResponse(MessageType.ResultError, id, undefined, error.message);
+            } else {
+                logger.error(`Unexpected error executing function ${functionName}: ${error}`);
+                this.ws.sendResponse(MessageType.ResultError, id, undefined, String(error));
             }
         }
     }
@@ -87,5 +90,22 @@ export class ClientController extends Controller {
         }
          
         return baseObject[functionName](...args);
+     }
+    
+    printError(error: Error, functionName: String) {
+
+        logger.error(`Error executing function ${functionName}: ${error.message}`);
+        logger.error(`Stack trace: ${error.stack}`);
+
+        // Log additional error properties if available
+        if ('code' in error) {
+            logger.error(`Error code: ${(error as any).code}`);
+        }
+        if ('name' in error) {
+            logger.error(`Error name: ${(error as any).name}`);
+        }
+
+        // Fallback: log the entire error object in case there are other useful details
+        logger.error(`Full error object: ${JSON.stringify(error, Object.getOwnPropertyNames(error))}`)
     }
 }

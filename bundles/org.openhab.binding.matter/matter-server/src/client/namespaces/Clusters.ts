@@ -1,7 +1,6 @@
 import { Logger } from "@project-chip/matter.js/log";
 import { MatterNode } from "../MatterNode";
-import * as MatterClusters from "@project-chip/matter-node.js/cluster";
-import { ClusterModel, CommandModel, MatterModel } from "@project-chip/matter.js/model";
+import * as MatterClusters from "@project-chip/matter.js/cluster";
 
 const logger = Logger.get("Clusters");
 

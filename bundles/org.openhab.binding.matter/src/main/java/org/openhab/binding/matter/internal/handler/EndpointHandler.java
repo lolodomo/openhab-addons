@@ -50,6 +50,7 @@ import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.thing.binding.BridgeHandler;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.types.Command;
+import org.openhab.core.types.RefreshType;
 import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +83,15 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             logger.debug("Matter client not present, ignoring command");
             return;
         }
+
+        if (command instanceof RefreshType) {
+            ControllerHandler clusterHandler = controllerHandler();
+            if (clusterHandler != null) {
+                clusterHandler.updateNode(nodeId);
+            }
+            return;
+        }
+
         logger.debug("Looking up converter for {}", channelUID);
         ClusterConverter converter = channelIdMap.get(channelUID.getId());
         if (converter != null) {
