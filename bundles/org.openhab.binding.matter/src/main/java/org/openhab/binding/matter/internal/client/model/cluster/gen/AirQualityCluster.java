@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,18 +30,18 @@ public class AirQualityCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "AirQuality";
     public static final int CLUSTER_ID = 0x005B;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public FeatureMap featureMap; // 65532 FeatureMap 
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public FeatureMap featureMap; // 65532 FeatureMap
     /**
-    * Indicates a value from AirQualityEnum that is indicative of the currently measured air quality.
-    */
+     * Indicates a value from AirQualityEnum that is indicative of the currently measured air quality.
+     */
     public AirQualityEnum airQuality; // 0 AirQualityEnum R V
 
-
-    //Enums
+    // Enums
     /**
-    * The AirQualityEnum provides a representation of the quality of the analyzed air. It is up to the device manufacturer to determine the mapping between the measured values and their corresponding enumeration values.
-    */
+     * The AirQualityEnum provides a representation of the quality of the analyzed air. It is up to the device
+     * manufacturer to determine the mapping between the measured values and their corresponding enumeration values.
+     */
     public enum AirQualityEnum {
         UNKNOWN(0, "Unknown"),
         GOOD(1, "Good"),
@@ -54,9 +50,11 @@ public class AirQualityCluster extends BaseCluster {
         POOR(4, "Poor"),
         VERY_POOR(5, "VeryPoor"),
         EXTREMELY_POOR(6, "ExtremelyPoor");
+
         public final Integer value;
         public final String label;
-        private AirQualityEnum(Integer value, String label){
+
+        private AirQualityEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
@@ -65,22 +63,27 @@ public class AirQualityCluster extends BaseCluster {
     // Bitmaps
     public static class FeatureMap {
         /**
-        * Cluster supports the Fair air quality level
-        */
+         * Fair
+         * Cluster supports the Fair air quality level
+         */
         public boolean fAIR;
         /**
-        * Cluster supports the Moderate air quality level
-        */
+         * Moderate
+         * Cluster supports the Moderate air quality level
+         */
         public boolean mOD;
         /**
-        * Cluster supports the Very poor air quality level
-        */
+         * VeryPoor
+         * Cluster supports the Very poor air quality level
+         */
         public boolean vPOOR;
         /**
-        * Cluster supports the Extremely poor air quality level
-        */
+         * ExtremelyPoor
+         * Cluster supports the Extremely poor air quality level
+         */
         public boolean xPOOR;
-        public FeatureMap(boolean fAIR, boolean mOD, boolean vPOOR, boolean xPOOR){
+
+        public FeatureMap(boolean fAIR, boolean mOD, boolean vPOOR, boolean xPOOR) {
             this.fAIR = fAIR;
             this.mOD = mOD;
             this.vPOOR = vPOOR;
@@ -91,8 +94,6 @@ public class AirQualityCluster extends BaseCluster {
     public AirQualityCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 91, "AirQuality");
     }
-
-    
 
     public String toString() {
         String str = "";

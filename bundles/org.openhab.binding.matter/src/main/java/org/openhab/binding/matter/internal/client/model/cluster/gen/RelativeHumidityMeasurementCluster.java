@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,37 +30,36 @@ public class RelativeHumidityMeasurementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "RelativeHumidityMeasurement";
     public static final int CLUSTER_ID = 0x0405;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
+    public Integer clusterRevision; // 65533 ClusterRevision
     /**
-    * MeasuredValue represents the water content in % as follows:
-MeasuredValue &#x3D; 100 x water content
-Where 0% &lt; &#x3D; water content &lt; &#x3D; 100%, corresponding to a MeasuredValue in the range 0 to 10000. The maximum resolution this format allows is 0.01%.
-MinMeasuredValue and MaxMeasuredValue define the range of the sensor.
-The null value indicates that the measurement is unknown, otherwise the range shall be as described in Measured Value.
-MeasuredValue is updated continuously as new measurements are made.
-    */
+     * MeasuredValue represents the water content in % as follows:
+     * MeasuredValue &#x3D; 100 x water content
+     * Where 0% &lt; &#x3D; water content &lt; &#x3D; 100%, corresponding to a MeasuredValue in the range 0 to 10000.
+     * The maximum resolution this format allows is 0.01%.
+     * MinMeasuredValue and MaxMeasuredValue define the range of the sensor.
+     * The null value indicates that the measurement is unknown, otherwise the range shall be as described in Measured
+     * Value.
+     * MeasuredValue is updated continuously as new measurements are made.
+     */
     public Integer measuredValue; // 0 uint16 R V
     /**
-    * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. The null value means this attribute is not defined. See Measured Value for more details.
-    */
+     * The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that can be measured. The null value
+     * means this attribute is not defined. See Measured Value for more details.
+     */
     public Integer minMeasuredValue; // 1 uint16 R V
     /**
-    * The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. The null value means this attribute is not defined. See Measured Value for more details.
-    */
+     * The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that can be measured. The null value
+     * means this attribute is not defined. See Measured Value for more details.
+     */
     public Integer maxMeasuredValue; // 2 uint16 R V
     /**
-    * See Measured Value.
-    */
+     * See Measured Value.
+     */
     public Integer tolerance; // 3 uint16 R V
-
-
-
 
     public RelativeHumidityMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1029, "RelativeHumidityMeasurement");
     }
-
-    
 
     public String toString() {
         String str = "";

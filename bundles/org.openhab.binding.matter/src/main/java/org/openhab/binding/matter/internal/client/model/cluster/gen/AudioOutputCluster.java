@@ -16,9 +16,9 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -34,45 +34,47 @@ public class AudioOutputCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "AudioOutput";
     public static final int CLUSTER_ID = 0x050B;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public FeatureMap featureMap; // 65532 FeatureMap 
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public FeatureMap featureMap; // 65532 FeatureMap
     /**
-    * This attribute provides the list of outputs supported by the device.
-    */
+     * This attribute provides the list of outputs supported by the device.
+     */
     public List<OutputInfoStruct> outputList; // 0 list R V
     /**
-    * This attribute contains the value of the index field of the currently selected OutputInfoStruct.
-    */
+     * This attribute contains the value of the index field of the currently selected OutputInfoStruct.
+     */
     public Integer currentOutput; // 1 uint8 R V
-    //Structs
+    // Structs
+
     /**
-    * This contains information about an output.
-    */
-     public class OutputInfoStruct {
+     * This contains information about an output.
+     */
+    public class OutputInfoStruct {
         /**
-        * This field shall indicate the unique index into the list of outputs.
-        */
+         * This field shall indicate the unique index into the list of outputs.
+         */
         public Integer index; // uint8
         /**
-        * This field shall indicate the type of output.
-        */
+         * This field shall indicate the type of output.
+         */
         public OutputTypeEnum outputType; // OutputTypeEnum
         /**
-        * The device defined and user editable output name, such as “Soundbar”, “Speakers”. This field may be blank, but SHOULD be provided when known.
-        */
+         * The device defined and user editable output name, such as “Soundbar”, “Speakers”. This field may be blank,
+         * but SHOULD be provided when known.
+         */
         public String name; // string
+
         public OutputInfoStruct(Integer index, OutputTypeEnum outputType, String name) {
             this.index = index;
             this.outputType = outputType;
             this.name = name;
         }
-     }
+    }
 
-
-    //Enums
+    // Enums
     /**
-    * The type of output, expressed as an enum, with the following values:
-    */
+     * The type of output, expressed as an enum, with the following values:
+     */
     public enum OutputTypeEnum {
         HDMI(0, "Hdmi"),
         BT(1, "Bt"),
@@ -80,9 +82,11 @@ public class AudioOutputCluster extends BaseCluster {
         HEADPHONE(3, "Headphone"),
         INTERNAL(4, "Internal"),
         OTHER(5, "Other");
+
         public final Integer value;
         public final String label;
-        private OutputTypeEnum(Integer value, String label){
+
+        private OutputTypeEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
@@ -91,10 +95,12 @@ public class AudioOutputCluster extends BaseCluster {
     // Bitmaps
     public static class FeatureMap {
         /**
-        * Supports updates to output names
-        */
+         * NameUpdates
+         * Supports updates to output names
+         */
         public boolean nU;
-        public FeatureMap(boolean nU){
+
+        public FeatureMap(boolean nU) {
             this.nU = nU;
         }
     }
@@ -103,22 +109,24 @@ public class AudioOutputCluster extends BaseCluster {
         super(nodeId, endpointId, 1291, "AudioOutput");
     }
 
-    
-    //commands
+    // commands
     /**
-    * Upon receipt, this shall change the output on the device to the output at a specific index in the Output List.
-Note that when the current output is set to an output of type HDMI, adjustments to volume via a Speaker endpoint on the same node may cause HDMI volume up/down commands to be sent to the given HDMI output.
-    */
+     * Upon receipt, this shall change the output on the device to the output at a specific index in the Output List.
+     * Note that when the current output is set to an output of type HDMI, adjustments to volume via a Speaker endpoint
+     * on the same node may cause HDMI volume up/down commands to be sent to the given HDMI output.
+     */
     public static ClusterCommand selectOutput(Integer index) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("index", index);
 
         return new ClusterCommand("selectOutput", map);
     }
+
     /**
-    * Upon receipt, this shall rename the output at a specific index in the Output List.
-Updates to the output name shall appear in the device’s settings menus. Name updates may automatically be sent to the actual device to which the output connects.
-    */
+     * Upon receipt, this shall rename the output at a specific index in the Output List.
+     * Updates to the output name shall appear in the device’s settings menus. Name updates may automatically be sent to
+     * the actual device to which the output connects.
+     */
     public static ClusterCommand renameOutput(Integer index, String name) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("index", index);

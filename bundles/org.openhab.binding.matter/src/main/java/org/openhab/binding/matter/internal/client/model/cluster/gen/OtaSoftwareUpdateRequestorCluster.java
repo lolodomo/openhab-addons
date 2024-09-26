@@ -16,9 +16,9 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -34,64 +34,81 @@ public class OtaSoftwareUpdateRequestorCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "OtaSoftwareUpdateRequestor";
     public static final int CLUSTER_ID = 0x002A;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
+    public Integer clusterRevision; // 65533 ClusterRevision
     /**
-    * This field is a list of ProviderLocation whose entries shall be set by Administrators, either during Commissioning or at a later time, to set the ProviderLocation for the default OTA Provider Node to use for software updates on a given Fabric.
-There shall NOT be more than one entry per Fabric. On a list update that would introduce more than one entry per fabric, the write shall fail with CONSTRAINT_ERROR status code.
-Provider Locations obtained using the AnnounceOTAProvider command shall NOT overwrite values set in the DefaultOTAProviders attribute.
-    */
+     * This field is a list of ProviderLocation whose entries shall be set by Administrators, either during
+     * Commissioning or at a later time, to set the ProviderLocation for the default OTA Provider Node to use for
+     * software updates on a given Fabric.
+     * There shall NOT be more than one entry per Fabric. On a list update that would introduce more than one entry per
+     * fabric, the write shall fail with CONSTRAINT_ERROR status code.
+     * Provider Locations obtained using the AnnounceOTAProvider command shall NOT overwrite values set in the
+     * DefaultOTAProviders attribute.
+     */
     public List<ProviderLocation> defaultOtaProviders; // 0 list RW F VA
     /**
-    * This field shall be set to True if the OTA Requestor is currently able to be updated. Otherwise, it shall be set to False in case of any condition preventing update being possible, such as insufficient capacity of an internal battery. This field is merely informational for diagnostics purposes and shall NOT affect the responses provided by an OTA Provider to an OTA Requestor.
-    */
+     * This field shall be set to True if the OTA Requestor is currently able to be updated. Otherwise, it shall be set
+     * to False in case of any condition preventing update being possible, such as insufficient capacity of an internal
+     * battery. This field is merely informational for diagnostics purposes and shall NOT affect the responses provided
+     * by an OTA Provider to an OTA Requestor.
+     */
     public Boolean updatePossible; // 1 bool R V
     /**
-    * This field shall reflect the current state of the OTA Requestor with regards to obtaining software updates. See Section 11.20.7.4.2, “UpdateStateEnum Type” for possible values.
-This field SHOULD be updated in a timely manner whenever OTA Requestor internal state updates.
-    */
+     * This field shall reflect the current state of the OTA Requestor with regards to obtaining software updates. See
+     * Section 11.20.7.4.2, “UpdateStateEnum Type” for possible values.
+     * This field SHOULD be updated in a timely manner whenever OTA Requestor internal state updates.
+     */
     public UpdateStateEnum updateState; // 2 UpdateStateEnum R V
     /**
-    * This field shall reflect the percentage value of progress, relative to the current UpdateState, if applicable to the state.
-The value of this field shall be null if a progress indication does not apply to the current state.
-A value of 0 shall indicate that the beginning has occurred. A value of 100 shall indicate completion.
-This field may be updated infrequently. Some care SHOULD be taken by Nodes to avoid over- reporting progress when this attribute is part of a subscription.
-    */
+     * This field shall reflect the percentage value of progress, relative to the current UpdateState, if applicable to
+     * the state.
+     * The value of this field shall be null if a progress indication does not apply to the current state.
+     * A value of 0 shall indicate that the beginning has occurred. A value of 100 shall indicate completion.
+     * This field may be updated infrequently. Some care SHOULD be taken by Nodes to avoid over- reporting progress when
+     * this attribute is part of a subscription.
+     */
     public Integer updateStateProgress; // 3 uint8 R V
-    //Structs
+    // Structs
+
     /**
-    * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
-    */
-     public class ProviderLocation {
+     * This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
+     */
+    public class ProviderLocation {
         /**
-        * This field shall contain the Node ID of the OTA Provider to contact within the Fabric identified by the FabricIndex.
-        */
+         * This field shall contain the Node ID of the OTA Provider to contact within the Fabric identified by the
+         * FabricIndex.
+         */
         public BigInteger providerNodeId; // node-id
         /**
-        * This field shall contain the endpoint number which has the OTA Provider device type and OTA
-Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to do discovery of the location of that endpoint by walking over all endpoints and checking their Descriptor Cluster.
-        */
+         * This field shall contain the endpoint number which has the OTA Provider device type and OTA
+         * Software Update Provider cluster server on the ProviderNodeID. This is provided to avoid having to do
+         * discovery of the location of that endpoint by walking over all endpoints and checking their Descriptor
+         * Cluster.
+         */
         public Integer endpoint; // endpoint-no
         public Integer fabricIndex; // FabricIndex
+
         public ProviderLocation(BigInteger providerNodeId, Integer endpoint, Integer fabricIndex) {
             this.providerNodeId = providerNodeId;
             this.endpoint = endpoint;
             this.fabricIndex = fabricIndex;
         }
-     }
+    }
 
-
-    //Enums
+    // Enums
     public enum AnnouncementReasonEnum {
         SIMPLE_ANNOUNCEMENT(0, "SimpleAnnouncement"),
         UPDATE_AVAILABLE(1, "UpdateAvailable"),
         URGENT_UPDATE_AVAILABLE(2, "UrgentUpdateAvailable");
+
         public final Integer value;
         public final String label;
-        private AnnouncementReasonEnum(Integer value, String label){
+
+        private AnnouncementReasonEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum UpdateStateEnum {
         UNKNOWN(0, "Unknown"),
         IDLE(1, "Idle"),
@@ -102,40 +119,44 @@ Software Update Provider cluster server on the ProviderNodeID. This is provided 
         DELAYED_ON_APPLY(6, "DelayedOnApply"),
         ROLLING_BACK(7, "RollingBack"),
         DELAYED_ON_USER_CONSENT(8, "DelayedOnUserConsent");
+
         public final Integer value;
         public final String label;
-        private UpdateStateEnum(Integer value, String label){
+
+        private UpdateStateEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum ChangeReasonEnum {
         UNKNOWN(0, "Unknown"),
         SUCCESS(1, "Success"),
         FAILURE(2, "Failure"),
         TIME_OUT(3, "TimeOut"),
         DELAY_BY_PROVIDER(4, "DelayByProvider");
+
         public final Integer value;
         public final String label;
-        private ChangeReasonEnum(Integer value, String label){
+
+        private ChangeReasonEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
-
     public OtaSoftwareUpdateRequestorCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 42, "OtaSoftwareUpdateRequestor");
     }
 
-    
-    //commands
+    // commands
     /**
-    * This command may be invoked by Administrators to announce the presence of a particular OTA Provider.
-This command shall be scoped to the accessing fabric.
-If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
-    */
-    public static ClusterCommand announceOtaProvider(BigInteger providerNodeId, Integer vendorId, AnnouncementReasonEnum announcementReason, String metadataForNode, Integer endpoint, Integer fabricIndex) {
+     * This command may be invoked by Administrators to announce the presence of a particular OTA Provider.
+     * This command shall be scoped to the accessing fabric.
+     * If the accessing fabric index is 0, this command shall fail with an UNSUPPORTED_ACCESS status code.
+     */
+    public static ClusterCommand announceOtaProvider(BigInteger providerNodeId, Integer vendorId,
+            AnnouncementReasonEnum announcementReason, String metadataForNode, Integer endpoint, Integer fabricIndex) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("providerNodeId", providerNodeId);
         map.put("vendorId", vendorId);

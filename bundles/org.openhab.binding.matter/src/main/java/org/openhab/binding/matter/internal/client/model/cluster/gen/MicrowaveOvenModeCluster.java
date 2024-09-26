@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,29 +30,27 @@ public class MicrowaveOvenModeCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "MicrowaveOvenMode";
     public static final int CLUSTER_ID = 0x005E;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public String supportedModes; // 0  
-    public String currentMode; // 1  
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public String supportedModes; // 0
+    public String currentMode; // 1
 
-
-    //Enums
+    // Enums
     public enum ModeTag {
         NORMAL(16384, "Normal"),
         DEFROST(16385, "Defrost");
+
         public final Integer value;
         public final String label;
-        private ModeTag(Integer value, String label){
+
+        private ModeTag(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
-
     public MicrowaveOvenModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 94, "MicrowaveOvenMode");
     }
-
-    
 
     public String toString() {
         String str = "";

@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,22 +30,25 @@ public class UnitLocalizationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "UnitLocalization";
     public static final int CLUSTER_ID = 0x002D;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public FeatureMap featureMap; // 65532 FeatureMap 
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public FeatureMap featureMap; // 65532 FeatureMap
     /**
-    * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying temperature in communication to the user. If provided, this value shall take priority over any unit implied through the ActiveLocale Attribute.
-    */
+     * The TemperatureUnit attribute shall indicate the unit for the Node to use only when conveying temperature in
+     * communication to the user. If provided, this value shall take priority over any unit implied through the
+     * ActiveLocale Attribute.
+     */
     public TempUnitEnum temperatureUnit; // 0 TempUnitEnum RW VM
 
-
-    //Enums
+    // Enums
     public enum TempUnitEnum {
         FAHRENHEIT(0, "Fahrenheit"),
         CELSIUS(1, "Celsius"),
         KELVIN(2, "Kelvin");
+
         public final Integer value;
         public final String label;
-        private TempUnitEnum(Integer value, String label){
+
+        private TempUnitEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
@@ -58,10 +57,12 @@ public class UnitLocalizationCluster extends BaseCluster {
     // Bitmaps
     public static class FeatureMap {
         /**
-        * The Node can be configured to use different units of temperature when conveying values to a user.
-        */
+         * TemperatureUnit
+         * The Node can be configured to use different units of temperature when conveying values to a user.
+         */
         public boolean tEMP;
-        public FeatureMap(boolean tEMP){
+
+        public FeatureMap(boolean tEMP) {
             this.tEMP = tEMP;
         }
     }
@@ -69,8 +70,6 @@ public class UnitLocalizationCluster extends BaseCluster {
     public UnitLocalizationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 45, "UnitLocalization");
     }
-
-    
 
     public String toString() {
         String str = "";

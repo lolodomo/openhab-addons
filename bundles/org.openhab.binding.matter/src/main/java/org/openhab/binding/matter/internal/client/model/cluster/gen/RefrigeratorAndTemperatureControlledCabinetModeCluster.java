@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,31 +30,29 @@ public class RefrigeratorAndTemperatureControlledCabinetModeCluster extends Base
     public static final String CLUSTER_NAME = "RefrigeratorAndTemperatureControlledCabinetMode";
     public static final int CLUSTER_ID = 0x0052;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public String supportedModes; // 0  
-    public String currentMode; // 1  
-    public String startUpMode; // 2  
-    public String onMode; // 3  
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public String supportedModes; // 0
+    public String currentMode; // 1
+    public String startUpMode; // 2
+    public String onMode; // 3
 
-
-    //Enums
+    // Enums
     public enum ModeTag {
         RAPID_COOL(16384, "RapidCool"),
         RAPID_FREEZE(16385, "RapidFreeze");
+
         public final Integer value;
         public final String label;
-        private ModeTag(Integer value, String label){
+
+        private ModeTag(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
-
     public RefrigeratorAndTemperatureControlledCabinetModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 82, "RefrigeratorAndTemperatureControlledCabinetMode");
     }
-
-    
 
     public String toString() {
         String str = "";

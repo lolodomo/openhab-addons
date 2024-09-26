@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,12 +30,11 @@ public class RvcRunModeCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "RvcRunMode";
     public static final int CLUSTER_ID = 0x0054;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public String supportedModes; // 0  
-    public String currentMode; // 1  
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public String supportedModes; // 0
+    public String currentMode; // 1
 
-
-    //Enums
+    // Enums
     public enum ModeChangeStatus {
         STUCK(65, "Stuck"),
         DUST_BIN_MISSING(66, "DustBinMissing"),
@@ -49,31 +44,33 @@ public class RvcRunModeCluster extends BaseCluster {
         WATER_TANK_LID_OPEN(70, "WaterTankLidOpen"),
         MOP_CLEANING_PAD_MISSING(71, "MopCleaningPadMissing"),
         BATTERY_LOW(72, "BatteryLow");
+
         public final Integer value;
         public final String label;
-        private ModeChangeStatus(Integer value, String label){
+
+        private ModeChangeStatus(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum ModeTag {
         IDLE(16384, "Idle"),
         CLEANING(16385, "Cleaning"),
         MAPPING(16386, "Mapping");
+
         public final Integer value;
         public final String label;
-        private ModeTag(Integer value, String label){
+
+        private ModeTag(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
-
     public RvcRunModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 84, "RvcRunMode");
     }
-
-    
 
     public String toString() {
         String str = "";

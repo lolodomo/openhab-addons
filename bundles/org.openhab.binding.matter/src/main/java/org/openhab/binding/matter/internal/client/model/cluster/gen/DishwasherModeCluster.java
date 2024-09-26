@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,35 +30,35 @@ public class DishwasherModeCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "DishwasherMode";
     public static final int CLUSTER_ID = 0x0059;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public String supportedModes; // 0  
-    public String currentMode; // 1  
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public String supportedModes; // 0
+    public String currentMode; // 1
     /**
-    * If this attribute is supported, the device SHOULD initially set this to one of the supported modes that has the Normal tag associated with it. See the Mode Base cluster specification for full details about the StartUpMode attribute.
-    */
-    public String startUpMode; // 2  
-    public String onMode; // 3  
+     * If this attribute is supported, the device SHOULD initially set this to one of the supported modes that has the
+     * Normal tag associated with it. See the Mode Base cluster specification for full details about the StartUpMode
+     * attribute.
+     */
+    public String startUpMode; // 2
+    public String onMode; // 3
 
-
-    //Enums
+    // Enums
     public enum ModeTag {
         NORMAL(16384, "Normal"),
         HEAVY(16385, "Heavy"),
         LIGHT(16386, "Light");
+
         public final Integer value;
         public final String label;
-        private ModeTag(Integer value, String label){
+
+        private ModeTag(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
-
     public DishwasherModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 89, "DishwasherMode");
     }
-
-    
 
     public String toString() {
         String str = "";

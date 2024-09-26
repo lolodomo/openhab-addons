@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,34 +30,31 @@ public class TemperatureMeasurementCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "TemperatureMeasurement";
     public static final int CLUSTER_ID = 0x0402;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
+    public Integer clusterRevision; // 65533 ClusterRevision
     /**
-    * Indicates the measured temperature. The null value indicates that the temperature is unknown.
-    */
+     * Indicates the measured temperature. The null value indicates that the temperature is unknown.
+     */
     public Integer measuredValue; // 0 temperature R V
     /**
-    * Indicates the minimum value of MeasuredValue that is capable of being measured. See Measured Value for more details.
-The null value indicates that the value is not available.
-    */
+     * Indicates the minimum value of MeasuredValue that is capable of being measured. See Measured Value for more
+     * details.
+     * The null value indicates that the value is not available.
+     */
     public Integer minMeasuredValue; // 1 temperature R V
     /**
-    * This attribute indicates the maximum value of MeasuredValue that is capable of being measured. See Measured Value for more details.
-The null value indicates that the value is not available.
-    */
+     * This attribute indicates the maximum value of MeasuredValue that is capable of being measured. See Measured Value
+     * for more details.
+     * The null value indicates that the value is not available.
+     */
     public Integer maxMeasuredValue; // 2 temperature R V
     /**
-    * See Measured Value.
-    */
+     * See Measured Value.
+     */
     public Integer tolerance; // 3 uint16 R V
-
-
-
 
     public TemperatureMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1026, "TemperatureMeasurement");
     }
-
-    
 
     public String toString() {
         String str = "";

@@ -16,9 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -34,22 +33,24 @@ public class KeypadInputCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "KeypadInput";
     public static final int CLUSTER_ID = 0x0509;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public FeatureMap featureMap; // 65532 FeatureMap 
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public FeatureMap featureMap; // 65532 FeatureMap
 
-
-    //Enums
+    // Enums
     public enum StatusEnum {
         SUCCESS(0, "Success"),
         UNSUPPORTED_KEY(1, "UnsupportedKey"),
         INVALID_KEY_IN_CURRENT_STATE(2, "InvalidKeyInCurrentState");
+
         public final Integer value;
         public final String label;
-        private StatusEnum(Integer value, String label){
+
+        private StatusEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum CecKeyCodeEnum {
         SELECT(0, "Select"),
         UP(1, "Up"),
@@ -136,9 +137,11 @@ public class KeypadInputCluster extends BaseCluster {
         F4YELLOW(116, "F4Yellow"),
         F5(117, "F5"),
         DATA(118, "Data");
+
         public final Integer value;
         public final String label;
-        private CecKeyCodeEnum(Integer value, String label){
+
+        private CecKeyCodeEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
@@ -147,18 +150,22 @@ public class KeypadInputCluster extends BaseCluster {
     // Bitmaps
     public static class FeatureMap {
         /**
-        * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
-        */
+         * NavigationKeyCodes
+         * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
+         */
         public boolean nV;
         /**
-        * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
-        */
+         * LocationKeys
+         * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
+         */
         public boolean lK;
         /**
-        * Supports numeric input 0..9
-        */
+         * NumberKeys
+         * Supports numeric input 0..9
+         */
         public boolean nK;
-        public FeatureMap(boolean nV, boolean lK, boolean nK){
+
+        public FeatureMap(boolean nV, boolean lK, boolean nK) {
             this.nV = nV;
             this.lK = lK;
             this.nK = nK;
@@ -169,13 +176,17 @@ public class KeypadInputCluster extends BaseCluster {
         super(nodeId, endpointId, 1289, "KeypadInput");
     }
 
-    
-    //commands
+    // commands
     /**
-    * Upon receipt, this shall process a keycode as input to the media endpoint.
-If a device has multiple media endpoints implementing this cluster, such as a casting video player endpoint with one or more content app endpoints, then only the endpoint receiving the command shall process the keycode as input. In other words, a specific content app endpoint shall NOT process a keycode received by a different content app endpoint.
-If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint will consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200 ms, then the endpoint will consider the last key press to be a release.
-    */
+     * Upon receipt, this shall process a keycode as input to the media endpoint.
+     * If a device has multiple media endpoints implementing this cluster, such as a casting video player endpoint with
+     * one or more content app endpoints, then only the endpoint receiving the command shall process the keycode as
+     * input. In other words, a specific content app endpoint shall NOT process a keycode received by a different
+     * content app endpoint.
+     * If a second SendKey request with the same KeyCode value is received within 200 ms, then the endpoint will
+     * consider the first key press to be a press and hold. When such a repeat KeyCode value is not received within 200
+     * ms, then the endpoint will consider the last key press to be a release.
+     */
     public static ClusterCommand sendKey(CecKeyCodeEnum keyCode) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("keyCode", keyCode);

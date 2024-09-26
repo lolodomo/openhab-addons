@@ -16,9 +16,9 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -34,142 +34,185 @@ public class MediaPlaybackCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "MediaPlayback";
     public static final int CLUSTER_ID = 0x0506;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public FeatureMap featureMap; // 65532 FeatureMap 
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public FeatureMap featureMap; // 65532 FeatureMap
     /**
-    * Indicates the current playback state of media.
-During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING.
-    */
+     * Indicates the current playback state of media.
+     * During fast-forward, rewind, and other seek operations; this attribute shall be set to PLAYING.
+     */
     public PlaybackStateEnum currentState; // 0 PlaybackStateEnum R V
     /**
-    * Indicates the start time of the media, in case the media has a fixed start time (for example, live stream or television broadcast), or null when start time does not apply to the current media (for example, video-on-demand). This time is a UTC time. The client needs to handle conversion to local time, as required, taking in account time zone and possible local DST offset.
-    */
+     * Indicates the start time of the media, in case the media has a fixed start time (for example, live stream or
+     * television broadcast), or null when start time does not apply to the current media (for example,
+     * video-on-demand). This time is a UTC time. The client needs to handle conversion to local time, as required,
+     * taking in account time zone and possible local DST offset.
+     */
     public BigInteger startTime; // 1 epoch-us R V
     /**
-    * Indicates the duration, in milliseconds, of the current media being played back
-or null when duration is not applicable (for example, in live streaming content with no known duration). This attribute shall never be 0.
-    */
+     * Indicates the duration, in milliseconds, of the current media being played back
+     * or null when duration is not applicable (for example, in live streaming content with no known duration). This
+     * attribute shall never be 0.
+     */
     public BigInteger duration; // 2 uint64 R V
     /**
-    * Indicates the position of playback (Position field) at the time (UpdateAt field) specified in the attribute. The client may use the SampledPosition attribute to compute the current position within the media stream based on the PlaybackSpeed, PlaybackPositionStruct.UpdatedAt and PlaybackPositionStruct.Position fields. To enable this, the SampledPosition attribute shall be updated whenever a change in either the playback speed or the playback position is triggered outside the normal playback of the media. The events which may cause this to happen include:
-  • Starting or resumption of playback
-  • Seeking
-  • Skipping forward or backward
-  • Fast-forwarding or rewinding
-  • Updating of playback speed as a result of explicit request, or as a result of buffering events
-    */
+     * Indicates the position of playback (Position field) at the time (UpdateAt field) specified in the attribute. The
+     * client may use the SampledPosition attribute to compute the current position within the media stream based on the
+     * PlaybackSpeed, PlaybackPositionStruct.UpdatedAt and PlaybackPositionStruct.Position fields. To enable this, the
+     * SampledPosition attribute shall be updated whenever a change in either the playback speed or the playback
+     * position is triggered outside the normal playback of the media. The events which may cause this to happen
+     * include:
+     * • Starting or resumption of playback
+     * • Seeking
+     * • Skipping forward or backward
+     * • Fast-forwarding or rewinding
+     * • Updating of playback speed as a result of explicit request, or as a result of buffering events
+     */
     public PlaybackPositionStruct sampledPosition; // 3 PlaybackPositionStruct R V
     /**
-    * Indicates the speed at which the current media is being played. The new PlaybackSpeed shall be reflected in this attribute whenever any of the following occurs:
-  • Starting of playback
-  • Resuming of playback
-  • Fast-forwarding
-  • Rewinding
-The PlaybackSpeed shall reflect the ratio of time elapsed in the media to the actual time taken for the playback assuming no changes to media playback (for example buffering events or requests to pause/rewind/forward).
-  • A value for PlaybackSpeed of 1 shall indicate normal playback where, for example, playback for     1 second causes the media to advance by 1 second within the duration of the media.
-  • A value for PlaybackSpeed which is greater than 0 shall indicate that as playback is happening     the media is currently advancing in time within the duration of the media.
-  • A value for PlaybackSpeed which is less than 0 shall indicate that as playback is happening the     media is currently going back in time within the duration of the media.
-  • A value for PlaybackSpeed of 0 shall indicate that the media is currently not playing back.     When the CurrentState attribute has the value of PAUSED, NOT_PLAYING or BUFFERING, the     PlaybackSpeed shall be set to 0 to reflect that the media is not playing.
-Following examples illustrate the PlaybackSpeed attribute values in various conditions.
-    */
+     * Indicates the speed at which the current media is being played. The new PlaybackSpeed shall be reflected in this
+     * attribute whenever any of the following occurs:
+     * • Starting of playback
+     * • Resuming of playback
+     * • Fast-forwarding
+     * • Rewinding
+     * The PlaybackSpeed shall reflect the ratio of time elapsed in the media to the actual time taken for the playback
+     * assuming no changes to media playback (for example buffering events or requests to pause/rewind/forward).
+     * • A value for PlaybackSpeed of 1 shall indicate normal playback where, for example, playback for 1 second causes
+     * the media to advance by 1 second within the duration of the media.
+     * • A value for PlaybackSpeed which is greater than 0 shall indicate that as playback is happening the media is
+     * currently advancing in time within the duration of the media.
+     * • A value for PlaybackSpeed which is less than 0 shall indicate that as playback is happening the media is
+     * currently going back in time within the duration of the media.
+     * • A value for PlaybackSpeed of 0 shall indicate that the media is currently not playing back. When the
+     * CurrentState attribute has the value of PAUSED, NOT_PLAYING or BUFFERING, the PlaybackSpeed shall be set to 0 to
+     * reflect that the media is not playing.
+     * Following examples illustrate the PlaybackSpeed attribute values in various conditions.
+     */
     public Float playbackSpeed; // 4 single R V
     /**
-    * Indicates the furthest forward valid position to which a client may seek forward, in milliseconds from the start of the media. When the media has an associated StartTime, a value of null shall indicate that a seek forward is valid only until the current time within the media, using a position computed from the difference between the current time offset and StartTime, in milliseconds from start of the media, truncating fractional milliseconds towards 0. A value of Nas when StartTime is not specified shall indicate that seeking forward is not allowed.
-    */
+     * Indicates the furthest forward valid position to which a client may seek forward, in milliseconds from the start
+     * of the media. When the media has an associated StartTime, a value of null shall indicate that a seek forward is
+     * valid only until the current time within the media, using a position computed from the difference between the
+     * current time offset and StartTime, in milliseconds from start of the media, truncating fractional milliseconds
+     * towards 0. A value of Nas when StartTime is not specified shall indicate that seeking forward is not allowed.
+     */
     public BigInteger seekRangeEnd; // 5 uint64 R V
     /**
-    * Indicates the earliest valid position to which a client may seek back, in milliseconds from start of the media. A value of Nas shall indicate that seeking backwards is not allowed.
-    */
+     * Indicates the earliest valid position to which a client may seek back, in milliseconds from start of the media. A
+     * value of Nas shall indicate that seeking backwards is not allowed.
+     */
     public BigInteger seekRangeStart; // 6 uint64 R V
     /**
-    * ActiveTrack refers to the Audio track currently set and being used for the streaming media. A value of null shall indicate that no Audio Track corresponding to the current media is currently being played.
-    */
+     * ActiveTrack refers to the Audio track currently set and being used for the streaming media. A value of null shall
+     * indicate that no Audio Track corresponding to the current media is currently being played.
+     */
     public TrackStruct activeAudioTrack; // 7 TrackStruct R V
     /**
-    * AvailableAudioTracks refers to the list of Audio tracks available for the current title being played. A value of null shall indicate that no Audio Tracks corresponding to the current media are selectable by the client.
-    */
+     * AvailableAudioTracks refers to the list of Audio tracks available for the current title being played. A value of
+     * null shall indicate that no Audio Tracks corresponding to the current media are selectable by the client.
+     */
     public List<TrackStruct> availableAudioTracks; // 8 list R V
     /**
-    * ActiveTrack refers to the Text track currently set and being used for the streaming media. This can be nil. A value of null shall indicate that no Text Track corresponding to the current media is currently being displayed.
-    */
+     * ActiveTrack refers to the Text track currently set and being used for the streaming media. This can be nil. A
+     * value of null shall indicate that no Text Track corresponding to the current media is currently being displayed.
+     */
     public TrackStruct activeTextTrack; // 9 TrackStruct R V
     /**
-    * AvailableTextTracks refers to the list of Text tracks available for the current title being played. This can be an empty list. A value of null shall indicate that no Text Tracks corresponding to the current media are selectable by the client.
-    */
+     * AvailableTextTracks refers to the list of Text tracks available for the current title being played. This can be
+     * an empty list. A value of null shall indicate that no Text Tracks corresponding to the current media are
+     * selectable by the client.
+     */
     public List<TrackStruct> availableTextTracks; // 10 list R V
-    //Structs
+    // Structs
+
     /**
-    * This structure defines a playback position within a media stream being played.
-    */
-     public class PlaybackPositionStruct {
+     * This structure defines a playback position within a media stream being played.
+     */
+    public class PlaybackPositionStruct {
         /**
-        * This field shall indicate the time when the position was last updated.
-        */
+         * This field shall indicate the time when the position was last updated.
+         */
         public BigInteger updatedAt; // epoch-us
         /**
-        * This field shall indicate the associated discrete position within the media stream, in milliseconds from the beginning of the stream, being associated with the time indicated by the UpdatedAt field. The Position shall not be greater than the duration of the media if duration is specified. The Position shall not be greater than the time difference between current time and start time of the media when start time is specified.
-A value of null shall indicate that playback position is not applicable for the current state of the media playback (For example : Live media with no known duration and where seek is not supported).
-        */
+         * This field shall indicate the associated discrete position within the media stream, in milliseconds from the
+         * beginning of the stream, being associated with the time indicated by the UpdatedAt field. The Position shall
+         * not be greater than the duration of the media if duration is specified. The Position shall not be greater
+         * than the time difference between current time and start time of the media when start time is specified.
+         * A value of null shall indicate that playback position is not applicable for the current state of the media
+         * playback (For example : Live media with no known duration and where seek is not supported).
+         */
         public BigInteger position; // uint64
+
         public PlaybackPositionStruct(BigInteger updatedAt, BigInteger position) {
             this.updatedAt = updatedAt;
             this.position = position;
         }
-     }
+    }
+
     /**
-    * This structure defines a uniquely identifiable Text Track or Audio Track.
-    */
-     public class TrackStruct {
+     * This structure defines a uniquely identifiable Text Track or Audio Track.
+     */
+    public class TrackStruct {
         /**
-        * This field shall indicate the Identifier for the Track which is unique within the Track catalog. The Track catalog contains all the Text/Audio tracks corresponding to the main media content.
-        */
+         * This field shall indicate the Identifier for the Track which is unique within the Track catalog. The Track
+         * catalog contains all the Text/Audio tracks corresponding to the main media content.
+         */
         public String id; // string
         /**
-        * This field shall indicate the Attributes associated to the Track, like languageCode.
-        */
+         * This field shall indicate the Attributes associated to the Track, like languageCode.
+         */
         public TrackAttributesStruct trackAttributes; // TrackAttributesStruct
+
         public TrackStruct(String id, TrackAttributesStruct trackAttributes) {
             this.id = id;
             this.trackAttributes = trackAttributes;
         }
-     }
+    }
+
     /**
-    * This structure includes the attributes associated with a Text/Audio Track
-    */
-     public class TrackAttributesStruct {
+     * This structure includes the attributes associated with a Text/Audio Track
+     */
+    public class TrackAttributesStruct {
         /**
-        * The value is a String containing one of the standard Tags for Identifying Languages RFC 5646, which identifies the primary language used in the Track.
-        */
+         * The value is a String containing one of the standard Tags for Identifying Languages RFC 5646, which
+         * identifies the primary language used in the Track.
+         */
         public String languageCode; // string
         /**
-        * This is a list of enumerated CharacteristicEnum values that indicate a purpose, trait or feature associated with the Track. A value of null shall indicate that there are no Characteristics corresponding to the Track.
-        */
+         * This is a list of enumerated CharacteristicEnum values that indicate a purpose, trait or feature associated
+         * with the Track. A value of null shall indicate that there are no Characteristics corresponding to the Track.
+         */
         public List<CharacteristicEnum> characteristics; // list
         /**
-        * The value is a String containing a user displayable name for the Track. A value of null shall indicate that there is no DisplayName corresponding to the Track.
-        */
+         * The value is a String containing a user displayable name for the Track. A value of null shall indicate that
+         * there is no DisplayName corresponding to the Track.
+         */
         public String displayName; // string
-        public TrackAttributesStruct(String languageCode, List<CharacteristicEnum> characteristics, String displayName) {
+
+        public TrackAttributesStruct(String languageCode, List<CharacteristicEnum> characteristics,
+                String displayName) {
             this.languageCode = languageCode;
             this.characteristics = characteristics;
             this.displayName = displayName;
         }
-     }
+    }
 
-
-    //Enums
+    // Enums
     public enum PlaybackStateEnum {
         PLAYING(0, "Playing"),
         PAUSED(1, "Paused"),
         NOT_PLAYING(2, "NotPlaying"),
         BUFFERING(3, "Buffering");
+
         public final Integer value;
         public final String label;
-        private PlaybackStateEnum(Integer value, String label){
+
+        private PlaybackStateEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum StatusEnum {
         SUCCESS(0, "Success"),
         INVALID_STATE_FOR_COMMAND(1, "InvalidStateForCommand"),
@@ -177,13 +220,16 @@ A value of null shall indicate that playback position is not applicable for the 
         NOT_ACTIVE(3, "NotActive"),
         SPEED_OUT_OF_RANGE(4, "SpeedOutOfRange"),
         SEEK_OUT_OF_RANGE(5, "SeekOutOfRange");
+
         public final Integer value;
         public final String label;
-        private StatusEnum(Integer value, String label){
+
+        private StatusEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum CharacteristicEnum {
         FORCED_SUBTITLES(0, "ForcedSubtitles"),
         DESCRIBES_VIDEO(1, "DescribesVideo"),
@@ -203,9 +249,11 @@ A value of null shall indicate that playback position is not applicable for the 
         ENHANCED_AUDIO_INTELLIGIBILITY(15, "EnhancedAudioIntelligibility"),
         EMERGENCY(16, "Emergency"),
         KARAOKE(17, "Karaoke");
+
         public final Integer value;
         public final String label;
-        private CharacteristicEnum(Integer value, String label){
+
+        private CharacteristicEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
@@ -214,27 +262,37 @@ A value of null shall indicate that playback position is not applicable for the 
     // Bitmaps
     public static class FeatureMap {
         /**
-        * This feature provides access to the time offset location within current playback media and allows for jumping to a specific location using time offsets. This enables clients to implement more advanced media seeking behavior in their user interface, for instance a &quot;seek bar&quot;.
-        */
+         * AdvancedSeek
+         * This feature provides access to the time offset location within current playback media and allows for jumping
+         * to a specific location using time offsets. This enables clients to implement more advanced media seeking
+         * behavior in their user interface, for instance a &quot;seek bar&quot;.
+         */
         public boolean aS;
         /**
-        * This feature is for a device which supports variable speed playback on media that supports it.
-        */
+         * VariableSpeed
+         * This feature is for a device which supports variable speed playback on media that supports it.
+         */
         public boolean vS;
         /**
-        * This feature is for a device or app that supports Text Tracks.
-        */
+         * TextTracks
+         * This feature is for a device or app that supports Text Tracks.
+         */
         public boolean tT;
         /**
-        * This feature is for a device or app that supports Audio Tracks.
-        */
+         * AudioTracks
+         * This feature is for a device or app that supports Audio Tracks.
+         */
         public boolean aT;
         /**
-        * This feature is for a device or app that supports playing audio during fast and slow advance and rewind (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio during certain speeds.
-A cluster implementing AA shall implement AS.
-        */
+         * AudioAdvance
+         * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
+         * (e.g., while playback speed is not 1). A device that supports this feature may only support playing audio
+         * during certain speeds.
+         * A cluster implementing AA shall implement AS.
+         */
         public boolean aA;
-        public FeatureMap(boolean aS, boolean vS, boolean tT, boolean aT, boolean aA){
+
+        public FeatureMap(boolean aS, boolean vS, boolean tT, boolean aT, boolean aA) {
             this.aS = aS;
             this.vS = vS;
             this.tT = tT;
@@ -247,107 +305,139 @@ A cluster implementing AA shall implement AS.
         super(nodeId, endpointId, 1286, "MediaPlayback");
     }
 
-    
-    //commands
+    // commands
     /**
-    * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall return media to normal playback speed.
-    */
+     * Upon receipt, this shall play media. If content is currently in a FastForward or Rewind state. Play shall return
+     * media to normal playback speed.
+     */
     public static ClusterCommand play() {
         Map<String, Object> map = new LinkedHashMap<>();
 
         return new ClusterCommand("play");
     }
+
     /**
-    * Upon receipt, this shall pause playback of the media.
-    */
+     * Upon receipt, this shall pause playback of the media.
+     */
     public static ClusterCommand pause() {
         Map<String, Object> map = new LinkedHashMap<>();
 
         return new ClusterCommand("pause");
     }
+
     /**
-    * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may navigate the user back to the location from where the media was originally launched.
-    */
+     * Upon receipt, this shall stop playback of the media. User-visible outcome is context-specific. This may navigate
+     * the user back to the location from where the media was originally launched.
+     */
     public static ClusterCommand stop() {
         Map<String, Object> map = new LinkedHashMap<>();
 
         return new ClusterCommand("stop");
     }
+
     /**
-    * Upon receipt, this shall Start Over with the current media playback item.
-    */
+     * Upon receipt, this shall Start Over with the current media playback item.
+     */
     public static ClusterCommand startOver() {
         Map<String, Object> map = new LinkedHashMap<>();
 
         return new ClusterCommand("startOver");
     }
+
     /**
-    * Upon receipt, this shall cause the handler to be invoked for &quot;Previous&quot;. User experience is context-specific. This will often Go back to the previous media playback item.
-    */
+     * Upon receipt, this shall cause the handler to be invoked for &quot;Previous&quot;. User experience is
+     * context-specific. This will often Go back to the previous media playback item.
+     */
     public static ClusterCommand previous() {
         Map<String, Object> map = new LinkedHashMap<>();
 
         return new ClusterCommand("previous");
     }
+
     /**
-    * Upon receipt, this shall cause the handler to be invoked for &quot;Next&quot;. User experience is context- specific. This will often Go forward to the next media playback item.
-    */
+     * Upon receipt, this shall cause the handler to be invoked for &quot;Next&quot;. User experience is context-
+     * specific. This will often Go forward to the next media playback item.
+     */
     public static ClusterCommand next() {
         Map<String, Object> map = new LinkedHashMap<>();
 
         return new ClusterCommand("next");
     }
+
     /**
-    * Upon receipt, this shall start playback of the media backward in case the media is currently playing in the forward direction or is not playing. If the playback is already happening in the backwards direction receipt of this command shall increase the speed of the media playback backwards.
-Different &quot;rewind&quot; speeds may be reflected on the media playback device based upon the number of sequential calls to this function and the capability of the device. This is to avoid needing to define every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for media playing backwards, the status of SPEED_OUT_OF_RANGE shall be returned.
-    */
+     * Upon receipt, this shall start playback of the media backward in case the media is currently playing in the
+     * forward direction or is not playing. If the playback is already happening in the backwards direction receipt of
+     * this command shall increase the speed of the media playback backwards.
+     * Different &quot;rewind&quot; speeds may be reflected on the media playback device based upon the number of
+     * sequential calls to this function and the capability of the device. This is to avoid needing to define every
+     * speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to
+     * reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for
+     * example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the
+     * playback speed has reached the maximum supported speed for media playing backwards, the status of
+     * SPEED_OUT_OF_RANGE shall be returned.
+     */
     public static ClusterCommand rewind(Boolean audioAdvanceUnmuted) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("audioAdvanceUnmuted", audioAdvanceUnmuted);
 
         return new ClusterCommand("rewind", map);
     }
+
     /**
-    * Upon receipt, this shall start playback of the media in the forward direction in case the media is
-currently playing in the backward direction or is not playing. If the playback is already happening in the forward direction receipt of this command shall increase the speed of the media playback.
-Different &quot;fast-forward&quot; speeds may be reflected on the media playback device based upon the number of sequential calls to this function and the capability of the device. This is to avoid needing to define every speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the playback speed has reached the maximum supported speed for media playing forward, the status of SPEED_OUT_OF_RANGE shall be returned.
-    */
+     * Upon receipt, this shall start playback of the media in the forward direction in case the media is
+     * currently playing in the backward direction or is not playing. If the playback is already happening in the
+     * forward direction receipt of this command shall increase the speed of the media playback.
+     * Different &quot;fast-forward&quot; speeds may be reflected on the media playback device based upon the number of
+     * sequential calls to this function and the capability of the device. This is to avoid needing to define every
+     * speed (multiple fast, slow motion, etc). If the PlaybackSpeed attribute is supported it shall be updated to
+     * reflect the new speed of playback. If the playback speed cannot be changed for the media being played(for
+     * example, in live streaming content not supporting seek), the status of NOT_ALLOWED shall be returned. If the
+     * playback speed has reached the maximum supported speed for media playing forward, the status of
+     * SPEED_OUT_OF_RANGE shall be returned.
+     */
     public static ClusterCommand fastForward(Boolean audioAdvanceUnmuted) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("audioAdvanceUnmuted", audioAdvanceUnmuted);
 
         return new ClusterCommand("fastForward", map);
     }
+
     /**
-    * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
-    */
+     * Upon receipt, this shall Skip forward in the media by the given number of milliseconds.
+     */
     public static ClusterCommand skipForward(BigInteger deltaPositionMilliseconds) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("deltaPositionMilliseconds", deltaPositionMilliseconds);
 
         return new ClusterCommand("skipForward", map);
     }
+
     /**
-    * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
-    */
+     * Upon receipt, this shall Skip backward in the media by the given number of milliseconds.
+     */
     public static ClusterCommand skipBackward(BigInteger deltaPositionMilliseconds) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("deltaPositionMilliseconds", deltaPositionMilliseconds);
 
         return new ClusterCommand("skipBackward", map);
     }
+
     /**
-    * Upon receipt, this shall change the playback position in the media to the given position.
-    */
+     * Upon receipt, this shall change the playback position in the media to the given position.
+     */
     public static ClusterCommand seek(BigInteger position) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("position", position);
 
         return new ClusterCommand("seek", map);
     }
+
     /**
-    * Upon receipt, the server shall set the active Audio Track to the one identified by the TrackID in the Track catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond to the streaming media OR no media is being streamed at the time of receipt of this command, the server will return an error status of INVALID_ARGUMENT.
-    */
+     * Upon receipt, the server shall set the active Audio Track to the one identified by the TrackID in the Track
+     * catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond to
+     * the streaming media OR no media is being streamed at the time of receipt of this command, the server will return
+     * an error status of INVALID_ARGUMENT.
+     */
     public static ClusterCommand activateAudioTrack(String trackId, Integer audioOutputIndex) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("trackId", trackId);
@@ -355,18 +445,24 @@ Different &quot;fast-forward&quot; speeds may be reflected on the media playback
 
         return new ClusterCommand("activateAudioTrack", map);
     }
+
     /**
-    * Upon receipt, the server shall set the active Text Track to the one identified by the TrackID in the Track catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond to the streaming media OR no media is being streamed at the time of receipt of this command, the server shall return an error status of INVALID_ARGUMENT.
-    */
+     * Upon receipt, the server shall set the active Text Track to the one identified by the TrackID in the Track
+     * catalog for the streaming media. If the TrackID does not exist in the Track catalog, OR does not correspond to
+     * the streaming media OR no media is being streamed at the time of receipt of this command, the server shall return
+     * an error status of INVALID_ARGUMENT.
+     */
     public static ClusterCommand activateTextTrack(String trackId) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("trackId", trackId);
 
         return new ClusterCommand("activateTextTrack", map);
     }
+
     /**
-    * If a Text Track is active (i.e. being displayed), upon receipt of this command, the server shall stop displaying it.
-    */
+     * If a Text Track is active (i.e. being displayed), upon receipt of this command, the server shall stop displaying
+     * it.
+     */
     public static ClusterCommand deactivateTextTrack() {
         Map<String, Object> map = new LinkedHashMap<>();
 

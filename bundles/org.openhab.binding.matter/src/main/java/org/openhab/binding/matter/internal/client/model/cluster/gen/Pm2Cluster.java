@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,15 +30,9 @@ public class Pm2Cluster extends BaseCluster {
     public static final String CLUSTER_NAME = "Pm2";
     public static final int CLUSTER_ID = 0x042A;
 
-
-
-
-
     public Pm2Cluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1066, "Pm2");
     }
-
-    
 
     public String toString() {
         String str = "";

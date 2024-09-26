@@ -29,7 +29,6 @@ import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControl
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.handler.EndpointHandler;
-import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.PercentType;
 import org.openhab.core.thing.ChannelUID;
@@ -63,11 +62,11 @@ public class LevelControlConverter extends ClusterConverter {
         if (client == null) {
             return;
         }
-        if (command instanceof PercentType) {
-            float level = ((DecimalType) command).floatValue();
+        if (command instanceof PercentType percentType) {
+            float level = percentType.floatValue();
             sendOnOff(client, level > 0);
             if (level > 0) {
-                sendLevel(client, (PercentType) command);
+                sendLevel(client, percentType);
             }
         }
 
@@ -90,13 +89,13 @@ public class LevelControlConverter extends ClusterConverter {
 
     @Override
     public void updateCluster(BaseCluster cluster) {
-        if (cluster instanceof LevelControlCluster) {
-            lastLevel = levelToPercent(((LevelControlCluster) cluster).currentLevel);
+        if (cluster instanceof LevelControlCluster levelControlCluster) {
+            lastLevel = levelToPercent(levelControlCluster.currentLevel);
             logger.debug("LevelControl {}", lastLevel);
             handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
             handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
-        } else if (cluster instanceof OnOffCluster) {
-            lastOnOff = OnOffType.from(Boolean.valueOf(((OnOffCluster) cluster).onOff));
+        } else if (cluster instanceof OnOffCluster onOffCluster) {
+            lastOnOff = OnOffType.from(Boolean.valueOf(onOffCluster.onOff));
             logger.debug("OnOff {}", lastOnOff);
             handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, lastOnOff);
             handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL,

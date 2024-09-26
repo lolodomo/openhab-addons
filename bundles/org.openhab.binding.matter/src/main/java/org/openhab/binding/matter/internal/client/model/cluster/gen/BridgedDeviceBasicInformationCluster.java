@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,32 +30,27 @@ public class BridgedDeviceBasicInformationCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BridgedDeviceBasicInformation";
     public static final int CLUSTER_ID = 0x0039;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
-    public String vendorName; // 1  
-    public String vendorId; // 2  
-    public String productName; // 3  
-    public String nodeLabel; // 5  
-    public String hardwareVersion; // 7  
-    public String hardwareVersionString; // 8  
-    public String softwareVersion; // 9  
-    public String softwareVersionString; // 10  
-    public String manufacturingDate; // 11  
-    public String partNumber; // 12  
-    public String productUrl; // 13  
-    public String productLabel; // 14  
-    public String serialNumber; // 15  
-    public String reachable; // 17  
-    public String uniqueId; // 18  
-    public String productAppearance; // 20  
-
-
-
+    public Integer clusterRevision; // 65533 ClusterRevision
+    public String vendorName; // 1
+    public String vendorId; // 2
+    public String productName; // 3
+    public String nodeLabel; // 5
+    public String hardwareVersion; // 7
+    public String hardwareVersionString; // 8
+    public String softwareVersion; // 9
+    public String softwareVersionString; // 10
+    public String manufacturingDate; // 11
+    public String partNumber; // 12
+    public String productUrl; // 13
+    public String productLabel; // 14
+    public String serialNumber; // 15
+    public String reachable; // 17
+    public String uniqueId; // 18
+    public String productAppearance; // 20
 
     public BridgedDeviceBasicInformationCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 57, "BridgedDeviceBasicInformation");
     }
-
-    
 
     public String toString() {
         String str = "";

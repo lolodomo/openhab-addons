@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,22 +30,17 @@ public class BooleanStateCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "BooleanState";
     public static final int CLUSTER_ID = 0x0045;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
+    public Integer clusterRevision; // 65533 ClusterRevision
     /**
-    * This represents a boolean state.
-The semantics of this boolean state are defined by the device type using this cluster.
-For example, in a Contact Sensor device type, FALSE&#x3D;open or no contact, TRUE&#x3D;closed or contact.
-    */
+     * This represents a boolean state.
+     * The semantics of this boolean state are defined by the device type using this cluster.
+     * For example, in a Contact Sensor device type, FALSE&#x3D;open or no contact, TRUE&#x3D;closed or contact.
+     */
     public Boolean stateValue; // 0 bool R V
-
-
-
 
     public BooleanStateCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 69, "BooleanState");
     }
-
-    
 
     public String toString() {
         String str = "";

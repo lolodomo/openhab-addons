@@ -65,9 +65,9 @@ public class OnOffConverter extends ClusterConverter {
 
     @Override
     public void updateCluster(BaseCluster cluster) {
-        if (cluster instanceof OnOffCluster) {
+        if (cluster instanceof OnOffCluster onOffCluster) {
             handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF,
-                    OnOffType.from(Boolean.valueOf(((OnOffCluster) cluster).onOff)));
+                    OnOffType.from(Boolean.valueOf(onOffCluster.onOff)));
         }
     }
 

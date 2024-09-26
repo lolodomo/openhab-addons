@@ -59,6 +59,10 @@ handlebars.registerHelper('isDepreciated', function (field) {
     return field.conformance == "D" || field.conformance == "X"
 });
 
+handlebars.registerHelper('toBitmapType', function (constraint) {
+    return constraint.indexOf(" to ") > 0 ? "short" : "boolean"
+});
+
 function toUpperCamelCase(str: string | undefined) {
     if (str == undefined) {
         return "undefined"

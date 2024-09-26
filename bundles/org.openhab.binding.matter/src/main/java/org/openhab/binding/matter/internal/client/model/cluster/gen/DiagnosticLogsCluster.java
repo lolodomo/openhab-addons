@@ -16,9 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
@@ -34,56 +33,62 @@ public class DiagnosticLogsCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "DiagnosticLogs";
     public static final int CLUSTER_ID = 0x0032;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
+    public Integer clusterRevision; // 65533 ClusterRevision
 
-
-    //Enums
+    // Enums
     public enum IntentEnum {
         END_USER_SUPPORT(0, "EndUserSupport"),
         NETWORK_DIAG(1, "NetworkDiag"),
         CRASH_LOGS(2, "CrashLogs");
+
         public final Integer value;
         public final String label;
-        private IntentEnum(Integer value, String label){
+
+        private IntentEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
+
     public enum StatusEnum {
         SUCCESS(0, "Success"),
         EXHAUSTED(1, "Exhausted"),
         NO_LOGS(2, "NoLogs"),
         BUSY(3, "Busy"),
         DENIED(4, "Denied");
+
         public final Integer value;
         public final String label;
-        private StatusEnum(Integer value, String label){
-            this.value = value;
-            this.label = label;
-        }
-    }
-    public enum TransferProtocolEnum {
-        RESPONSE_PAYLOAD(0, "ResponsePayload"),
-        BDX(1, "Bdx");
-        public final Integer value;
-        public final String label;
-        private TransferProtocolEnum(Integer value, String label){
+
+        private StatusEnum(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
+    public enum TransferProtocolEnum {
+        RESPONSE_PAYLOAD(0, "ResponsePayload"),
+        BDX(1, "Bdx");
+
+        public final Integer value;
+        public final String label;
+
+        private TransferProtocolEnum(Integer value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+    }
 
     public DiagnosticLogsCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 50, "DiagnosticLogs");
     }
 
-    
-    //commands
+    // commands
     /**
-    * Reception of this command starts the process of retrieving diagnostic logs from a Node.
-    */
-    public static ClusterCommand retrieveLogsRequest(IntentEnum intent, TransferProtocolEnum requestedProtocol, String transferFileDesignator) {
+     * Reception of this command starts the process of retrieving diagnostic logs from a Node.
+     */
+    public static ClusterCommand retrieveLogsRequest(IntentEnum intent, TransferProtocolEnum requestedProtocol,
+            String transferFileDesignator) {
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("intent", intent);
         map.put("requestedProtocol", requestedProtocol);

@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,15 +30,9 @@ public class TotalVolatileOrganicCompoundsConcentrationMeasurementCluster extend
     public static final String CLUSTER_NAME = "TotalVolatileOrganicCompoundsConcentrationMeasurement";
     public static final int CLUSTER_ID = 0x042E;
 
-
-
-
-
     public TotalVolatileOrganicCompoundsConcentrationMeasurementCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 1070, "TotalVolatileOrganicCompoundsConcentrationMeasurement");
     }
-
-    
 
     public String toString() {
         String str = "";

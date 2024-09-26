@@ -34,6 +34,7 @@ import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.types.Command;
+import org.openhab.core.types.StateDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,12 @@ public abstract class ClusterConverter implements AttributeListener {
     public abstract void updateCluster(BaseCluster cluster);
 
     public abstract List<ChannelUID> createChannels(BaseCluster cluster);
+
+    protected Map<ChannelUID, StateDescription> stateDescriptions = new HashMap<>();
+
+    public @Nullable StateDescription getStateDescription(ChannelUID channelUID) {
+        return stateDescriptions.get(channelUID);
+    }
 
     protected ChannelUID createChannel(BaseCluster cluster, String channelName, ChannelTypeUID channelType,
             String channelLabel, String itemType) {

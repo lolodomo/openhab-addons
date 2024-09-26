@@ -16,12 +16,8 @@
 package org.openhab.binding.matter.internal.client.model.cluster.gen;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DataTypes.*;
 
 /**
@@ -34,29 +30,27 @@ public class DeviceEnergyManagementModeCluster extends BaseCluster {
     public static final String CLUSTER_NAME = "DeviceEnergyManagementMode";
     public static final int CLUSTER_ID = 0x009F;
 
-    public Integer clusterRevision; // 65533 ClusterRevision 
+    public Integer clusterRevision; // 65533 ClusterRevision
 
-
-    //Enums
+    // Enums
     public enum ModeTag {
         NO_OPTIMIZATION(16384, "NoOptimization"),
         DEVICE_OPTIMIZATION(16385, "DeviceOptimization"),
         LOCAL_OPTIMIZATION(16386, "LocalOptimization"),
         GRID_OPTIMIZATION(16387, "GridOptimization");
+
         public final Integer value;
         public final String label;
-        private ModeTag(Integer value, String label){
+
+        private ModeTag(Integer value, String label) {
             this.value = value;
             this.label = label;
         }
     }
 
-
     public DeviceEnergyManagementModeCluster(BigInteger nodeId, int endpointId) {
         super(nodeId, endpointId, 159, "DeviceEnergyManagementMode");
     }
-
-    
 
     public String toString() {
         String str = "";

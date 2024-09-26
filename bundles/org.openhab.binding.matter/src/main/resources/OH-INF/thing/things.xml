@@ -67,11 +67,12 @@
 				<description>The Matter Endpoint Id</description>
 			</parameter>
 			<parameter name="commissionMode" type="boolean">
-                <label>Commission Mode</label>
-                <description>Puts the device into commission mode for 3rd party systems to connect to. A temporary pairing code will be generated and available in this thing's properties</description>
-                <advanced>true</advanced>
-                <default>false</default>
-            </parameter>
+				<label>Commission Mode</label>
+				<description>Puts the device into commission mode for 3rd party systems to connect to. A temporary pairing code will
+					be generated and available in this thing's properties</description>
+				<advanced>true</advanced>
+				<default>false</default>
+			</parameter>
 		</config-description>
 	</thing-type>
 
