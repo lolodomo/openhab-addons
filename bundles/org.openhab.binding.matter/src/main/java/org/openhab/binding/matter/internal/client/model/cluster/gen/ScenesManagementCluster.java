@@ -252,10 +252,10 @@ public class ScenesManagementCluster extends BaseCluster {
          * SceneNames
          * This feature indicates the ability to store a name for a scene when a scene is added.
          */
-        public boolean sN;
+        public boolean sceneNames;
 
-        public FeatureMap(boolean sN) {
-            this.sN = sN;
+        public FeatureMap(boolean sceneNames) {
+            this.sceneNames = sceneNames;
         }
     }
 

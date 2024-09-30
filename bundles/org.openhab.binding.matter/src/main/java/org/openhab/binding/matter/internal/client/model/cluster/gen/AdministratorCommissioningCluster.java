@@ -97,10 +97,10 @@ public class AdministratorCommissioningCluster extends BaseCluster {
          * Basic
          * Node supports Basic Commissioning Method.
          */
-        public boolean bC;
+        public boolean basic;
 
-        public FeatureMap(boolean bC) {
-            this.bC = bC;
+        public FeatureMap(boolean basic) {
+            this.basic = basic;
         }
     }
 

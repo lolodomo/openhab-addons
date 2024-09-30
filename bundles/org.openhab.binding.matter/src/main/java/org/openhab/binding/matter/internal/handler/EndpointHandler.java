@@ -16,13 +16,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -33,25 +28,21 @@ import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BridgedDeviceBasicInformationCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.DeviceTypes;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.DescriptorCluster;
 import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
 import org.openhab.binding.matter.internal.config.EndpointConfiguration;
-import org.openhab.binding.matter.internal.converter.ClusterConverter;
+import org.openhab.binding.matter.internal.mapper.DeviceType;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.validation.ConfigValidationException;
-import org.openhab.core.thing.Bridge;
-import org.openhab.core.thing.ChannelUID;
-import org.openhab.core.thing.Thing;
-import org.openhab.core.thing.ThingStatus;
-import org.openhab.core.thing.ThingStatusDetail;
-import org.openhab.core.thing.ThingStatusInfo;
+import org.openhab.core.thing.*;
 import org.openhab.core.thing.binding.BaseThingHandler;
 import org.openhab.core.thing.binding.BridgeHandler;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
+import org.openhab.core.thing.type.DynamicStateDescriptionProvider;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.RefreshType;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,14 +53,16 @@ import org.slf4j.LoggerFactory;
  * @author Dan Cunningham - Initial contribution
  */
 @NonNullByDefault
-public class EndpointHandler extends BaseThingHandler implements AttributeListener {
+public class EndpointHandler extends BaseThingHandler implements AttributeListener, DynamicStateDescriptionProvider {
 
     private final Logger logger = LoggerFactory.getLogger(EndpointHandler.class);
     private BigInteger nodeId = BigInteger.valueOf(0);
     protected int endpointId;
     private List<Integer> deviceTypes = Collections.emptyList();
-    private Map<String, ClusterConverter> channelIdMap = new HashMap<String, ClusterConverter>();
-    private Map<Integer, ClusterConverter> clusterIdMap = new HashMap<Integer, ClusterConverter>();
+    private Map<String, DeviceType> channelIdMap = new HashMap<String, DeviceType>();
+    // private Map<Integer, DeviceTypeMapper> clusterIdMap = new HashMap<Integer, DeviceTypeMapper>();
+    private Map<Integer, DeviceType> deviceTypeMap = new HashMap<Integer, DeviceType>();
+
     private @Nullable MatterWebsocketClient cachedClient;
 
     public EndpointHandler(Thing thing) {
@@ -93,7 +86,7 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         }
 
         logger.debug("Looking up converter for {}", channelUID);
-        ClusterConverter converter = channelIdMap.get(channelUID.getId());
+        DeviceType converter = channelIdMap.get(channelUID.getId());
         if (converter != null) {
             logger.debug("Found converter for {} : {} ", channelUID, converter);
             converter.handleCommand(channelUID, command);
@@ -198,6 +191,18 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         return super.editThing();
     }
 
+    @Override
+    public @Nullable StateDescription getStateDescription(Channel channel,
+            @Nullable StateDescription originalStateDescription, @Nullable Locale locale) {
+        for (DeviceType dt : deviceTypeMap.values()) {
+            StateDescription sd = dt.getStateDescription(channel.getUID());
+            if (sd != null) {
+                return sd;
+            }
+        }
+        return null;
+    }
+
     public int getEndpointId() {
         return endpointId;
     }
@@ -215,19 +220,6 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         }
         Map<String, BaseCluster> clusters = endpoint.clusters;
 
-        String deviceTypesString = getThing().getProperties().get("deviceTypes");
-        boolean isSwitchTypeInternal = false;
-        if (deviceTypesString != null) {
-            String[] deviceTypesArray = deviceTypesString.split(",");
-            boolean hasOnOffLight = Arrays.stream(deviceTypesArray)
-                    .anyMatch(s -> s.equals(DeviceTypes.OnOffLight.toString()));
-            boolean hasDimmableLight = Arrays.stream(deviceTypesArray)
-                    .anyMatch(s -> s.equals(DeviceTypes.DimmableLight.toString()));
-            isSwitchTypeInternal = hasOnOffLight && !hasDimmableLight;
-        }
-
-        final boolean isSwitchType = isSwitchTypeInternal;
-
         Object basicInfoObject = clusters.get(BasicInformationCluster.CLUSTER_NAME);
         if (basicInfoObject != null) {
             BasicInformationCluster basicInfo = (BasicInformationCluster) basicInfoObject;
@@ -243,46 +235,78 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
 
             }
         }
-        clusters.forEach((clusterName, cluster) -> {
-            logger.trace("checking cluster {} for handler", clusterName);
-            // TODO this is a hack to ignore the dimmer cluster that switches advertise as a convienence, need to
-            // revisit this.
-            if (cluster.id == LevelControlCluster.CLUSTER_ID && isSwitchType) {
-                return;
-            }
-            Integer id = cluster.id;
-            ClusterConverter clusterConverter = clusterIdMap.get(id);
-            if (clusterConverter == null) {
-                Class<? extends ClusterConverter> clazz = ClusterConverter.getConverterClass(id);
-                logger.trace("Creating handler {}", clazz);
+
+        DescriptorCluster descriptorCluster = (DescriptorCluster) clusters.get(DescriptorCluster.CLUSTER_NAME);
+
+        descriptorCluster.deviceTypeList.forEach(dt -> {
+            DeviceType mapper = deviceTypeMap.get(dt.deviceType);
+            if (mapper == null) {
+                Class<? extends DeviceType> clazz = DeviceType.getDeviceMapper(dt.deviceType);
                 if (clazz != null) {
                     try {
-                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class };
-                        Constructor<? extends ClusterConverter> constructor = clazz
-                                .getConstructor(constructorParameterTypes);
-                        final ClusterConverter converter = constructor.newInstance(this);
-                        for (Integer i : converter.supportedClusters()) {
-                            clusterIdMap.put(i, converter);
-                        }
-                        // now we need to create channels and add those to the channel map
-                        converter.createChannels(cluster).forEach(channel -> {
-                            logger.trace("Added channel {}", channel.getId());
-                            channelIdMap.put(channel.getId(), converter);
+                        Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class, Integer.class };
+                        Constructor<? extends DeviceType> constructor = clazz.getConstructor(constructorParameterTypes);
+                        final DeviceType mapperInternal = constructor.newInstance(this, dt.deviceType);
+                        deviceTypeMap.put(dt.deviceType, mapperInternal);
+
+                        mapperInternal.createChannels(clusters).forEach(channel -> {
+                            logger.debug("Added channel {}", channel.getId());
+                            channelIdMap.put(channel.getId(), mapperInternal);
                         });
-                        clusterConverter = converter;
                     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                             | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-                        logger.debug("Could not create cluster handler", e);
+                        logger.debug("Could not create device type mapper", e);
                     }
+                } else {
+                    logger.debug("No mapper found for device type {}", dt.deviceType);
                 }
             }
-            if (clusterConverter == null) {
-                logger.trace("No handler found for cluster {}", clusterName);
-                return;
-            }
-            clusterConverter.updateCluster(cluster);
+        });
+
+        clusters.forEach((clusterName, cluster) -> {
+            deviceTypeMap.forEach((id, dm) -> dm.updateCluster(cluster));
         });
     }
+    // clusters.forEach((clusterName, cluster) -> {
+    // logger.trace("checking cluster {} for handler", clusterName);
+    // // TODO this is a hack to ignore the dimmer cluster that switches advertise as a convienence, need to
+    // // revisit this.
+    // if (cluster.id == LevelControlCluster.CLUSTER_ID && isSwitchType) {
+    // return;
+    // }
+    // Integer id = cluster.id;
+    // DeviceTypeMapper clusterConverter = clusterIdMap.get(id);
+    // if (clusterConverter == null) {
+    // Class<? extends DeviceTypeMapper> clazz = DeviceTypeMapper.getConverterClass(id);
+    // logger.trace("Creating handler {}", clazz);
+    // if (clazz != null) {
+    // try {
+    // Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class };
+    // Constructor<? extends DeviceTypeMapper> constructor = clazz
+    // .getConstructor(constructorParameterTypes);
+    // final DeviceTypeMapper converter = constructor.newInstance(this);
+    // for (Integer i : converter.supportedClusters()) {
+    // clusterIdMap.put(i, converter);
+    // }
+    // // now we need to create channels and add those to the channel map
+    // converter.createChannels(cluster).forEach(channel -> {
+    // logger.trace("Added channel {}", channel.getId());
+    // channelIdMap.put(channel.getId(), converter);
+    // });
+    // clusterConverter = converter;
+    // } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+    // | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+    // logger.debug("Could not create cluster handler", e);
+    // }
+    // }
+    // }
+    // if (clusterConverter == null) {
+    // logger.trace("No handler found for cluster {}", clusterName);
+    // return;
+    // }
+    // clusterConverter.updateCluster(cluster);
+    // });
+    // }
 
     @Override
     public void handleRemoval() {
@@ -295,12 +319,11 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
 
     @Override
     public void onEvent(AttributeChangedMessage message) {
-        ClusterConverter c = clusterIdMap.get(message.path.clusterId);
-        if (c == null) {
-            logger.debug("No cluster found for id {}", message.path.clusterId);
-            return;
-        }
-        c.onEvent(message);
+        deviceTypeMap.forEach((id, dm) -> {
+            if (dm.supportedClusters().contains(message.path.clusterId)) {
+                dm.onEvent(message);
+            }
+        });
     }
 
     public BigInteger getNodeId() {

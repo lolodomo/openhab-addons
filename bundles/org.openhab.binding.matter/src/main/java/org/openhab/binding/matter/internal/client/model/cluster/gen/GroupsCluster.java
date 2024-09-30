@@ -57,10 +57,10 @@ public class GroupsCluster extends BaseCluster {
          * GroupNames
          * The Group Names feature indicates the ability to store a name for a group when a group is added.
          */
-        public boolean gN;
+        public boolean groupNames;
 
-        public FeatureMap(boolean gN) {
-            this.gN = gN;
+        public FeatureMap(boolean groupNames) {
+            this.groupNames = groupNames;
         }
     }
 

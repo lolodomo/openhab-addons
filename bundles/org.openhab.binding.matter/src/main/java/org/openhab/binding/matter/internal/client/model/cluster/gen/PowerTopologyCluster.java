@@ -50,28 +50,28 @@ public class PowerTopologyCluster extends BaseCluster {
          * NodeTopology
          * This endpoint provides or consumes power to/from the entire node
          */
-        public boolean nODE;
+        public boolean nodeTopology;
         /**
          * TreeTopology
          * This endpoint provides or consumes power to/from itself and its child endpoints
          */
-        public boolean tREE;
+        public boolean treeTopology;
         /**
          * SetTopology
          * This endpoint provides or consumes power to/from a specified set of endpoints
          */
-        public boolean sET;
+        public boolean setTopology;
         /**
          * DynamicPowerFlow
          * The specified set of endpoints may change
          */
-        public boolean dYPF;
+        public boolean dynamicPowerFlow;
 
-        public FeatureMap(boolean nODE, boolean tREE, boolean sET, boolean dYPF) {
-            this.nODE = nODE;
-            this.tREE = tREE;
-            this.sET = sET;
-            this.dYPF = dYPF;
+        public FeatureMap(boolean nodeTopology, boolean treeTopology, boolean setTopology, boolean dynamicPowerFlow) {
+            this.nodeTopology = nodeTopology;
+            this.treeTopology = treeTopology;
+            this.setTopology = setTopology;
+            this.dynamicPowerFlow = dynamicPowerFlow;
         }
     }
 

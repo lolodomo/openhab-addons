@@ -153,22 +153,22 @@ public class KeypadInputCluster extends BaseCluster {
          * NavigationKeyCodes
          * Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
          */
-        public boolean nV;
+        public boolean navigationKeyCodes;
         /**
          * LocationKeys
          * Supports CEC keys 0x0A (Settings) and 0x09 (Home)
          */
-        public boolean lK;
+        public boolean locationKeys;
         /**
          * NumberKeys
          * Supports numeric input 0..9
          */
-        public boolean nK;
+        public boolean numberKeys;
 
-        public FeatureMap(boolean nV, boolean lK, boolean nK) {
-            this.nV = nV;
-            this.lK = lK;
-            this.nK = nK;
+        public FeatureMap(boolean navigationKeyCodes, boolean locationKeys, boolean numberKeys) {
+            this.navigationKeyCodes = navigationKeyCodes;
+            this.locationKeys = locationKeys;
+            this.numberKeys = numberKeys;
         }
     }
 

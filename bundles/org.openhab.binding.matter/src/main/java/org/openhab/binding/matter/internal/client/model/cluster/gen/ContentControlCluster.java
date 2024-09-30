@@ -297,54 +297,55 @@ public class ContentControlCluster extends BaseCluster {
          * ScreenTime
          * Supports managing screen time limits.
          */
-        public boolean sT;
+        public boolean screenTime;
         /**
          * PinManagement
          * Supports managing a PIN code which is used for restricting access to configuration of this feature.
          */
-        public boolean pM;
+        public boolean pinManagement;
         /**
          * BlockUnrated
          * Supports managing content controls for unrated content.
          */
-        public boolean bU;
+        public boolean blockUnrated;
         /**
          * OnDemandContentRating
          * Supports managing content controls based upon rating threshold for on demand content.
          */
-        public boolean oCR;
+        public boolean onDemandContentRating;
         /**
          * ScheduledContentRating
          * Supports managing content controls based upon rating threshold for scheduled content.
          */
-        public boolean sCR;
+        public boolean scheduledContentRating;
         /**
          * BlockChannels
          * Supports managing a set of channels that are prohibited.
          */
-        public boolean bC;
+        public boolean blockChannels;
         /**
          * BlockApplications
          * Supports managing a set of applications that are prohibited.
          */
-        public boolean bA;
+        public boolean blockApplications;
         /**
          * BlockContentTimeWindow
          * Supports managing content controls based upon setting time window in which all contents and applications
          * SHALL be blocked.
          */
-        public boolean bTW;
+        public boolean blockContentTimeWindow;
 
-        public FeatureMap(boolean sT, boolean pM, boolean bU, boolean oCR, boolean sCR, boolean bC, boolean bA,
-                boolean bTW) {
-            this.sT = sT;
-            this.pM = pM;
-            this.bU = bU;
-            this.oCR = oCR;
-            this.sCR = sCR;
-            this.bC = bC;
-            this.bA = bA;
-            this.bTW = bTW;
+        public FeatureMap(boolean screenTime, boolean pinManagement, boolean blockUnrated,
+                boolean onDemandContentRating, boolean scheduledContentRating, boolean blockChannels,
+                boolean blockApplications, boolean blockContentTimeWindow) {
+            this.screenTime = screenTime;
+            this.pinManagement = pinManagement;
+            this.blockUnrated = blockUnrated;
+            this.onDemandContentRating = onDemandContentRating;
+            this.scheduledContentRating = scheduledContentRating;
+            this.blockChannels = blockChannels;
+            this.blockApplications = blockApplications;
+            this.blockContentTimeWindow = blockContentTimeWindow;
         }
     }
 

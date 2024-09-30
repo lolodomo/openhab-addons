@@ -319,29 +319,29 @@ public class TimeSynchronizationCluster extends BaseCluster {
          * commands, and TimeZone and DSTOffset attributes, and shall expose the local time through the LocalTime
          * attribute.
          */
-        public boolean tZ;
+        public boolean timeZone;
         /**
          * NtpClient
          * Allows a node to use NTP/SNTP for time synchronization.
          */
-        public boolean nTPC;
+        public boolean ntpClient;
         /**
          * NtpServer
          * Allows a Node to host an NTP server for the network so that other Nodes can achieve a high accuracy time
          * synchronization within the network. See Section 11.17.15, “Acting as an NTP Server”.
          */
-        public boolean nTPS;
+        public boolean ntpServer;
         /**
          * TimeSyncClient
          * This node also supports a time synchronization client and can connect to and read time from other nodes.
          */
-        public boolean tSC;
+        public boolean timeSyncClient;
 
-        public FeatureMap(boolean tZ, boolean nTPC, boolean nTPS, boolean tSC) {
-            this.tZ = tZ;
-            this.nTPC = nTPC;
-            this.nTPS = nTPS;
-            this.tSC = tSC;
+        public FeatureMap(boolean timeZone, boolean ntpClient, boolean ntpServer, boolean timeSyncClient) {
+            this.timeZone = timeZone;
+            this.ntpClient = ntpClient;
+            this.ntpServer = ntpServer;
+            this.timeSyncClient = timeSyncClient;
         }
     }
 

@@ -85,10 +85,10 @@ public class PressureMeasurementCluster extends BaseCluster {
          * Extended
          * Extended range and resolution
          */
-        public boolean eXT;
+        public boolean extended;
 
-        public FeatureMap(boolean eXT) {
-            this.eXT = eXT;
+        public FeatureMap(boolean extended) {
+            this.extended = extended;
         }
     }
 

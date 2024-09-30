@@ -269,10 +269,10 @@ public class GeneralDiagnosticsCluster extends BaseCluster {
          * This feature shall be supported if the MaxPathsPerInvoke attribute of the Basic Information Cluster has a
          * value &gt; 1.
          */
-        public boolean dMTEST;
+        public boolean dataModelTest;
 
-        public FeatureMap(boolean dMTEST) {
-            this.dMTEST = dMTEST;
+        public FeatureMap(boolean dataModelTest) {
+            this.dataModelTest = dataModelTest;
         }
     }
 

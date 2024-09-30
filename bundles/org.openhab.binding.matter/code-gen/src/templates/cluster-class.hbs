@@ -115,11 +115,11 @@ public class {{asUpperCamelCase name}}Cluster extends BaseCluster {
         * {{details}}
         */
 {{/if}}
-        public {{toBitmapType constraint}} {{asLowerCamelCase name}};
+        public {{toBitmapType constraint}} {{toBitmapChildName this ../type}};
 {{/each}}
-        public {{asUpperCamelCase name}}({{#each children}}{{toBitmapType constraint}} {{asLowerCamelCase name}}{{#unless (isLastElement @index ../children.length)}}, {{/unless}}{{/each}}){
+        public {{asUpperCamelCase name}}({{#each children}}{{toBitmapType constraint}} {{toBitmapChildName this ../type}}{{#unless (isLastElement @index ../children.length)}}, {{/unless}}{{/each}}){
 {{#each children}}
-            this.{{asLowerCamelCase name}} = {{asLowerCamelCase name}};
+            this.{{toBitmapChildName this ../type}} = {{toBitmapChildName this ../type}};
 {{/each}}
         }
     }

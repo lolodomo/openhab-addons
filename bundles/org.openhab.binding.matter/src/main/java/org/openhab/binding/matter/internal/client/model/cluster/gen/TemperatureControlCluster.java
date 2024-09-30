@@ -84,24 +84,24 @@ public class TemperatureControlCluster extends BaseCluster {
          * the feature TN shall be used. Note that this cluster provides and supports temperatures in degrees Celsius
          * via the temperature data type.
          */
-        public boolean tN;
+        public boolean temperatureNumber;
         /**
          * TemperatureLevel
          * For devices that use vendor-specific temperature levels for the temperature setpoint, such as some washers,
          * the feature TL shall be used.
          */
-        public boolean tL;
+        public boolean temperatureLevel;
         /**
          * TemperatureStep
          * For devices that support discrete temperature setpoints that are larger than the temperature resolution
          * imposed via the temperature data type, the Step feature may be used.
          */
-        public boolean sTEP;
+        public boolean temperatureStep;
 
-        public FeatureMap(boolean tN, boolean tL, boolean sTEP) {
-            this.tN = tN;
-            this.tL = tL;
-            this.sTEP = sTEP;
+        public FeatureMap(boolean temperatureNumber, boolean temperatureLevel, boolean temperatureStep) {
+            this.temperatureNumber = temperatureNumber;
+            this.temperatureLevel = temperatureLevel;
+            this.temperatureStep = temperatureStep;
         }
     }
 

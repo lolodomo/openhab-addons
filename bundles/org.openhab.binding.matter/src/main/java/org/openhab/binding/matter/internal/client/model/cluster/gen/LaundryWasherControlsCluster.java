@@ -92,17 +92,17 @@ public class LaundryWasherControlsCluster extends BaseCluster {
          * This feature indicates multiple spin speeds are supported in at least one supported mode. Note that some
          * modes may not support multiple spin speeds even if this feature is supported.
          */
-        public boolean sPIN;
+        public boolean spin;
         /**
          * Rinse
          * This feature indicates multiple rinse cycles are supported in at least one supported mode. Note that some
          * modes may not support selection of the number of rinse cycles even if this feature is supported.
          */
-        public boolean rINSE;
+        public boolean rinse;
 
-        public FeatureMap(boolean sPIN, boolean rINSE) {
-            this.sPIN = sPIN;
-            this.rINSE = rINSE;
+        public FeatureMap(boolean spin, boolean rinse) {
+            this.spin = spin;
+            this.rinse = rinse;
         }
     }
 

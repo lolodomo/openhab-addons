@@ -220,40 +220,41 @@ public class FanControlCluster extends BaseCluster {
          * which has a maximum of 100.
          * See Speed Rules for more details.
          */
-        public boolean sPD;
+        public boolean multiSpeed;
         /**
          * Auto
          * Automatic mode supported for fan speed
          */
-        public boolean aUT;
+        public boolean auto;
         /**
          * Rocking
          * Rocking movement supported
          */
-        public boolean rCK;
+        public boolean rocking;
         /**
          * Wind
          * Wind emulation supported
          */
-        public boolean wND;
+        public boolean wind;
         /**
          * Step
          * Step command supported
          */
-        public boolean sTEP;
+        public boolean step;
         /**
          * AirflowDirection
          * Airflow Direction attribute is supported
          */
-        public boolean dIR;
+        public boolean airflowDirection;
 
-        public FeatureMap(boolean sPD, boolean aUT, boolean rCK, boolean wND, boolean sTEP, boolean dIR) {
-            this.sPD = sPD;
-            this.aUT = aUT;
-            this.rCK = rCK;
-            this.wND = wND;
-            this.sTEP = sTEP;
-            this.dIR = dIR;
+        public FeatureMap(boolean multiSpeed, boolean auto, boolean rocking, boolean wind, boolean step,
+                boolean airflowDirection) {
+            this.multiSpeed = multiSpeed;
+            this.auto = auto;
+            this.rocking = rocking;
+            this.wind = wind;
+            this.step = step;
+            this.airflowDirection = airflowDirection;
         }
     }
 

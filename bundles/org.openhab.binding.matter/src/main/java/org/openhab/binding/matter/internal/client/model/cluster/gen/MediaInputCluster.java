@@ -107,10 +107,10 @@ public class MediaInputCluster extends BaseCluster {
          * NameUpdates
          * Supports updates to the input names
          */
-        public boolean nU;
+        public boolean nameUpdates;
 
-        public FeatureMap(boolean nU) {
-            this.nU = nU;
+        public FeatureMap(boolean nameUpdates) {
+            this.nameUpdates = nameUpdates;
         }
     }
 

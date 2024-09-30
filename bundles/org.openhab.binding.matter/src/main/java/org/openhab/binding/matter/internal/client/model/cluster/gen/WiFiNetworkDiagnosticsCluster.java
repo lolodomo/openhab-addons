@@ -165,17 +165,17 @@ public class WiFiNetworkDiagnosticsCluster extends BaseCluster {
          * PacketCounts
          * Node makes available the counts for the number of received and transmitted packets on the Wi-Fi interface.
          */
-        public boolean pKTCNT;
+        public boolean packetCounts;
         /**
          * ErrorCounts
          * Node makes available the counts for the number of errors that have occurred during the reception and
          * transmission of packets on the Wi-Fi interface.
          */
-        public boolean eRRCNT;
+        public boolean errorCounts;
 
-        public FeatureMap(boolean pKTCNT, boolean eRRCNT) {
-            this.pKTCNT = pKTCNT;
-            this.eRRCNT = eRRCNT;
+        public FeatureMap(boolean packetCounts, boolean errorCounts) {
+            this.packetCounts = packetCounts;
+            this.errorCounts = errorCounts;
         }
     }
 

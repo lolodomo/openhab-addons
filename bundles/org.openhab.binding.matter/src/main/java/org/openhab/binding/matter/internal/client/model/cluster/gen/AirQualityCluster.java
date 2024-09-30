@@ -66,28 +66,28 @@ public class AirQualityCluster extends BaseCluster {
          * Fair
          * Cluster supports the Fair air quality level
          */
-        public boolean fAIR;
+        public boolean fair;
         /**
          * Moderate
          * Cluster supports the Moderate air quality level
          */
-        public boolean mOD;
+        public boolean moderate;
         /**
          * VeryPoor
          * Cluster supports the Very poor air quality level
          */
-        public boolean vPOOR;
+        public boolean veryPoor;
         /**
          * ExtremelyPoor
          * Cluster supports the Extremely poor air quality level
          */
-        public boolean xPOOR;
+        public boolean extremelyPoor;
 
-        public FeatureMap(boolean fAIR, boolean mOD, boolean vPOOR, boolean xPOOR) {
-            this.fAIR = fAIR;
-            this.mOD = mOD;
-            this.vPOOR = vPOOR;
-            this.xPOOR = xPOOR;
+        public FeatureMap(boolean fair, boolean moderate, boolean veryPoor, boolean extremelyPoor) {
+            this.fair = fair;
+            this.moderate = moderate;
+            this.veryPoor = veryPoor;
+            this.extremelyPoor = extremelyPoor;
         }
     }
 

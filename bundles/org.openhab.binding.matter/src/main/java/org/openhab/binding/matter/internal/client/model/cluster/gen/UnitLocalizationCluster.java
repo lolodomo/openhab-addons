@@ -60,10 +60,10 @@ public class UnitLocalizationCluster extends BaseCluster {
          * TemperatureUnit
          * The Node can be configured to use different units of temperature when conveying values to a user.
          */
-        public boolean tEMP;
+        public boolean temperatureUnit;
 
-        public FeatureMap(boolean tEMP) {
-            this.tEMP = tEMP;
+        public FeatureMap(boolean temperatureUnit) {
+            this.temperatureUnit = temperatureUnit;
         }
     }
 

@@ -378,34 +378,35 @@ public class ElectricalPowerMeasurementCluster extends BaseCluster {
          * DirectCurrent
          * This feature indicates the cluster can measure a direct current.
          */
-        public boolean dIRC;
+        public boolean directCurrent;
         /**
          * AlternatingCurrent
          * This feature indicates the cluster can measure an alternating current.
          */
-        public boolean aLTC;
+        public boolean alternatingCurrent;
         /**
          * PolyphasePower
          * This feature indicates the cluster represents the collective measurements for a Polyphase power supply.
          */
-        public boolean pOLY;
+        public boolean polyphasePower;
         /**
          * Harmonics
          * This feature indicates the cluster can measure the harmonics of an alternating current.
          */
-        public boolean hARM;
+        public boolean harmonics;
         /**
          * PowerQuality
          * This feature indicates the cluster can measure the harmonic phases of an alternating current.
          */
-        public boolean pWRQ;
+        public boolean powerQuality;
 
-        public FeatureMap(boolean dIRC, boolean aLTC, boolean pOLY, boolean hARM, boolean pWRQ) {
-            this.dIRC = dIRC;
-            this.aLTC = aLTC;
-            this.pOLY = pOLY;
-            this.hARM = hARM;
-            this.pWRQ = pWRQ;
+        public FeatureMap(boolean directCurrent, boolean alternatingCurrent, boolean polyphasePower, boolean harmonics,
+                boolean powerQuality) {
+            this.directCurrent = directCurrent;
+            this.alternatingCurrent = alternatingCurrent;
+            this.polyphasePower = polyphasePower;
+            this.harmonics = harmonics;
+            this.powerQuality = powerQuality;
         }
     }
 

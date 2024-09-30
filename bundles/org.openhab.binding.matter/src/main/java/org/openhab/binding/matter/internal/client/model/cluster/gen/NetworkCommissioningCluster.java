@@ -323,22 +323,23 @@ public class NetworkCommissioningCluster extends BaseCluster {
          * WiFiNetworkInterface
          * Wi-Fi related features
          */
-        public boolean wI;
+        public boolean wiFiNetworkInterface;
         /**
          * ThreadNetworkInterface
          * Thread related features
          */
-        public boolean tH;
+        public boolean threadNetworkInterface;
         /**
          * EthernetNetworkInterface
          * Ethernet related features
          */
-        public boolean eT;
+        public boolean ethernetNetworkInterface;
 
-        public FeatureMap(boolean wI, boolean tH, boolean eT) {
-            this.wI = wI;
-            this.tH = tH;
-            this.eT = eT;
+        public FeatureMap(boolean wiFiNetworkInterface, boolean threadNetworkInterface,
+                boolean ethernetNetworkInterface) {
+            this.wiFiNetworkInterface = wiFiNetworkInterface;
+            this.threadNetworkInterface = threadNetworkInterface;
+            this.ethernetNetworkInterface = ethernetNetworkInterface;
         }
     }
 

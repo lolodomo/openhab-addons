@@ -389,6 +389,15 @@ public class MatterWebsocketClient implements WebSocketListener {
         });
     }
 
+    public CompletableFuture<Void> clusterWriteAttribute(BigInteger nodeId, Integer endpointId, String clusterName,
+            String attributeName, String value) {
+        Object[] clusterArgs = { String.valueOf(nodeId), endpointId, clusterName, attributeName, value };
+        CompletableFuture<JsonElement> future = sendMessage("clusters", "writeAttribute", clusterArgs);
+        return future.thenAccept(obj -> {
+            // Do nothing, just to complete the future
+        });
+    }
+
     public CompletableFuture<ActiveSessionInformation[]> getSessionInformation() {
         CompletableFuture<JsonElement> future = sendMessage("nodes", "sessionInformation", new Object[0]);
         return future.thenApply(obj -> {

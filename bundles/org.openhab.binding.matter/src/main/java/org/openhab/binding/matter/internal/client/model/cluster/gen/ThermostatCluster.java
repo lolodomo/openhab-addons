@@ -753,49 +753,49 @@ public class ThermostatCluster extends BaseCluster {
          * Heating
          * Thermostat is capable of managing a heating device
          */
-        public boolean hEAT;
+        public boolean heating;
         /**
          * Cooling
          * Thermostat is capable of managing a cooling device
          */
-        public boolean cOOL;
+        public boolean cooling;
         /**
          * Occupancy
          * Supports Occupied and Unoccupied setpoints
          */
-        public boolean oCC;
+        public boolean occupancy;
         /**
          * ScheduleConfiguration
          * Supports remote configuration of a weekly schedule of setpoint transitions
          */
-        public boolean sCH;
+        public boolean scheduleConfiguration;
         /**
          * Setback
          * Supports configurable setback (or span)
          */
-        public boolean sB;
+        public boolean setback;
         /**
          * AutoMode
          * Supports a System Mode of Auto
          */
-        public boolean aUTO;
+        public boolean autoMode;
         /**
          * LocalTemperatureNotExposed
          * This feature indicates that the Calculated Local Temperature used internally is unavailable to report
          * externally, for example due to the temperature control being done by a separate subsystem which does not
          * offer a view into the currently measured temperature, but allows setpoints to be provided.
          */
-        public boolean lTNE;
+        public boolean localTemperatureNotExposed;
 
-        public FeatureMap(boolean hEAT, boolean cOOL, boolean oCC, boolean sCH, boolean sB, boolean aUTO,
-                boolean lTNE) {
-            this.hEAT = hEAT;
-            this.cOOL = cOOL;
-            this.oCC = oCC;
-            this.sCH = sCH;
-            this.sB = sB;
-            this.aUTO = aUTO;
-            this.lTNE = lTNE;
+        public FeatureMap(boolean heating, boolean cooling, boolean occupancy, boolean scheduleConfiguration,
+                boolean setback, boolean autoMode, boolean localTemperatureNotExposed) {
+            this.heating = heating;
+            this.cooling = cooling;
+            this.occupancy = occupancy;
+            this.scheduleConfiguration = scheduleConfiguration;
+            this.setback = setback;
+            this.autoMode = autoMode;
+            this.localTemperatureNotExposed = localTemperatureNotExposed;
         }
     }
 

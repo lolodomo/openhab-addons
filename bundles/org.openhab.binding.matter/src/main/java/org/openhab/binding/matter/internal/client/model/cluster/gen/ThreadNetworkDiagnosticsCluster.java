@@ -688,29 +688,29 @@ public class ThreadNetworkDiagnosticsCluster extends BaseCluster {
          * PacketCounts
          * Server supports the counts for the number of received and transmitted packets on the Thread interface.
          */
-        public boolean pKTCNT;
+        public boolean packetCounts;
         /**
          * ErrorCounts
          * Server supports the counts for the number of errors that have occurred during the reception and transmission
          * of packets on the Thread interface.
          */
-        public boolean eRRCNT;
+        public boolean errorCounts;
         /**
          * MleCounts
          * Server supports the counts for various MLE layer happenings.
          */
-        public boolean mLECNT;
+        public boolean mleCounts;
         /**
          * MacCounts
          * Server supports the counts for various MAC layer happenings.
          */
-        public boolean mACCNT;
+        public boolean macCounts;
 
-        public FeatureMap(boolean pKTCNT, boolean eRRCNT, boolean mLECNT, boolean mACCNT) {
-            this.pKTCNT = pKTCNT;
-            this.eRRCNT = eRRCNT;
-            this.mLECNT = mLECNT;
-            this.mACCNT = mACCNT;
+        public FeatureMap(boolean packetCounts, boolean errorCounts, boolean mleCounts, boolean macCounts) {
+            this.packetCounts = packetCounts;
+            this.errorCounts = errorCounts;
+            this.mleCounts = mleCounts;
+            this.macCounts = macCounts;
         }
     }
 

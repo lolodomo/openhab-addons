@@ -481,34 +481,35 @@ public class ColorControlCluster extends BaseCluster {
          * HueSaturation
          * Supports color specification via hue/saturation.
          */
-        public boolean hS;
+        public boolean hueSaturation;
         /**
          * EnhancedHue
          * Enhanced hue is supported.
          */
-        public boolean eHUE;
+        public boolean enhancedHue;
         /**
          * ColorLoop
          * Color loop is supported.
          */
-        public boolean cL;
+        public boolean colorLoop;
         /**
          * Xy
          * Supports color specification via XY.
          */
-        public boolean xY;
+        public boolean xy;
         /**
          * ColorTemperature
          * Supports specification of color temperature.
          */
-        public boolean cT;
+        public boolean colorTemperature;
 
-        public FeatureMap(boolean hS, boolean eHUE, boolean cL, boolean xY, boolean cT) {
-            this.hS = hS;
-            this.eHUE = eHUE;
-            this.cL = cL;
-            this.xY = xY;
-            this.cT = cT;
+        public FeatureMap(boolean hueSaturation, boolean enhancedHue, boolean colorLoop, boolean xy,
+                boolean colorTemperature) {
+            this.hueSaturation = hueSaturation;
+            this.enhancedHue = enhancedHue;
+            this.colorLoop = colorLoop;
+            this.xy = xy;
+            this.colorTemperature = colorTemperature;
         }
     }
 

@@ -213,23 +213,23 @@ public class IcdManagementCluster extends BaseCluster {
          * When this feature is supported, the device shall support all the associated commands and attributes to
          * properly support the Check-In Protocol.
          */
-        public boolean cIP;
+        public boolean checkInProtocolSupport;
         /**
          * UserActiveModeTrigger
          * This feature is supported if and only if the device has a user active mode trigger.
          */
-        public boolean uAT;
+        public boolean userActiveModeTrigger;
         /**
          * LongIdleTimeSupport
          * This feature is supported if and only the device is a Long Idle Time ICD.
          * NOTE In this version of the specification, the support for the feature is provisional.
          */
-        public boolean lITS;
+        public boolean longIdleTimeSupport;
 
-        public FeatureMap(boolean cIP, boolean uAT, boolean lITS) {
-            this.cIP = cIP;
-            this.uAT = uAT;
-            this.lITS = lITS;
+        public FeatureMap(boolean checkInProtocolSupport, boolean userActiveModeTrigger, boolean longIdleTimeSupport) {
+            this.checkInProtocolSupport = checkInProtocolSupport;
+            this.userActiveModeTrigger = userActiveModeTrigger;
+            this.longIdleTimeSupport = longIdleTimeSupport;
         }
     }
 

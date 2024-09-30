@@ -206,16 +206,16 @@ public class SmokeCoAlarmCluster extends BaseCluster {
          * SmokeAlarm
          * Supports Smoke alarm
          */
-        public boolean sMOKE;
+        public boolean smokeAlarm;
         /**
          * CoAlarm
          * Supports CO alarm
          */
-        public boolean cO;
+        public boolean coAlarm;
 
-        public FeatureMap(boolean sMOKE, boolean cO) {
-            this.sMOKE = sMOKE;
-            this.cO = cO;
+        public FeatureMap(boolean smokeAlarm, boolean coAlarm) {
+            this.smokeAlarm = smokeAlarm;
+            this.coAlarm = coAlarm;
         }
     }
 

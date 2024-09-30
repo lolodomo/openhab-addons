@@ -332,47 +332,47 @@ public class PumpConfigurationAndControlCluster extends BaseCluster {
          * ConstantPressure
          * Supports operating in constant pressure mode
          */
-        public boolean pRSCONST;
+        public boolean constantPressure;
         /**
          * CompensatedPressure
          * Supports operating in compensated pressure mode
          */
-        public boolean pRSCOMP;
+        public boolean compensatedPressure;
         /**
          * ConstantFlow
          * Supports operating in constant flow mode
          */
-        public boolean fLW;
+        public boolean constantFlow;
         /**
          * ConstantSpeed
          * Supports operating in constant speed mode
          */
-        public boolean sPD;
+        public boolean constantSpeed;
         /**
          * ConstantTemperature
          * Supports operating in constant temperature mode
          */
-        public boolean tEMP;
+        public boolean constantTemperature;
         /**
          * Automatic
          * Supports operating in automatic mode
          */
-        public boolean aUTO;
+        public boolean automatic;
         /**
          * LocalOperation
          * Supports operating using local settings
          */
-        public boolean lOCAL;
+        public boolean localOperation;
 
-        public FeatureMap(boolean pRSCONST, boolean pRSCOMP, boolean fLW, boolean sPD, boolean tEMP, boolean aUTO,
-                boolean lOCAL) {
-            this.pRSCONST = pRSCONST;
-            this.pRSCOMP = pRSCOMP;
-            this.fLW = fLW;
-            this.sPD = sPD;
-            this.tEMP = tEMP;
-            this.aUTO = aUTO;
-            this.lOCAL = lOCAL;
+        public FeatureMap(boolean constantPressure, boolean compensatedPressure, boolean constantFlow,
+                boolean constantSpeed, boolean constantTemperature, boolean automatic, boolean localOperation) {
+            this.constantPressure = constantPressure;
+            this.compensatedPressure = compensatedPressure;
+            this.constantFlow = constantFlow;
+            this.constantSpeed = constantSpeed;
+            this.constantTemperature = constantTemperature;
+            this.automatic = automatic;
+            this.localOperation = localOperation;
         }
     }
 

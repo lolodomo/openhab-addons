@@ -643,7 +643,7 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * charging the vehicle, and periodically modify the charging power depending on PV generation and other home
          * loads, so as to minimize import and export to the grid.
          */
-        public boolean pA;
+        public boolean powerAdjustment;
         /**
          * PowerForecastReporting
          * For Energy Smart Appliances (ESA) the definition of being &#x27;smart&#x27; implies that they can report
@@ -671,7 +671,7 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * For example, a heat pump may be able to modulate its compressor inverter between 20-100% of its rated power.
          * The ESA indicates its power adjustment range and its nominal power consumption as part of its Forecast.
          */
-        public boolean pFR;
+        public boolean powerForecastReporting;
         /**
          * StateForecastReporting
          * Some ESAs do not know their actual power consumption, but do know the state of operation. Like the
@@ -684,7 +684,7 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * Once the EMS has built a model of the state vs observed power consumption, it may request a forecast
          * adjustment for particular times of the day, encouraging the ESA to use power at alternative times.
          */
-        public boolean sFR;
+        public boolean stateForecastReporting;
         /**
          * StartTimeAdjustment
          * ESAs which support the Start Time Adjustment feature, allow an EMS to recommend a change to the start time of
@@ -700,7 +700,7 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * It does this by sending a StartTimeAdjustRequest to the washing machine to request delaying the start of the
          * washing cycle.
          */
-        public boolean sTA;
+        public boolean startTimeAdjustment;
         /**
          * Pausable
          * ESAs which support the Pausable feature, allow an EMS to recommend a pause in the middle of a forecast power
@@ -716,7 +716,7 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * It does this by sending a PauseRequest to the washing machine to request pausing the current step of the
          * forecast power usage for a period to allow other home loads to finish before resuming the washing cycle.
          */
-        public boolean pAU;
+        public boolean pausable;
         /**
          * ForecastAdjustment
          * ESAs which support the Forecast adjustment feature, allow an EMS to recommend a change to the start, duration
@@ -737,7 +737,7 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * lower power consumption (within the solar excess power) which requires the heat pump to run for a longer
          * duration to achieve its required energy demand.
          */
-        public boolean fA;
+        public boolean forecastAdjustment;
         /**
          * ConstraintBasedAdjustment
          * ESAs which support the Constraint-Based Adjustment feature allow an EMS to inform the ESA of periods during
@@ -756,16 +756,18 @@ public class DeviceEnergyManagementCluster extends BaseCluster {
          * NominalPower consumption during the constraint period, which may require it to decrease its charge rate
          * outside the constraint period to achieve its required energy demand.
          */
-        public boolean cON;
+        public boolean constraintBasedAdjustment;
 
-        public FeatureMap(boolean pA, boolean pFR, boolean sFR, boolean sTA, boolean pAU, boolean fA, boolean cON) {
-            this.pA = pA;
-            this.pFR = pFR;
-            this.sFR = sFR;
-            this.sTA = sTA;
-            this.pAU = pAU;
-            this.fA = fA;
-            this.cON = cON;
+        public FeatureMap(boolean powerAdjustment, boolean powerForecastReporting, boolean stateForecastReporting,
+                boolean startTimeAdjustment, boolean pausable, boolean forecastAdjustment,
+                boolean constraintBasedAdjustment) {
+            this.powerAdjustment = powerAdjustment;
+            this.powerForecastReporting = powerForecastReporting;
+            this.stateForecastReporting = stateForecastReporting;
+            this.startTimeAdjustment = startTimeAdjustment;
+            this.pausable = pausable;
+            this.forecastAdjustment = forecastAdjustment;
+            this.constraintBasedAdjustment = constraintBasedAdjustment;
         }
     }
 

@@ -98,10 +98,10 @@ public class AudioOutputCluster extends BaseCluster {
          * NameUpdates
          * Supports updates to output names
          */
-        public boolean nU;
+        public boolean nameUpdates;
 
-        public FeatureMap(boolean nU) {
-            this.nU = nU;
+        public FeatureMap(boolean nameUpdates) {
+            this.nameUpdates = nameUpdates;
         }
     }
 

@@ -490,28 +490,28 @@ public class PowerSourceCluster extends BaseCluster {
          * Wired
          * A wired power source
          */
-        public boolean wIRED;
+        public boolean wired;
         /**
          * Battery
          * A battery power source
          */
-        public boolean bAT;
+        public boolean battery;
         /**
          * Rechargeable
          * A rechargeable battery power source
          */
-        public boolean rECHG;
+        public boolean rechargeable;
         /**
          * Replaceable
          * A replaceable battery power source
          */
-        public boolean rEPLC;
+        public boolean replaceable;
 
-        public FeatureMap(boolean wIRED, boolean bAT, boolean rECHG, boolean rEPLC) {
-            this.wIRED = wIRED;
-            this.bAT = bAT;
-            this.rECHG = rECHG;
-            this.rEPLC = rEPLC;
+        public FeatureMap(boolean wired, boolean battery, boolean rechargeable, boolean replaceable) {
+            this.wired = wired;
+            this.battery = battery;
+            this.rechargeable = rechargeable;
+            this.replaceable = replaceable;
         }
     }
 

@@ -94,22 +94,22 @@ public class MicrowaveOvenControlCluster extends BaseCluster {
          * PowerAsNumber
          * Power is specified as a unitless number or a percentage
          */
-        public boolean pWRNUM;
+        public boolean powerAsNumber;
         /**
          * PowerInWatts
          * Power is specified in Watts
          */
-        public boolean wATTS;
+        public boolean powerInWatts;
         /**
          * PowerNumberLimits
          * Supports the limit attributes used with the PWRNUM feature
          */
-        public boolean pWRLMTS;
+        public boolean powerNumberLimits;
 
-        public FeatureMap(boolean pWRNUM, boolean wATTS, boolean pWRLMTS) {
-            this.pWRNUM = pWRNUM;
-            this.wATTS = wATTS;
-            this.pWRLMTS = pWRLMTS;
+        public FeatureMap(boolean powerAsNumber, boolean powerInWatts, boolean powerNumberLimits) {
+            this.powerAsNumber = powerAsNumber;
+            this.powerInWatts = powerInWatts;
+            this.powerNumberLimits = powerNumberLimits;
         }
     }
 

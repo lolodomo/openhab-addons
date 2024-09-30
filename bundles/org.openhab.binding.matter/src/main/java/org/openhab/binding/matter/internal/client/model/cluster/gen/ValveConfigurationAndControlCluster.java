@@ -182,17 +182,17 @@ public class ValveConfigurationAndControlCluster extends BaseCluster {
          * auto close time.
          * This feature shall NOT be supported unless the device supports the Time Synchronization cluster.
          */
-        public boolean tS;
+        public boolean timeSync;
         /**
          * Level
          * This feature shall indicate that the valve is capable of being adjusted to a specific position, as a
          * percentage, of its full range of motion.
          */
-        public boolean lVL;
+        public boolean level;
 
-        public FeatureMap(boolean tS, boolean lVL) {
-            this.tS = tS;
-            this.lVL = lVL;
+        public FeatureMap(boolean timeSync, boolean level) {
+            this.timeSync = timeSync;
+            this.level = level;
         }
     }
 

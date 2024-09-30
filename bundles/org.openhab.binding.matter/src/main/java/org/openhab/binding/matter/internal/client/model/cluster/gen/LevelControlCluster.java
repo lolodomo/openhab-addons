@@ -171,7 +171,7 @@ public class LevelControlCluster extends BaseCluster {
          * OnOff
          * Dependency with the On/Off cluster
          */
-        public boolean oO;
+        public boolean onOff;
         /**
          * Lighting
          * This feature supports an interface for controlling the level of a light source. For the CurrentLevel
@@ -182,17 +182,17 @@ public class LevelControlCluster extends BaseCluster {
          * value.
          * All other values are application specific gradations from the minimum to the maximum level.
          */
-        public boolean lT;
+        public boolean lighting;
         /**
          * Frequency
          * NOTE The Frequency feature is provisional.
          */
-        public boolean fQ;
+        public boolean frequency;
 
-        public FeatureMap(boolean oO, boolean lT, boolean fQ) {
-            this.oO = oO;
-            this.lT = lT;
-            this.fQ = fQ;
+        public FeatureMap(boolean onOff, boolean lighting, boolean frequency) {
+            this.onOff = onOff;
+            this.lighting = lighting;
+            this.frequency = frequency;
         }
     }
 

@@ -170,10 +170,10 @@ public class ModeSelectCluster extends BaseCluster {
          * This feature creates a dependency between an OnOff cluster instance and this cluster instance on the same
          * endpoint. See OnMode for more information.
          */
-        public boolean dEPONOFF;
+        public boolean onOff;
 
-        public FeatureMap(boolean dEPONOFF) {
-            this.dEPONOFF = dEPONOFF;
+        public FeatureMap(boolean onOff) {
+            this.onOff = onOff;
         }
     }
 

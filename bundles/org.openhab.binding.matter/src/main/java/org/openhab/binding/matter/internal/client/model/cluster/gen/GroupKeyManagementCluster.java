@@ -211,10 +211,10 @@ public class GroupKeyManagementCluster extends BaseCluster {
          * CacheAndSync
          * The ability to support CacheAndSync security policy and MCSP.
          */
-        public boolean cS;
+        public boolean cacheAndSync;
 
-        public FeatureMap(boolean cS) {
-            this.cS = cS;
+        public FeatureMap(boolean cacheAndSync) {
+            this.cacheAndSync = cacheAndSync;
         }
     }
 

@@ -1,8 +1,5 @@
 import { AnyElement, FieldElement, Matter, ClusterElement, DatatypeElement, AttributeElement, CommandElement, AnyValueElement } from "@project-chip/matter.js/model";
-import { LevelControl } from "@project-chip/matter.js/cluster";
-import { Logger } from "@project-chip/matter.js/log";
 import handlebars from "handlebars";
-import { SafeString } from 'handlebars';
 import { ByteArray } from "@project-chip/matter.js/util"
 import fs from "fs";
 
@@ -30,6 +27,14 @@ function toJSON(data: any, space = 2) {
     }, space);
 }
 
+handlebars.registerHelper('asUpperCase', function (str) {
+    return toUpperCase(str);
+});
+
+handlebars.registerHelper('asLowerCase', function (str) {
+    return toLowerCase(str);
+});
+
 handlebars.registerHelper('asUpperCamelCase', function (str) {
     return toUpperCamelCase(str);
 });
@@ -56,12 +61,34 @@ handlebars.registerHelper('isEmpty', function (e: Array<any> | undefined) {
     return e == undefined || e.length == 0
 });
 handlebars.registerHelper('isDepreciated', function (field) {
-    return field.conformance == "D" || field.conformance == "X"
+    return field.conformance == "D" || field.conformance == "X" || field.conformance == "[!LT]"
 });
-
+handlebars.registerHelper('isReadOnly', function (field) {
+    return field.access.indexOf('RW') == -1;
+});
 handlebars.registerHelper('toBitmapType', function (constraint) {
     return constraint.indexOf(" to ") > 0 ? "short" : "boolean"
 });
+handlebars.registerHelper('toBitmapChildName', function (child, type) {
+    return type == "FeatureMap" ? toLowerCamelCase(child.description) : toLowerCamelCase(child.name)
+});
+handlebars.registerHelper('isAttribute', function (field) {
+    return field.tag == 'attribute'
+});
+
+function toUpperCase(str: string | undefined) {
+    if (str == undefined) {
+        return "UNDEFINED"
+    }
+    return str.toUpperCase();
+}
+
+function toLowerCase(str: string | undefined) {
+    if (str == undefined) {
+        return "undefined"
+    }
+    return str.toLowerCase();
+}
 
 function toUpperCamelCase(str: string | undefined) {
     if (str == undefined) {
@@ -388,6 +415,8 @@ const deviceTypeSource = fs.readFileSync('src/templates/device-types-class.hbs',
 const deviceTypeTemplate = handlebars.compile(deviceTypeSource);
 const thingTypeSource = fs.readFileSync('src/templates/cluster-thing-types-class.hbs', 'utf8');
 const thingTypeTemplate = handlebars.compile(thingTypeSource);
+const clusterConstantsSource = fs.readFileSync('src/templates/cluster-constants.hbs', 'utf8');
+const clusterConstantsTemplate = handlebars.compile(clusterConstantsSource);
 
 // Generate Java code
 
@@ -417,6 +446,10 @@ fs.writeFileSync(`out/DeviceTypes.java`, deviceTypeClass);
 
 const thingTypesClass = thingTypeTemplate({ clusters: clusters });
 fs.writeFileSync(`out/ClusterThingTypes.java`, thingTypesClass);
+
+const clusterConstantsClass = clusterConstantsTemplate({ clusters: clusters });
+fs.writeFileSync(`out/ClusterConstants.java`, clusterConstantsClass);
+
 
 clusters.forEach(cluster => {
     if (cluster.id == undefined) {

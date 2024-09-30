@@ -101,10 +101,10 @@ public class DescriptorCluster extends BaseCluster {
          * See the Disambiguation section in the System Model spec for conformance requirements for this feature and the
          * corresponding attribute.
          */
-        public boolean tAGLIST;
+        public boolean tagList;
 
-        public FeatureMap(boolean tAGLIST) {
-            this.tAGLIST = tAGLIST;
+        public FeatureMap(boolean tagList) {
+            this.tagList = tagList;
         }
     }
 

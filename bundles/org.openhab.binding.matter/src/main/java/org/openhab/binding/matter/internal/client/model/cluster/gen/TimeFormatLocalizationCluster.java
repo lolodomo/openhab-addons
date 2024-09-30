@@ -99,10 +99,10 @@ public class TimeFormatLocalizationCluster extends BaseCluster {
          * CalendarFormat
          * The Node can be configured to use different calendar formats when conveying values to a user.
          */
-        public boolean cALFMT;
+        public boolean calendarFormat;
 
-        public FeatureMap(boolean cALFMT) {
-            this.cALFMT = cALFMT;
+        public FeatureMap(boolean calendarFormat) {
+            this.calendarFormat = calendarFormat;
         }
     }
 

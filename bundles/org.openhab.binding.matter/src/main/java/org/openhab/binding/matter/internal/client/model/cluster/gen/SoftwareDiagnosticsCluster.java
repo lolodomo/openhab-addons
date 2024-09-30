@@ -103,10 +103,10 @@ public class SoftwareDiagnosticsCluster extends BaseCluster {
          * Watermarks
          * Node makes available the metrics for high watermark related to memory consumption.
          */
-        public boolean wTRMRK;
+        public boolean watermarks;
 
-        public FeatureMap(boolean wTRMRK) {
-            this.wTRMRK = wTRMRK;
+        public FeatureMap(boolean watermarks) {
+            this.watermarks = watermarks;
         }
     }
 

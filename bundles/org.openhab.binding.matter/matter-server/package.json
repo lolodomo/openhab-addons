@@ -24,7 +24,7 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
-        "@matter.js/main": "0.11.0-alpha.0-20240923-508e6b1e1",
+        "@matter.js/main": "0.11.0-alpha.0-20240928-08865c2ce",
         "uuid": "^9.0.1",
         "ws": "^8.18.0",
         "yargs": "^17.7.2"

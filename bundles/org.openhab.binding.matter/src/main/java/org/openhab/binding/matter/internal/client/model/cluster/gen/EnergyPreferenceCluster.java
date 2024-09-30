@@ -131,18 +131,18 @@ public class EnergyPreferenceCluster extends BaseCluster {
          * This feature allows a user to select from a list of energy balances with associated descriptions of which
          * strategies a device will use to target the specified balance.
          */
-        public boolean bALA;
+        public boolean energyBalance;
         /**
          * LowPowerModeSensitivity
          * This feature allows the user to select a condition or set of conditions which will cause the device to switch
          * to a mode using less power. For example, a device might provide a scale of durations that must elapse without
          * user interaction before it goes to sleep.
          */
-        public boolean lPMS;
+        public boolean lowPowerModeSensitivity;
 
-        public FeatureMap(boolean bALA, boolean lPMS) {
-            this.bALA = bALA;
-            this.lPMS = lPMS;
+        public FeatureMap(boolean energyBalance, boolean lowPowerModeSensitivity) {
+            this.energyBalance = energyBalance;
+            this.lowPowerModeSensitivity = lowPowerModeSensitivity;
         }
     }
 

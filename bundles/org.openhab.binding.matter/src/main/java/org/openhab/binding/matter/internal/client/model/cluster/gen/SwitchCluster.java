@@ -56,39 +56,40 @@ public class SwitchCluster extends BaseCluster {
          * LatchingSwitch
          * This feature is for a switch that maintains its position after being pressed (or turned).
          */
-        public boolean lS;
+        public boolean latchingSwitch;
         /**
          * MomentarySwitch
          * This feature is for a switch that does not maintain its position after being pressed (or turned). After
          * releasing, it goes back to its idle position.
          */
-        public boolean mS;
+        public boolean momentarySwitch;
         /**
          * MomentarySwitchRelease
          * This feature is for a momentary switch that can distinguish and report release events. When this feature flag
          * MSR is present, MS shall be present as well.
          */
-        public boolean mSR;
+        public boolean momentarySwitchRelease;
         /**
          * MomentarySwitchLongPress
          * This feature is for a momentary switch that can distinguish and report long presses from short presses. When
          * this feature flag MSL is present, MS and MSR shall be present as well.
          */
-        public boolean mSL;
+        public boolean momentarySwitchLongPress;
         /**
          * MomentarySwitchMultiPress
          * This feature is for a momentary switch that can distinguish and report double press and potentially multiple
          * presses with more events, such as triple press, etc. When this feature flag MSM is present, MS and MSR shall
          * be present as well.
          */
-        public boolean mSM;
+        public boolean momentarySwitchMultiPress;
 
-        public FeatureMap(boolean lS, boolean mS, boolean mSR, boolean mSL, boolean mSM) {
-            this.lS = lS;
-            this.mS = mS;
-            this.mSR = mSR;
-            this.mSL = mSL;
-            this.mSM = mSM;
+        public FeatureMap(boolean latchingSwitch, boolean momentarySwitch, boolean momentarySwitchRelease,
+                boolean momentarySwitchLongPress, boolean momentarySwitchMultiPress) {
+            this.latchingSwitch = latchingSwitch;
+            this.momentarySwitch = momentarySwitch;
+            this.momentarySwitchRelease = momentarySwitchRelease;
+            this.momentarySwitchLongPress = momentarySwitchLongPress;
+            this.momentarySwitchMultiPress = momentarySwitchMultiPress;
         }
     }
 

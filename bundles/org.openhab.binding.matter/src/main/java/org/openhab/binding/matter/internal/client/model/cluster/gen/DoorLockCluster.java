@@ -951,7 +951,7 @@ public class DoorLockCluster extends BaseCluster {
          * Schedules are all associated with a User index and not directly with a PIN index. A User index may have
          * several credentials associated with it.
          */
-        public boolean pIN;
+        public boolean pinCredential;
         /**
          * RfidCredential
          * If the User Feature is also supported then any RFID credential stored in the lock shall be associated with a
@@ -960,7 +960,7 @@ public class DoorLockCluster extends BaseCluster {
          * Schedules are all associated with a User index and not directly with a RFID index. A User
          * Index may have several credentials associated with it.
          */
-        public boolean rID;
+        public boolean rfidCredential;
         /**
          * FingerCredentials
          * Currently the cluster only defines the metadata format for notifications when a fingerprint/ finger vein
@@ -971,13 +971,13 @@ public class DoorLockCluster extends BaseCluster {
          * Schedules are all associated with a User index and not directly with a Finger index. A User Index may have
          * several credentials associated with it.
          */
-        public boolean fGP;
+        public boolean fingerCredentials;
         /**
          * Logging
          * If Events are not supported the logging feature shall replace the Event reporting structure. If Events are
          * supported the logging feature shall NOT be supported.
          */
-        public boolean lOG;
+        public boolean logging;
         /**
          * WeekDayAccessSchedules
          * If the User feature is supported then Week Day Schedules are applied to a User and not a credential.
@@ -986,13 +986,13 @@ public class DoorLockCluster extends BaseCluster {
          * unrestricted access to the user. The lock may automatically adjust the UserType when a schedule is created or
          * cleared.
          */
-        public boolean wDSCH;
+        public boolean weekDayAccessSchedules;
         /**
          * DoorPositionSensor
          * If this feature is supported this indicates that the lock has the ability to determine the position of the
          * door which is separate from the state of the lock.
          */
-        public boolean dPS;
+        public boolean doorPositionSensor;
         /**
          * FaceCredentials
          * Currently the cluster only defines the metadata format for notifications when a face recognition, iris, or
@@ -1002,27 +1002,27 @@ public class DoorLockCluster extends BaseCluster {
          * A lock may support multiple credential types so if the User feature is supported the UserType, UserStatus and
          * Schedules are all associated with a User and not directly with a credential.
          */
-        public boolean fACE;
+        public boolean faceCredentials;
         /**
          * CredentialOverTheAirAccess
          * If this feature is supported then the lock supports the ability to verify a credential provided in a
          * lock/unlock command. Currently the cluster only supports providing the PIN credential to the lock/unlock
          * commands. If this feature is supported then the PIN Credential feature shall also be supported.
          */
-        public boolean cOTA;
+        public boolean credentialOverTheAirAccess;
         /**
          * User
          * If the User Feature is supported then a lock employs a User database. A User within the User database is used
          * to associate credentials and schedules to single user record within the lock. This also means the UserType
          * and UserStatus fields are associated with a User and not a credential.
          */
-        public boolean uSR;
+        public boolean user;
         /**
          * Notification
          * This is a feature used before support of events. This feature supports notification commands and masks used
          * to filter these notifications.
          */
-        public boolean nOT;
+        public boolean notification;
         /**
          * YearDayAccessSchedules
          * If the User feature is supported then Year Day Schedules are applied to a User and not a credential.
@@ -1030,13 +1030,13 @@ public class DoorLockCluster extends BaseCluster {
          * cleared this clears the access restrictions and grants unrestricted access to the user. The lock may
          * automatically adjust the UserType when a schedule is created or cleared.
          */
-        public boolean yDSCH;
+        public boolean yearDayAccessSchedules;
         /**
          * HolidaySchedules
          * This feature is used to setup Holiday Schedule in the lock device. A Holiday Schedule sets a start and stop
          * end date/time for the lock to use the specified operating mode set by the Holiday Schedule.
          */
-        public boolean hDSCH;
+        public boolean holidaySchedules;
         /**
          * Unbolting
          * Locks that support this feature differentiate between unbolting and unlocking. The Unbolt Door command
@@ -1045,23 +1045,25 @@ public class DoorLockCluster extends BaseCluster {
          * without unbolting support don’t differentiate between unbolting and unlocking and perform the same operation
          * for both commands.
          */
-        public boolean uBOLT;
+        public boolean unbolting;
 
-        public FeatureMap(boolean pIN, boolean rID, boolean fGP, boolean lOG, boolean wDSCH, boolean dPS, boolean fACE,
-                boolean cOTA, boolean uSR, boolean nOT, boolean yDSCH, boolean hDSCH, boolean uBOLT) {
-            this.pIN = pIN;
-            this.rID = rID;
-            this.fGP = fGP;
-            this.lOG = lOG;
-            this.wDSCH = wDSCH;
-            this.dPS = dPS;
-            this.fACE = fACE;
-            this.cOTA = cOTA;
-            this.uSR = uSR;
-            this.nOT = nOT;
-            this.yDSCH = yDSCH;
-            this.hDSCH = hDSCH;
-            this.uBOLT = uBOLT;
+        public FeatureMap(boolean pinCredential, boolean rfidCredential, boolean fingerCredentials, boolean logging,
+                boolean weekDayAccessSchedules, boolean doorPositionSensor, boolean faceCredentials,
+                boolean credentialOverTheAirAccess, boolean user, boolean notification, boolean yearDayAccessSchedules,
+                boolean holidaySchedules, boolean unbolting) {
+            this.pinCredential = pinCredential;
+            this.rfidCredential = rfidCredential;
+            this.fingerCredentials = fingerCredentials;
+            this.logging = logging;
+            this.weekDayAccessSchedules = weekDayAccessSchedules;
+            this.doorPositionSensor = doorPositionSensor;
+            this.faceCredentials = faceCredentials;
+            this.credentialOverTheAirAccess = credentialOverTheAirAccess;
+            this.user = user;
+            this.notification = notification;
+            this.yearDayAccessSchedules = yearDayAccessSchedules;
+            this.holidaySchedules = holidaySchedules;
+            this.unbolting = unbolting;
         }
     }
 

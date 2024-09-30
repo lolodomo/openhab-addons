@@ -18,15 +18,8 @@ import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_T
 
 import java.io.File;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -46,12 +39,7 @@ import org.openhab.binding.matter.internal.discovery.MatterDiscoveryService;
 import org.openhab.core.OpenHAB;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.validation.ConfigValidationException;
-import org.openhab.core.thing.Bridge;
-import org.openhab.core.thing.ChannelUID;
-import org.openhab.core.thing.Thing;
-import org.openhab.core.thing.ThingStatus;
-import org.openhab.core.thing.ThingStatusDetail;
-import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.*;
 import org.openhab.core.thing.binding.BaseBridgeHandler;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerService;

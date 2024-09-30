@@ -393,17 +393,17 @@ public class WindowCoveringCluster extends BaseCluster {
          * lift Open and Close) or slide left to right (e.g. for a sliding curtain, Left and Right is lift Open and
          * Close).
          */
-        public boolean lF;
+        public boolean lift;
         /**
          * Tilt
          * The Tilt feature applies to window coverings with vertical or horizontal strips.
          */
-        public boolean tL;
+        public boolean tilt;
         /**
          * PositionAwareLift
          * Position aware lift control is supported.
          */
-        public boolean pALF;
+        public boolean positionAwareLift;
         /**
          * AbsolutePosition
          * The percentage attributes shall indicate the position as a percentage between the InstalledOpenLimits and
@@ -411,19 +411,20 @@ public class WindowCoveringCluster extends BaseCluster {
          * As a general rule, absolute positioning (in centimeters or tenth of a degrees) SHOULD NOT be supported for
          * new implementations.
          */
-        public boolean aBS;
+        public boolean absolutePosition;
         /**
          * PositionAwareTilt
          * Position aware tilt control is supported.
          */
-        public boolean pATL;
+        public boolean positionAwareTilt;
 
-        public FeatureMap(boolean lF, boolean tL, boolean pALF, boolean aBS, boolean pATL) {
-            this.lF = lF;
-            this.tL = tL;
-            this.pALF = pALF;
-            this.aBS = aBS;
-            this.pATL = pATL;
+        public FeatureMap(boolean lift, boolean tilt, boolean positionAwareLift, boolean absolutePosition,
+                boolean positionAwareTilt) {
+            this.lift = lift;
+            this.tilt = tilt;
+            this.positionAwareLift = positionAwareLift;
+            this.absolutePosition = absolutePosition;
+            this.positionAwareTilt = positionAwareTilt;
         }
     }
 

@@ -216,30 +216,31 @@ public class MessagesCluster extends BaseCluster {
          * ReceivedConfirmation
          * This feature shall indicate that the device can get confirmation from a user that the message was received.
          */
-        public boolean cONF;
+        public boolean receivedConfirmation;
         /**
          * ConfirmationResponse
          * This feature shall indicate that the device is capable of presenting a list of responses to the user and
          * recording the user’s choice of response.
          */
-        public boolean rESP;
+        public boolean confirmationResponse;
         /**
          * ConfirmationReply
          * This feature shall indicate that the device is capable of collecting a free-form text response to a message.
          */
-        public boolean rPLY;
+        public boolean confirmationReply;
         /**
          * ProtectedMessages
          * This feature shall indicate that the device is capable of requiring the user to authenticate before viewing a
          * message; e.g. entering a PIN or password before viewing a message with billing information.
          */
-        public boolean pROT;
+        public boolean protectedMessages;
 
-        public FeatureMap(boolean cONF, boolean rESP, boolean rPLY, boolean pROT) {
-            this.cONF = cONF;
-            this.rESP = rESP;
-            this.rPLY = rPLY;
-            this.pROT = pROT;
+        public FeatureMap(boolean receivedConfirmation, boolean confirmationResponse, boolean confirmationReply,
+                boolean protectedMessages) {
+            this.receivedConfirmation = receivedConfirmation;
+            this.confirmationResponse = confirmationResponse;
+            this.confirmationReply = confirmationReply;
+            this.protectedMessages = protectedMessages;
         }
     }
 

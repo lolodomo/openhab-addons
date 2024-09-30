@@ -402,7 +402,7 @@ public class EnergyEvseCluster extends BaseCluster {
          * propose a revised optimized forecast (which is the charging profile).
          * See the Device Energy Management Cluster for more details.
          */
-        public boolean pREF;
+        public boolean chargingPreferences;
         /**
          * SoCReporting
          * Vehicles and EVSEs which support ISO 15118 may allow the vehicle to report its battery size and state of
@@ -413,7 +413,7 @@ public class EnergyEvseCluster extends BaseCluster {
          * Note some EVSEs may use other undefined mechanisms to obtain vehicle State of Charge outside the scope of
          * this cluster.
          */
-        public boolean sOC;
+        public boolean soCReporting;
         /**
          * PlugAndCharge
          * If the EVSE supports PLC, it may be able to support the Plug and Charge feature. e.g. this may allow the
@@ -421,7 +421,7 @@ public class EnergyEvseCluster extends BaseCluster {
          * to give the owner an indicative cost of charging, or for work place charging).
          * If the EVSE supports the Plug and Charge feature, it will only work if a compatible EV is connected.
          */
-        public boolean pNC;
+        public boolean plugAndCharge;
         /**
          * Rfid
          * If the EVSE is fitted with an RFID reader, it may be possible to obtain the User or Vehicle ID from an RFID
@@ -431,7 +431,7 @@ public class EnergyEvseCluster extends BaseCluster {
          * subscribed to by the EVSE Management cluster client. This client may use this to enable the EV to charge or
          * discharge. The lookup and authorization of RIFD UID is outside the scope of this cluster.
          */
-        public boolean rFID;
+        public boolean rfid;
         /**
          * V2X
          * If the EVSE can support bi-directional charging, it may be possible to request that the vehicle can discharge
@@ -439,11 +439,12 @@ public class EnergyEvseCluster extends BaseCluster {
          */
         public boolean v2X;
 
-        public FeatureMap(boolean pREF, boolean sOC, boolean pNC, boolean rFID, boolean v2X) {
-            this.pREF = pREF;
-            this.sOC = sOC;
-            this.pNC = pNC;
-            this.rFID = rFID;
+        public FeatureMap(boolean chargingPreferences, boolean soCReporting, boolean plugAndCharge, boolean rfid,
+                boolean v2X) {
+            this.chargingPreferences = chargingPreferences;
+            this.soCReporting = soCReporting;
+            this.plugAndCharge = plugAndCharge;
+            this.rfid = rfid;
             this.v2X = v2X;
         }
     }

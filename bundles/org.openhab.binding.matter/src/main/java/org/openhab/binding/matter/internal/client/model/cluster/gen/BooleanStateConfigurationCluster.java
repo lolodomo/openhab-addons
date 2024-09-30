@@ -115,12 +115,12 @@ public class BooleanStateConfigurationCluster extends BaseCluster {
          * Visual
          * Supports visual alarms
          */
-        public boolean vIS;
+        public boolean visual;
         /**
          * Audible
          * Supports audible alarms
          */
-        public boolean aUD;
+        public boolean audible;
         /**
          * AlarmSuppress
          * This feature shall indicate that the device is able to suppress the supported alarm modes, when the user
@@ -136,18 +136,18 @@ public class BooleanStateConfigurationCluster extends BaseCluster {
          * is intended to stop the physical alarming, e.g. emitting a sound or blinking a light; it does not impact
          * alarm reporting in AlarmsActive.
          */
-        public boolean sPRS;
+        public boolean alarmSuppress;
         /**
          * SensitivityLevel
          * Supports ability to set sensor sensitivity
          */
-        public boolean sENSLVL;
+        public boolean sensitivityLevel;
 
-        public FeatureMap(boolean vIS, boolean aUD, boolean sPRS, boolean sENSLVL) {
-            this.vIS = vIS;
-            this.aUD = aUD;
-            this.sPRS = sPRS;
-            this.sENSLVL = sENSLVL;
+        public FeatureMap(boolean visual, boolean audible, boolean alarmSuppress, boolean sensitivityLevel) {
+            this.visual = visual;
+            this.audible = audible;
+            this.alarmSuppress = alarmSuppress;
+            this.sensitivityLevel = sensitivityLevel;
         }
     }
 

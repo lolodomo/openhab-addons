@@ -149,7 +149,7 @@ public class OnOffCluster extends BaseCluster {
          * On receipt of a Level Control cluster command that causes the OnOff attribute to be set to TRUE, if the value
          * of the OnTime attribute is equal to 0, the server shall set the OffWaitTime attribute to 0.
          */
-        public boolean lT;
+        public boolean lighting;
         /**
          * DeadFrontBehavior
          * When this feature is supported, the device exposing this server cluster exhibits &quot;dead front&quot;
@@ -176,7 +176,7 @@ public class OnOffCluster extends BaseCluster {
          * attribute changes from value 4 to null on &quot;dead front&quot; behavior due to an Off command being
          * received, this change shall be processed for reporting and subscriptions.
          */
-        public boolean dF;
+        public boolean deadFrontBehavior;
         /**
          * OffOnly
          * When this feature is supported, the Off command shall be supported and the On and Toggle commands shall NOT
@@ -185,12 +185,12 @@ public class OnOffCluster extends BaseCluster {
          * this cluster but cannot be turned on via commands received by an instance of this cluster due to regulatory
          * requirements.
          */
-        public boolean oFFONLY;
+        public boolean offOnly;
 
-        public FeatureMap(boolean lT, boolean dF, boolean oFFONLY) {
-            this.lT = lT;
-            this.dF = dF;
-            this.oFFONLY = oFFONLY;
+        public FeatureMap(boolean lighting, boolean deadFrontBehavior, boolean offOnly) {
+            this.lighting = lighting;
+            this.deadFrontBehavior = deadFrontBehavior;
+            this.offOnly = offOnly;
         }
     }
 

@@ -267,22 +267,22 @@ public class MediaPlaybackCluster extends BaseCluster {
          * to a specific location using time offsets. This enables clients to implement more advanced media seeking
          * behavior in their user interface, for instance a &quot;seek bar&quot;.
          */
-        public boolean aS;
+        public boolean advancedSeek;
         /**
          * VariableSpeed
          * This feature is for a device which supports variable speed playback on media that supports it.
          */
-        public boolean vS;
+        public boolean variableSpeed;
         /**
          * TextTracks
          * This feature is for a device or app that supports Text Tracks.
          */
-        public boolean tT;
+        public boolean textTracks;
         /**
          * AudioTracks
          * This feature is for a device or app that supports Audio Tracks.
          */
-        public boolean aT;
+        public boolean audioTracks;
         /**
          * AudioAdvance
          * This feature is for a device or app that supports playing audio during fast and slow advance and rewind
@@ -290,14 +290,15 @@ public class MediaPlaybackCluster extends BaseCluster {
          * during certain speeds.
          * A cluster implementing AA shall implement AS.
          */
-        public boolean aA;
+        public boolean audioAdvance;
 
-        public FeatureMap(boolean aS, boolean vS, boolean tT, boolean aT, boolean aA) {
-            this.aS = aS;
-            this.vS = vS;
-            this.tT = tT;
-            this.aT = aT;
-            this.aA = aA;
+        public FeatureMap(boolean advancedSeek, boolean variableSpeed, boolean textTracks, boolean audioTracks,
+                boolean audioAdvance) {
+            this.advancedSeek = advancedSeek;
+            this.variableSpeed = variableSpeed;
+            this.textTracks = textTracks;
+            this.audioTracks = audioTracks;
+            this.audioAdvance = audioAdvance;
         }
     }
 

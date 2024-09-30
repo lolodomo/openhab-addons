@@ -109,10 +109,10 @@ public class ApplicationLauncherCluster extends BaseCluster {
          * Support for attributes and commands required for endpoint to support launching any application within the
          * supported application catalogs
          */
-        public boolean aP;
+        public boolean applicationPlatform;
 
-        public FeatureMap(boolean aP) {
-            this.aP = aP;
+        public FeatureMap(boolean applicationPlatform) {
+            this.applicationPlatform = applicationPlatform;
         }
     }
 

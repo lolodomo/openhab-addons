@@ -227,12 +227,12 @@ public class ElectricalEnergyMeasurementCluster extends BaseCluster {
          * ImportedEnergy
          * The feature indicates the server is capable of measuring how much energy is imported by the server.
          */
-        public boolean iMPE;
+        public boolean importedEnergy;
         /**
          * ExportedEnergy
          * The feature indicates the server is capable of measuring how much energy is exported by the server.
          */
-        public boolean eXPE;
+        public boolean exportedEnergy;
         /**
          * CumulativeEnergy
          * The feature indicates the server is capable of measuring how much energy has been imported or exported by the
@@ -240,20 +240,21 @@ public class ElectricalEnergyMeasurementCluster extends BaseCluster {
          * include this feature, when a device’s firmware is updated to correct measurement errors, or when a device is
          * factory reset.
          */
-        public boolean cUME;
+        public boolean cumulativeEnergy;
         /**
          * PeriodicEnergy
          * The feature indicates the server is capable of measuring how much energy has been imported or exported by the
          * server during a certain period of time. The start and end times for measurement periods shall be determined
          * by the server, and may represent overlapping periods.
          */
-        public boolean pERE;
+        public boolean periodicEnergy;
 
-        public FeatureMap(boolean iMPE, boolean eXPE, boolean cUME, boolean pERE) {
-            this.iMPE = iMPE;
-            this.eXPE = eXPE;
-            this.cUME = cUME;
-            this.pERE = pERE;
+        public FeatureMap(boolean importedEnergy, boolean exportedEnergy, boolean cumulativeEnergy,
+                boolean periodicEnergy) {
+            this.importedEnergy = importedEnergy;
+            this.exportedEnergy = exportedEnergy;
+            this.cumulativeEnergy = cumulativeEnergy;
+            this.periodicEnergy = periodicEnergy;
         }
     }
 

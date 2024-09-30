@@ -1,6 +1,10 @@
 import { Logger } from "@project-chip/matter.js/log";
 import { MatterNode } from "../MatterNode";
+import { convertJsonDataWithModel } from "../../util/Json";
+import { ValidationError } from "@project-chip/matter.js/common";
 import * as MatterClusters from "@project-chip/matter.js/cluster";
+import { SupportedAttributeClient } from "@matter.js/protocol"
+import { MatterModel, ValueModel } from "@matter.js/model";
 
 const logger = Logger.get("Clusters");
 
@@ -30,10 +34,6 @@ export class Clusters {
             throw new Error(`Endpoint ${endpointId} not found`);
         }
         const cluster = (MatterClusters as any)[`${clusterName}Cluster`];
-        logger.debug(`Clients for device ${device.name} : ${device.number}`)
-        device.getAllClusterClients().forEach(cc => { 
-            logger.debug(cc.name)
-        })
         const clusterClient: any = device.getClusterClient(cluster);
         if (clusterClient === undefined) {
             throw new Error(`Cluster ${clusterName} not found`);
@@ -45,6 +45,50 @@ export class Clusters {
             return clusterClient[commandName]();
         } else {
             return clusterClient[commandName](args);
+        }
+    }
+
+    async writeAttribute(nodeId: number, endpointId: number, clusterName: string, attributeName: string, value: string) {
+        let parsedValue: any;
+        try {
+            parsedValue = JSON.parse(value);
+        } catch (error) {
+            try {
+                parsedValue = JSON.parse(`"${value}"`);
+            } catch (innerError) {
+                throw new Error(`ERROR: Could not parse value ${value} as JSON.`)
+            }
+        }
+
+        const node = await this.theNode.getNode(nodeId);
+
+        const device = this.theNode.getEndpoint(await this.theNode.getNode(nodeId), endpointId);
+        if (device == undefined) {
+            throw new Error(`Endpoint ${endpointId} not found`);
+        }
+        const cluster = (MatterClusters as any)[`${clusterName}Cluster`];
+        const clusterClient: any = device.getClusterClient(cluster);
+        if (clusterClient === undefined) {
+            throw new Error(`Cluster ${clusterName} not found`);
+        }
+        const attributeClient = clusterClient.attributes[attributeName];
+        if (!(attributeClient instanceof SupportedAttributeClient)) {
+            throw new Error(`Attribute ${node.nodeId.toString()}/${endpointId}/${clusterName}/${attributeName} not supported.`)
+        }
+
+        try {
+            parsedValue = convertJsonDataWithModel(cluster, parsedValue);
+            await attributeClient.set(parsedValue);
+            console.log(
+                `Attribute ${attributeName} ${node.nodeId.toString()}/${endpointId}/${clusterName}/${attributeName} set to ${Logger.toJSON(value)}`,
+            );
+        } catch (error) {
+            if (error instanceof ValidationError) {
+               throw new Error(`Could not validate data for attribute ${attributeName} to ${Logger.toJSON(parsedValue)}: ${error}${error.fieldName !== undefined ? ` in field ${error.fieldName}` : ""}`,
+            )
+            } else {
+                throw new Error(`Could not set attribute ${attributeName} to ${Logger.toJSON(parsedValue)}: ${error}`)
+            }
         }
     }
 }

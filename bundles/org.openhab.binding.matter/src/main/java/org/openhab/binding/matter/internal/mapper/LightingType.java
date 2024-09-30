@@ -10,16 +10,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.matter.internal.converter;
+package org.openhab.binding.matter.internal.mapper;
 
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_COLOR_COLOR;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_LABEL_COLOR_COLOR;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_COLOR_COLOR;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_LEVEL;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.CHANNEL_NAME_SWITCH_ONOFF;
-import static org.openhab.binding.matter.internal.MatterBindingConstants.ITEM_TYPE_COLOR;
+import static org.openhab.binding.matter.internal.MatterBindingConstants.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -32,6 +29,7 @@ import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControlCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.ColorControlCluster.Options;
+import org.openhab.binding.matter.internal.client.model.cluster.gen.DeviceTypes;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.LevelControlCluster.OptionsBitmap;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.OnOffCluster;
@@ -51,8 +49,8 @@ import org.slf4j.LoggerFactory;
  *
  */
 @NonNullByDefault
-public class ColorControlConverter extends ClusterConverter {
-    private final Logger logger = LoggerFactory.getLogger(ColorControlConverter.class);
+public class LightingType extends DeviceType {
+    private final Logger logger = LoggerFactory.getLogger(LightingType.class);
     private PercentType lastLevel = new PercentType(0);
     private OnOffType lastOnOff = OnOffType.OFF;
     private boolean supportsHue = false;
@@ -69,13 +67,19 @@ public class ColorControlConverter extends ClusterConverter {
     private Options optionsMask = new Options(true);
     private ScheduledExecutorService colorUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
 
-    public ColorControlConverter(EndpointHandler handler) {
-        super(handler);
+    public LightingType(EndpointHandler handler, Integer deviceType) {
+        super(handler, deviceType);
+    }
+
+    public static List<Integer> supportedTypes() {
+        return List.of(DeviceTypes.OnOffLight, DeviceTypes.OnOffLightSwitch, DeviceTypes.DimmableLight,
+                DeviceTypes.DimmablePlugInUnit, DeviceTypes.DimmerSwitch, DeviceTypes.ColorDimmerSwitch,
+                DeviceTypes.ExtendedColorLight, DeviceTypes.ColorTemperatureLight);
     }
 
     @Override
     public List<Integer> supportedClusters() {
-        return List.of(ColorControlCluster.CLUSTER_ID);
+        return List.of(LevelControlCluster.CLUSTER_ID, OnOffCluster.CLUSTER_ID, ColorControlCluster.CLUSTER_ID);
     }
 
     @Override
@@ -102,70 +106,61 @@ public class ColorControlConverter extends ClusterConverter {
         }
     }
 
-    private void sendOnOff(MatterWebsocketClient client, boolean on) {
-        ClusterCommand onOffCommand = on ? OnOffCluster.on() : OnOffCluster.off();
-        client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME, onOffCommand);
-    }
-
-    private void sendLevel(MatterWebsocketClient client, PercentType level) {
-        ClusterCommand levelCommand = LevelControlCluster.moveToLevel(percentToLevel(level), 0,
-                new OptionsBitmap(false, true), new OptionsBitmap(false, true));
-        client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), LevelControlCluster.CLUSTER_NAME,
-                levelCommand);
-    }
-
     @Override
     public void updateCluster(BaseCluster cluster) {
-        if (cluster instanceof ColorControlCluster) {
-            ColorControlCluster colorCluster = (ColorControlCluster) cluster;
-            // colorCluster.featureMap.forEach((name, enabled) -> {
-            // switch (name) {
-            // case "hueSaturation":
-            // supportsHue = enabled;
-            // break;
-            // case "enhancedHue":
-            // break;
-            // case "colorLoop":
-            // break;
-            // case "xy":
-            // break;
-            // case "colorTemperature":
-            // break;
-            // }
-            // });
-            supportsHue = colorCluster.featureMap.hS;
-            // optionsMask = colorCluster.options;
-            lastX = colorCluster.currentX;
-            lastY = colorCluster.currentY;
-            lastHue = colorCluster.currentHue;
-            lastSaturation = colorCluster.currentSaturation;
+        if (cluster instanceof ColorControlCluster colorControlCluster) {
+            supportsHue = colorControlCluster.featureMap.hueSaturation;
+            lastX = colorControlCluster.currentX;
+            lastY = colorControlCluster.currentY;
+            lastHue = colorControlCluster.currentHue;
+            lastSaturation = colorControlCluster.currentSaturation;
             if (supportsHue) {
                 updateColorHSB();
             } else {
                 updateColorXY();
             }
         }
-        if (cluster instanceof LevelControlCluster) {
-            lastLevel = levelToPercent(((LevelControlCluster) cluster).currentLevel);
-            handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
-            handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+        if (cluster instanceof LevelControlCluster levelControlCluster) {
+            lastLevel = levelToPercent(levelControlCluster.currentLevel);
+            updateState(CHANNEL_SWITCH_LEVEL, lastLevel);
+            updateState(CHANNEL_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+        }
+        if (cluster instanceof OnOffCluster onOffCluster) {
+            lastOnOff = OnOffType.from(Boolean.valueOf(onOffCluster.onOff));
+            logger.debug("OnOff {}", lastOnOff);
+            updateState(CHANNEL_SWITCH_LEVEL, lastOnOff);
+            updateState(CHANNEL_SWITCH_ONOFF, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
         }
     }
 
     @Override
-    public List<ChannelUID> createChannels(BaseCluster cluster) {
-        return List.of(createChannel(cluster, CHANNEL_NAME_COLOR_COLOR, CHANNEL_COLOR_COLOR, CHANNEL_LABEL_COLOR_COLOR,
-                ITEM_TYPE_COLOR));
+    public List<ChannelUID> createChannels(Map<String, BaseCluster> clusters) {
+        List<ChannelUID> channels = new ArrayList<>();
+        clusters.forEach((name, cluster) -> {
+            switch (name) {
+                case OnOffCluster.CLUSTER_NAME:
+                    // don't add a switch to dimmable devices
+                    if (deviceType.equals(DeviceTypes.OnOffLight) || deviceType.equals(DeviceTypes.OnOffLightSwitch)) {
+                        channels.add(createChannel(cluster, CHANNEL_NAME_SWITCH_ONOFF, CHANNEL_SWITCH_ONOFF,
+                                CHANNEL_LABEL_SWITCH_ONOFF, ITEM_TYPE_SWITCH));
+                    }
+                    break;
+                case LevelControlCluster.CLUSTER_NAME:
+                    // don't add a dimmer to only switchable devices
+                    if (!deviceType.equals(DeviceTypes.OnOffLight)
+                            && !deviceType.equals(DeviceTypes.OnOffLightSwitch)) {
+                        channels.add(createChannel(cluster, CHANNEL_NAME_SWITCH_LEVEL, CHANNEL_SWITCH_LEVEL,
+                                CHANNEL_LABEL_SWITCH_LEVEL, ITEM_TYPE_DIMMER));
+                    }
+                    break;
+                case ColorControlCluster.CLUSTER_NAME:
+                    channels.add(createChannel(cluster, CHANNEL_NAME_COLOR_COLOR, CHANNEL_COLOR_COLOR,
+                            CHANNEL_LABEL_COLOR_COLOR, ITEM_TYPE_COLOR));
+                    break;
+            }
+        });
+        return channels;
     }
-
-    /**
-     * currentX
-     * currentY
-     * currentHue
-     * currentSaturation
-     * colorTemperatureMireds
-     * enhancedCurrentHue
-     */
 
     @Override
     public void onEvent(AttributeChangedMessage message) {
@@ -194,15 +189,14 @@ public class ColorControlConverter extends ClusterConverter {
                 break;
             case "onOff":
                 lastOnOff = OnOffType.from((Boolean) message.value);
-                handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, lastOnOff);
-                handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL,
-                        lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
+                updateState(CHANNEL_SWITCH_ONOFF, lastOnOff);
+                updateState(CHANNEL_SWITCH_LEVEL, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
                 break;
             case "currentLevel":
                 logger.debug("currentLevel {}", message.value);
                 lastLevel = levelToPercent(numberValue);
-                handler.updateState("LevelControl_" + CHANNEL_NAME_SWITCH_LEVEL, lastLevel);
-                handler.updateState("OnOff_" + CHANNEL_NAME_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+                updateState(CHANNEL_SWITCH_LEVEL, lastLevel);
+                updateState(CHANNEL_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
                 updateBrightness(lastLevel);
                 break;
             default:
@@ -229,7 +223,7 @@ public class ColorControlConverter extends ClusterConverter {
         HSBType oldHSB = lastHSB;
         HSBType newHSB = new HSBType(oldHSB.getHue(), oldHSB.getSaturation(), brightness);
         lastHSB = newHSB;
-        handler.updateState("ColorControl_" + CHANNEL_NAME_COLOR_COLOR, newHSB);
+        updateState(CHANNEL_COLOR_COLOR, newHSB);
     }
 
     private void updateColorHSB(DecimalType hue, PercentType saturation) {
@@ -237,7 +231,7 @@ public class ColorControlConverter extends ClusterConverter {
         HSBType oldHSB = lastHSB;
         HSBType newHSB = new HSBType(hue, saturation, oldHSB.getBrightness());
         lastHSB = newHSB;
-        handler.updateState("ColorControl_" + CHANNEL_NAME_COLOR_COLOR, newHSB);
+        updateState(CHANNEL_COLOR_COLOR, newHSB);
     }
 
     private void updateColorXY(PercentType x, PercentType y) {
@@ -278,5 +272,17 @@ public class ColorControlConverter extends ClusterConverter {
         int y = (int) (xy[1].floatValue() / 100.0f * 65536.0f + 0.5f); // up to 65279
         client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), ColorControlCluster.CLUSTER_NAME,
                 ColorControlCluster.moveToColor(x, y, 0, optionsMask, optionsMask));
+    }
+
+    private void sendOnOff(MatterWebsocketClient client, boolean on) {
+        ClusterCommand onOffCommand = on ? OnOffCluster.on() : OnOffCluster.off();
+        client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), OnOffCluster.CLUSTER_NAME, onOffCommand);
+    }
+
+    private void sendLevel(MatterWebsocketClient client, PercentType level) {
+        ClusterCommand levelCommand = LevelControlCluster.moveToLevelWithOnOff(percentToLevel(level), 0,
+                new OptionsBitmap(true, true), new OptionsBitmap(true, true));
+        client.clusterCommand(handler.getNodeId(), handler.getEndpointId(), LevelControlCluster.CLUSTER_NAME,
+                levelCommand);
     }
 }
