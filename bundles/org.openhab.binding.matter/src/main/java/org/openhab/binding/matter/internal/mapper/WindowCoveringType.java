@@ -64,8 +64,8 @@ public class WindowCoveringType extends DeviceType {
         if (client == null) {
             return;
         }
-        if (command instanceof UpDownType) {
-            switch ((UpDownType) command) {
+        if (command instanceof UpDownType upDownType) {
+            switch (upDownType) {
                 case UP:
                     moveCommand(client, WindowCoveringCluster.upOrOpen());
                     break;
@@ -75,16 +75,16 @@ public class WindowCoveringType extends DeviceType {
                 default:
                     break;
             }
-        } else if (command instanceof StopMoveType) {
-            switch ((StopMoveType) command) {
+        } else if (command instanceof StopMoveType stopMoveType) {
+            switch (stopMoveType) {
                 case STOP:
                     moveCommand(client, WindowCoveringCluster.stopMotion());
                     break;
                 default:
                     break;
             }
-        } else if (command instanceof PercentType) {
-            moveCommand(client, WindowCoveringCluster.goToLiftPercentage(((PercentType) command).intValue()));
+        } else if (command instanceof PercentType percentType) {
+            moveCommand(client, WindowCoveringCluster.goToLiftPercentage(percentType.intValue()));
         }
     }
 

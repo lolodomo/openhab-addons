@@ -413,8 +413,6 @@ const dataTypeSource = fs.readFileSync('src/templates/data-types-class.hbs', 'ut
 const dataTypeTemplate = handlebars.compile(dataTypeSource);
 const deviceTypeSource = fs.readFileSync('src/templates/device-types-class.hbs', 'utf8');
 const deviceTypeTemplate = handlebars.compile(deviceTypeSource);
-const thingTypeSource = fs.readFileSync('src/templates/cluster-thing-types-class.hbs', 'utf8');
-const thingTypeTemplate = handlebars.compile(thingTypeSource);
 const clusterConstantsSource = fs.readFileSync('src/templates/cluster-constants.hbs', 'utf8');
 const clusterConstantsTemplate = handlebars.compile(clusterConstantsSource);
 
@@ -444,8 +442,6 @@ fs.writeFileSync(`out/DataTypes.java`, dataTypeClass);
 const deviceTypeClass = deviceTypeTemplate({ deviceTypes: Matter.children.filter(c => c.tag == 'deviceType' && c.id !== undefined) });
 fs.writeFileSync(`out/DeviceTypes.java`, deviceTypeClass);
 
-const thingTypesClass = thingTypeTemplate({ clusters: clusters });
-fs.writeFileSync(`out/ClusterThingTypes.java`, thingTypesClass);
 
 const clusterConstantsClass = clusterConstantsTemplate({ clusters: clusters });
 fs.writeFileSync(`out/ClusterConstants.java`, clusterConstantsClass);

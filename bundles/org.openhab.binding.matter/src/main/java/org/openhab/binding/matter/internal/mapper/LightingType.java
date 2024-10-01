@@ -88,8 +88,7 @@ public class LightingType extends DeviceType {
         if (client == null) {
             return;
         }
-        if (command instanceof HSBType) {
-            HSBType color = (HSBType) command;
+        if (command instanceof HSBType color) {
             PercentType brightness = color.getBrightness();
 
             sendLevel(client, brightness);
@@ -99,10 +98,10 @@ public class LightingType extends DeviceType {
             } else {
                 changeColorXY(client, color);
             }
-        } else if (command instanceof PercentType) {
-            sendLevel(client, (PercentType) command);
-        } else if (command instanceof OnOffType) {
-            sendOnOff(client, ((OnOffType) command) == OnOffType.ON);
+        } else if (command instanceof PercentType percentType) {
+            sendLevel(client, percentType);
+        } else if (command instanceof OnOffType onOffType) {
+            sendOnOff(client, onOffType == OnOffType.ON);
         }
     }
 
@@ -165,7 +164,7 @@ public class LightingType extends DeviceType {
     @Override
     public void onEvent(AttributeChangedMessage message) {
         logger.debug("OnEvent: {}", message.path.attributeName);
-        Integer numberValue = message.value instanceof Number ? ((Number) message.value).intValue() : 0;
+        Integer numberValue = message.value instanceof Number number ? number.intValue() : 0;
         switch (message.path.attributeName) {
             case "currentX":
                 lastX = numberValue;

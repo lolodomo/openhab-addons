@@ -149,8 +149,7 @@ public abstract class DeviceType implements AttributeListener {
      */
     protected @Nullable Integer temperatureToValue(Command command) {
         BigDecimal value = null;
-        if (command instanceof QuantityType) {
-            QuantityType<?> quantity = (QuantityType<?>) command;
+        if (command instanceof QuantityType<?> quantity) {
             if (quantity.getUnit() == SIUnits.CELSIUS) {
                 value = quantity.toBigDecimal();
             } else if (quantity.getUnit() == ImperialUnits.FAHRENHEIT) {
@@ -162,9 +161,9 @@ public abstract class DeviceType implements AttributeListener {
             } else {
                 return null;
             }
-        } else if (command instanceof Number) {
+        } else if (command instanceof Number number) {
             // No scale, so assumed to be Celsius
-            value = BigDecimal.valueOf(((Number) command).doubleValue());
+            value = BigDecimal.valueOf(number.doubleValue());
         }
         if (value == null) {
             return null;

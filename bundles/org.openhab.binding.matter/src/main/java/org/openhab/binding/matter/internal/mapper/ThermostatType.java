@@ -133,8 +133,6 @@ public class ThermostatType extends DeviceType {
                             ITEM_TYPE_SWITCH));
                     break;
                 case ThermostatCluster.CLUSTER_NAME:
-                    // TODO we need to modify the state options to reflect the feature map
-
                     if (cluster instanceof ThermostatCluster thermostatCluster) {
                         logger.debug("createChannels adding thermo channel");
 
@@ -249,23 +247,12 @@ public class ThermostatType extends DeviceType {
     @Override
     public void onEvent(AttributeChangedMessage message) {
         logger.debug("OnEvent: {}", message.path.attributeName);
-        Integer numberValue = message.value instanceof Number ? ((Number) message.value).intValue() : 0;
+        Integer numberValue = message.value instanceof Number number ? number.intValue() : 0;
         switch (message.path.attributeName) {
             case "onOff":
                 OnOffType onOff = OnOffType.from((Boolean) message.value);
                 updateState(CHANNEL_SWITCH_ONOFF, onOff);
                 break;
-            /**
-             * "localTemperature": 2390,
-             * "controlSequenceOfOperation": 4,
-             * "systemMode": 0,
-             * "absMinHeatSetpointLimit": 1000,
-             * "absMaxHeatSetpointLimit": 3222,
-             * "absMinCoolSetpointLimit": 1000,
-             * "absMaxCoolSetpointLimit": 3222,
-             * "occupiedCoolingSetpoint": 2000,
-             * "occupiedHeatingSetpoint": 2000,
-             */
             case "systemMode":
                 updateState(CHANNEL_THERMOSTAT_SYSTEMMODE, new DecimalType(numberValue));
                 break;

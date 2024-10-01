@@ -20,7 +20,6 @@ import org.openhab.binding.matter.internal.client.model.Endpoint;
 import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.BasicInformationCluster;
-import org.openhab.binding.matter.internal.client.model.cluster.gen.ClusterThingTypes;
 import org.openhab.binding.matter.internal.client.model.cluster.gen.DescriptorCluster;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
@@ -41,7 +40,7 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
     private @Nullable ThingHandler thingHandler;
 
     public MatterDiscoveryService() throws IllegalArgumentException {
-        super(ClusterThingTypes.SUPPORTED_DISCOVERY_THING_TYPES_UIDS, 5, false);
+        super(null, 5, false);
     }
 
     @Override
