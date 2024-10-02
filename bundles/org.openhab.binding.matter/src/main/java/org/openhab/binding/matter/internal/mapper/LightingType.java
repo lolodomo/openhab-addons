@@ -72,9 +72,9 @@ public class LightingType extends DeviceType {
     }
 
     public static List<Integer> supportedTypes() {
-        return List.of(DeviceTypes.OnOffLight, DeviceTypes.OnOffLightSwitch, DeviceTypes.DimmableLight,
-                DeviceTypes.DimmablePlugInUnit, DeviceTypes.DimmerSwitch, DeviceTypes.ColorDimmerSwitch,
-                DeviceTypes.ExtendedColorLight, DeviceTypes.ColorTemperatureLight);
+        return List.of(DeviceTypes.OnOffLight, DeviceTypes.OnOffLightSwitch, DeviceTypes.OnOffPlugInUnit,
+                DeviceTypes.DimmableLight, DeviceTypes.DimmablePlugInUnit, DeviceTypes.DimmerSwitch,
+                DeviceTypes.ColorDimmerSwitch, DeviceTypes.ExtendedColorLight, DeviceTypes.ColorTemperatureLight);
     }
 
     @Override
@@ -121,35 +121,39 @@ public class LightingType extends DeviceType {
         }
         if (cluster instanceof LevelControlCluster levelControlCluster) {
             lastLevel = levelToPercent(levelControlCluster.currentLevel);
-            updateState(CHANNEL_SWITCH_LEVEL, lastLevel);
-            updateState(CHANNEL_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+            updateState(CHANNEL_LEVEL_LEVEL, lastLevel);
+            updateState(CHANNEL_ONOFF_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
         }
         if (cluster instanceof OnOffCluster onOffCluster) {
             lastOnOff = OnOffType.from(Boolean.valueOf(onOffCluster.onOff));
             logger.debug("OnOff {}", lastOnOff);
-            updateState(CHANNEL_SWITCH_LEVEL, lastOnOff);
-            updateState(CHANNEL_SWITCH_ONOFF, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
+            updateState(CHANNEL_LEVEL_LEVEL, lastOnOff);
+            updateState(CHANNEL_ONOFF_ONOFF, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
         }
     }
 
     @Override
     public List<ChannelUID> createChannels(Map<String, BaseCluster> clusters) {
         List<ChannelUID> channels = new ArrayList<>();
+
         clusters.forEach((name, cluster) -> {
+            logger.debug("Create Channel {}:{} Cluster {} DeviceType {}", handler.getNodeId(), handler.getEndpointId(),
+                    cluster.name, deviceType);
             switch (name) {
                 case OnOffCluster.CLUSTER_NAME:
                     // don't add a switch to dimmable devices
-                    if (deviceType.equals(DeviceTypes.OnOffLight) || deviceType.equals(DeviceTypes.OnOffLightSwitch)) {
-                        channels.add(createChannel(cluster, CHANNEL_NAME_SWITCH_ONOFF, CHANNEL_SWITCH_ONOFF,
-                                CHANNEL_LABEL_SWITCH_ONOFF, ITEM_TYPE_SWITCH));
+                    if (deviceType.equals(DeviceTypes.OnOffLight) || deviceType.equals(DeviceTypes.OnOffLightSwitch)
+                            || deviceType.equals(DeviceTypes.OnOffPlugInUnit)) {
+                        channels.add(createChannel(cluster, CHANNEL_NAME_ONOFF_ONOFF, CHANNEL_ONOFF_ONOFF,
+                                CHANNEL_LABEL_ONOFF_ONOFF, ITEM_TYPE_SWITCH));
                     }
                     break;
                 case LevelControlCluster.CLUSTER_NAME:
                     // don't add a dimmer to only switchable devices
                     if (!deviceType.equals(DeviceTypes.OnOffLight)
                             && !deviceType.equals(DeviceTypes.OnOffLightSwitch)) {
-                        channels.add(createChannel(cluster, CHANNEL_NAME_SWITCH_LEVEL, CHANNEL_SWITCH_LEVEL,
-                                CHANNEL_LABEL_SWITCH_LEVEL, ITEM_TYPE_DIMMER));
+                        channels.add(createChannel(cluster, CHANNEL_NAME_LEVEL_LEVEL, CHANNEL_LEVEL_LEVEL,
+                                CHANNEL_LABEL_LEVEL_LEVEL, ITEM_TYPE_DIMMER));
                     }
                     break;
                 case ColorControlCluster.CLUSTER_NAME:
@@ -188,14 +192,14 @@ public class LightingType extends DeviceType {
                 break;
             case "onOff":
                 lastOnOff = OnOffType.from((Boolean) message.value);
-                updateState(CHANNEL_SWITCH_ONOFF, lastOnOff);
-                updateState(CHANNEL_SWITCH_LEVEL, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
+                updateState(CHANNEL_ONOFF_ONOFF, lastOnOff);
+                updateState(CHANNEL_LEVEL_LEVEL, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
                 break;
             case "currentLevel":
                 logger.debug("currentLevel {}", message.value);
                 lastLevel = levelToPercent(numberValue);
-                updateState(CHANNEL_SWITCH_LEVEL, lastLevel);
-                updateState(CHANNEL_SWITCH_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+                updateState(CHANNEL_LEVEL_LEVEL, lastLevel);
+                updateState(CHANNEL_ONOFF_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
                 updateBrightness(lastLevel);
                 break;
             default:

@@ -65,7 +65,7 @@ public class ThermostatType extends DeviceType {
             return;
         }
         String id = channelUID.getId();
-        if (id.equals(CHANNEL_SWITCH_ONOFF.getId()) && command instanceof OnOffType onOffType) {
+        if (id.equals(CHANNEL_ONOFF_ONOFF.getId()) && command instanceof OnOffType onOffType) {
             sendOnOff(client, onOffType == OnOffType.ON);
         }
         if (id.equals(CHANNEL_THERMOSTAT_SYSTEMMODE.getId())) {
@@ -89,7 +89,7 @@ public class ThermostatType extends DeviceType {
         if (cluster instanceof OnOffCluster onOffCluster) {
             OnOffType onOff = OnOffType.from(Boolean.valueOf(onOffCluster.onOff));
             logger.debug("OnOff {}", onOff);
-            updateState(CHANNEL_SWITCH_ONOFF, onOff);
+            updateState(CHANNEL_ONOFF_ONOFF, onOff);
         }
         if (cluster instanceof ThermostatCluster thermostatCluster) {
             if (thermostatCluster.localTemperature != null) {
@@ -129,7 +129,7 @@ public class ThermostatType extends DeviceType {
             logger.debug("createChannels cluster {}", name);
             switch (name) {
                 case OnOffCluster.CLUSTER_NAME:
-                    channels.add(createChannel(cluster, CHANNEL_NAME_SWITCH_ONOFF, CHANNEL_SWITCH_ONOFF, "Mode Switch",
+                    channels.add(createChannel(cluster, CHANNEL_NAME_ONOFF_ONOFF, CHANNEL_ONOFF_ONOFF, "Mode Switch",
                             ITEM_TYPE_SWITCH));
                     break;
                 case ThermostatCluster.CLUSTER_NAME:
@@ -251,7 +251,7 @@ public class ThermostatType extends DeviceType {
         switch (message.path.attributeName) {
             case "onOff":
                 OnOffType onOff = OnOffType.from((Boolean) message.value);
-                updateState(CHANNEL_SWITCH_ONOFF, onOff);
+                updateState(CHANNEL_ONOFF_ONOFF, onOff);
                 break;
             case "systemMode":
                 updateState(CHANNEL_THERMOSTAT_SYSTEMMODE, new DecimalType(numberValue));

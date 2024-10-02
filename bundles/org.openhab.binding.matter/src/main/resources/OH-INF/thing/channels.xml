@@ -31,7 +31,7 @@
 	</channel-type>
 
 	<!-- Color Channel -->
-	<channel-type id="color_color">
+	<channel-type id="colorcontrol_color">
 		<item-type>Color</item-type>
 		<label>Color</label>
 		<description>The color channel allows to control the color of a light.
@@ -52,7 +52,7 @@
 	</channel-type>
 
 	<!-- Fan Control -->
-	<channel-type id="fancontrol">
+	<channel-type id="fancontrol_fanmode">
 		<item-type>Number</item-type>
 		<label>Fan Mode</label>
 		<description>Set the fan mode</description>
@@ -70,207 +70,8 @@
 		<autoUpdatePolicy>veto</autoUpdatePolicy>
 	</channel-type>
 
-	<!-- Electrical Measurement Active Power -->
-	<channel-type id="electrical_activepower">
-		<item-type>Number:Power</item-type>
-		<label>Total Active Power</label>
-		<description>The total power consumed by the device</description>
-		<category>Energy</category>
-		<state pattern="%.1f %unit%" readOnly="true"/>
-		<autoUpdatePolicy>veto</autoUpdatePolicy>
-	</channel-type>
-
-	<!-- RMS Current -->
-	<channel-type id="electrical_rmscurrent">
-		<item-type>Number:ElectricCurrent</item-type>
-		<label>Current</label>
-		<description>The current RMS current measurement</description>
-		<category>Energy</category>
-		<state pattern="%.1f %unit%" readOnly="true"/>
-	</channel-type>
-
-	<!-- RMS Voltage -->
-	<channel-type id="electrical_rmsvoltage">
-		<item-type>Number:ElectricPotential</item-type>
-		<label>Voltage</label>
-		<description>The current RMS voltage measurement</description>
-		<category>Energy</category>
-		<state pattern="%.1f %unit%" readOnly="true"/>
-	</channel-type>
-
-	<!-- Binary input sensor -->
-	<channel-type id="binaryinput">
-		<item-type>Switch</item-type>
-		<label>Binary Input Sensor</label>
-		<description>Indicates a binary input sensor state</description>
-		<category></category>
-		<state readOnly="true"></state>
-	</channel-type>
-
-	<!-- IAS Contact Channel -->
-	<channel-type id="ias_contactportal1">
-		<item-type>Switch</item-type>
-		<label>Contact Sensor</label>
-		<description>Contact sensor</description>
-		<category>Door</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Motion Intrusion Channel -->
-	<channel-type id="ias_motionintrusion">
-		<item-type>Switch</item-type>
-		<label>Motion Intrusion</label>
-		<description>Motion intrusion sensor</description>
-		<category>Motion</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS CO Detector Channel -->
-	<channel-type id="ias_codetector">
-		<item-type>Switch</item-type>
-		<label>Carbon Monoxide Detector</label>
-		<description>Carbon Monoxide Alarm</description>
-		<category>Sensor</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Fire Channel -->
-	<channel-type id="ias_fire">
-		<item-type>Switch</item-type>
-		<label>Fire Detector</label>
-		<description>Fire Indication Alarm</description>
-		<category>SmokeDetector</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Motion Presence Channel -->
-	<channel-type id="ias_motionpresence">
-		<item-type>Switch</item-type>
-		<label>Motion Presence</label>
-		<description>Motion presence sensor</description>
-		<category>Motion</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS System Alarm Channel -->
-	<channel-type id="ias_standard_system">
-		<item-type>Switch</item-type>
-		<label>System Alarm</label>
-		<description></description>
-		<category></category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Water Sensor Channel -->
-	<channel-type id="ias_water">
-		<item-type>Switch</item-type>
-		<label>Water Sensor</label>
-		<description>Water Sensor Alarm</description>
-		<category>Sensor</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Movement Sensor Channel -->
-	<channel-type id="ias_movement">
-		<item-type>Switch</item-type>
-		<label>Movement Sensor</label>
-		<description>Movement Sensor Alarm</description>
-		<category>Sensor</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Vibration Sensor Channel -->
-	<channel-type id="ias_vibration">
-		<item-type>Switch</item-type>
-		<label>Vibration Sensor</label>
-		<description>Vibration Sensor Alarm</description>
-		<category>Sensor</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- IAS Tamper Channel -->
-	<channel-type id="ias_tamper">
-		<item-type>Switch</item-type>
-		<label>Tamper</label>
-		<description>Indicates if a device is tampered with</description>
-		<category>Alarm</category>
-		<state readOnly="true"/>
-	</channel-type>
-
-	<!-- Illuminance Channel -->
-	<channel-type id="measurement_illuminance">
-		<item-type>Number</item-type>
-		<label>Illuminance</label>
-		<description>Indicates the current illuminance in lux</description>
-		<category></category>
-		<state pattern="%.0f" readOnly="true"/>
-	</channel-type>
-
-	<!-- Atmospheric Pressure Channel -->
-	<channel-type id="measurement_pressure">
-		<item-type>Number:Pressure</item-type>
-		<label>Atmospheric Pressure</label>
-		<description>Indicates the current pressure</description>
-		<category>Pressure</category>
-		<state pattern="%.1f %unit%" readOnly="true"/>
-	</channel-type>
-
-	<!-- Humidity Channel -->
-	<channel-type id="measurement_relativehumidity">
-		<item-type>Number</item-type>
-		<label>Humidity</label>
-		<description>Indicates the current relative humidity</description>
-		<category>Humidity</category>
-		<state pattern="%.1f" readOnly="true"/>
-	</channel-type>
-
-	<!-- Temperature Channel -->
-	<channel-type id="measurement_temperature">
-		<item-type>Number:Temperature</item-type>
-		<label>Temperature</label>
-		<description>Indicates the current temperature</description>
-		<category>Temperature</category>
-		<state pattern="%.1f %unit%" readOnly="true"/>
-	</channel-type>
-
-	<!-- Metering Instantaneous Demand -->
-	<channel-type id="metering_instantdemand">
-		<item-type>Number</item-type>
-		<label>Instantaneous Demand</label>
-		<description>The instantaneous demand from the metering system</description>
-		<category>Number</category>
-		<autoUpdatePolicy>veto</autoUpdatePolicy>
-	</channel-type>
-
-	<!-- Metering Summation Delivered -->
-	<channel-type id="metering_sumdelivered">
-		<item-type>Number</item-type>
-		<label>Summation Delivered</label>
-		<description>The total delivered from the metering system</description>
-		<category>Number</category>
-		<autoUpdatePolicy>veto</autoUpdatePolicy>
-	</channel-type>
-
-	<!-- Metering Summation Received -->
-	<channel-type id="metering_sumreceived">
-		<item-type>Number</item-type>
-		<label>Summation Delivered</label>
-		<description>The total delivered from the metering system</description>
-		<category>Number</category>
-		<autoUpdatePolicy>veto</autoUpdatePolicy>
-	</channel-type>
-
-	<!-- Occupancy sensor -->
-	<channel-type id="sensor_occupancy">
-		<item-type>Switch</item-type>
-		<label>Occupancy</label>
-		<description>Indicates if an occupancy sensor is triggered</description>
-		<category>Motion</category>
-		<state readOnly="true"></state>
-	</channel-type>
-
 	<!-- On Off Switch -->
-	<channel-type id="switch_onoff">
+	<channel-type id="onoffcontrol_onoff">
 		<item-type>Switch</item-type>
 		<label>Switch</label>
 		<description>Switches the power on and off</description>
@@ -278,8 +79,8 @@
 		<autoUpdatePolicy>veto</autoUpdatePolicy>
 	</channel-type>
 
-	<!-- Level Switch -->
-	<channel-type id="switch_level">
+	<!-- Level Dimmer -->
+	<channel-type id="levelcontrol_level">
 		<item-type>Dimmer</item-type>
 		<label>Dimmer</label>
 		<description>Sets the level of the light</description>
@@ -398,39 +199,6 @@
 		<description>The level of cooling currently demanded by the thermostat</description>
 		<category>HVAC</category>
 		<state pattern="%.0f %%" readOnly="true"/>
-	</channel-type>
-
-	<!-- Warning device -->
-	<channel-type id="warning_device">
-		<item-type>String</item-type>
-		<label>Warning device</label>
-		<description>Triggers warnings on a warning device</description>
-		<category>Siren</category>
-		<state readOnly="true"/>
-		<config-description>
-			<parameter name="zigbee_iaswd_maxDuration" type="integer" min="0" max="65534" unit="s">
-				<default>60</default>
-				<label>Maximal warning duration</label>
-				<description>Maximal time in seconds that the siren will sound continuously</description>
-				<unitLabel>seconds</unitLabel>
-				<limitToOptions>false</limitToOptions>
-			</parameter>
-			<parameter name="zigbee_iaswd_commandOptions" type="text" multiple="true">
-				<label>Command options for warning/squawk types</label>
-				<description>This configuration parameter is used to configure command options for warning/squawk types to be
-					displayed by UIs; see options for examples</description>
-				<options>
-					<option
-						value="Burglar Alarm (30s)=>type=warning useStrobe=true warningMode=BURGLAR sirenLevel=HIGH duration=PT30S">Burglar Alarm (30s)</option>
-					<option
-						value="Fire Alarm (60s, only siren)=>type=warning useStrobe=false warningMode=FIRE sirenLevel=HIGH duration=PT60S">Fire Alarm (60s, only siren)</option>
-					<option value="Stop Alarm=>type=warning useStrobe=false warningMode=STOP sirenLevel=HIGH duration=PT30S">Stop Alarm</option>
-					<option value="Signal Armed=>type=squawk useStrobe=false squawkMode=ARMED squawkLevel=HIGH">Signal Armed</option>
-					<option value="Signal Disarmed=>type=squawk useStrobe=false squawkMode=DISARMED squawkLevel=HIGH">Signal Disarmed</option>
-				</options>
-				<limitToOptions>false</limitToOptions>
-			</parameter>
-		</config-description>
 	</channel-type>
 
 	<!-- Window Covering Lift Channel -->

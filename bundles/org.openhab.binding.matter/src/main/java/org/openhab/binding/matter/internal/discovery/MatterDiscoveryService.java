@@ -12,6 +12,9 @@
  */
 package org.openhab.binding.matter.internal.discovery;
 
+import static org.openhab.binding.matter.internal.MatterBindingConstants.THING_TYPE_ENDPOINT;
+
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -40,7 +43,7 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
     private @Nullable ThingHandler thingHandler;
 
     public MatterDiscoveryService() throws IllegalArgumentException {
-        super(null, 5, false);
+        super(Set.of(THING_TYPE_ENDPOINT), 5, false);
     }
 
     @Override
