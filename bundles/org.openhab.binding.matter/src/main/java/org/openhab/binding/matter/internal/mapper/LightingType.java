@@ -41,6 +41,7 @@ import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.PercentType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.types.Command;
+import org.openhab.core.util.ColorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +67,7 @@ public class LightingType extends DeviceType {
     private HSBType lastHSB = new HSBType("0,0,100");
     private Options optionsMask = new Options(true);
     private ScheduledExecutorService colorUpdateScheduler = Executors.newSingleThreadScheduledExecutor();
+    private List<Integer> discoveredClusters = new ArrayList<>();
 
     public LightingType(EndpointHandler handler, Integer deviceType) {
         super(handler, deviceType);
@@ -101,7 +103,11 @@ public class LightingType extends DeviceType {
         } else if (command instanceof PercentType percentType) {
             sendLevel(client, percentType);
         } else if (command instanceof OnOffType onOffType) {
-            sendOnOff(client, onOffType == OnOffType.ON);
+            if (discoveredClusters.contains(OnOffCluster.CLUSTER_ID)) {
+                sendOnOff(client, onOffType == OnOffType.ON);
+            } else {
+                sendLevel(client, new PercentType(0));
+            }
         }
     }
 
@@ -122,13 +128,16 @@ public class LightingType extends DeviceType {
         if (cluster instanceof LevelControlCluster levelControlCluster) {
             lastLevel = levelToPercent(levelControlCluster.currentLevel);
             updateState(CHANNEL_LEVEL_LEVEL, lastLevel);
+            updateState(CHANNEL_COLOR_COLOR, lastLevel);
             updateState(CHANNEL_ONOFF_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
+
         }
         if (cluster instanceof OnOffCluster onOffCluster) {
             lastOnOff = OnOffType.from(Boolean.valueOf(onOffCluster.onOff));
             logger.debug("OnOff {}", lastOnOff);
+            updateState(CHANNEL_ONOFF_ONOFF, lastOnOff);
+            updateState(CHANNEL_COLOR_COLOR, lastOnOff);
             updateState(CHANNEL_LEVEL_LEVEL, lastOnOff);
-            updateState(CHANNEL_ONOFF_ONOFF, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
         }
     }
 
@@ -139,6 +148,7 @@ public class LightingType extends DeviceType {
         clusters.forEach((name, cluster) -> {
             logger.debug("Create Channel {}:{} Cluster {} DeviceType {}", handler.getNodeId(), handler.getEndpointId(),
                     cluster.name, deviceType);
+            discoveredClusters.add(cluster.id);
             switch (name) {
                 case OnOffCluster.CLUSTER_NAME:
                     // don't add a switch to dimmable devices
@@ -193,12 +203,14 @@ public class LightingType extends DeviceType {
             case "onOff":
                 lastOnOff = OnOffType.from((Boolean) message.value);
                 updateState(CHANNEL_ONOFF_ONOFF, lastOnOff);
-                updateState(CHANNEL_LEVEL_LEVEL, lastOnOff == OnOffType.ON ? lastLevel : new PercentType(0));
+                updateState(CHANNEL_COLOR_COLOR, lastOnOff);
+                updateState(CHANNEL_LEVEL_LEVEL, lastOnOff == OnOffType.ON ? lastLevel : OnOffType.OFF);
                 break;
             case "currentLevel":
                 logger.debug("currentLevel {}", message.value);
                 lastLevel = levelToPercent(numberValue);
                 updateState(CHANNEL_LEVEL_LEVEL, lastLevel);
+                updateState(CHANNEL_COLOR_COLOR, lastLevel);
                 updateState(CHANNEL_ONOFF_ONOFF, OnOffType.from(lastLevel.intValue() > 0));
                 updateBrightness(lastLevel);
                 break;
@@ -209,6 +221,7 @@ public class LightingType extends DeviceType {
             if (colorUpdateTimer != null) {
                 colorUpdateTimer.cancel(true);
             }
+
             colorUpdateTimer = colorUpdateScheduler.schedule(() -> updateColorHSB(), 500, TimeUnit.MILLISECONDS);
         }
         if (!supportsHue && (xChanged || yChanged)) {
@@ -238,7 +251,7 @@ public class LightingType extends DeviceType {
     }
 
     private void updateColorXY(PercentType x, PercentType y) {
-        HSBType color = HSBType.fromXY(x.floatValue() / 100.0f, y.floatValue() / 100.0f);
+        HSBType color = ColorUtil.xyToHsb(new double[] { x.floatValue() / 100.0f, y.floatValue() / 100.0f });
         updateColorHSB(color.getHue(), color.getSaturation());
     }
 

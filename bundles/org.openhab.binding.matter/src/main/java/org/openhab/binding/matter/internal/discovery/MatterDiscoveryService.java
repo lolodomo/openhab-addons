@@ -70,6 +70,16 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
         super.deactivate();
     }
 
+    @Override
+    public @Nullable String getScanInputLabel() {
+        return "Matter Pairing Code";
+    }
+
+    @Override
+    public @Nullable String getScanInputDescription() {
+        return "11 digit matter pairing code (with or without hyphens) or a short code and key (separated by a space)";
+    }
+
     public void discoverChildEndpointThing(ThingUID thingUID, ThingUID bridgeUID, Node node, Integer endpointId) {
         logger.debug("discoverChildEndpointThing: {} {} {}", thingUID, bridgeUID, endpointId);
         String vendorName = "";
@@ -102,9 +112,14 @@ public class MatterDiscoveryService extends AbstractDiscoveryService implements 
 
     @Override
     protected void startScan() {
+        startScan("");
+    }
+
+    @Override
+    public void startScan(String input) {
         ThingHandler handler = this.thingHandler;
         if (handler != null && handler instanceof MatterDiscoveryHandler childDiscoveryHandler) {
-            childDiscoveryHandler.startScan();
+            childDiscoveryHandler.startScan(input.length() > 0 ? input : null);
         }
     }
 }

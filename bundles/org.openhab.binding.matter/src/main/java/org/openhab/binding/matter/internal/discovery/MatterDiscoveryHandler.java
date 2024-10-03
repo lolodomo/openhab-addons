@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.matter.internal.discovery;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * @author Dan Cunningham
  *
@@ -24,5 +26,5 @@ public interface MatterDiscoveryHandler {
      */
     void setDiscoveryService(MatterDiscoveryService service);
 
-    void startScan();
+    void startScan(@Nullable String code);
 }

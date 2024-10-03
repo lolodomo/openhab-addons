@@ -249,8 +249,20 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
     }
 
     @Override
-    public void startScan() {
-        refresh();
+    public void startScan(@Nullable String code) {
+        if (code != null) {
+            if (!client.isConnected()) {
+                logger.debug("not connected");
+                return;
+            }
+            try {
+                client.pairNode(code);
+            } catch (Exception e) {
+                logger.debug("Could not pair", e);
+            }
+        } else {
+            refresh();
+        }
     }
 
     @Override
@@ -395,8 +407,6 @@ public class ControllerHandler extends BaseBridgeHandler implements MatterClient
             if (decommission && getConfigAs(ControllerConfiguration.class).decommissionNodesOnDelete) {
                 logger.debug("Decommissioning node {}", nodeId);
                 client.removeNode(nodeId);
-            } else {
-                client.disconnectNode(nodeId);
             }
         } catch (Exception e) {
             logger.debug("Could not decommission node {}", nodeId, e);

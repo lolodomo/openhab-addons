@@ -77,16 +77,15 @@ public class MatterBindingConstants {
     public static final String CHANNEL_LABEL_POWER_BATTERYALARM = "Battery Alarm";
     public static final ChannelTypeUID CHANNEL_POWER_BATTERYALARM = new ChannelTypeUID("matter:battery_alarm");
 
-    public static final String CHANNEL_NAME_THERMOSTAT_LOCALTEMPERATURE = "thermostatlocaltemp";
+    public static final String CHANNEL_NAME_THERMOSTAT_LOCALTEMPERATURE = "thermostatlocaltemperature";
     public static final String CHANNEL_LABEL_THERMOSTAT_LOCALTEMPERATURE = "Local Temperature";
-    public static final String CHANNEL_ID_THERMOSTAT_LOCALTEMPERATURE = "thermostat_localtemp";
     public static final ChannelTypeUID CHANNEL_THERMOSTAT_LOCALTEMPERATURE = new ChannelTypeUID(
-            "matter:" + CHANNEL_ID_THERMOSTAT_LOCALTEMPERATURE);
+            "matter:thermostat_localtemperature");
 
-    public static final String CHANNEL_NAME_THERMOSTAT_OUTDOORTEMPERATURE = "thermostatoutdoortemp";
+    public static final String CHANNEL_NAME_THERMOSTAT_OUTDOORTEMPERATURE = "thermostatoutdoortemperature";
     public static final String CHANNEL_LABEL_THERMOSTAT_OUTDOORTEMPERATURE = "Outdoor Temperature";
     public static final ChannelTypeUID CHANNEL_THERMOSTAT_OUTDOORTEMPERATURE = new ChannelTypeUID(
-            "matter:thermostat_outdoortemp");
+            "matter:thermostat_outdoortemperature");
 
     public static final String CHANNEL_NAME_THERMOSTAT_OCCUPIEDCOOLING = "thermostatoccupiedcooling";
     public static final String CHANNEL_LABEL_THERMOSTAT_OCCUPIEDCOOLING = "Occupied Cooling Setpoint";

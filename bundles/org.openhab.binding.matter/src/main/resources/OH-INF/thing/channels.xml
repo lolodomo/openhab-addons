@@ -89,7 +89,7 @@
 	</channel-type>
 
 	<!-- Thermostat Local Temperature -->
-	<channel-type id="thermostat_localtemp">
+	<channel-type id="thermostat_localtemperature">
 		<item-type>Number:Temperature</item-type>
 		<label>Local Temperature</label>
 		<description>Indicates the local temperature provided by the thermostat</description>
@@ -98,7 +98,7 @@
 	</channel-type>
 
 	<!-- Thermostat Outdoor Temperature -->
-	<channel-type id="thermostat_outdoortemp">
+	<channel-type id="thermostat_outdoortemperature">
 		<item-type>Number:Temperature</item-type>
 		<label>Outdoor Temperature</label>
 		<description>Indicates the outdoor temperature provided by the thermostat</description>
