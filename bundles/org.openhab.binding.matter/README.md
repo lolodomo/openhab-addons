@@ -6,6 +6,10 @@ The Matter Binding for openHAB allows seamless integration with Matter-compatibl
 
 Matter is an open-source connectivity standard for smart home devices, allowing seamless communication between a wide range of devices, controllers, and ecosystems. The following section is an overview of how Matter devices work, how they get an IPv6 address, and the commissioning process for pairing devices.
 
+## Matter and IPV6
+
+Matter **requires** IPv6 to be enabled and routable between openHAB and the Matter device.  This means IPV6 needs to be enabled on the host openHAB is running on as well as the network understanding how to route IPv6 unicast and multicast messages.  Docker, VLANS, subnets and other configurations can prohibit Matter from working if not configured correctly.  If devices are not able to be discovered with openHAB, this will often be the root issue.   
+
 ## Matter Devices
 
 ### Nodes and Endpoints
@@ -63,7 +67,7 @@ Commissioning a Matter device involves securely adding it to the network using a
 When commissioning a new Matter device, it typically has a printed QR code or numeric pairing code that you scan or enter during setup. This pairing code allows the controller to establish a secure connection to the device and add it to the network. Once a device pairing code is in use, it can not be used again to pair other controllers.
 
 ### Additional Pairing Code from a Controller
-If a device has already been commissioned and you need to add it to another controller, the existing controller can generate an additional pairing code. This is useful when sharing access to a device across multiple hubs or apps. Apple Home, Google Home, Amazon Alexa and openHAB all support generating pairing codes for existing paired devices. 
+If a device has already been commissioned and you want to add it to another Matter controller, the existing controller can generate an additional pairing code. This is useful when sharing access to a device across multiple hubs or apps. Apple Home, Google Home, Amazon Alexa and openHAB all support generating pairing codes for existing paired devices.
 
 ### Example:
 - When setting up a smart lock, you may scan a QR code directly from the lock, or use the 11 digit pairing code printed on it to pair it with openHAB. If you later want to control the lock from another app or hub, you would retrieve a new pairing code directly from openHAB.
@@ -76,6 +80,22 @@ The Matter Binding supports the following types of things:
 
 - `controller`: The main controller that interfaces with Matter devices. It requires configuration parameters such as `port`, `host`, `portId`, and `pairCode`.
 - `endpoint`: Represents an individual endpoint within the Matter network. Configuration parameters include `nodeId` and `endpointId`.
+
+The Following Matter Device types (endpoints) are currently supported:
+
+| Device Type                    | Description                                                                 | Associated Clusters                               |
+|---------------------------------|-----------------------------------------------------------------------------|---------------------------------------------------|
+| OnOffLight                     | A simple light device that can be turned on or off                          | On/Off                                            |
+| OnOffLightSwitch               | A switch to control On/Off lights                                            | On/Off                                            |
+| OnOffPlugInUnit                | A plug-in unit that can be turned on or off                                  | On/Off                                            |
+| DimmableLight                  | A light device that supports dimming in addition to on/off                   | On/Off, Level Control                             |
+| DimmablePlugInUnit             | A plug-in unit that supports dimming and on/off control                      | On/Off, Level Control                             |
+| DimmerSwitch                   | A switch to control dimmable lights                                          | On/Off, Level Control                             |
+| ColorDimmerSwitch              | A switch to control both dimming and color of lights                         | On/Off, Level Control, Color Control              |
+| ExtendedColorLight             | A light that supports extended color control (e.g., RGB) and dimming         | On/Off, Level Control, Color Control              |
+| ColorTemperatureLight          | A light that supports color temperature control and dimming                 | On/Off, Level Control, Color Control (Temperature)|
+| Thermostat                     | A device that controls temperature in an environment                        | Thermostat, Temperature Measurement               |
+| WindowCovering                 | A device that controls window coverings such as blinds or curtains           | Window Covering                                   |
 
 ## Discovery
 

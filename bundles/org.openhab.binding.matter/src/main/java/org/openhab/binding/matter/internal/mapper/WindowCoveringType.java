@@ -50,7 +50,7 @@ public class WindowCoveringType extends DeviceType {
     }
 
     public static List<Integer> supportedTypes() {
-        return List.of(DeviceTypes.Thermostat);
+        return List.of(DeviceTypes.WindowCovering);
     }
 
     @Override

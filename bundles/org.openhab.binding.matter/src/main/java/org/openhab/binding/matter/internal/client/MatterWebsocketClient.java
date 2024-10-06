@@ -18,12 +18,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -41,14 +36,7 @@ import org.openhab.binding.matter.internal.client.model.Node;
 import org.openhab.binding.matter.internal.client.model.PairingCodes;
 import org.openhab.binding.matter.internal.client.model.cluster.BaseCluster;
 import org.openhab.binding.matter.internal.client.model.cluster.ClusterCommand;
-import org.openhab.binding.matter.internal.client.model.ws.ActiveSessionInformation;
-import org.openhab.binding.matter.internal.client.model.ws.AttributeChangedMessage;
-import org.openhab.binding.matter.internal.client.model.ws.Event;
-import org.openhab.binding.matter.internal.client.model.ws.Message;
-import org.openhab.binding.matter.internal.client.model.ws.NodeStateMessage;
-import org.openhab.binding.matter.internal.client.model.ws.Path;
-import org.openhab.binding.matter.internal.client.model.ws.Request;
-import org.openhab.binding.matter.internal.client.model.ws.Response;
+import org.openhab.binding.matter.internal.client.model.ws.*;
 import org.openhab.binding.matter.internal.util.NodeManager;
 import org.openhab.binding.matter.internal.util.NodeRunner;
 import org.openhab.binding.matter.internal.util.NodeRunner.NodeProcessListener;
@@ -56,17 +44,7 @@ import org.openhab.core.common.ThreadPoolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -341,13 +319,14 @@ public class MatterWebsocketClient implements WebSocketListener {
     }
 
     public CompletableFuture<Void> pairNode(String code) {
-        String formattedCode = code.replaceAll("-", "");
-        String[] parts = formattedCode.split(" ");
+        String[] parts = code.trim().split(" ");
         CompletableFuture<JsonElement> future = null;
         if (parts.length == 2) {
             future = sendMessage("nodes", "pairNode", new Object[] { "", parts[0], parts[1] });
         } else {
-            future = sendMessage("nodes", "pairNode", new Object[] { formattedCode });
+            // MT is a matter QR code, other wise remove any dashes in a manual pairing code
+            String pairCode = parts[0].indexOf("MT:") == 0 ? parts[0] : parts[0].replaceAll("-", "");
+            future = sendMessage("nodes", "pairNode", new Object[] { pairCode });
         }
         return future.thenAccept(obj -> {
             // Do nothing, just to complete the future

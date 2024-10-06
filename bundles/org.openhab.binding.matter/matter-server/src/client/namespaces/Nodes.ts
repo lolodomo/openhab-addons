@@ -4,7 +4,7 @@ import { CommissioningControllerNodeOptions, PairedNode } from "@project-chip/ma
 import { EndpointInterface } from "@project-chip/matter.js/endpoint";
 import { NodeCommissioningOptions } from "@project-chip/matter.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter.js/cluster";
-import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
+import { ManualPairingCodeCodec, QrPairingCodeCodec, QrCode } from "@project-chip/matter.js/schema";
 
 import { Logger } from "@project-chip/matter.js/log";
 import { MatterNode } from "../MatterNode";
@@ -78,13 +78,29 @@ export class Nodes {
         let ip: string | undefined;
         let instanceId: string | undefined;
         let ble = false
-
+/**
+ * const QrCodeDataSchema = ByteArrayBitmapSchema({
+    version: BitField(0, 3),
+    vendorId: BitField(3, 16),
+    productId: BitField(19, 16),
+    flowType: BitFieldEnum<CommissioningFlowType>(35, 2),
+    discoveryCapabilities: BitField(37, 8),
+    discriminator: BitField(45, 12),
+    passcode: BitField(57, 27),
+});
+ */
         if (typeof pairingCode === "string" && pairingCode.trim().length > 0) {
-            const { shortDiscriminator: pairingCodeShortDiscriminator, passcode } =
-                ManualPairingCodeCodec.decode(pairingCode);
-            shortDiscriminator = pairingCodeShortDiscriminator;
-            setupPinCode = passcode;
-            discriminator = undefined;
+            if (pairingCode.indexOf('MT:') == 0) {
+                const qrcode = QrPairingCodeCodec.decode(pairingCode)[0];
+                setupPinCode = qrcode.passcode;
+                discriminator = qrcode.discriminator;
+            } else {
+                const { shortDiscriminator: pairingCodeShortDiscriminator, passcode } =
+                    ManualPairingCodeCodec.decode(pairingCode);
+                shortDiscriminator = pairingCodeShortDiscriminator;
+                setupPinCode = passcode;
+                discriminator = undefined;
+            }
         } else if (discriminator === undefined && shortDiscriminator === undefined) {
             discriminator = 3840;
         }

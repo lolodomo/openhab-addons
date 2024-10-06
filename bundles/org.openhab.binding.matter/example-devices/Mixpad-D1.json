@@ -1,0 +1,888 @@
+{
+    "type": "response",
+    "message": {
+        "type": "resultSuccess",
+        "id": "9512a04d-0fbc-47c2-846b-7ff17d073aa8",
+        "result": {
+            "id": "17290837977005073804",
+            "endpoints": {
+                "0": {
+                    "number": 0,
+                    "clusters": {
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 22,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                29,
+                                31,
+                                40,
+                                43,
+                                44,
+                                48,
+                                49,
+                                50,
+                                51,
+                                52,
+                                54,
+                                60,
+                                62,
+                                63,
+                                64,
+                                65
+                            ],
+                            "clientList": [],
+                            "partsList": [
+                                1
+                            ],
+                            "clusterRevision": 2,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "AccessControl": {
+                            "id": 31,
+                            "name": "AccessControl",
+                            "acl": [
+                                {
+                                    "privilege": 5,
+                                    "authMode": 2,
+                                    "subjects": [
+                                        "11768573688415637178"
+                                    ],
+                                    "targets": null,
+                                    "fabricIndex": 4
+                                }
+                            ],
+                            "extension": [],
+                            "subjectsPerAccessControlEntry": 4,
+                            "targetsPerAccessControlEntry": 3,
+                            "accessControlEntriesPerFabric": 4,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "BasicInformation": {
+                            "id": 40,
+                            "name": "BasicInformation",
+                            "dataModelRevision": 17,
+                            "vendorName": "ORVIBO",
+                            "vendorId": 4633,
+                            "productName": "Mixpad D1",
+                            "productId": 5,
+                            "nodeLabel": "",
+                            "location": "XX",
+                            "hardwareVersion": 1,
+                            "hardwareVersionString": "v1.0",
+                            "softwareVersion": 1,
+                            "softwareVersionString": "V1.0",
+                            "manufacturingDate": "20230426",
+                            "productUrl": "https://www.orvibo.com",
+                            "productLabel": "Mixpad D1",
+                            "serialNumber": "H101201041001715",
+                            "localConfigDisabled": false,
+                            "uniqueId": "6085379C7206D4E5",
+                            "capabilityMinima": {
+                                "caseSessionsPerFabric": 3,
+                                "subscriptionsPerFabric": 65535
+                            },
+                            "clusterRevision": 2,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                18,
+                                19,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "LocalizationConfiguration": {
+                            "id": 43,
+                            "name": "LocalizationConfiguration",
+                            "activeLocale": "en-US",
+                            "supportedLocales": [
+                                "en-US",
+                                "de-DE",
+                                "fr-FR",
+                                "en-GB",
+                                "es-ES",
+                                "zh-CN",
+                                "it-IT",
+                                "ja-JP"
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "TimeFormatLocalization": {
+                            "id": 44,
+                            "name": "TimeFormatLocalization",
+                            "hourFormat": 0,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "calendarFormat": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": [],
+                            "activeCalendarType": 0,
+                            "supportedCalendarTypes": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                8,
+                                9,
+                                10,
+                                11,
+                                7
+                            ]
+                        },
+                        "GeneralCommissioning": {
+                            "id": 48,
+                            "name": "GeneralCommissioning",
+                            "breadcrumb": 0,
+                            "basicCommissioningInfo": {
+                                "failSafeExpiryLengthSeconds": 60,
+                                "maxCumulativeFailsafeSeconds": 90
+                            },
+                            "regulatoryConfig": 1,
+                            "locationCapability": 2,
+                            "supportsConcurrentConnection": true,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                2,
+                                4
+                            ],
+                            "generatedCommandList": [
+                                1,
+                                3,
+                                5
+                            ]
+                        },
+                        "NetworkCommissioning": {
+                            "id": 49,
+                            "name": "NetworkCommissioning",
+                            "maxNetworks": 1,
+                            "networks": [
+                                {
+                                    "networkId": "456e63727970746564446f75636865626167",
+                                    "connected": false
+                                }
+                            ],
+                            "interfaceEnabled": true,
+                            "lastNetworkingStatus": null,
+                            "lastNetworkId": null,
+                            "lastConnectErrorValue": null,
+                            "scanMaxTimeSeconds": 10,
+                            "connectMaxTimeSeconds": 20,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "wiFiNetworkInterface": true,
+                                "threadNetworkInterface": false,
+                                "ethernetNetworkInterface": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                2,
+                                4,
+                                6,
+                                8
+                            ],
+                            "generatedCommandList": [
+                                1,
+                                5,
+                                7
+                            ]
+                        },
+                        "DiagnosticLogs": {
+                            "id": 50,
+                            "name": "DiagnosticLogs",
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": [
+                                1
+                            ]
+                        },
+                        "GeneralDiagnostics": {
+                            "id": 51,
+                            "name": "GeneralDiagnostics",
+                            "networkInterfaces": [
+                                {
+                                    "name": "p2p0",
+                                    "isOperational": false,
+                                    "offPremiseServicesReachableIPv4": null,
+                                    "offPremiseServicesReachableIPv6": null,
+                                    "hardwareAddress": "e201c74f62db",
+                                    "iPv4Addresses": [],
+                                    "iPv6Addresses": [],
+                                    "type": 1
+                                },
+                                {
+                                    "name": "wlan0",
+                                    "isOperational": true,
+                                    "offPremiseServicesReachableIPv4": null,
+                                    "offPremiseServicesReachableIPv6": null,
+                                    "hardwareAddress": "e001c74f62db",
+                                    "iPv4Addresses": [
+                                        "c0a87b5b"
+                                    ],
+                                    "iPv6Addresses": [
+                                        "fdada1f70b465ae9d3ff52452c2bd1a6",
+                                        "fe8000000000000027da7777ed32cf83"
+                                    ],
+                                    "type": 1
+                                },
+                                {
+                                    "name": "lo",
+                                    "isOperational": true,
+                                    "offPremiseServicesReachableIPv4": null,
+                                    "offPremiseServicesReachableIPv6": null,
+                                    "hardwareAddress": "000000000000",
+                                    "iPv4Addresses": [
+                                        "7f000001"
+                                    ],
+                                    "iPv6Addresses": [
+                                        "00000000000000000000000000000001"
+                                    ],
+                                    "type": 0
+                                }
+                            ],
+                            "rebootCount": 70,
+                            "upTime": 25185,
+                            "totalOperationalHours": 6,
+                            "bootReason": 0,
+                            "activeHardwareFaults": [],
+                            "activeRadioFaults": [],
+                            "activeNetworkFaults": [],
+                            "testEventTriggersEnabled": false,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "dataModelTest": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "SoftwareDiagnostics": {
+                            "id": 52,
+                            "name": "SoftwareDiagnostics",
+                            "threadMetrics": [
+                                {
+                                    "id": 28830,
+                                    "name": "28830"
+                                },
+                                {
+                                    "id": 21396,
+                                    "name": "21396"
+                                },
+                                {
+                                    "id": 21393,
+                                    "name": "21393"
+                                },
+                                {
+                                    "id": 21391,
+                                    "name": "21391"
+                                },
+                                {
+                                    "id": 21390,
+                                    "name": "21390"
+                                },
+                                {
+                                    "id": 21373,
+                                    "name": "21373"
+                                },
+                                {
+                                    "id": 21372,
+                                    "name": "21372"
+                                },
+                                {
+                                    "id": 21371,
+                                    "name": "21371"
+                                },
+                                {
+                                    "id": 21370,
+                                    "name": "21370"
+                                },
+                                {
+                                    "id": 21369,
+                                    "name": "21369"
+                                },
+                                {
+                                    "id": 21367,
+                                    "name": "21367"
+                                },
+                                {
+                                    "id": 21260,
+                                    "name": "21260"
+                                }
+                            ],
+                            "currentHeapFree": 1173104,
+                            "currentHeapUsed": 5863824,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "watermarks": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": [],
+                            "currentHeapHighWatermark": 5863824
+                        },
+                        "WiFiNetworkDiagnostics": {
+                            "id": 54,
+                            "name": "WiFiNetworkDiagnostics",
+                            "bssid": "e001c74f62db",
+                            "securityType": 4,
+                            "wiFiVersion": 3,
+                            "channelNumber": 7,
+                            "rssi": 42,
+                            "currentMaxRate": 150000000,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "packetCounts": true,
+                                "errorCounts": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": [],
+                            "beaconLostCount": 0,
+                            "beaconRxCount": null,
+                            "packetMulticastRxCount": 0,
+                            "packetMulticastTxCount": 0,
+                            "packetUnicastRxCount": 252611,
+                            "packetUnicastTxCount": 56999,
+                            "overrunCount": 0
+                        },
+                        "AdministratorCommissioning": {
+                            "id": 60,
+                            "name": "AdministratorCommissioning",
+                            "windowStatus": 0,
+                            "adminFabricIndex": null,
+                            "adminVendorId": null,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "basic": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "OperationalCredentials": {
+                            "id": 62,
+                            "name": "OperationalCredentials",
+                            "nocs": [
+                                {
+                                    "noc": "15300101022402013703241400182604ef08a62c26056f3f5341370624150127118ca538808765f5ef1824070124080130094104192249eb217e5fcc3ddba8b2a44646a732a8cace0b0e07ae567b873b073e88e46e7566c056f7516dda2660a46a7148cf6f750f2d01152b55e6ab76fab7a21add370a35012801182402013603040204011830041436866cf0d20fa1a9a6c0595605b9fab5752cc8703005145c3e353c0a00801e0a6a995286e80a2772845ddd18300b40f665a29032c4afdff7c2893e2bb4c9fdf339b86ed2f7a1bd893c48d25a1b70af3a7131d2459f0e9470427d03174f581d3cfa225c39893b53da967058dbb1a1c718",
+                                    "icac": null,
+                                    "fabricIndex": 4
+                                }
+                            ],
+                            "fabrics": [
+                                {
+                                    "rootPublicKey": "04c84fc7a8d2aecc19aa5b3ba06d8245c876a04de75aecd99802d15b4e708daf00470d2aa5ff38dd6d48bb1196c213ea0e9e7089d4159e04e9b3d11ad4eb2cd1d2",
+                                    "vendorId": 65521,
+                                    "fabricId": "1",
+                                    "nodeId": "17290837977005073804",
+                                    "label": "",
+                                    "fabricIndex": 4
+                                }
+                            ],
+                            "supportedFabrics": 16,
+                            "commissionedFabrics": 4,
+                            "trustedRootCertificates": [
+                                "153001010124020137032c840255532c0706476f6f676c652c010b4d617474657220526f6f74271401000000feffffff1826047fd2432926057f945be537062c840255532c0706476f6f676c652c010b4d617474657220526f6f74271401000000feffffff18240701240801300941045b37df6549c20dc8d722a6b8acb660a8a764ce7baf6c6c224f7ee84349684ad7d809ff650033d1527dcf1fbaac6a9c3ad8b41edac909f7b5c760fd542c892375370a350129012402011824026030041472c201f7571913b348ca00ca7b45f4774668c97e30051472c201f7571913b348ca00ca7b45f4774668c97e18300b4065164b166adff18c15610a8ce91bd703e9c1f677b711ce133505152df0da15111675ac5591cee786851cdd9efdad296674bebcb2a3a3209bcde7b309db552c6f18",
+                                "1530010101240201370324140118260480228127260580254d3a37062414011824070124080130094104fa0e5b1fd4cb087f6281e270643674d7b032265e91249cdc936b4fb47ef06f75d3180d03e7d4616a4aac33b739ea553a33dc99ba3ac9596ffabc3a8ace18cfce370a35012901182402603004145d85dd32e29625f5e53b78bc6b99b08e7ecb7c0e3005145d85dd32e29625f5e53b78bc6b99b08e7ecb7c0e18300b4079b3489627de4533ff88c2ec784d0388709b9cbbbc293cad59bb9afd36e5d54a649eea4b4d531cbda86eab647b79a2a979bc5d0827706af0113d596bbf46195818",
+                                "153001090105e7cf71156d64372402013703271401000000cacacaca182604a83a872b2605a8401f513706271401000000cacacaca1824070124080130094104c7bb3c96d6a7f880dd06dceb2f277f363c8d3eea00006995677d3ee35f746be5d58f04d5eb72c04f0e3bd6e34af2cec4e02fac540628bef142caa5942dd0e771370a3501290118240260300414be6006585857a0690983b0b6e3e3f5d79637309e300514be6006585857a0690983b0b6e3e3f5d79637309e18300b402ec6a169f92e64c42366d711f608b908ab6cdfb74443139db1188d99fe20ebed192b0be71cc1f5dac86a395bcea8aeb589aab6b15ad66f11ea31366cfd29f4ce18",
+                                "153001010024020137032414001826043fa8a52c2605bfde524137062414001824070124080130094104c84fc7a8d2aecc19aa5b3ba06d8245c876a04de75aecd99802d15b4e708daf00470d2aa5ff38dd6d48bb1196c213ea0e9e7089d4159e04e9b3d11ad4eb2cd1d2370a35012901182402603004145c3e353c0a00801e0a6a995286e80a2772845ddd3005145c3e353c0a00801e0a6a995286e80a2772845ddd18300b40313424a88c239cbe0b65c692d9defa120cb8c316f33ea72afeb777a49f429e3990021cade9aba71de2ddc093ee94af10a87c9686e827446ad6b5d66e6c329c1c18"
+                            ],
+                            "currentFabricIndex": 4,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                2,
+                                4,
+                                6,
+                                7,
+                                9,
+                                10,
+                                11
+                            ],
+                            "generatedCommandList": [
+                                1,
+                                3,
+                                5,
+                                8
+                            ]
+                        },
+                        "GroupKeyManagement": {
+                            "id": 63,
+                            "name": "GroupKeyManagement",
+                            "groupKeyMap": [],
+                            "groupTable": [],
+                            "maxGroupsPerFabric": 4,
+                            "maxGroupKeysPerFabric": 3,
+                            "clusterRevision": 2,
+                            "featureMap": {
+                                "cacheAndSync": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                3,
+                                4
+                            ],
+                            "generatedCommandList": [
+                                2,
+                                5
+                            ]
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "room",
+                                    "value": "bedroom 2"
+                                },
+                                {
+                                    "label": "orientation",
+                                    "value": "North"
+                                },
+                                {
+                                    "label": "floor",
+                                    "value": "2"
+                                },
+                                {
+                                    "label": "direction",
+                                    "value": "up"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "UserLabel": {
+                            "id": 65,
+                            "name": "UserLabel",
+                            "labelList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        }
+                    }
+                },
+                "1": {
+                    "number": 1,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 0,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Groups": {
+                            "id": 4,
+                            "name": "Groups",
+                            "nameSupport": {
+                                "nameSupport": true
+                            },
+                            "clusterRevision": 4,
+                            "featureMap": {
+                                "groupNames": true
+                            },
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                            ],
+                            "generatedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        },
+                        "OnOff": {
+                            "id": 6,
+                            "name": "OnOff",
+                            "onOff": false,
+                            "clusterRevision": 5,
+                            "featureMap": {
+                                "lighting": false,
+                                "deadFrontBehavior": false,
+                                "offOnly": false
+                            },
+                            "attributeList": [
+                                0,
+                                16384,
+                                16385,
+                                16386,
+                                16387,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                64,
+                                65,
+                                66
+                            ],
+                            "generatedCommandList": [],
+                            "globalSceneControl": true,
+                            "onTime": 0,
+                            "offWaitTime": 0,
+                            "startUpOnOff": null
+                        },
+                        "LevelControl": {
+                            "id": 8,
+                            "name": "LevelControl",
+                            "currentLevel": 254,
+                            "maxLevel": 254,
+                            "options": {
+                                "executeIfOff": false,
+                                "coupleColorTempToLevel": false
+                            },
+                            "onOffTransitionTime": 0,
+                            "onLevel": null,
+                            "onTransitionTime": 0,
+                            "offTransitionTime": 0,
+                            "defaultMoveRate": 50,
+                            "clusterRevision": 5,
+                            "featureMap": {
+                                "onOff": false,
+                                "lighting": true,
+                                "frequency": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                16384,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7
+                            ],
+                            "generatedCommandList": [],
+                            "minLevel": 1,
+                            "remainingTime": 0,
+                            "currentFrequency": 0,
+                            "minFrequency": 0,
+                            "maxFrequency": 0,
+                            "startUpCurrentLevel": null
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 257,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                4,
+                                6,
+                                8,
+                                29
+                            ],
+                            "clientList": [],
+                            "partsList": [],
+                            "clusterRevision": 2,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        }
+                    }
+                }
+            }
+        },
+        "error": "undefined"
+    }
+}
