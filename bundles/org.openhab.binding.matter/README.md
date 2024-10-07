@@ -158,27 +158,23 @@ Possible channels include:
 
 ## Endpoint Channels
 
-| Channel ID                   | Item Type                | Label                       | Description                                          | Category       | ReadOnly | Pattern       |
-|------------------------------|--------------------------|-----------------------------|------------------------------------------------------|----------------|----------|----------------|
-| battery_voltage              | Number:ElectricPotential | Battery Voltage             | The current battery voltage                          | Energy         | yes      | %.1f %unit%    |
-| battery_alarm                | String                   | Battery Alarm               | The battery alarm state                              | Energy         | yes      |                |
-| colorcontrol_color                  | Color                    | Color                       | Control the color of a light                         | ColorLight     | no       |                |
-| door_state                   | Switch                   | Door Lock State             | Locks and unlocks the door                           | Door           | no       |                |
-| fancontrol_fanmode                   | Number                   | Fan Mode                    | Set the fan mode                                     | HVAC           | no       |                |
-| onoffcontrol_onoff                 | Switch                   | Switch                      | Switches the power on and off                        | Light          | no       |                |
-| levelcontrol_level                 | Dimmer                   | Dimmer                      | Sets the level of the light                          | Light          | no       |                |
-| thermostat_localtemp         | Number:Temperature       | Local Temperature           | Indicates the local temperature provided by the thermostat | HVAC       | yes      | %.1f %unit%    |
-| thermostat_outdoortemp       | Number:Temperature       | Outdoor Temperature         | Indicates the outdoor temperature provided by the thermostat | HVAC   | yes      | %.1f %unit%    |
-| thermostat_occupiedheating   | Number:Temperature       | Occupied Heating Setpoint   | Set the heating temperature when the room is occupied | HVAC          | no       | %.1f %unit%    |
-| thermostat_occupiedcooling   | Number:Temperature       | Occupied Cooling Setpoint   | Set the cooling temperature when the room is occupied | HVAC          | no       | %.1f %unit%    |
-| thermostat_unoccupiedheating | Number:Temperature       | Unoccupied Heating Setpoint | Set the heating temperature when the room is unoccupied | HVAC       | no       | %.1f %unit%    |
-| thermostat_unoccupiedcooling | Number:Temperature       | Unoccupied Cooling Setpoint | Set the cooling temperature when the room is unoccupied | HVAC       | no       | %.1f %unit%    |
-| thermostat_systemmode        | Number                   | System Mode                 | Set the system mode of the thermostat                | HVAC           | no       |                |
-| thermostat_runningmode       | Number                   | Running Mode                | The running mode of the thermostat                   | HVAC           | yes      |                |
-| thermostat_heatingdemand     | Number:Dimensionless     | Heating Demand              | The level of heating currently demanded by the thermostat | HVAC       | yes      | %.0f %%        |
-| thermostat_coolingdemand     | Number:Dimensionless     | Cooling Demand              | The level of cooling currently demanded by the thermostat | HVAC       | yes      | %.0f %%        |
-| windowcovering_lift          | Rollershutter            | Window Covering Lift        | Sets the window covering level                       | Blinds         | no       |                |
-
+| Channel ID                   | Item Type                | Label                       | Description                                                  | Category   | ReadOnly | Pattern     |
+|------------------------------|--------------------------|-----------------------------|--------------------------------------------------------------|------------|----------|-------------|
+| battery-voltage              | Number:ElectricPotential | Battery Voltage             | The current battery voltage                                  | Energy     | yes      | %.1f %unit% |
+| battery-alarm                | String                   | Battery Alarm               | The battery alarm state                                      | Energy     | yes      |             |
+| colorcontrol-color           | Color                    | Color                       | Control the color of a light                                 | ColorLight | no       |             |
+| door-state                   | Switch                   | Door Lock State             | Locks and unlocks the door                                   | Door       | no       |             |
+| onoffcontrol-onoff           | Switch                   | Switch                      | Switches the power on and off                                | Light      | no       |             |
+| levelcontrol-level           | Dimmer                   | Dimmer                      | Sets the level of the light                                  | Light      | no       |             |
+| thermostat-localtemp         | Number:Temperature       | Local Temperature           | Indicates the local temperature provided by the thermostat   | HVAC       | yes      | %.1f %unit% |
+| thermostat-outdoortemp       | Number:Temperature       | Outdoor Temperature         | Indicates the outdoor temperature provided by the thermostat | HVAC       | yes      | %.1f %unit% |
+| thermostat-occupiedheating   | Number:Temperature       | Occupied Heating Setpoint   | Set the heating temperature when the room is occupied        | HVAC       | no       | %.1f %unit% |
+| thermostat-occupiedcooling   | Number:Temperature       | Occupied Cooling Setpoint   | Set the cooling temperature when the room is occupied        | HVAC       | no       | %.1f %unit% |
+| thermostat-unoccupiedheating | Number:Temperature       | Unoccupied Heating Setpoint | Set the heating temperature when the room is unoccupied      | HVAC       | no       | %.1f %unit% |
+| thermostat-unoccupiedcooling | Number:Temperature       | Unoccupied Cooling Setpoint | Set the cooling temperature when the room is unoccupied      | HVAC       | no       | %.1f %unit% |
+| thermostat-systemmode        | Number                   | System Mode                 | Set the system mode of the thermostat                        | HVAC       | no       |             |
+| thermostat-runningmode       | Number                   | Running Mode                | The running mode of the thermostat                           | HVAC       | yes      |             |
+| windowcovering-lift          | Rollershutter            | Window Covering Lift        | Sets the window covering level                               | Blinds     | no       |             |
 
 ## Full Example
 
@@ -193,7 +189,7 @@ Thing matter:endpoint:myEndpoint [ nodeId="node1", endpointId=1 ]
 
 ### Item Configuration
 ```java
-Dimmer MyEndpointDimmer "My Endpoint Dimmer" { channel="matter:endpoint:myController:myEndpoint:levelcontrol_level" }
+Dimmer MyEndpointDimmer "My Endpoint Dimmer" { channel="matter:endpoint:myController:myEndpoint:levelcontrol-level" }
 ```
 
 ### Sitemap Configuration

@@ -63,6 +63,7 @@ public abstract class DeviceType implements AttributeListener {
     static {
         LightingType.supportedTypes().forEach(id -> deviceMappers.put(id, LightingType.class));
         ThermostatType.supportedTypes().forEach(id -> deviceMappers.put(id, ThermostatType.class));
+        WindowCoveringType.supportedTypes().forEach(id -> deviceMappers.put(id, WindowCoveringType.class));
     }
 
     public static @Nullable Class<? extends DeviceType> getDeviceMapper(int deviceType) {

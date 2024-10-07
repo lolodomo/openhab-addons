@@ -267,46 +267,6 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             deviceTypeMap.forEach((id, dm) -> dm.updateCluster(cluster));
         });
     }
-    // clusters.forEach((clusterName, cluster) -> {
-    // logger.trace("checking cluster {} for handler", clusterName);
-    // // TODO this is a hack to ignore the dimmer cluster that switches advertise as a convienence, need to
-    // // revisit this.
-    // if (cluster.id == LevelControlCluster.CLUSTER_ID && isSwitchType) {
-    // return;
-    // }
-    // Integer id = cluster.id;
-    // DeviceTypeMapper clusterConverter = clusterIdMap.get(id);
-    // if (clusterConverter == null) {
-    // Class<? extends DeviceTypeMapper> clazz = DeviceTypeMapper.getConverterClass(id);
-    // logger.trace("Creating handler {}", clazz);
-    // if (clazz != null) {
-    // try {
-    // Class<?>[] constructorParameterTypes = new Class<?>[] { EndpointHandler.class };
-    // Constructor<? extends DeviceTypeMapper> constructor = clazz
-    // .getConstructor(constructorParameterTypes);
-    // final DeviceTypeMapper converter = constructor.newInstance(this);
-    // for (Integer i : converter.supportedClusters()) {
-    // clusterIdMap.put(i, converter);
-    // }
-    // // now we need to create channels and add those to the channel map
-    // converter.createChannels(cluster).forEach(channel -> {
-    // logger.trace("Added channel {}", channel.getId());
-    // channelIdMap.put(channel.getId(), converter);
-    // });
-    // clusterConverter = converter;
-    // } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-    // | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-    // logger.debug("Could not create cluster handler", e);
-    // }
-    // }
-    // }
-    // if (clusterConverter == null) {
-    // logger.trace("No handler found for cluster {}", clusterName);
-    // return;
-    // }
-    // clusterConverter.updateCluster(cluster);
-    // });
-    // }
 
     @Override
     public void handleRemoval() {
@@ -342,6 +302,9 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
             if (handler instanceof ControllerHandler controllerHandler) {
                 return controllerHandler;
             }
+            // if (handler instanceof NodeHandler nodeHandler) {
+            // return nodeHandler.controllerHandler();
+            // }
         }
         return null;
     }

@@ -5,7 +5,7 @@
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
 	<!-- Battery Voltage -->
-	<channel-type id="battery_voltage">
+	<channel-type id="battery-voltage">
 		<item-type>Number:ElectricPotential</item-type>
 		<label>Battery Voltage</label>
 		<description>The current battery voltage</description>
@@ -14,7 +14,7 @@
 	</channel-type>
 
 	<!-- Battery Alarm -->
-	<channel-type id="battery_alarm">
+	<channel-type id="battery-alarm">
 		<item-type>String</item-type>
 		<label>Battery Alarm</label>
 		<description>The battery alarm state</description>
@@ -31,7 +31,7 @@
 	</channel-type>
 
 	<!-- Color Channel -->
-	<channel-type id="colorcontrol_color">
+	<channel-type id="colorcontrol-color">
 		<item-type>Color</item-type>
 		<label>Color</label>
 		<description>The color channel allows to control the color of a light.
@@ -43,7 +43,7 @@
 	</channel-type>
 
 	<!-- Door Lock Channel -->
-	<channel-type id="door_state">
+	<channel-type id="door-state">
 		<item-type>Switch</item-type>
 		<label>Door Lock State</label>
 		<description>Locks and unlocks the door and maintains the lock state</description>
@@ -52,7 +52,7 @@
 	</channel-type>
 
 	<!-- Fan Control -->
-	<channel-type id="fancontrol_fanmode">
+	<channel-type id="fancontrol-fanmode">
 		<item-type>Number</item-type>
 		<label>Fan Mode</label>
 		<description>Set the fan mode</description>
@@ -71,7 +71,7 @@
 	</channel-type>
 
 	<!-- On Off Switch -->
-	<channel-type id="onoffcontrol_onoff">
+	<channel-type id="onoffcontrol-onoff">
 		<item-type>Switch</item-type>
 		<label>Switch</label>
 		<description>Switches the power on and off</description>
@@ -80,7 +80,7 @@
 	</channel-type>
 
 	<!-- Level Dimmer -->
-	<channel-type id="levelcontrol_level">
+	<channel-type id="levelcontrol-level">
 		<item-type>Dimmer</item-type>
 		<label>Dimmer</label>
 		<description>Sets the level of the light</description>
@@ -89,7 +89,7 @@
 	</channel-type>
 
 	<!-- Thermostat Local Temperature -->
-	<channel-type id="thermostat_localtemperature">
+	<channel-type id="thermostat-localtemperature">
 		<item-type>Number:Temperature</item-type>
 		<label>Local Temperature</label>
 		<description>Indicates the local temperature provided by the thermostat</description>
@@ -98,7 +98,7 @@
 	</channel-type>
 
 	<!-- Thermostat Outdoor Temperature -->
-	<channel-type id="thermostat_outdoortemperature">
+	<channel-type id="thermostat-outdoortemperature">
 		<item-type>Number:Temperature</item-type>
 		<label>Outdoor Temperature</label>
 		<description>Indicates the outdoor temperature provided by the thermostat</description>
@@ -107,7 +107,7 @@
 	</channel-type>
 
 	<!-- Thermostat Occupied Heating -->
-	<channel-type id="thermostat_occupiedheating">
+	<channel-type id="thermostat-occupiedheating">
 		<item-type>Number:Temperature</item-type>
 		<label>Occupied Heating Setpoint</label>
 		<description>Set the heating temperature when the room is occupied</description>
@@ -117,7 +117,7 @@
 	</channel-type>
 
 	<!-- Thermostat Occupied Cooling -->
-	<channel-type id="thermostat_occupiedcooling">
+	<channel-type id="thermostat-occupiedcooling">
 		<item-type>Number:Temperature</item-type>
 		<label>Occupied Cooling Setpoint</label>
 		<description>Set the cooling temperature when the room is occupied</description>
@@ -127,7 +127,7 @@
 	</channel-type>
 
 	<!-- Thermostat Unoccupied Heating -->
-	<channel-type id="thermostat_unoccupiedheating">
+	<channel-type id="thermostat-unoccupiedheating">
 		<item-type>Number:Temperature</item-type>
 		<label>Unoccupied Heating Setpoint</label>
 		<description>Set the heating temperature when the room is unoccupied</description>
@@ -137,7 +137,7 @@
 	</channel-type>
 
 	<!-- Thermostat Unoccupied Cooling -->
-	<channel-type id="thermostat_unoccupiedcooling">
+	<channel-type id="thermostat-unoccupiedcooling">
 		<item-type>Number:Temperature</item-type>
 		<label>Unoccupied Cooling Setpoint</label>
 		<description>Set the cooling temperature when the room is unoccupied</description>
@@ -147,7 +147,7 @@
 	</channel-type>
 
 	<!-- Thermostat System Mode -->
-	<channel-type id="thermostat_systemmode">
+	<channel-type id="thermostat-systemmode">
 		<item-type>Number</item-type>
 		<label>System Mode</label>
 		<description>Set the system mode of the thermostat</description>
@@ -169,7 +169,7 @@
 	</channel-type>
 
 	<!-- Thermostat Running Mode -->
-	<channel-type id="thermostat_runningmode">
+	<channel-type id="thermostat-runningmode">
 		<item-type>Number</item-type>
 		<label>Running Mode</label>
 		<description>The running mode of the thermostat</description>
@@ -184,7 +184,7 @@
 	</channel-type>
 
 	<!-- Thermostat Heating Demand -->
-	<channel-type id="thermostat_heatingdemand" advanced="true">
+	<channel-type id="thermostat-heatingdemand" advanced="true">
 		<item-type>Number:Dimensionless</item-type>
 		<label>Heating Demand</label>
 		<description>The level of heating currently demanded by the thermostat</description>
@@ -193,7 +193,7 @@
 	</channel-type>
 
 	<!-- Thermostat Cooling Demand -->
-	<channel-type id="thermostat_coolingdemand" advanced="true">
+	<channel-type id="thermostat-coolingdemand" advanced="true">
 		<item-type>Number:Dimensionless</item-type>
 		<label>Cooling Demand</label>
 		<description>The level of cooling currently demanded by the thermostat</description>
@@ -202,7 +202,7 @@
 	</channel-type>
 
 	<!-- Window Covering Lift Channel -->
-	<channel-type id="windowcovering_lift">
+	<channel-type id="windowcovering-lift">
 		<item-type>Rollershutter</item-type>
 		<label>Window Covering Lift</label>
 		<description>Sets the window covering level - supporting open/close and up/down type commands

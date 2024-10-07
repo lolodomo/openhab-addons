@@ -119,6 +119,10 @@ public class ThermostatType extends DeviceType {
                 updateState(CHANNEL_THERMOSTAT_UNOCCUPIEDCOOLING,
                         valueToTemperature(thermostatCluster.unoccupiedCoolingSetpoint));
             }
+            if (thermostatCluster.thermostatRunningMode != null) {
+                updateState(CHANNEL_THERMOSTAT_RUNNINGMODE,
+                        new DecimalType(thermostatCluster.thermostatRunningMode.value));
+            }
         }
     }
 
@@ -140,37 +144,62 @@ public class ThermostatType extends DeviceType {
                                 CHANNEL_THERMOSTAT_SYSTEMMODE, CHANNEL_LABEL_THERMOSTAT_SYSTEMMODE, ITEM_TYPE_NUMBER);
                         channels.add(channelMode);
 
-                        List<StateOption> options = new ArrayList<>();
-                        options.add(new StateOption("0", "Off"));
+                        List<StateOption> modeOptions = new ArrayList<>();
+
+                        modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.OFF.value.toString(),
+                                ThermostatCluster.SystemModeEnum.OFF.label));
                         if (thermostatCluster.featureMap.autoMode) {
-                            options.add(new StateOption("1", "Auto"));
-                        }
-                        if (thermostatCluster.featureMap.heating) {
-                            options.add(new StateOption("4", "Heat"));
-                            options.add(new StateOption("5", "Emergency Heating"));
+                            modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.AUTO.value.toString(),
+                                    ThermostatCluster.SystemModeEnum.AUTO.label));
                         }
                         if (thermostatCluster.featureMap.cooling) {
-                            options.add(new StateOption("3", "Cool"));
-                            options.add(new StateOption("6", "Precooling"));
+                            modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.COOL.value.toString(),
+                                    ThermostatCluster.SystemModeEnum.COOL.label));
+                            modeOptions
+                                    .add(new StateOption(ThermostatCluster.SystemModeEnum.PRECOOLING.value.toString(),
+                                            ThermostatCluster.SystemModeEnum.PRECOOLING.label));
                         }
-                        options.add(new StateOption("7", "Fan Only"));
-                        options.add(new StateOption("8", "Dry"));
-                        options.add(new StateOption("9", "Sleep"));
+                        if (thermostatCluster.featureMap.heating) {
+                            modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.HEAT.value.toString(),
+                                    ThermostatCluster.SystemModeEnum.HEAT.label));
+                            modeOptions.add(
+                                    new StateOption(ThermostatCluster.SystemModeEnum.EMERGENCY_HEAT.value.toString(),
+                                            ThermostatCluster.SystemModeEnum.EMERGENCY_HEAT.label));
+                        }
+                        modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.FAN_ONLY.value.toString(),
+                                ThermostatCluster.SystemModeEnum.FAN_ONLY.label));
+                        modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.DRY.value.toString(),
+                                ThermostatCluster.SystemModeEnum.DRY.label));
+                        modeOptions.add(new StateOption(ThermostatCluster.SystemModeEnum.SLEEP.value.toString(),
+                                ThermostatCluster.SystemModeEnum.SLEEP.label));
+
                         StateDescription stateDescriptionMode = StateDescriptionFragmentBuilder.create()
-                                .withOptions(options).build().toStateDescription();
+                                .withPattern("%d").withOptions(modeOptions).build().toStateDescription();
                         if (stateDescriptionMode != null) {
                             stateDescriptions.put(channelMode, stateDescriptionMode);
                         }
 
                         if (!thermostatCluster.featureMap.localTemperatureNotExposed) {
-                            channels.add(createChannel(cluster, CHANNEL_NAME_THERMOSTAT_LOCALTEMPERATURE,
+                            ChannelUID channel = createChannel(cluster, CHANNEL_NAME_THERMOSTAT_LOCALTEMPERATURE,
                                     CHANNEL_THERMOSTAT_LOCALTEMPERATURE, CHANNEL_LABEL_THERMOSTAT_LOCALTEMPERATURE,
-                                    ITEM_TYPE_NUMBER_TEMPERATURE));
+                                    ITEM_TYPE_NUMBER_TEMPERATURE);
+                            channels.add(channel);
+                            StateDescription stateDescription = StateDescriptionFragmentBuilder.create()
+                                    .withPattern("%.1f %unit%").build().toStateDescription();
+                            if (stateDescription != null) {
+                                stateDescriptions.put(channel, stateDescription);
+                            }
                         }
                         if (thermostatCluster.outdoorTemperature != null) {
-                            channels.add(createChannel(cluster, CHANNEL_NAME_THERMOSTAT_OUTDOORTEMPERATURE,
+                            ChannelUID channel = createChannel(cluster, CHANNEL_NAME_THERMOSTAT_OUTDOORTEMPERATURE,
                                     CHANNEL_THERMOSTAT_OUTDOORTEMPERATURE, CHANNEL_LABEL_THERMOSTAT_OUTDOORTEMPERATURE,
-                                    ITEM_TYPE_NUMBER_TEMPERATURE));
+                                    ITEM_TYPE_NUMBER_TEMPERATURE);
+                            channels.add(channel);
+                            StateDescription stateDescription = StateDescriptionFragmentBuilder.create()
+                                    .withPattern("%.1f %unit%").build().toStateDescription();
+                            if (stateDescription != null) {
+                                stateDescriptions.put(channel, stateDescription);
+                            }
                         }
                         if (thermostatCluster.featureMap.heating) {
                             ChannelUID channel = createChannel(cluster, CHANNEL_NAME_THERMOSTAT_OCCUPIEDHEATING,
@@ -182,8 +211,8 @@ public class ThermostatType extends DeviceType {
                                             .toBigDecimal())
                                     .withMaximum(valueToTemperature(thermostatCluster.absMaxHeatSetpointLimit)
                                             .toBigDecimal())
-                                    .withStep(BigDecimal.valueOf(1)).withPattern("").withReadOnly(false).build()
-                                    .toStateDescription();
+                                    .withStep(BigDecimal.valueOf(1)).withPattern("%.1f %unit%").withReadOnly(false)
+                                    .build().toStateDescription();
                             if (stateDescription != null) {
                                 stateDescriptions.put(channel, stateDescription);
                             }
@@ -198,8 +227,8 @@ public class ThermostatType extends DeviceType {
                                             .toBigDecimal())
                                     .withMaximum(valueToTemperature(thermostatCluster.absMaxCoolSetpointLimit)
                                             .toBigDecimal())
-                                    .withStep(BigDecimal.valueOf(1)).withPattern("").withReadOnly(false).build()
-                                    .toStateDescription();
+                                    .withStep(BigDecimal.valueOf(1)).withPattern("%.1f %unit%").withReadOnly(false)
+                                    .build().toStateDescription();
                             if (stateDescription != null) {
                                 stateDescriptions.put(channel, stateDescription);
                             }
@@ -215,8 +244,8 @@ public class ThermostatType extends DeviceType {
                                                 .toBigDecimal())
                                         .withMaximum(valueToTemperature(thermostatCluster.absMaxHeatSetpointLimit)
                                                 .toBigDecimal())
-                                        .withStep(BigDecimal.valueOf(1)).withPattern("").withReadOnly(false).build()
-                                        .toStateDescription();
+                                        .withStep(BigDecimal.valueOf(1)).withPattern("%.1f %unit%").withReadOnly(false)
+                                        .build().toStateDescription();
                                 if (stateDescription != null) {
                                     stateDescriptions.put(channel, stateDescription);
                                 }
@@ -231,11 +260,31 @@ public class ThermostatType extends DeviceType {
                                                 .toBigDecimal())
                                         .withMaximum(valueToTemperature(thermostatCluster.absMaxCoolSetpointLimit)
                                                 .toBigDecimal())
-                                        .withStep(BigDecimal.valueOf(1)).withPattern("").withReadOnly(false).build()
-                                        .toStateDescription();
+                                        .withStep(BigDecimal.valueOf(1)).withPattern("%.1f %unit%").withReadOnly(false)
+                                        .build().toStateDescription();
                                 if (stateDescription != null) {
                                     stateDescriptions.put(channel, stateDescription);
                                 }
+                            }
+                        }
+                        if (thermostatCluster.thermostatRunningMode != null) {
+                            channels.add(createChannel(cluster, CHANNEL_NAME_THERMOSTAT_RUNNINGMODE,
+                                    CHANNEL_THERMOSTAT_RUNNINGMODE, CHANNEL_LABEL_THERMOSTAT_RUNNINGMODE,
+                                    ITEM_TYPE_NUMBER));
+                            List<StateOption> options = new ArrayList<>();
+                            options.add(
+                                    new StateOption(ThermostatCluster.ThermostatRunningModeEnum.OFF.value.toString(),
+                                            ThermostatCluster.ThermostatRunningModeEnum.OFF.label));
+                            options.add(
+                                    new StateOption(ThermostatCluster.ThermostatRunningModeEnum.HEAT.value.toString(),
+                                            ThermostatCluster.ThermostatRunningModeEnum.HEAT.label));
+                            options.add(
+                                    new StateOption(ThermostatCluster.ThermostatRunningModeEnum.COOL.value.toString(),
+                                            ThermostatCluster.ThermostatRunningModeEnum.COOL.label));
+                            StateDescription stateDescription = StateDescriptionFragmentBuilder.create()
+                                    .withOptions(options).build().toStateDescription();
+                            if (stateDescription != null) {
+                                stateDescriptions.put(channelMode, stateDescription);
                             }
                         }
                     }
@@ -273,6 +322,9 @@ public class ThermostatType extends DeviceType {
                 break;
             case "outdoorTemperature":
                 updateState(CHANNEL_THERMOSTAT_OUTDOORTEMPERATURE, valueToTemperature(numberValue));
+                break;
+            case "thermostatRunningMode":
+                updateState(CHANNEL_THERMOSTAT_RUNNINGMODE, new DecimalType(numberValue));
                 break;
             default:
                 logger.debug("Unknown attribute {}", message.path.attributeName);
