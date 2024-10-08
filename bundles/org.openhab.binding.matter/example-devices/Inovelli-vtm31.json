@@ -1,0 +1,2499 @@
+{
+    "type": "response",
+    "message": {
+        "type": "resultSuccess",
+        "id": "6b20d4ed-c3ae-43d6-80e7-83533ed52d33",
+        "result": {
+            "id": "6289508706803718081",
+            "endpoints": {
+                "0": {
+                    "number": 0,
+                    "clusters": {
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 18,
+                                    "revision": 1
+                                },
+                                {
+                                    "deviceType": 22,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                29,
+                                31,
+                                40,
+                                42,
+                                48,
+                                49,
+                                51,
+                                53,
+                                60,
+                                62,
+                                63,
+                                64
+                            ],
+                            "clientList": [
+                                41
+                            ],
+                            "partsList": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "AccessControl": {
+                            "id": 31,
+                            "name": "AccessControl",
+                            "acl": [
+                                {
+                                    "privilege": 5,
+                                    "authMode": 2,
+                                    "subjects": [
+                                        "18098693022946290589"
+                                    ],
+                                    "targets": null,
+                                    "fabricIndex": 2
+                                }
+                            ],
+                            "extension": [],
+                            "subjectsPerAccessControlEntry": 4,
+                            "targetsPerAccessControlEntry": 3,
+                            "accessControlEntriesPerFabric": 4,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                0,
+                                1
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "BasicInformation": {
+                            "id": 40,
+                            "name": "BasicInformation",
+                            "dataModelRevision": 1,
+                            "vendorName": "Inovelli",
+                            "vendorId": 4961,
+                            "productName": "VTM31-SN",
+                            "productId": 1,
+                            "nodeLabel": "",
+                            "location": "XX",
+                            "hardwareVersion": 1,
+                            "hardwareVersionString": "2.1",
+                            "softwareVersion": 100,
+                            "softwareVersionString": "1.0.0",
+                            "manufacturingDate": "20240716",
+                            "partNumber": "850007431228",
+                            "productUrl": "https://inovelli.com/products/thread-matter-white-series-smart-2-1-on-off-dimmer-switch",
+                            "productLabel": "White Series Smart 2-1 Switch",
+                            "serialNumber": "494C885351DBB386",
+                            "localConfigDisabled": false,
+                            "reachable": true,
+                            "uniqueId": "e95d097c252537ec39560939462d2e0d",
+                            "capabilityMinima": {
+                                "caseSessionsPerFabric": 3,
+                                "subscriptionsPerFabric": 3
+                            },
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                0
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "OtaSoftwareUpdateRequestor": {
+                            "id": 42,
+                            "name": "OtaSoftwareUpdateRequestor",
+                            "defaultOtaProviders": [],
+                            "updatePossible": true,
+                            "updateState": 1,
+                            "updateStateProgress": null,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                0,
+                                1,
+                                2
+                            ],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "GeneralCommissioning": {
+                            "id": 48,
+                            "name": "GeneralCommissioning",
+                            "breadcrumb": 0,
+                            "basicCommissioningInfo": {
+                                "failSafeExpiryLengthSeconds": 60,
+                                "maxCumulativeFailsafeSeconds": 900
+                            },
+                            "regulatoryConfig": 0,
+                            "locationCapability": 0,
+                            "supportsConcurrentConnection": true,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                2,
+                                4
+                            ],
+                            "generatedCommandList": [
+                                1,
+                                3,
+                                5
+                            ]
+                        },
+                        "NetworkCommissioning": {
+                            "id": 49,
+                            "name": "NetworkCommissioning",
+                            "maxNetworks": 1,
+                            "networks": [
+                                {
+                                    "networkId": "1111111122222222",
+                                    "connected": true
+                                }
+                            ],
+                            "interfaceEnabled": true,
+                            "lastNetworkingStatus": 0,
+                            "lastNetworkId": "1111111122222222",
+                            "lastConnectErrorValue": null,
+                            "scanMaxTimeSeconds": 10,
+                            "connectMaxTimeSeconds": 20,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "wiFiNetworkInterface": false,
+                                "threadNetworkInterface": true,
+                                "ethernetNetworkInterface": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                3,
+                                4,
+                                6,
+                                8
+                            ],
+                            "generatedCommandList": [
+                                1,
+                                5,
+                                7
+                            ]
+                        },
+                        "GeneralDiagnostics": {
+                            "id": 51,
+                            "name": "GeneralDiagnostics",
+                            "networkInterfaces": [
+                                {
+                                    "name": "OpenThread-ESP32",
+                                    "isOperational": true,
+                                    "offPremiseServicesReachableIPv4": null,
+                                    "offPremiseServicesReachableIPv6": null,
+                                    "hardwareAddress": "a4dc002041410816",
+                                    "iPv4Addresses": [],
+                                    "iPv6Addresses": [],
+                                    "type": 4
+                                }
+                            ],
+                            "rebootCount": 7,
+                            "upTime": 60,
+                            "totalOperationalHours": 0,
+                            "bootReason": 0,
+                            "activeHardwareFaults": [],
+                            "activeRadioFaults": [],
+                            "activeNetworkFaults": [],
+                            "testEventTriggersEnabled": false,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "dataModelTest": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                3
+                            ],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "ThreadNetworkDiagnostics": {
+                            "id": 53,
+                            "name": "ThreadNetworkDiagnostics",
+                            "channel": 15,
+                            "routingRole": 4,
+                            "networkName": "OpenThread-ESP32",
+                            "panId": 4660,
+                            "extendedPanId": "1229782938533634594",
+                            "meshLocalPrefix": "40fd396f1810a407d9",
+                            "neighborTable": [
+                                {
+                                    "extAddress": "8223258197556315517",
+                                    "age": 1,
+                                    "rloc16": 53248,
+                                    "linkFrameCounter": 15136,
+                                    "mleFrameCounter": 13606,
+                                    "lqi": 3,
+                                    "averageRssi": -69,
+                                    "lastRssi": -69,
+                                    "frameErrorRate": 0,
+                                    "messageErrorRate": 0,
+                                    "rxOnWhenIdle": true,
+                                    "fullThreadDevice": true,
+                                    "fullNetworkData": true,
+                                    "isChild": false
+                                }
+                            ],
+                            "routeTable": [
+                                {
+                                    "extAddress": 0,
+                                    "rloc16": 0,
+                                    "routerId": 0,
+                                    "nextHop": 63,
+                                    "pathCost": 0,
+                                    "lqiIn": 0,
+                                    "lqiOut": 0,
+                                    "age": 53,
+                                    "allocated": true,
+                                    "linkEstablished": false
+                                },
+                                {
+                                    "extAddress": "8223258197556315517",
+                                    "rloc16": 53248,
+                                    "routerId": 52,
+                                    "nextHop": 0,
+                                    "pathCost": 1,
+                                    "lqiIn": 3,
+                                    "lqiOut": 3,
+                                    "age": 1,
+                                    "allocated": true,
+                                    "linkEstablished": true
+                                }
+                            ],
+                            "partitionId": 1618122265,
+                            "weighting": 64,
+                            "dataVersion": 208,
+                            "stableDataVersion": 80,
+                            "leaderRouterId": 52,
+                            "activeTimestamp": 65536,
+                            "pendingTimestamp": 0,
+                            "delay": 0,
+                            "securityPolicy": {
+                                "rotationTime": 672,
+                                "flags": 8335
+                            },
+                            "channelPage0Mask": "001fffe0",
+                            "operationalDatasetComponents": {
+                                "activeTimestampPresent": true,
+                                "pendingTimestampPresent": false,
+                                "masterKeyPresent": true,
+                                "networkNamePresent": true,
+                                "extendedPanIdPresent": true,
+                                "meshLocalPrefixPresent": true,
+                                "delayPresent": false,
+                                "panIdPresent": true,
+                                "channelPresent": true,
+                                "pskcPresent": true,
+                                "securityPolicyPresent": true,
+                                "channelMaskPresent": true
+                            },
+                            "activeNetworkFaultsList": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "packetCounts": true,
+                                "errorCounts": true,
+                                "mleCounts": true,
+                                "macCounts": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25,
+                                26,
+                                27,
+                                28,
+                                29,
+                                30,
+                                31,
+                                32,
+                                33,
+                                34,
+                                35,
+                                36,
+                                37,
+                                38,
+                                39,
+                                40,
+                                41,
+                                42,
+                                43,
+                                44,
+                                45,
+                                46,
+                                47,
+                                48,
+                                49,
+                                50,
+                                51,
+                                52,
+                                53,
+                                54,
+                                55,
+                                56,
+                                57,
+                                58,
+                                59,
+                                60,
+                                61,
+                                62,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": [],
+                            "overrunCount": 0,
+                            "detachedRoleCount": 1,
+                            "childRoleCount": 1,
+                            "routerRoleCount": 1,
+                            "leaderRoleCount": 0,
+                            "attachAttemptCount": 1,
+                            "partitionIdChangeCount": 1,
+                            "betterPartitionAttachAttemptCount": 0,
+                            "parentChangeCount": 0,
+                            "txTotalCount": 414,
+                            "txUnicastCount": 396,
+                            "txBroadcastCount": 20,
+                            "txAckRequestedCount": 398,
+                            "txAckedCount": 398,
+                            "txNoAckRequestedCount": 21,
+                            "txDataCount": 423,
+                            "txDataPollCount": 0,
+                            "txBeaconCount": 0,
+                            "txBeaconRequestCount": 0,
+                            "txOtherCount": 0,
+                            "txRetryCount": 291,
+                            "txDirectMaxRetryExpiryCount": 2,
+                            "txIndirectMaxRetryExpiryCount": 0,
+                            "txErrCcaCount": 1,
+                            "txErrAbortCount": 0,
+                            "txErrBusyChannelCount": 0,
+                            "rxTotalCount": 267,
+                            "rxUnicastCount": 262,
+                            "rxBroadcastCount": 8,
+                            "rxDataCount": 230,
+                            "rxDataPollCount": 0,
+                            "rxBeaconCount": 0,
+                            "rxBeaconRequestCount": 0,
+                            "rxOtherCount": 0,
+                            "rxAddressFilteredCount": 0,
+                            "rxDestAddrFilteredCount": 0,
+                            "rxDuplicatedCount": 50,
+                            "rxErrNoFrameCount": 0,
+                            "rxErrUnknownNeighborCount": 0,
+                            "rxErrInvalidSrcAddrCount": 0,
+                            "rxErrSecCount": 0,
+                            "rxErrFcsCount": 0,
+                            "rxErrOtherCount": 0
+                        },
+                        "AdministratorCommissioning": {
+                            "id": 60,
+                            "name": "AdministratorCommissioning",
+                            "windowStatus": 0,
+                            "adminFabricIndex": null,
+                            "adminVendorId": null,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "basic": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "OperationalCredentials": {
+                            "id": 62,
+                            "name": "OperationalCredentials",
+                            "nocs": [
+                                {
+                                    "noc": "15300101012402013703241400182604e4f0b52c26056427634137062415012711c117c378d8d24857182407012408013009410498b6a02b587411e5ff48d0e70b004c4f2f47b9b1b869d49d992ee38dfa22116d66657c241ef21a37e39b7369b8b99d9c7f4f614c5e2c2c7202e5986bc4a89bd1370a3501280118240201360304020401183004148edf24869f587c95ea0eca2f6eea7a9dfdc1c74f300514e495b8fd782e5b14131ce0eb262e7e393411377518300b409f5fbcec2287f1dff08c99ba99277257c207596b17b47840827378b5c7940da3c1a582567da2f78190145c7d1ebe248f9c242bb14715e221aca4fa3c1130a3bc18",
+                                    "icac": null,
+                                    "fabricIndex": 2
+                                }
+                            ],
+                            "fabrics": [
+                                {
+                                    "rootPublicKey": "0479d547edded4a75b4cde6c316a6e8f0baf065e683a0c805ba6e8b7b0771f96fa7c60759e557f8112c7cbb9178251b618eaec181d7c0962c995ba2fd5a58e2002",
+                                    "vendorId": 65521,
+                                    "fabricId": "1",
+                                    "nodeId": "6289508706803718081",
+                                    "label": "",
+                                    "fabricIndex": 2
+                                }
+                            ],
+                            "supportedFabrics": 5,
+                            "commissionedFabrics": 2,
+                            "trustedRootCertificates": [
+                                "153001010024020137032714fde6a357de63f7ae2615ab9f434718260471225d2e24050037062714fde6a357de63f7ae2615ab9f4347182407012408013009410454c009734d853ebaa566a398735faf3a91d70b3f14ea735cd2933342b7220229769467ccf716cc212254827f1105bb4aec364df50ad46f098011310346bbe73a370a35012901182402603004141004aa97533b26d96763d4bb9d2216754273d76d3005141004aa97533b26d96763d4bb9d2216754273d76d18300b407dbb6e475e154c8d5c6fb0e39b2769d88de8a0cf87f597723179aa634edadbb0388e668ffec5600dbee636ddf6a96078ad1f91fd3dd4ed31c9831a127e0cf66218",
+                                "1530010100240201370324140018260483be4e2c260503f5fb403706241400182407012408013009410479d547edded4a75b4cde6c316a6e8f0baf065e683a0c805ba6e8b7b0771f96fa7c60759e557f8112c7cbb9178251b618eaec181d7c0962c995ba2fd5a58e2002370a3501290118240260300414e495b8fd782e5b14131ce0eb262e7e3934113775300514e495b8fd782e5b14131ce0eb262e7e393411377518300b401f8043dfc662bd21f5e09332a3959677ee1e19c0a190fab56de5397cc3ee1461f92e7433a574400b1f152bbbf20d783492f7a56e7acc2be1f6574d0c8bc4fd2218"
+                            ],
+                            "currentFabricIndex": 2,
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                2,
+                                4,
+                                6,
+                                7,
+                                9,
+                                10,
+                                11
+                            ],
+                            "generatedCommandList": [
+                                1,
+                                3,
+                                5,
+                                8
+                            ]
+                        },
+                        "GroupKeyManagement": {
+                            "id": 63,
+                            "name": "GroupKeyManagement",
+                            "groupKeyMap": [],
+                            "groupTable": [],
+                            "maxGroupsPerFabric": 4,
+                            "maxGroupKeysPerFabric": 3,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "cacheAndSync": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                3,
+                                4
+                            ],
+                            "generatedCommandList": [
+                                2,
+                                5
+                            ]
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "Vendor",
+                                    "value": "Inovelli"
+                                },
+                                {
+                                    "label": "Product",
+                                    "value": "VTM31-SN"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        }
+                    }
+                },
+                "1": {
+                    "number": 1,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 2,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Groups": {
+                            "id": 4,
+                            "name": "Groups",
+                            "nameSupport": {
+                                "nameSupport": true
+                            },
+                            "clusterRevision": 4,
+                            "featureMap": {
+                                "groupNames": true
+                            },
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                            ],
+                            "generatedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        },
+                        "Unknown cluster 0x5": {
+                            "id": 5,
+                            "name": "Unknown cluster 0x5",
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            "generatedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                6
+                            ],
+                            "unknownAttribute_0x1": 0,
+                            "unknownAttribute_0x2": 0,
+                            "unknownAttribute_0x3": false,
+                            "unknownAttribute_0x4": 128
+                        },
+                        "OnOff": {
+                            "id": 6,
+                            "name": "OnOff",
+                            "onOff": false,
+                            "clusterRevision": 4,
+                            "featureMap": {
+                                "lighting": true,
+                                "deadFrontBehavior": false,
+                                "offOnly": false
+                            },
+                            "attributeList": [
+                                0,
+                                16384,
+                                16385,
+                                16386,
+                                16387,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                64,
+                                65,
+                                66
+                            ],
+                            "generatedCommandList": [],
+                            "globalSceneControl": true,
+                            "onTime": 0,
+                            "offWaitTime": 0,
+                            "startUpOnOff": null
+                        },
+                        "LevelControl": {
+                            "id": 8,
+                            "name": "LevelControl",
+                            "currentLevel": 254,
+                            "maxLevel": 254,
+                            "options": {
+                                "executeIfOff": false,
+                                "coupleColorTempToLevel": false
+                            },
+                            "onOffTransitionTime": 0,
+                            "onLevel": null,
+                            "onTransitionTime": 25,
+                            "offTransitionTime": 25,
+                            "defaultMoveRate": 50,
+                            "clusterRevision": 5,
+                            "featureMap": {
+                                "onOff": true,
+                                "lighting": true,
+                                "frequency": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                16384,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7
+                            ],
+                            "generatedCommandList": [],
+                            "minLevel": 1,
+                            "remainingTime": 0,
+                            "startUpCurrentLevel": null
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 257,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                4,
+                                5,
+                                6,
+                                8,
+                                29,
+                                64,
+                                80,
+                                305134641
+                            ],
+                            "clientList": [],
+                            "partsList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "DeviceType",
+                                    "value": "DimmableLight"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "ModeSelect": {
+                            "id": 80,
+                            "name": "ModeSelect",
+                            "description": "Switch Mode",
+                            "standardNamespace": 0,
+                            "supportedModes": [
+                                {
+                                    "label": "OnOff+Single",
+                                    "mode": 0,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "OnOff+Dumb",
+                                    "mode": 1,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "OnOff+AUX",
+                                    "mode": 2,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "OnOff+Full Wave",
+                                    "mode": 3,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Dimmer+Single",
+                                    "mode": 4,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Dimmer+Dumb",
+                                    "mode": 5,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Dimmer+Aux",
+                                    "mode": 6,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                }
+                            ],
+                            "currentMode": 3,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "onOff": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Unknown cluster 0x122ffc31": {
+                            "id": 305134641,
+                            "name": "Unknown cluster 0x122ffc31",
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                305070080,
+                                305070081,
+                                305070082,
+                                305070083,
+                                305070084,
+                                305070085,
+                                305070086,
+                                305070087,
+                                305070088,
+                                305070089,
+                                305070090,
+                                305070091,
+                                305070092,
+                                305070093,
+                                305070094,
+                                305070095,
+                                305070097,
+                                305070101,
+                                305070102,
+                                305070106,
+                                305070112,
+                                305070113,
+                                305070130,
+                                305070132,
+                                305070133,
+                                305070134,
+                                305070135,
+                                305070136,
+                                305070175,
+                                305070176,
+                                305070177,
+                                305070178,
+                                305070336,
+                                305070338,
+                                305070339,
+                                305070340,
+                                305070341,
+                                305070342,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                305070081,
+                                305070083,
+                                305070276
+                            ],
+                            "generatedCommandList": [],
+                            "unknownAttribute_0x122f0000": 254,
+                            "unknownAttribute_0x122f0001": 25,
+                            "unknownAttribute_0x122f0002": 127,
+                            "unknownAttribute_0x122f0003": 127,
+                            "unknownAttribute_0x122f0004": 127,
+                            "unknownAttribute_0x122f0005": 127,
+                            "unknownAttribute_0x122f0006": 127,
+                            "unknownAttribute_0x122f0007": 127,
+                            "unknownAttribute_0x122f0008": 127,
+                            "unknownAttribute_0x122f0009": 1,
+                            "unknownAttribute_0x122f000a": 255,
+                            "unknownAttribute_0x122f000b": false,
+                            "unknownAttribute_0x122f000c": 0,
+                            "unknownAttribute_0x122f000d": 255,
+                            "unknownAttribute_0x122f000e": 255,
+                            "unknownAttribute_0x122f000f": 255,
+                            "unknownAttribute_0x122f0011": 11,
+                            "unknownAttribute_0x122f0015": false,
+                            "unknownAttribute_0x122f0016": 3,
+                            "unknownAttribute_0x122f001a": 0,
+                            "unknownAttribute_0x122f0020": 30,
+                            "unknownAttribute_0x122f0021": false,
+                            "unknownAttribute_0x122f0032": 5,
+                            "unknownAttribute_0x122f0034": false,
+                            "unknownAttribute_0x122f0035": false,
+                            "unknownAttribute_0x122f0036": false,
+                            "unknownAttribute_0x122f0037": 254,
+                            "unknownAttribute_0x122f0038": 2,
+                            "unknownAttribute_0x122f005f": 170,
+                            "unknownAttribute_0x122f0060": 170,
+                            "unknownAttribute_0x122f0061": 33,
+                            "unknownAttribute_0x122f0062": 1,
+                            "unknownAttribute_0x122f0100": false,
+                            "unknownAttribute_0x122f0102": true,
+                            "unknownAttribute_0x122f0103": false,
+                            "unknownAttribute_0x122f0104": true,
+                            "unknownAttribute_0x122f0105": false,
+                            "unknownAttribute_0x122f0106": false
+                        }
+                    }
+                },
+                "2": {
+                    "number": 2,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 2,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 260,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                29,
+                                30,
+                                64,
+                                80
+                            ],
+                            "clientList": [
+                                3,
+                                6,
+                                8
+                            ],
+                            "partsList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "Binding": {
+                            "id": 30,
+                            "name": "Binding",
+                            "binding": [],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "DeviceType",
+                                    "value": "DimmableSwitch"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "ModeSelect": {
+                            "id": 80,
+                            "name": "ModeSelect",
+                            "description": "Smart Bulb Mode",
+                            "standardNamespace": 0,
+                            "supportedModes": [
+                                {
+                                    "label": "Smart Bulb Disable",
+                                    "mode": 0,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Smart Bulb Enable",
+                                    "mode": 1,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                }
+                            ],
+                            "currentMode": 0,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "onOff": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        }
+                    }
+                },
+                "3": {
+                    "number": 3,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 2,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 15,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                29,
+                                59,
+                                64,
+                                80
+                            ],
+                            "clientList": [],
+                            "partsList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "Switch": {
+                            "id": 59,
+                            "name": "Switch",
+                            "numberOfPositions": 2,
+                            "currentPosition": 0,
+                            "multiPressMax": 5,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "latchingSwitch": false,
+                                "momentarySwitch": true,
+                                "momentarySwitchRelease": true,
+                                "momentarySwitchLongPress": true,
+                                "momentarySwitchMultiPress": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "Button",
+                                    "value": "Up"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "ModeSelect": {
+                            "id": 80,
+                            "name": "ModeSelect",
+                            "description": "Dimming Edge",
+                            "standardNamespace": 0,
+                            "supportedModes": [
+                                {
+                                    "label": "Leading",
+                                    "mode": 0,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Trailing",
+                                    "mode": 1,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                }
+                            ],
+                            "currentMode": 0,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "onOff": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        }
+                    }
+                },
+                "4": {
+                    "number": 4,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 2,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 15,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                29,
+                                59,
+                                64,
+                                80
+                            ],
+                            "clientList": [],
+                            "partsList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "Switch": {
+                            "id": 59,
+                            "name": "Switch",
+                            "numberOfPositions": 2,
+                            "currentPosition": 0,
+                            "multiPressMax": 5,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "latchingSwitch": false,
+                                "momentarySwitch": true,
+                                "momentarySwitchRelease": true,
+                                "momentarySwitchLongPress": true,
+                                "momentarySwitchMultiPress": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "Button",
+                                    "value": "Down"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "ModeSelect": {
+                            "id": 80,
+                            "name": "ModeSelect",
+                            "description": "Dimming Speed",
+                            "standardNamespace": 0,
+                            "supportedModes": [
+                                {
+                                    "label": "Instant",
+                                    "mode": 0,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "500ms",
+                                    "mode": 5,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "800ms",
+                                    "mode": 8,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "1s",
+                                    "mode": 10,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "1.5s",
+                                    "mode": 15,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "2s",
+                                    "mode": 20,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "2.5s",
+                                    "mode": 25,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "3s",
+                                    "mode": 30,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "3.5s",
+                                    "mode": 35,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "4s",
+                                    "mode": 40,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "5s",
+                                    "mode": 50,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "6s",
+                                    "mode": 60,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "7s",
+                                    "mode": 70,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "8s",
+                                    "mode": 80,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "10s",
+                                    "mode": 100,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                }
+                            ],
+                            "currentMode": 25,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "onOff": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        }
+                    }
+                },
+                "5": {
+                    "number": 5,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 2,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 15,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                29,
+                                59,
+                                64,
+                                80
+                            ],
+                            "clientList": [],
+                            "partsList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "Switch": {
+                            "id": 59,
+                            "name": "Switch",
+                            "numberOfPositions": 2,
+                            "currentPosition": 0,
+                            "multiPressMax": 5,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "latchingSwitch": false,
+                                "momentarySwitch": true,
+                                "momentarySwitchRelease": true,
+                                "momentarySwitchLongPress": true,
+                                "momentarySwitchMultiPress": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "Button",
+                                    "value": "Config"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "ModeSelect": {
+                            "id": 80,
+                            "name": "ModeSelect",
+                            "description": "Relay",
+                            "standardNamespace": 0,
+                            "supportedModes": [
+                                {
+                                    "label": "Relay Click Enable",
+                                    "mode": 0,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Relay Click Disable",
+                                    "mode": 1,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                }
+                            ],
+                            "currentMode": 0,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "onOff": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        }
+                    }
+                },
+                "6": {
+                    "number": 6,
+                    "clusters": {
+                        "Identify": {
+                            "id": 3,
+                            "name": "Identify",
+                            "identifyTime": 0,
+                            "identifyType": 2,
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                64
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "Groups": {
+                            "id": 4,
+                            "name": "Groups",
+                            "nameSupport": {
+                                "nameSupport": true
+                            },
+                            "clusterRevision": 4,
+                            "featureMap": {
+                                "groupNames": true
+                            },
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                            ],
+                            "generatedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ]
+                        },
+                        "Unknown cluster 0x5": {
+                            "id": 5,
+                            "name": "Unknown cluster 0x5",
+                            "clusterRevision": 4,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6
+                            ],
+                            "generatedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                6
+                            ],
+                            "unknownAttribute_0x1": 0,
+                            "unknownAttribute_0x2": 0,
+                            "unknownAttribute_0x3": false,
+                            "unknownAttribute_0x4": 128
+                        },
+                        "OnOff": {
+                            "id": 6,
+                            "name": "OnOff",
+                            "onOff": false,
+                            "clusterRevision": 4,
+                            "featureMap": {
+                                "lighting": true,
+                                "deadFrontBehavior": false,
+                                "offOnly": false
+                            },
+                            "attributeList": [
+                                0,
+                                16384,
+                                16385,
+                                16386,
+                                16387,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                64,
+                                65,
+                                66
+                            ],
+                            "generatedCommandList": [],
+                            "globalSceneControl": true,
+                            "onTime": 0,
+                            "offWaitTime": 0,
+                            "startUpOnOff": 0
+                        },
+                        "LevelControl": {
+                            "id": 8,
+                            "name": "LevelControl",
+                            "currentLevel": 128,
+                            "maxLevel": 254,
+                            "options": {
+                                "executeIfOff": false,
+                                "coupleColorTempToLevel": false
+                            },
+                            "onLevel": 0,
+                            "clusterRevision": 5,
+                            "featureMap": {
+                                "onOff": false,
+                                "lighting": false,
+                                "frequency": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                15,
+                                17,
+                                16384,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7
+                            ],
+                            "generatedCommandList": [],
+                            "minLevel": 1,
+                            "remainingTime": 0,
+                            "startUpCurrentLevel": 128
+                        },
+                        "Descriptor": {
+                            "id": 29,
+                            "name": "Descriptor",
+                            "deviceTypeList": [
+                                {
+                                    "deviceType": 269,
+                                    "revision": 1
+                                }
+                            ],
+                            "serverList": [
+                                3,
+                                4,
+                                5,
+                                6,
+                                8,
+                                29,
+                                64,
+                                80,
+                                768
+                            ],
+                            "clientList": [],
+                            "partsList": [],
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "tagList": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "FixedLabel": {
+                            "id": 64,
+                            "name": "FixedLabel",
+                            "labelList": [
+                                {
+                                    "label": "DeviceType",
+                                    "value": "DimmableLight"
+                                },
+                                {
+                                    "label": "Light",
+                                    "value": "LED Bar"
+                                }
+                            ],
+                            "clusterRevision": 1,
+                            "featureMap": {},
+                            "attributeList": [
+                                0,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [],
+                            "generatedCommandList": []
+                        },
+                        "ModeSelect": {
+                            "id": 80,
+                            "name": "ModeSelect",
+                            "description": "LED Color",
+                            "standardNamespace": 0,
+                            "supportedModes": [
+                                {
+                                    "label": "Red",
+                                    "mode": 0,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Orange",
+                                    "mode": 1,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Lemon",
+                                    "mode": 2,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Lime",
+                                    "mode": 3,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Green",
+                                    "mode": 4,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Teal",
+                                    "mode": 5,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Cyan",
+                                    "mode": 6,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Aqua",
+                                    "mode": 7,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Blue",
+                                    "mode": 8,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Violet",
+                                    "mode": 9,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Magenta",
+                                    "mode": 10,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "Pink",
+                                    "mode": 11,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                },
+                                {
+                                    "label": "White",
+                                    "mode": 12,
+                                    "semanticTags": [
+                                        {
+                                            "mfgCode": 0,
+                                            "value": 0
+                                        }
+                                    ]
+                                }
+                            ],
+                            "currentMode": 8,
+                            "clusterRevision": 1,
+                            "featureMap": {
+                                "onOff": false
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0
+                            ],
+                            "generatedCommandList": []
+                        },
+                        "ColorControl": {
+                            "id": 768,
+                            "name": "ColorControl",
+                            "remainingTime": 0,
+                            "colorMode": 2,
+                            "options": {
+                                "executeIfOff": false
+                            },
+                            "numberOfPrimaries": 0,
+                            "enhancedColorMode": 2,
+                            "colorCapabilities": {
+                                "hueSaturation": true,
+                                "enhancedHue": false,
+                                "colorLoop": false,
+                                "xy": true,
+                                "colorTemperature": true
+                            },
+                            "clusterRevision": 5,
+                            "featureMap": {
+                                "hueSaturation": true,
+                                "enhancedHue": false,
+                                "colorLoop": false,
+                                "xy": true,
+                                "colorTemperature": true
+                            },
+                            "attributeList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                7,
+                                8,
+                                15,
+                                16,
+                                16385,
+                                16394,
+                                16395,
+                                16396,
+                                16397,
+                                16400,
+                                65528,
+                                65529,
+                                65530,
+                                65531,
+                                65532,
+                                65533
+                            ],
+                            "eventList": [],
+                            "acceptedCommandList": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                71,
+                                75,
+                                76
+                            ],
+                            "generatedCommandList": [],
+                            "currentHue": 0,
+                            "currentSaturation": 0,
+                            "currentX": 24939,
+                            "currentY": 24701,
+                            "colorTemperatureMireds": 0,
+                            "colorTempPhysicalMinMireds": 0,
+                            "colorTempPhysicalMaxMireds": 65279,
+                            "coupleColorTempToLevelMinMireds": 0,
+                            "startUpColorTemperatureMireds": 0
+                        }
+                    }
+                }
+            }
+        },
+        "error": "undefined"
+    }
+}

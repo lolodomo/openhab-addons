@@ -223,14 +223,16 @@ public class EndpointHandler extends BaseThingHandler implements AttributeListen
         Object basicInfoObject = clusters.get(BasicInformationCluster.CLUSTER_NAME);
         if (basicInfoObject != null) {
             BasicInformationCluster basicInfo = (BasicInformationCluster) basicInfoObject;
-            String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
+            String label = basicInfo.nodeLabel != null && basicInfo.nodeLabel.length() > 0 ? basicInfo.nodeLabel
+                    : basicInfo.productLabel;
             updateProperty("label", label);
 
         } else {
             basicInfoObject = clusters.get(BridgedDeviceBasicInformationCluster.CLUSTER_NAME);
             if (basicInfoObject != null) {
                 BridgedDeviceBasicInformationCluster basicInfo = (BridgedDeviceBasicInformationCluster) basicInfoObject;
-                String label = basicInfo.nodeLabel != null ? basicInfo.nodeLabel : basicInfo.productLabel;
+                String label = basicInfo.nodeLabel != null && basicInfo.nodeLabel.length() > 0 ? basicInfo.nodeLabel
+                        : basicInfo.productLabel;
                 updateProperty("label", label);
 
             }
